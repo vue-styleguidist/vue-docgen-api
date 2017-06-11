@@ -1,4 +1,5 @@
 # vue-docgen-api
+[![npm](https://img.shields.io/npm/v/vue-docgen-api.svg)](https://www.npmjs.com/package/vue-docgen-api)
 
 `vue-docgen-api` is a toolbox to help extracting information from [Vue][] components, and generate documentation from it.
 
