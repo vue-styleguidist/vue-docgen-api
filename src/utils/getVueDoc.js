@@ -34,7 +34,7 @@ export default function getVueDoc(docFile, component) {
 		})[0];
 		const description = getDescription(docComponent);
 		const comment = getComment(docComponent);
-		const tags = processTags(docComponent, ['name', ...IGNORE_DEFAULT]);
+		const tags = processTags(docComponent, IGNORE_DEFAULT);
 		const props = processProps(docFile, component);
 		const methods = processMethods(docFile, component);
 

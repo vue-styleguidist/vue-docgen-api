@@ -14,9 +14,14 @@ export default function processProps(docFile, component) {
 					return comment.longname.indexOf('props.' + propName) > -1
 				})[0];
 				const prop = component.props[propName];
-				const listTag = getProp(prop, docPart);
-				if ( listTag['tags'] && !listTag['tags']['ignore'] ) {
-					listProps[propName] = listTag;
+				const docProp = getProp(prop, docPart);
+				const listTags = docProp['tags']
+				if ( listTags ) {
+					if ( !listTags['ignore'] ) {
+						listProps[propName] = docProp;
+					}
+				} else {
+					listProps[propName] = docProp;
 				}
 			})
 		}

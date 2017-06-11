@@ -39,19 +39,15 @@ describe('tests', () => {
 		expect(typeof docJson['props'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have kind', () => {
-		expect(typeof docJson['tags']['kind'] !== 'undefined').to.be.true
-	})
-
 	it('should the component have version', () => {
 		expect(typeof docJson['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have one prop', () => {
-		expect(Object.keys(docJson['props']).length === 1).to.be.true
+	it('should the component have three prop', () => {
+		expect(Object.keys(docJson['props']).length === 3).to.be.true
 	})
 
-	it('should the prop filter key have three tags', () => {
-		expect(Object.keys(docJson['props']['filterKey']['tags']).length === 3).to.be.true
+	it('should the prop msg have four tags', () => {
+		expect(Object.keys(docJson['props']['msg']['tags']).length === 4).to.be.true
 	})
 })

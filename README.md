@@ -71,7 +71,6 @@ export default {
     /**
      * object/array defaults should be returned from a factory function
      * @version 1.0.5
-     * @ignore
      * @since Version 1.0.1
      * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
      * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
@@ -82,6 +81,7 @@ export default {
     },
     /**
      * describe data
+     * @version 1.0.5
      */
     data: [Array],
     /**
@@ -90,6 +90,7 @@ export default {
     columns: [Array],
     /**
      * filter key
+     * @ignore
      */
     filterKey: {
       type: String,
@@ -137,20 +138,22 @@ export default {
   methods: {
 
     /**
-    * Sets the order
-    *
-    * @public
-    * @version 1.0.5
-    * @since Version 1.0.1
-    * @param {string} key Key to order
-    * @returns {string} Test
-    */
+   * Sets the order
+   *
+   * @public
+   * @version 1.0.5
+   * @since Version 1.0.1
+   * @param {string} key Key to order
+   * @returns {string} Test
+   */
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
 
-    hiddenMethod: function(){}
+    hiddenMethod: function(){
+
+    }
   }
 }
 </script>
@@ -170,7 +173,7 @@ we are getting this output:
   "methods": [
     {
       "name": "sortBy",
-      "comment": "/**\n\t * Sets the order\n\t *\n\t * @public\n\t * @version 1.0.5\n\t * @since Version 1.0.1\n\t * @param {string} key Key to order\n\t * @returns {string} Test\n\t */",
+      "comment": "/**\n   * Sets the order\n   *\n   * @public\n   * @version 1.0.5\n   * @since Version 1.0.1\n   * @param {string} key Key to order\n   * @returns {string} Test\n   */",
       "modifiers": [],
       "params": [
         {
@@ -193,24 +196,6 @@ we are getting this output:
           {
             "title": "access",
             "description": "public"
-          }
-        ],
-        "description": [
-          {
-            "title": "description",
-            "description": "Sets the order"
-          }
-        ],
-        "kind": [
-          {
-            "title": "kind",
-            "description": "function"
-          }
-        ],
-        "name": [
-          {
-            "title": "name",
-            "description": "sortBy"
           }
         ],
         "params": [
@@ -251,37 +236,55 @@ we are getting this output:
   ],
   "displayName": "Grid",
   "props": {
-    "filterKey": {
+    "msg": {
       "type": {
-        "name": "string"
+        "name": "string|number"
       },
       "required": "",
       "defaultValue": {
-        "value": "\"example\"",
+        "value": "\"Ejemplo\"",
         "computed": false
       },
       "tags": {
-        "description": [
+        "see": [
           {
-            "title": "description",
-            "description": "filter key"
+            "title": "see",
+            "description": "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
           }
         ],
-        "kind": [
+        "since": [
           {
-            "title": "kind",
-            "description": "member"
+            "title": "since",
+            "description": "Version 1.0.1"
           }
         ],
-        "name": [
+        "version": [
           {
-            "title": "name",
-            "description": "filterKey"
+            "title": "version",
+            "description": "1.0.5"
+          }
+        ],
+        "link": [
+          {
+            "title": "link",
+            "description": "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
           }
         ]
       },
-      "comment": "/**\n     * filter key\n     */",
-      "description": "filter key"
+      "comment": "/**\n     * object/array defaults should be returned from a factory function\n     * @version 1.0.5\n     * @since Version 1.0.1\n     * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     */",
+      "description": "object/array defaults should be returned from a factory function"
+    },
+    "data": {
+      "type": {
+        "name": "array"
+      },
+      "description": "describe data"
+    },
+    "columns": {
+      "type": {
+        "name": "array"
+      },
+      "description": "get columns list"
     }
   },
   "comment": "/**\n * This is an example of creating a reusable grid component and using it with external data.\n * @version 1.0.5\n * @author [Rafael](https://github.com/rafaesc92)\n * @since Version 1.0.1\n */",
@@ -290,18 +293,6 @@ we are getting this output:
       {
         "title": "author",
         "description": "[Rafael](https://github.com/rafaesc92)"
-      }
-    ],
-    "description": [
-      {
-        "title": "description",
-        "description": "This is an example of creating a reusable grid component and using it with external data."
-      }
-    ],
-    "kind": [
-      {
-        "title": "kind",
-        "description": "member"
       }
     ],
     "since": [

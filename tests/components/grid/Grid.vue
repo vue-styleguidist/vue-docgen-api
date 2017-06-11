@@ -37,17 +37,17 @@ export default {
     /**
      * object/array defaults should be returned from a factory function
      * @version 1.0.5
-     * @ignore
      * @since Version 1.0.1
      * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
      * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
      */
     msg: {
-	    type: [String, Number],
-	    default: 'Ejemplo'
+      type: [String, Number],
+      default: 'Ejemplo'
     },
     /**
      * describe data
+     * @version 1.0.5
      */
     data: [Array],
     /**
@@ -56,6 +56,7 @@ export default {
     columns: [Array],
     /**
      * filter key
+     * @ignore
      */
     filterKey: {
       type: String,
@@ -103,22 +104,22 @@ export default {
   methods: {
 
     /**
-	 * Sets the order
-	 *
-	 * @public
-	 * @version 1.0.5
-	 * @since Version 1.0.1
-	 * @param {string} key Key to order
-	 * @returns {string} Test
-	 */
+   * Sets the order
+   *
+   * @public
+   * @version 1.0.5
+   * @since Version 1.0.1
+   * @param {string} key Key to order
+   * @returns {string} Test
+   */
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
 
-		hiddenMethod: function(){
+    hiddenMethod: function(){
 
-		}
+    }
   }
 }
 </script>

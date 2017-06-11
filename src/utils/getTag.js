@@ -1,9 +1,9 @@
 import { EMPTY } from './variables';
 
 function isExistInTagList(docPart, tagName) {
-	return docPart['tags'].some( tagObj => {
-		return tagObj['title'] === tagName;
-	})
+	return docPart['tags'].some(tagObj => {
+		return tagObj['title'] === tagName
+	});
 }
 
 function generateTag(title, description, type) {
@@ -62,15 +62,15 @@ export default function getTag(tagName, docPart) {
 					return generateTag(tagName, description)
 				})
 			}
-		} else if (docPart['tags'] &&
-		isExistInTagList(tagName, docPart)) {
-			return docPart['tags'].filter(tagObj => {
+		}
+		return false;
+	} else if (docPart['tags'] &&
+		isExistInTagList(docPart, tagName)) {
+		return docPart['tags'].filter(tagObj => {
 				return tagObj['title'] === tagName;
 			}).map(tagObj =>{
 				return generateTag(tagName, tagObj['text'])
 			})
-		}
-	} else {
-		return false;
 	}
+	return false;
 }
