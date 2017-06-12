@@ -1,4 +1,4 @@
-import { IGNORE_DEFAULT, getDescription, getComment } from './variables';
+import { IGNORE_DEFAULT, getDescription, getComment , EMPTY} from './variables';
 import processTags from './processTags';
 import processProps from './processProps';
 import processMethods from './processMethods';
@@ -32,9 +32,14 @@ export default function getVueDoc(docFile, component) {
 		const docComponent = docFile.filter(comment => {
 			return comment.longname === 'module.exports'
 		})[0];
-		const description = getDescription(docComponent);
-		const comment = getComment(docComponent);
-		const tags = processTags(docComponent, IGNORE_DEFAULT);
+		let description = EMPTY;
+		let comment = EMPTY;
+		let tags = {};
+		if (docComponent) {
+			description = getDescription(docComponent);
+			comment = getComment(docComponent);
+			tags = processTags(docComponent, IGNORE_DEFAULT);
+		}
 		const props = processProps(docFile, component);
 		const methods = processMethods(docFile, component);
 
