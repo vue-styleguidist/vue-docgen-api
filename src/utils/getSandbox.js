@@ -21,11 +21,15 @@ function clone(obj) {
 }
 
 const evalComponentCode = (code) => {
-	const script = new vm.Script(code, {});
-	let sand = clone(sandbox)
-	const context = new vm.createContext(sand);
-	script.runInContext(context);
-	return sand.exports;
+	try {
+		const script = new vm.Script(code, {});
+		let sand = clone(sandbox)
+		const context = new vm.createContext(sand);
+		script.runInContext(context);
+		return sand.exports;
+	} catch (err) {
+		throw new Error('Can not compile the vue component', err)
+	}
 };
 
 module.exports = function getSandbox(jscodeReqest) {

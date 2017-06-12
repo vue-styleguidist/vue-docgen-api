@@ -15,8 +15,9 @@ export default function getDocFile (jscodeReqest, file) {
 				return obj;
 			});
 		return docReturn;
-	} catch (e) {
-		console.log('error', e);
-		return;
+	} catch (err) {
+		const errorMessage = err.toString();
+		console.log(`\n${errorMessage}\n`);
+		throw new Error(err);
 	}
 }

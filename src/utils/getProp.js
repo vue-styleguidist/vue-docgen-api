@@ -1,5 +1,6 @@
 import { EMPTY, UNDEFINED, IGNORE_DEFAULT, getDescription, getComment } from './variables';
 import processTags from './processTags';
+const fnNameMatchRegex = /^\s*function\s+([^\(\s]*)\s*/;
 
 function getTypeName(prop) {
 	if (!prop) return UNDEFINED;
@@ -11,6 +12,7 @@ function getTypeName(prop) {
 }
 
 function getTypeNameToFunction(object) {
+	if (object.name.toLowerCase() === 'function') return 'func'
 	return object.name.toLowerCase();
 }
 
@@ -26,9 +28,16 @@ export default function getProp(prop, docPart){
 				name: getTypeName(prop.type),
 			};
 			obj['required'] = prop.required || EMPTY;
-			if (prop.default && typeof prop.default !== 'function' ) {
+			if (prop.default) {
+				let value;
+				if (typeof prop.default === 'function') {
+					var func = prop.default.toString().replace(fnNameMatchRegex, 'function');
+					value = JSON.parse(JSON.stringify(func.replace(/\s\s+/g, ' ')))
+				} else {
+					value = JSON.stringify(prop.default)
+				}
 				obj['defaultValue'] = {
-					value: JSON.stringify(prop.default),
+					value: value,
 					computed: false,
 				};
 			}

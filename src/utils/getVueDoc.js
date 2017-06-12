@@ -24,35 +24,38 @@ function getFileNameComponent(doc) {
 }
 
 export default function getVueDoc(docFile, component) {
-	try {
-		const displayName = getFileNameComponent(docFile);
+	let displayName;
+	let docComponent;
+	if (docFile) {
+		displayName = getFileNameComponent(docFile);
 		docFile = docFile.filter( comment => {
 			return comment.kind !== 'package'
 		});
-		const docComponent = docFile.filter(comment => {
+		docComponent = docFile.filter(comment => {
 			return comment.longname === 'module.exports'
 		})[0];
-		let description = EMPTY;
-		let comment = EMPTY;
-		let tags = {};
-		if (docComponent) {
-			description = getDescription(docComponent);
-			comment = getComment(docComponent);
-			tags = processTags(docComponent, IGNORE_DEFAULT);
-		}
-		const props = processProps(docFile, component);
-		const methods = processMethods(docFile, component);
+	} else {
+		docFile = [];
+		displayName = component.name || EMPTY;
+		docComponent = false;
+	}
+	let description = EMPTY;
+	let comment = EMPTY;
+	let tags = {};
+	if (docComponent) {
+		description = getDescription(docComponent);
+		comment = getComment(docComponent);
+		tags = processTags(docComponent, IGNORE_DEFAULT);
+	}
+	const props = processProps(docFile, component);
+	const methods = processMethods(docFile, component);
 
-		return {
-			description,
-			methods,
-			displayName,
-			props,
-			comment,
-			tags,
-		}
-
-	} catch (e) {
-		console.log(e)
+	return {
+		description,
+		methods,
+		displayName,
+		props,
+		comment,
+		tags,
 	}
 }
