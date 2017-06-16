@@ -3,31 +3,14 @@ import processTags from './processTags';
 import processProps from './processProps';
 import processMethods from './processMethods';
 
-const getFileName = (fileName) => {
-	return fileName.split('\\').reverse()[0].split('.')[0]
-}
-
-const capitalizeFirstLetter = (str) => {
-  return str[0].toUpperCase() + str.substr(1)
-}
-
-const kebabToCamel= (myString) => {
-  return myString.replace(/-([aA-zZ])/g, function (g) { return g[1].toUpperCase() })
-}
-
-function getFileNameComponent(doc) {
-	const packageComponent = doc.filter( comment => {
-		return comment.kind === 'package'
-	} )[0];
-	const fileName = packageComponent['files'][0];
-	return capitalizeFirstLetter(kebabToCamel(getFileName(fileName)));
-}
-
 export default function getVueDoc(docFile, component) {
 	let displayName;
 	let docComponent;
+	if (!component.name || component.name === '') {
+		throw new Error("The component has no name, add 'el' property on the Vue component");
+	}
+	displayName = component.name;
 	if (docFile) {
-		displayName = getFileNameComponent(docFile);
 		docFile = docFile.filter( comment => {
 			return comment.kind !== 'package'
 		});
@@ -36,7 +19,6 @@ export default function getVueDoc(docFile, component) {
 		})[0];
 	} else {
 		docFile = [];
-		displayName = component.name || EMPTY;
 		docComponent = false;
 	}
 	let description = EMPTY;

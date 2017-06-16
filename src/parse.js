@@ -7,7 +7,7 @@ export default function parse(file) {
 		throw new Error('The document is empty');
 	}
 	const jscodeReqest = utils.getComponentModuleJSCode(source, file);
-	const component = utils.getSandbox(jscodeReqest, file).default;
+	const component = utils.getSandbox(jscodeReqest).default;
 	const doc = utils.getDocFile(jscodeReqest, file);
 	const vueDoc = utils.getVueDoc(doc, component);
 	return vueDoc;

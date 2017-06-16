@@ -1,5 +1,5 @@
 <template>
-<button class="button" @click.prevent="onClick">
+<button class="buttonComponent" @click.prevent="onClick">
 	<slot></slot>
 </button>
 </template>
@@ -7,10 +7,10 @@
 <script>
 
 export default {
-	name: 'button',
+	name: 'buttonComponent',
 	props: {
 		/**
-		 * The color for the button
+		 * The color for the button example
 		 */
 		color: {
 			type: String,

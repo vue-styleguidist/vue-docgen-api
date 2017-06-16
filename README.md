@@ -312,6 +312,17 @@ we are getting this output:
 }
 ```
 
+## Change log
+
+The change log can be found on the [Releases page](https://github.com/vue-styleguidist/vue-docgen-api/releases).
+
+## Authors and license
+
+[Rafael Escala](https://github.com/rafaesc92)
+
+MIT License.
+
+
 [JSDoc]: http://usejsdoc.org/
 [vue]: https://vuejs.org/
 [babel]: https://www.npmjs.com/package/babel-core
