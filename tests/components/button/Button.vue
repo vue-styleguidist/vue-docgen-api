@@ -5,24 +5,25 @@
 </template>
 
 <script>
+import genericMixin from './genericMixin';
+import colorMixin from './colorMixin';
 
 export default {
 	name: 'buttonComponent',
+	mixins: [genericMixin, colorMixin],
 	props: {
-		/**
-		 * The color for the button example
-		 */
-		color: {
-			type: String,
-			default: '#333'
-		},
 		/**
 		 * The size of the button
 		 * `small, normal, large`
 		 */
 		size: {
-			type: Number,
 			default: 'normal'
+		},
+		/**
+		 * Add custom click actions.
+		 **/
+		onCustomClick: {
+			default: () => () => null,
 		},
 	},
 	data () {
@@ -32,7 +33,7 @@ export default {
 	},
 	methods: {
 		onClick(){
-			console.log('Hola Mundo')
+			console.log('Hello World')
 		}
 	}
 }

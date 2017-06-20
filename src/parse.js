@@ -1,14 +1,14 @@
 import fs from 'fs';
 import * as utils from './utils';
+import stateDoc from './utils/stateDoc';
 
-export default function parse(file) {
+export default function parse(file, webpackConfig) {
 	const source = fs.readFileSync(file, { encoding: 'utf-8' });
 	if (source === '') {
 		throw new Error('The document is empty');
 	}
-	const jscodeReqest = utils.getComponentModuleJSCode(source, file);
-	const component = utils.getSandbox(jscodeReqest).default;
-	const doc = utils.getDocFile(jscodeReqest, file);
-	const vueDoc = utils.getVueDoc(doc, component);
+	stateDoc.file = file;
+	const component = utils.getComponent(source, file, webpackConfig);
+	const vueDoc = utils.getVueDoc(stateDoc.docComponent, component);
 	return vueDoc;
 }

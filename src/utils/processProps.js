@@ -1,31 +1,34 @@
 import getProp from './getProp';
 
 export default function processProps(docFile, component) {
-	if ( component.props ) {
-		const listProps = {};
-		if ( Array.isArray(component.props) ) {
-			component.props.forEach( propName => {
-				listProps[propName] = getProp();
+	let props = component.props;
+	let mixins = component.mixins;
+	if ( mixins ) {
+		mixins.forEach(mixin => {
+			const pMixin = mixin.props;
+			if (pMixin) {
+				props = Object.assign({}, pMixin, props);
+			}
+		});
+	}
+	if ( props ) {
+		const listDocProps = {};
+		if ( Array.isArray(props) ) {
+			props.forEach( propName => {
+				listDocProps[propName] = getProp();
 			});
 		} else {
-			Object.keys(component.props).forEach( key => {
+			Object.keys(props).forEach( key => {
 				const propName = key;
-				const docPart = docFile.filter( comment => {
+				const docPart = docFile.reverse().filter( comment => {
 					return comment.longname.indexOf('props.' + propName) > -1
 				})[0];
-				const prop = component.props[propName];
+				const prop = props[propName];
 				const docProp = getProp(prop, docPart);
-				const listTags = docProp['tags']
-				if ( listTags ) {
-					if ( !listTags['ignore'] ) {
-						listProps[propName] = docProp;
-					}
-				} else {
-					listProps[propName] = docProp;
-				}
+				listDocProps[propName] = docProp;
 			})
 		}
-		return listProps;
+		return listDocProps;
 	}
 	return;
 }

@@ -35,6 +35,9 @@ export default function getProp(prop, docPart){
 					var func = prop.default.toString().replace(fnNameMatchRegex, 'function');
 					value = JSON.parse(JSON.stringify(func.replace(/\s\s+/g, ' ')))
 				} else {
+					if (!prop.type) {
+						obj['type'] = { name: typeof prop.default }
+					}
 					value = JSON.stringify(prop.default)
 				}
 				obj['defaultValue'] = {

@@ -22,37 +22,27 @@ var vueDocs = require('vue-docgen-api');
 var componentInfo = vueDocs.parse(filePath);
 ```
 
+
+## parse(filePath \[, webpackConfig \])
+
+| Parameter |  Type | Description |
+| -------------- | ------ | --------------- |
+| filePath       | string | The file path |
+| webpackConfig     | object | Optional argument, extracts the necessary loaders to document the component. |
+
+
 ## Using JSDoc tags
 
 You can use the following [JSDoc][] tags when documenting components, props and methods.
 
-## PropTypes
-
-### Example
+## Example
 
 For the following component
 
 ```html
 <template>
   <table class="grid">
-    <thead>
-      <tr>
-        <th v-for="key in columns"
-          @click="sortBy(key)"
-          :class="{ active: sortKey == key }">
-          {{ key | capitalize }}
-          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-          </span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="entry in filteredData">
-        <td v-for="key in columns">
-          {{entry[key]}}
-        </td>
-      </tr>
-    </tbody>
+    <!-- -->
   </table>
 </template>
 
@@ -78,7 +68,7 @@ export default {
      */
     msg: {
       type: [String, Number],
-      default: 'Ejemplo'
+      default: text
     },
     /**
      * describe data
@@ -158,12 +148,6 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.grid {
-  margin-bottom: 20px;
-}
-</style>
 ```
 
 we are getting this output:
@@ -235,7 +219,7 @@ we are getting this output:
       }
     }
   ],
-  "displayName": "Grid",
+  "displayName": "grid",
   "props": {
     "msg": {
       "type": {
@@ -243,7 +227,7 @@ we are getting this output:
       },
       "required": "",
       "defaultValue": {
-        "value": "\"Ejemplo\"",
+        "value": "\"this is a secret\"",
         "computed": false
       },
       "tags": {
@@ -286,6 +270,26 @@ we are getting this output:
         "name": "array"
       },
       "description": "get columns list"
+    },
+    "filterKey": {
+      "type": {
+        "name": "string"
+      },
+      "required": "",
+      "defaultValue": {
+        "value": "\"example\"",
+        "computed": false
+      },
+      "tags": {
+        "ignore": [
+          {
+            "title": "ignore",
+            "description": true
+          }
+        ]
+      },
+      "comment": "/**\n     * filter key\n     * @ignore\n     */",
+      "description": "filter key"
     }
   },
   "comment": "/**\n * This is an example of creating a reusable grid component and using it with external data.\n * @version 1.0.5\n * @author [Rafael](https://github.com/rafaesc92)\n * @since Version 1.0.1\n */",
@@ -310,6 +314,60 @@ we are getting this output:
     ]
   }
 }
+
+```
+
+## Mixins
+If you import a mixin, for it to be documented you need to add in the header the mixin tag **@mixin**, for example
+
+```javascript
+// src/mixins/colorMixin.js
+
+/**
+ * @mixin
+ */
+module.exports = {
+	props: {
+		/**
+		 * The color for the button example
+		 */
+		color: {
+			type: String,
+			default: '#333'
+		},
+	}
+}
+```
+
+```html
+<template>
+<!-- -->
+</template>
+<script>
+// src/components/Button/Button.vue
+
+import colorMixin from '../../mixins/colorMixin';
+export default {
+  name: 'buttonComponent',
+  mixins: [colorMixin],
+  props: {
+    /**
+    * The size of the button
+    * `small, normal, large`
+    */
+    size: {
+      default: 'normal'
+    },
+    /**
+    * Add custom click actions.
+    **/
+    onCustomClick: {
+      default: () => () => null,
+    },
+  },
+  /* ... */
+}
+</script>
 ```
 
 ## Change log

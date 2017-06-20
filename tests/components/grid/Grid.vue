@@ -43,7 +43,7 @@ export default {
      */
     msg: {
       type: [String, Number],
-      default: 'Ejemplo'
+      default: text
     },
     /**
      * describe data

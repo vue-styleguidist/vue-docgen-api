@@ -6,18 +6,11 @@ const expect = require("chai").expect;
 let docGrid;
 let docButton;
 
-describe('tests components', () => {
+describe('tests grid', () => {
 	docGrid = api.parse(grid);
-	docButton = api.parse(button);
-	console.log(JSON.stringify(docButton, null, 2));
 
 	it('should return an object', () => {
 		expect(docGrid).to.be.an('object')
-		expect(docButton).to.be.an('object')
-	})
-
-	it('The component name should be buttonComponent', () => {
-		expect(docButton.displayName).to.equal('buttonComponent');
 	})
 
 	it('The component name should be grid', () => {
@@ -41,7 +34,7 @@ describe('tests components', () => {
 	})
 
 	it('should the component have one method', () => {
-		expect(Object.keys(docGrid['methods']).length === 1).to.be.true
+		expect(Object.keys(docGrid['methods']).length).to.equal(1)
 	})
 
 	it('should have props', () => {
@@ -52,11 +45,52 @@ describe('tests components', () => {
 		expect(typeof docGrid['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have three prop', () => {
-		expect(Object.keys(docGrid['props']).length === 3).to.be.true
+	it('should the component have four props', () => {
+		expect(Object.keys(docGrid['props']).length).to.equal(4)
 	})
 
 	it('should the prop msg have four tags', () => {
-		expect(Object.keys(docGrid['props']['msg']['tags']).length === 4).to.be.true
+		expect(Object.keys(docGrid['props']['msg']['tags']).length).to.equal(4)
+	})
+})
+
+describe('tests button', () => {
+	docButton = api.parse(button);
+	console.log(JSON.stringify(docGrid, null, 2));
+
+	it('should return an object', () => {
+		expect(docButton).to.be.an('object')
+	})
+
+	it('The component name should be buttonComponent', () => {
+		expect(docButton.displayName).to.equal('buttonComponent');
+	})
+
+	it('The component should have a description', () => {
+		expect(docButton.description).to.equal('This is an example of creating a reusable grid component and using it with external data.');
+	})
+
+	it('should the component have three tags', () => {
+		expect(Object.keys(docButton['tags']).length).to.equal(3)
+	})
+
+	it('should the component have authors', () => {
+		expect(typeof docButton['tags']['author'] !== 'undefined').to.be.true
+	})
+
+	it('should dont have methods', () => {
+		expect(docButton['methods'].length).to.equal(0)
+	})
+
+	it('should have props', () => {
+		expect(typeof docButton['props'] !== 'undefined').to.be.true
+	})
+
+	it('should the component have version', () => {
+		expect(typeof docButton['tags']['version'] !== 'undefined').to.be.true
+	})
+
+	it('should the component have four props', () => {
+		expect(Object.keys(docButton['props']).length).to.equal(4)
 	})
 })
