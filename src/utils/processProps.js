@@ -18,6 +18,7 @@ export default function processProps(docFile, component) {
 				listDocProps[propName] = getProp();
 			});
 		} else {
+			docFile.reverse()
 			Object.keys(props).forEach( key => {
 				const propName = key;
 				const docPart = docFile.reverse().filter( comment => {

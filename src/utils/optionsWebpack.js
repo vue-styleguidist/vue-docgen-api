@@ -6,6 +6,7 @@ export default {
 	resolve: {
 		modulesDirectories: ['node_modules', 'bower_components'],
 	},
+	watch: true,
 	module: {
 		loaders,
 	},

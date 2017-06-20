@@ -29,6 +29,10 @@ describe('tests grid', () => {
 		expect(typeof docGrid['description'] !== 'undefined').to.be.true
 	})
 
+	it('should the component have msg prop default equal this is a secret', () => {
+		expect(docGrid['props']['msg']['defaultValue']['value']).to.equal('"this is a secret"')
+	})
+
 	it('should have methods', () => {
 		expect(typeof docGrid['methods'] !== 'undefined').to.be.true
 	})
@@ -56,7 +60,7 @@ describe('tests grid', () => {
 
 describe('tests button', () => {
 	docButton = api.parse(button);
-	console.log(JSON.stringify(docGrid, null, 2));
+	console.log(JSON.stringify(docButton, null, 2));
 
 	it('should return an object', () => {
 		expect(docButton).to.be.an('object')
@@ -70,8 +74,20 @@ describe('tests button', () => {
 		expect(docButton.description).to.equal('This is an example of creating a reusable grid component and using it with external data.');
 	})
 
-	it('should the component have three tags', () => {
-		expect(Object.keys(docButton['tags']).length).to.equal(3)
+	it('should the component have two tags', () => {
+		expect(Object.keys(docButton['tags']).length).to.equal(2)
+	})
+
+	it('should the component have four props', () => {
+		expect(Object.keys(docButton['props']).length).to.equal(4)
+	})
+
+	it('should the component have size prop default equal normal', () => {
+		expect(docButton['props']['size']['defaultValue']['value']).to.equal('"normal"')
+	})
+
+	it('should the component have size prop description equal The size of the button\n`small, normal, large`', () => {
+		expect(docButton['props']['size']['description']).to.equal('The size of the button\n`small, normal, large`')
 	})
 
 	it('should the component have authors', () => {

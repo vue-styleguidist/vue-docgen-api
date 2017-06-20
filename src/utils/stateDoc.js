@@ -4,7 +4,8 @@ import getDocFile from './getDocFile';
 class stateDoc {
 	constructor(){
 		this.file = '';
-		this.docComponent = false
+		this.docComponent = {};
+		this.sourceComponent = '';
 		this.docMixins = [];
 	}
 
@@ -13,7 +14,7 @@ class stateDoc {
 	}
 
 	saveComponent(source, file){
-		if (!this.docComponent) {
+		if (this.isMainComponent(file) && this.sourceComponent !== source) {
 			const jscodeReqest = getComponentModuleJSCode(source, file);
 			const doc = getDocFile(jscodeReqest, file);
 			this.docComponent = doc;
@@ -24,6 +25,14 @@ class stateDoc {
 		return doc.some(docPart => {
 			return docPart.kind === 'mixin'
 		});
+	}
+
+	getDoc(){
+		let docMixins = [].concat.apply([], this.docMixins)
+											.filter(function (docPart) {
+												return docPart.kind !== 'package';
+											});
+		return docMixins.concat(this.docComponent);
 	}
 
 	saveMixin(source, file) {
@@ -39,10 +48,21 @@ class stateDoc {
 				return docPart;
 			}).filter(docPart => {
 				return docPart.longname !== 'module.exports'
-			}).filter(docPart => {
-				return docPart.kind !== 'package'
 			})
-			this.docComponent = this.docComponent.concat(doc);
+			let index;
+			this.docMixins.forEach((docMixin, id) => {
+				const packages = docMixin.filter(function (docPart) {
+					return docPart.kind === 'package';
+				})[0];
+				if (packages && packages.files[0] === file) {
+					index = id;
+				}
+			})
+			if (index) {
+				this.docMixins[index] = doc;
+			} else {
+				this.docMixins.push(doc)
+			}
 		}
 	}
 }

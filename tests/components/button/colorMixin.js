@@ -10,5 +10,11 @@ module.exports = {
 			type: String,
 			default: '#333'
 		},
+		/**
+		 * Error
+		 */
+		size: {
+			default: 'example'
+		}
 	}
 }

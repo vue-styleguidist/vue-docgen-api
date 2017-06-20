@@ -8,6 +8,11 @@
 import genericMixin from './genericMixin';
 import colorMixin from './colorMixin';
 
+/**
+ * This is an example of creating a reusable grid component and using it with external data.
+ * @author [Rafael](https://github.com/rafaesc92)
+ * @version 1.0.5
+*/
 export default {
 	name: 'buttonComponent',
 	mixins: [genericMixin, colorMixin],

@@ -13,6 +13,7 @@ export default function processMethods(docFile, component) {
 		});
 	}
 	if (methods) {
+		docFile.reverse()
 		Object.keys(methods).forEach(methodName => {
 			const docPart = docFile.reverse().filter( comment => {
 				return (comment.longname.indexOf('methods.' + methodName) > -1)

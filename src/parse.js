@@ -9,6 +9,6 @@ export default function parse(file, webpackConfig) {
 	}
 	stateDoc.file = file;
 	const component = utils.getComponent(source, file, webpackConfig);
-	const vueDoc = utils.getVueDoc(stateDoc.docComponent, component);
+	const vueDoc = utils.getVueDoc(stateDoc.getDoc(), component);
 	return vueDoc;
 }
