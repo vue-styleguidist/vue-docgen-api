@@ -7,7 +7,7 @@ let docGrid;
 let docButton;
 
 describe('tests grid', () => {
-	docGrid = api.parse(grid);
+	docGrid = api.parseWebpack(grid);
 
 	it('should return an object', () => {
 		expect(docGrid).to.be.an('object')
@@ -59,7 +59,7 @@ describe('tests grid', () => {
 })
 
 describe('tests button', () => {
-	docButton = api.parse(button);
+	docButton = api.parseWebpack(button);
 	console.log(JSON.stringify(docButton, null, 2));
 
 	it('should return an object', () => {
@@ -84,6 +84,10 @@ describe('tests button', () => {
 
 	it('should the component have size prop default equal normal', () => {
 		expect(docButton['props']['size']['defaultValue']['value']).to.equal('"normal"')
+	})
+
+	it('should the component have color prop default equal #333', () => {
+		expect(docButton['props']['color']['defaultValue']['value']).to.equal('"#333"')
 	})
 
 	it('should the component have size prop description equal The size of the button\n`small, normal, large`', () => {

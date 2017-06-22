@@ -5,8 +5,11 @@
 </template>
 
 <script>
+import anotherMixin from '../../mixins/anotherMixin';
+import model from '../../utils/model.json';
 import genericMixin from './genericMixin';
 import colorMixin from './colorMixin';
+import review from '../../utils/review.json';
 
 /**
  * This is an example of creating a reusable grid component and using it with external data.

@@ -22,13 +22,22 @@ var vueDocs = require('vue-docgen-api');
 var componentInfo = vueDocs.parse(filePath);
 ```
 
+### parse(filePath)
 
-## parse(filePath \[, webpackConfig \])
+| Parameter |  Type | Description |
+| -------------- | ------ | --------------- |
+| filePath       | string | The file path |
+
+
+### parseWebpack(filePath \[, webpackConfig \])
+
+Has implemented [enhanced-require](https://github.com/webpack/enhanced-require)
 
 | Parameter |  Type | Description |
 | -------------- | ------ | --------------- |
 | filePath       | string | The file path |
 | webpackConfig     | object | Optional argument, extracts the necessary loaders to document the component. |
+
 
 
 ## Using JSDoc tags

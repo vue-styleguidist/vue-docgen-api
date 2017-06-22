@@ -7,6 +7,8 @@ class stateDoc {
 		this.docComponent = {};
 		this.sourceComponent = '';
 		this.docMixins = [];
+		this.jscodeReqest = '';
+		this.docTemp = '';
 	}
 
 	isMainComponent(file){
@@ -15,13 +17,19 @@ class stateDoc {
 
 	saveComponent(source, file){
 		if (this.isMainComponent(file) && this.sourceComponent !== source) {
-			const jscodeReqest = getComponentModuleJSCode(source, file);
-			const doc = getDocFile(jscodeReqest, file);
+			this.jscodeReqest = getComponentModuleJSCode(source, file);
+			const doc = this.getDocFile(this.jscodeReqest, file);
 			this.docComponent = doc;
 		}
 	}
 
+	getDocFile(source, file){
+		this.docTemp = getDocFile(source, file)
+		return this.docTemp;
+	}
+
 	isMixin(doc) {
+		doc = doc || this.docTemp;
 		return doc.some(docPart => {
 			return docPart.kind === 'mixin'
 		});
@@ -36,9 +44,8 @@ class stateDoc {
 	}
 
 	saveMixin(source, file) {
-		let doc = getDocFile(source, file);
+		let doc = this.getDocFile(source, file);
 		if (this.isMixin(doc)) {
-
 			doc = doc.map(docPart =>{
 				let longnameSplit = docPart.longname.split('.');
 				if (longnameSplit[0] === 'default') {
