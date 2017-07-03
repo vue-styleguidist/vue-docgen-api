@@ -2,11 +2,12 @@ const path = require('path');
 var api = require('../dist/main');
 var grid = path.join(__dirname,  './components/grid/Grid.vue');
 var button = path.join(__dirname,  './components/button/Button.vue');
+var exampleVuex = path.join(__dirname,  './components/vuex/example.vue');
 const expect = require("chai").expect;
 let docGrid;
 let docButton;
 
-describe('tests lite grid', () => {
+describe('tests grid', () => {
 	docGrid = api.parse(grid);
 
 	it('should return an object', () => {
@@ -54,9 +55,9 @@ describe('tests lite grid', () => {
 	})
 })
 
-describe('tests lite button', () => {
+describe('tests button', () => {
 	docButton = api.parse(button);
-	console.log(JSON.stringify(docButton, null, 2));
+	// console.log(JSON.stringify(docButton, null, 2));
 
 	it('should return an object', () => {
 		expect(docButton).to.be.an('object')
@@ -100,5 +101,21 @@ describe('tests lite button', () => {
 
 	it('should the component have four props', () => {
 		expect(Object.keys(docButton['props']).length).to.equal(4)
+	})
+})
+
+describe('test example vuex', () =>{
+	const docVuex = api.parse(exampleVuex);
+
+	it('should return an object', () => {
+		expect(docVuex).to.be.an('object')
+	})
+
+	it('The component name should be example', () => {
+		expect(docVuex.displayName).to.equal('example');
+	})
+
+	it('The component should have a description', () => {
+		expect(docVuex.description).to.equal('Partial mapping, object spread operator example');
 	})
 })

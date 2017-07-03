@@ -1,4 +1,3 @@
-import getDocFile from './getDocFile';
 import stateDoc from './stateDoc';
 const babel = require('babel-core');
 const fs = require('fs');
@@ -10,7 +9,7 @@ const babelifyCode = code => {
 	const options = {
 		ast: false,
 		comments: false,
-		presets: ['babel-preset-es2015'],
+		presets: ['babel-preset-es2015', 'babel-preset-stage-2'],
 	};
 	return babel.transform(code, options);
 };
@@ -68,7 +67,15 @@ const evalComponentCode = (code) => {
 				exports: {
 				},
 			},
-			require:()=> {
+			require:(element)=> {
+				if (element === 'vuex') {
+					return {
+						mapState: function(){},
+						mapMutations: function(){},
+						mapGetters: function(){},
+						mapActions: function(){}
+					}
+				}
 				return function(){}
 			},
 			document: {},
