@@ -6,7 +6,7 @@ const expect = require("chai").expect;
 let docGrid;
 let docButton;
 
-describe('tests grid', () => {
+describe('tests parseWebpack grid', () => {
 	docGrid = api.parseWebpack(grid);
 
 	it('should return an object', () => {
@@ -58,7 +58,7 @@ describe('tests grid', () => {
 	})
 })
 
-describe('tests button', () => {
+describe('tests parseWebpack button', () => {
 	docButton = api.parseWebpack(button);
 	console.log(JSON.stringify(docButton, null, 2));
 
@@ -76,10 +76,6 @@ describe('tests button', () => {
 
 	it('should the component have two tags', () => {
 		expect(Object.keys(docButton['tags']).length).to.equal(2)
-	})
-
-	it('should the component have four props', () => {
-		expect(Object.keys(docButton['props']).length).to.equal(4)
 	})
 
 	it('should the component have size prop default equal normal', () => {
@@ -110,7 +106,19 @@ describe('tests button', () => {
 		expect(typeof docButton['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have four props', () => {
-		expect(Object.keys(docButton['props']).length).to.equal(4)
+	it('should the component have five props', () => {
+		expect(Object.keys(docButton['props']).length).to.equal(5)
+	})
+
+	it('should prop1 to be string', () => {
+		expect(docButton['props']['prop1']['type']['name']).to.equal('string')
+	})
+
+	it('should onCustomClick to be ignored', () => {
+		expect(docButton['props']['onCustomClick']['tags']['ignore']).to.be.an('array')
+	})
+
+	it('should prop1 to be ignored', () => {
+		expect(docButton['props']['prop1']['tags']['ignore']).to.be.an('array')
 	})
 })

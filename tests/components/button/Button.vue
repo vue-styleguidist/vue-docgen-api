@@ -28,11 +28,17 @@ export default {
 			default: 'normal'
 		},
 		/**
+		 * @ignore
 		 * Add custom click actions.
 		 **/
 		onCustomClick: {
 			default: () => () => null,
 		},
+		/**
+		 *@ignore
+		 *
+		 */
+		prop1: String
 	},
 	data () {
 		return {

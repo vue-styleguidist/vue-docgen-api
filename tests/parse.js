@@ -57,7 +57,7 @@ describe('tests grid', () => {
 
 describe('tests button', () => {
 	docButton = api.parse(button);
-	// console.log(JSON.stringify(docButton, null, 2));
+	console.log(JSON.stringify(docButton, null, 2));
 
 	it('should return an object', () => {
 		expect(docButton).to.be.an('object')
@@ -99,8 +99,20 @@ describe('tests button', () => {
 		expect(typeof docButton['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have four props', () => {
-		expect(Object.keys(docButton['props']).length).to.equal(4)
+	it('should the component have five props', () => {
+		expect(Object.keys(docButton['props']).length).to.equal(5)
+	})
+
+	it('should prop1 to be string', () => {
+		expect(docButton['props']['prop1']['type']['name']).to.equal('string')
+	})
+
+	it('should onCustomClick to be ignored', () => {
+		expect(docButton['props']['onCustomClick']['tags']['ignore']).to.be.an('array')
+	})
+
+	it('should prop1 to be ignored', () => {
+		expect(docButton['props']['prop1']['tags']['ignore']).to.be.an('array')
 	})
 })
 

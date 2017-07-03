@@ -19,10 +19,16 @@ function getTypeNameToFunction(object) {
 export default function getProp(prop, docPart){
 	if ( prop ) {
 		let obj = {};
-		if ( typeof prop === 'function' || Array.isArray(prop) ) {
+		if ( Array.isArray(prop) ) {
 			obj['type'] = {
 				name: getTypeName(prop),
 			};
+		} else if (typeof prop === 'function') {
+			obj['type'] = {
+				name: getTypeName(prop),
+			};
+			obj['tags'] = processTags(docPart, IGNORE_DEFAULT);
+			obj['comment'] = getComment(docPart);
 		} else {
 			obj['type'] = {
 				name: getTypeName(prop.type),
