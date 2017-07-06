@@ -7,7 +7,7 @@ export default function getVueDoc(docFile, component) {
 	let displayName;
 	let docComponent;
 	if (!component.name || component.name === '') {
-		throw new Error("The component has no name, add 'el' property on the Vue component");
+		throw new Error("The component has no name, add 'name' property on the Vue component");
 	}
 	displayName = component.name;
 	if (docFile) {
