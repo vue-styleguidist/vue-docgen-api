@@ -16,6 +16,12 @@
                 characters: 'alphaKeys'
             })
         },
+        methods: {
+          async onSubmit () {
+            let  res = await api.post(this.params)
+            this.response = response
+          }
+        },
         mounted () {
             console.log('Second component loaded')
         }

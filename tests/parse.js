@@ -118,6 +118,7 @@ describe('tests button', () => {
 
 describe('test example vuex', () =>{
 	const docVuex = api.parse(exampleVuex);
+	console.log(docVuex);
 
 	it('should return an object', () => {
 		expect(docVuex).to.be.an('object')

@@ -1,18 +1,9 @@
 import stateDoc from './stateDoc';
-const babel = require('babel-core');
 const fs = require('fs');
 const path = require('path');
 const getRequires = require('./getRequires');
+const getParseBabel = require('./getParseBabel');
 import vm from 'vm';
-
-const babelifyCode = code => {
-	const options = {
-		ast: false,
-		comments: false,
-		presets: ['babel-preset-es2015', 'babel-preset-stage-2'],
-	};
-	return babel.transform(code, options);
-};
 
 function clone(obj) {
 	if (null == obj || 'object' != typeof obj) return obj;
@@ -36,7 +27,7 @@ function getMixins(code, file) {
 					const source = fs.readFileSync(pathRequire, { encoding: 'utf-8' });
 					stateDoc.saveMixin(source, pathRequire);
 					if (stateDoc.isMixin()){
-						const babelifycode = babelifyCode(source);
+						const babelifycode = getParseBabel(source);
 						const mixin = evalComponentCode(babelifycode.code);
 						if (Object.keys(mixin.exports).length === 0 ) {
 							mixin.exports.default = mixin.module.exports;
@@ -109,7 +100,7 @@ const evalComponentCode = (code) => {
 };
 
 module.exports = function getSandbox(jscodeReqest, file) {
-	const babelifycode = babelifyCode(jscodeReqest);
+	const babelifycode = getParseBabel(jscodeReqest);
 	let component = evalComponentCode(babelifycode.code).exports;
 	const mixins = getMixins(babelifycode.code, file).reverse();
 	component.default.mixins = mixins;
