@@ -57,7 +57,6 @@ describe('tests grid', () => {
 
 describe('tests button', () => {
 	docButton = api.parse(button);
-	console.log(JSON.stringify(docButton, null, 2));
 
 	it('should return an object', () => {
 		expect(docButton).to.be.an('object')
@@ -118,7 +117,6 @@ describe('tests button', () => {
 
 describe('test example vuex', () =>{
 	const docVuex = api.parse(exampleVuex);
-	console.log(docVuex);
 
 	it('should return an object', () => {
 		expect(docVuex).to.be.an('object')
@@ -130,5 +128,13 @@ describe('test example vuex', () =>{
 
 	it('The component should have a description', () => {
 		expect(docVuex.description).to.equal('Partial mapping, object spread operator example');
+	})
+
+	it('should have a method', () => {
+		expect(docVuex['methods'].length).to.equal(1)
+	})
+
+	it('should have "submit" method', () => {
+		expect(docVuex['methods'][0]['name']).to.equal('onSubmit')
 	})
 })

@@ -60,7 +60,6 @@ describe('tests parseWebpack grid', () => {
 
 describe('tests parseWebpack button', () => {
 	docButton = api.parseWebpack(button);
-	console.log(JSON.stringify(docButton, null, 2));
 
 	it('should return an object', () => {
 		expect(docButton).to.be.an('object')
