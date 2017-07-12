@@ -39,5 +39,6 @@ export default function getVueDoc(docFile, component) {
 		props,
 		comment,
 		tags,
+		global: component.global,
 	}
 }

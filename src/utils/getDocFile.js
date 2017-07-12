@@ -16,6 +16,19 @@ export default function getDocFile (jscodeReqest, file) {
 				}
 				return obj;
 			});
+
+		/**
+		 * Fix Vue global component
+		 */
+		docReturn = docReturn.map(obj => {
+			if (obj.scope === 'global' &&
+				obj.name === 'TEMPLATE' &&
+				obj.kind === 'constant'
+			) {
+				obj.longname = 'module.exports'
+			}
+			return obj;
+		})
 		return docReturn;
 	} catch (err) {
 		const errorMessage = err.toString();

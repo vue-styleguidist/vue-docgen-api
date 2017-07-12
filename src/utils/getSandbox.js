@@ -51,7 +51,12 @@ const evalComponentCode = (code) => {
 		const sandbox = {
 			exports: {},
 			Vue: {
-				component: () => {},
+				component: (name, obj) => {
+					sandbox.exports = { default: Object.assign({}, {
+						name,
+						global: true,
+					}, obj) }
+				},
 				extended: () => {},
 			},
 			module: {
@@ -64,7 +69,7 @@ const evalComponentCode = (code) => {
 						mapState: function(){},
 						mapMutations: function(){},
 						mapGetters: function(){},
-						mapActions: function(){}
+						mapActions: function(){},
 					}
 				}
 				return function(){}
@@ -103,6 +108,9 @@ module.exports = function getSandbox(jscodeReqest, file) {
 	const babelifycode = getParseBabel(jscodeReqest);
 	let component = evalComponentCode(babelifycode.code).exports;
 	const mixins = getMixins(babelifycode.code, file).reverse();
-	component.default.mixins = mixins;
+	if (component.default) {
+		component.default.mixins = mixins;
+	}
+
 	return component;
 };

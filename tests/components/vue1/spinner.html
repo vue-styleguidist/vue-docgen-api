@@ -1,0 +1,6 @@
+<div :class="{ 'lock': loading }">
+	<div class="mask" v-if="loading">
+			<div class="loading-small"></div>
+	</div>
+	<slot></slot>
+</div>
