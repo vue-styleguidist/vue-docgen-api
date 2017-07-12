@@ -1,0 +1,94 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'dist-tags',
+1 verbose cli   'add',
+1 verbose cli   'vue-docgen-api@2.0.7-globals',
+1 verbose cli   'beta' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.0
+4 verbose dist-tag add beta to vue-docgen-api@2.0.7-globals
+5 silly mapToRegistry name vue-docgen-api
+6 silly mapToRegistry using default registry
+7 silly mapToRegistry registry https://registry.npmjs.org/
+8 silly mapToRegistry data Result {
+8 silly mapToRegistry   raw: 'vue-docgen-api',
+8 silly mapToRegistry   scope: null,
+8 silly mapToRegistry   escapedName: 'vue-docgen-api',
+8 silly mapToRegistry   name: 'vue-docgen-api',
+8 silly mapToRegistry   rawSpec: '',
+8 silly mapToRegistry   spec: 'latest',
+8 silly mapToRegistry   type: 'tag' }
+9 silly mapToRegistry uri https://registry.npmjs.org/vue-docgen-api
+10 verbose request uri https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags
+11 verbose request no auth needed
+12 info attempt registry request try #1 at 18:00:49
+13 verbose request using bearer token for auth
+14 verbose request id 8b3cf3b48b3d6815
+15 http request GET https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags
+16 http 200 https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags
+17 verbose headers { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+17 verbose headers   etag: '"8R1JEOVEIYLJQECY5DE579993"',
+17 verbose headers   'content-type': 'application/json',
+17 verbose headers   'content-encoding': 'gzip',
+17 verbose headers   'cache-control': 'max-age=300',
+17 verbose headers   'transfer-encoding': 'chunked',
+17 verbose headers   'accept-ranges': 'bytes',
+17 verbose headers   date: 'Wed, 12 Jul 2017 23:01:19 GMT',
+17 verbose headers   via: '1.1 varnish',
+17 verbose headers   connection: 'close',
+17 verbose headers   'x-served-by': 'cache-lax8626-LAX',
+17 verbose headers   'x-cache': 'MISS',
+17 verbose headers   'x-cache-hits': '0',
+17 verbose headers   'x-timer': 'S1499900479.243521,VS0,VE56',
+17 verbose headers   vary: 'Accept-Encoding, Accept' }
+18 silly mapToRegistry name vue-docgen-api
+19 silly mapToRegistry using default registry
+20 silly mapToRegistry registry https://registry.npmjs.org/
+21 silly mapToRegistry data Result {
+21 silly mapToRegistry   raw: 'vue-docgen-api',
+21 silly mapToRegistry   scope: null,
+21 silly mapToRegistry   escapedName: 'vue-docgen-api',
+21 silly mapToRegistry   name: 'vue-docgen-api',
+21 silly mapToRegistry   rawSpec: '',
+21 silly mapToRegistry   spec: 'latest',
+21 silly mapToRegistry   type: 'tag' }
+22 silly mapToRegistry uri https://registry.npmjs.org/vue-docgen-api
+23 verbose request uri https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags/beta
+24 verbose request sending authorization for write operation
+25 info attempt registry request try #1 at 18:00:50
+26 verbose request using bearer token for auth
+27 http request PUT https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags/beta
+28 http 404 https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags/beta
+29 verbose headers { 'content-type': 'application/json',
+29 verbose headers   'cache-control': 'max-age=0',
+29 verbose headers   'content-length': '46',
+29 verbose headers   'accept-ranges': 'bytes',
+29 verbose headers   date: 'Wed, 12 Jul 2017 23:01:20 GMT',
+29 verbose headers   via: '1.1 varnish',
+29 verbose headers   connection: 'close',
+29 verbose headers   'x-served-by': 'cache-lax8635-LAX',
+29 verbose headers   'x-cache': 'MISS',
+29 verbose headers   'x-cache-hits': '0',
+29 verbose headers   'x-timer': 'S1499900480.896917,VS0,VE237' }
+30 verbose request invalidating C:\Users\xt7282\AppData\Roaming\npm-cache\registry.npmjs.org\-\package\vue-docgen-api\dist-tags\beta on PUT
+31 verbose stack Error: Registry returned 404 for PUT on https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags/beta
+31 verbose stack     at makeError (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:302:12)
+31 verbose stack     at CachingRegistryClient.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:280:14)
+31 verbose stack     at Request._callback (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:210:14)
+31 verbose stack     at Request.self.callback (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:187:22)
+31 verbose stack     at emitTwo (events.js:106:13)
+31 verbose stack     at Request.emit (events.js:191:7)
+31 verbose stack     at Request.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:1048:10)
+31 verbose stack     at emitOne (events.js:96:13)
+31 verbose stack     at Request.emit (events.js:188:7)
+31 verbose stack     at IncomingMessage.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:969:12)
+32 verbose statusCode 404
+33 verbose cwd C:\Users\xt7282\Documents\github\vue-docgen-api
+34 error Windows_NT 6.1.7601
+35 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "dist-tags" "add" "vue-docgen-api@2.0.7-globals" "beta"
+36 error node v6.10.0
+37 error npm  v3.10.10
+38 error code E404
+39 error 404 Registry returned 404 for PUT on https://registry.npmjs.org/-/package/vue-docgen-api/dist-tags/beta
+40 verbose exit [ 1, true ]
