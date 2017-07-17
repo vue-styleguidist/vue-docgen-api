@@ -85,8 +85,8 @@ describe('tests parseWebpack button', () => {
 		expect(docButton['props']['color']['defaultValue']['value']).to.equal('"#333"')
 	})
 
-	it('should the component have size prop description equal The size of the button\n`small, normal, large`', () => {
-		expect(docButton['props']['size']['description']).to.equal('The size of the button\n`small, normal, large`')
+	it('should the component have size prop description equal The size of the button', () => {
+		expect(docButton['props']['size']['description']).to.equal('The size of the button')
 	})
 
 	it('should the component have authors', () => {
@@ -105,8 +105,8 @@ describe('tests parseWebpack button', () => {
 		expect(typeof docButton['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have five props', () => {
-		expect(Object.keys(docButton['props']).length).to.equal(5)
+	it('should the component have seven props', () => {
+		expect(Object.keys(docButton['props']).length).to.equal(7)
 	})
 
 	it('should prop1 to be string', () => {

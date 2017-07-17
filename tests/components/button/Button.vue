@@ -22,10 +22,22 @@ export default {
 	props: {
 		/**
 		 * The size of the button
-		 * `small, normal, large`
 		 */
 		size: {
 			default: 'normal'
+		},
+		/**
+		 * The size of the button
+		 */
+		example: {
+			default: false
+		},
+		/**
+		 * The size of the button
+		 */
+		example2: {
+			type: Boolean,
+			default: true
 		},
 		/**
 		 * @ignore
