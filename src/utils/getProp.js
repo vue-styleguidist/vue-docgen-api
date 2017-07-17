@@ -34,7 +34,7 @@ export default function getProp(prop, docPart){
 				name: getTypeName(prop.type),
 			};
 			obj['required'] = prop.required || EMPTY;
-			if (prop.default !== UNDEFINED) {
+			if (typeof prop.default !== UNDEFINED) {
 				let value;
 				if (typeof prop.default === 'function') {
 					obj['type'] = { name: 'func' }

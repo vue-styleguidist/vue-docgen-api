@@ -98,12 +98,28 @@ describe('tests button', () => {
 		expect(typeof docButton['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have five props', () => {
-		expect(Object.keys(docButton['props']).length).to.equal(5)
+	it('should the component have seven props', () => {
+		expect(Object.keys(docButton['props']).length).to.equal(7)
 	})
 
 	it('should prop1 to be string', () => {
 		expect(docButton['props']['prop1']['type']['name']).to.equal('string')
+	})
+
+	it('should example to be boolean', () => {
+		expect(docButton['props']['example']['type']['name']).to.equal('boolean')
+	})
+
+	it('should value default example to be boolean', () => {
+		expect(docButton['props']['example']['defaultValue']['value']).to.equal('false')
+	})
+
+	it('should example2 to be boolean', () => {
+		expect(docButton['props']['example2']['type']['name']).to.equal('boolean')
+	})
+
+	it('should value default example2 to be boolean', () => {
+		expect(docButton['props']['example2']['defaultValue']['value']).to.equal('true')
 	})
 
 	it('should onCustomClick to be ignored', () => {
