@@ -1,6 +1,6 @@
 {
   "name": "vue-docgen-api",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "Toolbox to extract information from Vue component files for documentation generation purposes.",
   "bugs": {
     "url": "https://github.com/vue-styleguidist/vue-docgen-api/issues"
@@ -40,7 +40,7 @@
     "hash-sum": "^1.0.2",
     "jsdoc-api": "^3.0.0",
     "lru-cache": "^4.1.0",
-    "vue-template-compiler": "^2.3.4",
+    "vue-template-compiler": "^2.4.2",
     "vue-webpack-loaders": "^1.0.5"
   },
   "devDependencies": {
