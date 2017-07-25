@@ -48,6 +48,20 @@ function getMixins(code, file) {
 const evalComponentCode = (code) => {
 	try {
 		const script = new vm.Script(code, {});
+		let requireSanbox = function(element){
+			if (element === 'vuex') {
+				return {
+					mapState: function(){},
+					mapMutations: function(){},
+					mapGetters: function(){},
+					mapActions: function(){}
+				}
+			}
+			return function(){}
+		}
+		requireSanbox.context = function(){
+			return function(){}
+		}
 		const sandbox = {
 			exports: {},
 			Vue: {
@@ -58,17 +72,7 @@ const evalComponentCode = (code) => {
 				exports: {
 				},
 			},
-			require:(element)=> {
-				if (element === 'vuex') {
-					return {
-						mapState: function(){},
-						mapMutations: function(){},
-						mapGetters: function(){},
-						mapActions: function(){}
-					}
-				}
-				return function(){}
-			},
+			require:requireSanbox,
 			document: {},
 			window: {
 				location: {},
