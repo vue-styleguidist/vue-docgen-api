@@ -58,6 +58,8 @@ const evalComponentCode = (code) => {
 					}, obj) }
 				},
 				extended: () => {},
+				filter: () => {},
+				directive: () => {},
 			},
 			module: {
 				exports: {
