@@ -26,7 +26,9 @@ export default function processProps(docFile, component) {
 					return (comment.longname.indexOf('props.' + propName) > -1 &&
 						listDocParts.indexOf(comment.longname) === -1)
 				})[0];
-				listDocParts.push(docPart.longname);
+				if ( docPart ) {
+					listDocParts.push(docPart.longname);
+				}
 				const prop = props[propName];
 				const docProp = getProp(prop, docPart);
 				if (docProp.tags.model) {
