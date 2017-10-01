@@ -40,7 +40,7 @@ class stateDoc {
 											.filter(function (docPart) {
 												return docPart.kind !== 'package';
 											});
-		return docMixins.concat(this.docComponent);
+		return [].concat(this.docComponent, docMixins);
 	}
 
 	saveMixin(source, file) {

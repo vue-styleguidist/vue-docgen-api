@@ -69,6 +69,13 @@ export default {
       default: text
     },
     /**
+     * Model example
+     * @model
+     */
+    value: {
+      type: String
+    }
+    /**
      * describe data
      * @version 1.0.5
      */
@@ -127,17 +134,27 @@ export default {
   methods: {
 
     /**
-   * Sets the order
-   *
-   * @public
-   * @version 1.0.5
-   * @since Version 1.0.1
-   * @param {string} key Key to order
-   * @returns {string} Test
-   */
+     * Sets the order
+     *
+     * @public
+     * @version 1.0.5
+     * @since Version 1.0.1
+     * @param {string} key Key to order
+     * @returns {string} Test
+     */
     sortBy: function (key) {
       this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
+      this.sortOrders[key] = this.sortOrders[key] * -1;
+
+      /**
+       * Success event.
+       *
+       * @event success
+       * @type {object}
+       */
+      this.$emit('success', {
+        demo: 'example',
+      })
     },
 
     hiddenMethod: function(){
@@ -257,6 +274,12 @@ we are getting this output:
       "comment": "/**\n     * object/array defaults should be returned from a factory function\n     * @version 1.0.5\n     * @since Version 1.0.1\n     * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     */",
       "description": "object/array defaults should be returned from a factory function"
     },
+    "v-model": {
+      "type": {
+        "name": "string"
+      },
+      "description": "Model example"
+    },
     "data": {
       "type": {
         "name": "array"
@@ -310,6 +333,17 @@ we are getting this output:
         "description": "1.0.5"
       }
     ]
+  },
+  "events": {
+    "success": {
+      "description": "Success event.",
+      "type": {
+        "names": [
+          "object"
+        ]
+      },
+      "comment": "/**\n     * Success event.\n     *\n     * @event success\n     * @type {object}\n     */"
+    }
   }
 }
 
@@ -325,15 +359,15 @@ If you import a mixin, for it to be documented you need to add in the header the
  * @mixin
  */
 module.exports = {
-	props: {
-		/**
-		 * The color for the button example
-		 */
-		color: {
-			type: String,
-			default: '#333'
-		},
-	}
+  props: {
+    /**
+    * The color for the button example
+    */
+    color: {
+      type: String,
+      default: '#333'
+    },
+  }
 }
 ```
 
@@ -367,6 +401,21 @@ export default {
 }
 </script>
 ```
+
+## Events
+
+```js
+/**
+ * Success event.
+ *
+ * @event success
+ * @type {object}
+ */
+this.$emit('success', {
+  demo: 'example',
+})
+```
+
 
 ## Change log
 

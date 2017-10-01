@@ -1,8 +1,8 @@
 const path = require('path');
 var api = require('../dist/main');
-var grid = path.join(__dirname,  './components/grid/Grid.vue');
-var button = path.join(__dirname,  './components/button/Button.vue');
-var exampleVuex = path.join(__dirname,  './components/vuex/example.vue');
+var grid = path.join(__dirname, './components/grid/Grid.vue');
+var button = path.join(__dirname, './components/button/Button.vue');
+var exampleVuex = path.join(__dirname, './components/vuex/example.vue');
 const expect = require("chai").expect;
 let docGrid;
 let docButton;
@@ -18,45 +18,70 @@ describe('tests grid', () => {
 		expect(docGrid.displayName).to.equal('grid');
 	})
 
-	it('should the component have tags', () => {
+	it('should the component has tags', () => {
 		expect(typeof docGrid['tags'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have authors', () => {
+	it('should the component has authors', () => {
 		expect(typeof docGrid['tags']['author'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have description', () => {
+	it('should the component has description', () => {
 		expect(typeof docGrid['description'] !== 'undefined').to.be.true
 	})
 
-	it('should have methods', () => {
+	it('should has methods', () => {
 		expect(typeof docGrid['methods'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have one method', () => {
+	it('should the component has one method', () => {
 		expect(Object.keys(docGrid['methods']).length).to.equal(1)
 	})
 
-	it('should have props', () => {
+	it('should has props', () => {
 		expect(typeof docGrid['props'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have version', () => {
+	it('should the component has version', () => {
 		expect(typeof docGrid['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have four props', () => {
+	it('should the component has four props', () => {
 		expect(Object.keys(docGrid['props']).length).to.equal(4)
 	})
 
-	it('should the prop msg have four tags', () => {
+	it('should the prop msg has four tags', () => {
 		expect(Object.keys(docGrid['props']['msg']['tags']).length).to.equal(4)
+	})
+
+	it('should the component has two event', () => {
+		expect(Object.keys(docGrid['events']).length).to.equal(2)
+	})
+
+	it('should the component has event, it called success', () => {
+		expect(typeof docGrid['events']['success'] !== 'undefined').to.be.true
+	})
+
+	it('should the description of success event is Success event.', () => {
+		expect(docGrid['events']['success']['description']).to.equal('Success event.')
+	})
+
+	it('should the component has event, it called error', () => {
+		expect(typeof docGrid['events']['error'] !== 'undefined').to.be.true
+	})
+
+	it('should the description of error event is Error event.', () => {
+		expect(docGrid['events']['error']['description']).to.equal('Error event.')
+	})
+
+	it('should the type of error event is object.', () => {
+		expect(docGrid['events']['error']['type']['names'][0]).to.equal('object')
 	})
 })
 
 describe('tests button', () => {
 	docButton = api.parse(button);
+	console.log(JSON.stringify(docButton, null, 2))
 
 	it('should return an object', () => {
 		expect(docButton).to.be.an('object')
@@ -66,40 +91,48 @@ describe('tests button', () => {
 		expect(docButton.displayName).to.equal('buttonComponent');
 	})
 
-	it('The component should have a description', () => {
-		expect(docButton.description).to.equal('This is an example of creating a reusable grid component and using it with external data.');
+	it('The component should has a description', () => {
+		expect(docButton.description).to.equal('This is an example of creating a reusable button component and using it with external data.');
 	})
 
-	it('should the component have two tags', () => {
+	it('should the component has two tags', () => {
 		expect(Object.keys(docButton['tags']).length).to.equal(2)
 	})
 
-	it('should the component have size prop default equal normal', () => {
+	it('should the component has size prop default equal normal', () => {
 		expect(docButton['props']['size']['defaultValue']['value']).to.equal('"normal"')
 	})
 
-	it('should the component have color prop default equal #333', () => {
+	it('should the component has size prop description equal The size of the button', () => {
+		expect(docButton['props']['size']['description']).to.equal('The size of the button')
+	})
+
+	it('should the component has color prop description equal The color for the button example', () => {
+		expect(docButton['props']['color']['description']).to.equal('The color for the button example')
+	})
+
+	it('should the component has color prop default equal #333', () => {
 		expect(docButton['props']['color']['defaultValue']['value']).to.equal('"#333"')
 	})
 
-	it('should the component have authors', () => {
+	it('should the component has authors', () => {
 		expect(typeof docButton['tags']['author'] !== 'undefined').to.be.true
 	})
 
-	it('should dont have methods', () => {
+	it('should dont has methods', () => {
 		expect(docButton['methods'].length).to.equal(0)
 	})
 
-	it('should have props', () => {
+	it('should has props', () => {
 		expect(typeof docButton['props'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have version', () => {
+	it('should the component has version', () => {
 		expect(typeof docButton['tags']['version'] !== 'undefined').to.be.true
 	})
 
-	it('should the component have seven props', () => {
-		expect(Object.keys(docButton['props']).length).to.equal(7)
+	it('should the component has eight props', () => {
+		expect(Object.keys(docButton['props']).length).to.equal(8)
 	})
 
 	it('should prop1 to be string', () => {
@@ -110,16 +143,36 @@ describe('tests button', () => {
 		expect(docButton['props']['example']['type']['name']).to.equal('boolean')
 	})
 
-	it('should value default example to be boolean', () => {
+	it('should value default example to be false', () => {
 		expect(docButton['props']['example']['defaultValue']['value']).to.equal('false')
 	})
 
-	it('should example2 to be boolean', () => {
-		expect(docButton['props']['example2']['type']['name']).to.equal('boolean')
+	it('should value default example props description to be The example props', () => {
+		expect(docButton['props']['example']['description']).to.equal('The example props')
 	})
 
-	it('should value default example2 to be boolean', () => {
-		expect(docButton['props']['example2']['defaultValue']['value']).to.equal('true')
+	it('should v-model to be string', () => {
+		expect(docButton['props']['v-model']['type']['name']).to.equal('string')
+	})
+
+	it('should value default v-model to be example model', () => {
+		expect(docButton['props']['v-model']['defaultValue']['value']).to.equal('"example model"')
+	})
+
+	it('should value default v-model props description to be Model example2', () => {
+		expect(docButton['props']['v-model']['description']).to.equal('Model example2')
+	})
+
+	it('should example3 to be number', () => {
+		expect(docButton['props']['example3']['type']['name']).to.equal('number')
+	})
+
+	it('should value default example3 to be 16', () => {
+		expect(docButton['props']['example3']['defaultValue']['value']).to.equal('16')
+	})
+
+	it('should value default example3 props description to be The example3 props', () => {
+		expect(docButton['props']['example3']['description']).to.equal('The example3 props')
 	})
 
 	it('should onCustomClick to be ignored', () => {
@@ -128,6 +181,18 @@ describe('tests button', () => {
 
 	it('should prop1 to be ignored', () => {
 		expect(docButton['props']['prop1']['tags']['ignore']).to.be.an('array')
+	})
+
+	it('should the component has one event', () => {
+		expect(Object.keys(docButton['events']).length).to.equal(1)
+	})
+
+	it('should the component has event, it called success', () => {
+		expect(typeof docButton['events']['success'] !== 'undefined').to.be.true
+	})
+
+	it('should the description of success event is Success event.', () => {
+		expect(docButton['events']['success']['description']).to.equal('Success event.')
 	})
 })
 
@@ -142,15 +207,16 @@ describe('test example vuex', () =>{
 		expect(docVuex.displayName).to.equal('example');
 	})
 
-	it('The component should have a description', () => {
+	it('The component should has a description', () => {
 		expect(docVuex.description).to.equal('Partial mapping, object spread operator example');
 	})
 
-	it('should have a method', () => {
+	it('should has a method', () => {
 		expect(docVuex['methods'].length).to.equal(1)
 	})
 
-	it('should have "submit" method', () => {
+	it('should has "submit" method', () => {
 		expect(docVuex['methods'][0]['name']).to.equal('onSubmit')
 	})
 })
+

@@ -4,6 +4,7 @@ export default [
 	'alias',
 	'augments',
 	'author',
+	'model',
 	'callback',
 	'class',
 	'classdesc',

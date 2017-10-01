@@ -2,6 +2,7 @@ import { IGNORE_DEFAULT, getDescription, getComment , EMPTY} from './variables';
 import processTags from './processTags';
 import processProps from './processProps';
 import processMethods from './processMethods';
+import processEvents from './processEvents';
 
 export default function getVueDoc(docFile, component) {
 	let displayName;
@@ -31,6 +32,7 @@ export default function getVueDoc(docFile, component) {
 	}
 	const props = processProps(docFile, component);
 	const methods = processMethods(docFile, component);
+	const events = processEvents(docFile, component);
 
 	return {
 		description,
@@ -39,5 +41,6 @@ export default function getVueDoc(docFile, component) {
 		props,
 		comment,
 		tags,
+		events,
 	}
 }

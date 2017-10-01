@@ -1,6 +1,7 @@
 import getMethod from './getMethod';
 
 export default function processMethods(docFile, component) {
+	docFile = docFile.slice();
 	let methods = component.methods;
 	const listDocMethods = [];
 	let mixins = component.mixins;
@@ -13,13 +14,15 @@ export default function processMethods(docFile, component) {
 		});
 	}
 	if (methods) {
-		docFile.reverse()
+		const listDocParts = [];
 		Object.keys(methods).forEach(methodName => {
 			const docPart = docFile.reverse().filter( comment => {
-				return (comment.longname.indexOf('methods.' + methodName) > -1)
+				return (comment.longname.indexOf('methods.' + methodName) > -1 &&
+				listDocParts.indexOf(comment.longname) === -1)
 			})[0];
 			if ( docPart ) {
 				if ( docPart['access'] && docPart['access'] === 'public' ) {
+					listDocParts.push(docPart.longname);
 					listDocMethods.push(getMethod(methodName, docPart));
 				}
 			}

@@ -27,8 +27,6 @@ export default function getProp(prop, docPart){
 			obj['type'] = {
 				name: getTypeName(prop),
 			};
-			obj['tags'] = processTags(docPart, IGNORE_DEFAULT);
-			obj['comment'] = getComment(docPart);
 		} else {
 			obj['type'] = {
 				name: getTypeName(prop.type),
@@ -51,9 +49,9 @@ export default function getProp(prop, docPart){
 					computed: false,
 				};
 			}
-			obj['tags'] = processTags(docPart, IGNORE_DEFAULT);
-			obj['comment'] = getComment(docPart);
 		}
+		obj['tags'] = processTags(docPart, IGNORE_DEFAULT);
+		obj['comment'] = getComment(docPart);
 		obj['description'] = getDescription(docPart);
 		return obj;
 	} else {

@@ -1,24 +1,22 @@
 <template>
-  <table class="grid">
-    <thead>
-      <tr>
-        <th v-for="key in columns"
-          @click="sortBy(key)"
-          :class="{ active: sortKey == key }">
-          {{ key | capitalize }}
-          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-          </span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="entry in filteredData">
-        <td v-for="key in columns">
-          {{entry[key]}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+	<table class="grid">
+		<thead>
+			<tr>
+				<th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">
+					{{ key | capitalize }}
+					<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+					</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="entry in filteredData">
+				<td v-for="key in columns">
+					{{entry[key]}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </template>
 
 <script>
@@ -31,8 +29,8 @@ import { text } from './utils';
  * @since Version 1.0.1
  */
 export default {
-  name: 'grid',
-  props: {
+	name: 'grid',
+	props: {
 
     /**
      * object/array defaults should be returned from a factory function
@@ -41,67 +39,67 @@ export default {
      * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
      * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
      */
-    msg: {
-      type: [String, Number],
-      default: text
-    },
+		msg: {
+			type: [String, Number],
+			default: text
+		},
     /**
      * describe data
      * @version 1.0.5
      */
-    data: [Array],
+		data: [Array],
     /**
      * get columns list
      */
-    columns: [Array],
+		columns: [Array],
     /**
      * filter key
      * @ignore
      */
-    filterKey: {
-      type: String,
-      default: 'example'
-    }
-  },
-  data () {
-    var sortOrders = {}
-    this.columns.forEach(function (key) {
-      sortOrders[key] = 1
-    })
-    return {
-      sortKey: '',
-      sortOrders: sortOrders
-    }
-  },
-  computed: {
-    filteredData: function () {
-      var sortKey = this.sortKey
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var order = this.sortOrders[sortKey] || 1
-      var data = this.data
-      if (filterKey) {
-        data = data.filter(function (row) {
-          return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-          })
-        })
-      }
-      if (sortKey) {
-        data = data.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
-        })
-      }
-      return data
-    }
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
-    }
-  },
-  methods: {
+		filterKey: {
+			type: String,
+			default: 'example'
+		}
+	},
+	data() {
+		var sortOrders = {}
+		this.columns.forEach(function(key) {
+			sortOrders[key] = 1
+		})
+		return {
+			sortKey: '',
+			sortOrders: sortOrders
+		}
+	},
+	computed: {
+		filteredData: function() {
+			var sortKey = this.sortKey
+			var filterKey = this.filterKey && this.filterKey.toLowerCase()
+			var order = this.sortOrders[sortKey] || 1
+			var data = this.data
+			if (filterKey) {
+				data = data.filter(function(row) {
+					return Object.keys(row).some(function(key) {
+						return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+					})
+				})
+			}
+			if (sortKey) {
+				data = data.slice().sort(function(a, b) {
+					a = a[sortKey]
+					b = b[sortKey]
+					return (a === b ? 0 : a > b ? 1 : -1) * order
+				})
+			}
+			return data
+		}
+	},
+	filters: {
+		capitalize: function(str) {
+			return str.charAt(0).toUpperCase() + str.slice(1)
+		}
+	},
+	methods: {
 
     /**
    * Sets the order
@@ -112,20 +110,39 @@ export default {
    * @param {string} key Key to order
    * @returns {string} Test
    */
-    sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
-    },
+		sortBy: function(key) {
+			this.sortKey = key
+			this.sortOrders[key] = this.sortOrders[key] * -1;
 
-    hiddenMethod: function(){
+			/**
+			 * Success event.
+			 *
+			 * @event success
+			 * @type {object}
+			 */
+			this.$emit('example', {
+				demo: 'example success',
+			})
+		},
 
-    }
-  }
+		hiddenMethod: function() {
+			/**
+			 * Error event.
+			 *
+			 * @event error
+			 * @type {object}
+			 */
+			this.$emit('error', {
+				demo: 'example error',
+			})
+
+		}
+	}
 }
 </script>
 
 <style scoped>
 .grid {
-  margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 </style>
