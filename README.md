@@ -39,9 +39,17 @@ For the following component
 
 ```html
 <template>
-  <table class="grid">
-    <!-- -->
-  </table>
+  <div>
+    <!-- Use this slot header -->
+    <slot name="header"></slot>
+
+    <table class="grid">
+      <!-- -->
+    </table>
+
+    <!-- Use this slot footer -->
+    <slot name="footer"></slot>
+  </div>
 </template>
 
 <script>
@@ -344,6 +352,14 @@ we are getting this output:
       },
       "comment": "/**\n     * Success event.\n     *\n     * @event success\n     * @type {object}\n     */"
     }
+  },
+  "slots": {
+    "header": {
+      "description": "Use this slot header"
+    },
+    "footer": {
+      "description": "Use this slot footer"
+    }
   }
 }
 
@@ -414,6 +430,20 @@ export default {
 this.$emit('success', {
   demo: 'example',
 })
+```
+
+## Slots
+
+```html
+<template>
+  <div>
+    <!-- Use this slot header -->
+    <slot name="header"></slot>
+
+    <!-- Use this slot footer -->
+    <slot name="footer"></slot>
+  </div>
+</template>
 ```
 
 
