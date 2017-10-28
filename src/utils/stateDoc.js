@@ -1,4 +1,6 @@
+import parser from './parser';
 import getComponentModuleJSCode from './getComponentModuleJSCode';
+import getSlots from './getSlots';
 import getDocFile from './getDocFile';
 
 class stateDoc {
@@ -9,6 +11,7 @@ class stateDoc {
 		this.docMixins = [];
 		this.jscodeReqest = '';
 		this.docTemp = '';
+		this.slots;
 	}
 
 	isMainComponent(file){
@@ -17,7 +20,9 @@ class stateDoc {
 
 	saveComponent(source, file){
 		if (this.isMainComponent(file) && this.sourceComponent !== source) {
-			this.jscodeReqest = getComponentModuleJSCode(source, file);
+			const parts = parser(source, 'name');
+			this.slots = getSlots(parts);
+			this.jscodeReqest = getComponentModuleJSCode(parts, source, file);
 			const doc = this.getDocFile(this.jscodeReqest, file);
 			this.docComponent = doc;
 		}
@@ -35,12 +40,12 @@ class stateDoc {
 		});
 	}
 
-	getDoc(){
+	getDocJs(){
 		let docMixins = [].concat.apply([], this.docMixins)
 											.filter(function (docPart) {
 												return docPart.kind !== 'package';
 											});
-		return [].concat(this.docComponent, docMixins);
+		return this.docComponent.concat(docMixins);
 	}
 
 	saveMixin(source, file) {

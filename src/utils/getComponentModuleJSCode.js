@@ -1,4 +1,3 @@
-import parser from './parser';
 import path from 'path';
 import fs from 'fs';
 
@@ -6,8 +5,7 @@ const readSeparateScriptFile = (fileName) => {
 	return fs.readFileSync(fileName, { encoding: 'utf-8' });
 };
 
-export default function getComponentModuleJSCode (source, file){
-	const parts = parser(source, 'name');
+export default function getComponentModuleJSCode (parts, source, file){
 	if (!parts.script) {
 		return source;
 		// No script code;

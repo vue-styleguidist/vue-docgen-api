@@ -10,6 +10,6 @@ export default function parse(file) {
 	stateDoc.file = file;
 	stateDoc.saveComponent(source, file);
 	const component = utils.getSandbox(stateDoc.jscodeReqest, file).default;
-	const vueDoc = utils.getVueDoc(stateDoc.getDoc(), component);
+	const vueDoc = utils.getVueDoc(stateDoc, component);
 	return vueDoc;
 }

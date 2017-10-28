@@ -1,4 +1,7 @@
 <template>
+
+	<!-- Use this slot header -->
+	<slot name="header"></slot>
 	<table class="grid">
 		<thead>
 			<tr>
@@ -17,6 +20,9 @@
 			</tr>
 		</tbody>
 	</table>
+
+	<!-- Use this slot footer -->
+	<slot name="footer"></slot>
 </template>
 
 <script>

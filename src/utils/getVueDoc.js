@@ -4,22 +4,24 @@ import processProps from './processProps';
 import processMethods from './processMethods';
 import processEvents from './processEvents';
 
-export default function getVueDoc(docFile, component) {
+export default function getVueDoc(stateDoc, component) {
+
+	let docJsFile = stateDoc.getDocJs();
 	let displayName;
 	let docComponent;
 	if (!component.name || component.name === '') {
 		throw new Error("The component has no name, add 'name' property on the Vue component");
 	}
 	displayName = component.name;
-	if (docFile) {
-		docFile = docFile.filter( comment => {
+	if (docJsFile) {
+		docJsFile = docJsFile.filter( comment => {
 			return comment.kind !== 'package'
 		});
-		docComponent = docFile.filter(comment => {
+		docComponent = docJsFile.filter(comment => {
 			return comment.longname === 'module.exports'
 		})[0];
 	} else {
-		docFile = [];
+		docJsFile = [];
 		docComponent = false;
 	}
 	let description = EMPTY;
@@ -30,9 +32,9 @@ export default function getVueDoc(docFile, component) {
 		comment = getComment(docComponent);
 		tags = processTags(docComponent, IGNORE_DEFAULT);
 	}
-	const props = processProps(docFile, component);
-	const methods = processMethods(docFile, component);
-	const events = processEvents(docFile, component);
+	const props = processProps(docJsFile, component);
+	const methods = processMethods(docJsFile, component);
+	const events = processEvents(docJsFile, component);
 
 	return {
 		description,
@@ -42,5 +44,6 @@ export default function getVueDoc(docFile, component) {
 		comment,
 		tags,
 		events,
+		slots: stateDoc.slots,
 	}
 }

@@ -77,6 +77,26 @@ describe('tests grid', () => {
 	it('should the type of error event is object.', () => {
 		expect(docGrid['events']['error']['type']['names'][0]).to.equal('object')
 	})
+
+	it('should have two slots.', () => {
+		expect(Object.keys(docGrid['slots']).length).to.equal(2)
+	})
+
+	it('should have a slot named header.', () => {
+		expect(typeof docGrid['slots']['header'] !== 'undefined').to.be.true
+	})
+
+	it('the header slot should have "Use this slot header" as description', () => {
+		expect(docGrid['slots']['header']['description']).to.equal('Use this slot header')
+	})
+
+	it('should have a slot named footer.', () => {
+		expect(typeof docGrid['slots']['footer'] !== 'undefined').to.be.true
+	})
+
+	it('the footer slot should have "Use this slot footer" as description', () => {
+		expect(docGrid['slots']['footer']['description']).to.equal('Use this slot footer')
+	})
 })
 
 describe('tests button', () => {
@@ -194,10 +214,23 @@ describe('tests button', () => {
 	it('should the description of success event is Success event.', () => {
 		expect(docButton['events']['success']['description']).to.equal('Success event.')
 	})
+
+	it('should have a slot.', () => {
+		expect(Object.keys(docButton['slots']).length).to.equal(1)
+	})
+
+	it('should have a default slot.', () => {
+		expect(typeof docButton['slots']['default'] !== 'undefined').to.be.true
+	})
+
+	it('the default slot should have "Use this slot default" as description', () => {
+		expect(docButton['slots']['default']['description']).to.equal('Use this slot default')
+	})
 })
 
-describe('test example vuex', () =>{
+describe('test example vuex', () => {
 	const docVuex = api.parse(exampleVuex);
+	console.log(JSON.stringify(docVuex, null, 2))
 
 	it('should return an object', () => {
 		expect(docVuex).to.be.an('object')
@@ -218,5 +251,8 @@ describe('test example vuex', () =>{
 	it('should has "submit" method', () => {
 		expect(docVuex['methods'][0]['name']).to.equal('onSubmit')
 	})
-})
 
+	it('should dont have slots.', () => {
+		expect(Object.keys(docVuex['slots']).length).to.equal(0)
+	})
+})
