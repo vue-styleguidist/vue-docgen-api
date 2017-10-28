@@ -33,5 +33,5 @@ export default function getSlots(parts) {
 		parser.end();
 		return output;
 	}
-	return null;
+	return {};
 };
