@@ -10,7 +10,9 @@ export default function getSlots(parts) {
 
 		const parser = new HtmlParser({
 			oncomment: (data) => {
-				lastComment = data.trim()
+				if (data.search(/\@slot/) !== -1) {
+					lastComment = data.replace('@slot', '').trim()
+				}
 			},
 			ontext: (text) => {
 				if (text.trim()) {

@@ -1,6 +1,6 @@
 <template>
 
-	<!-- Use this slot header -->
+	<!-- @slot Use this slot header -->
 	<slot name="header"></slot>
 	<table class="grid">
 		<thead>
@@ -21,7 +21,7 @@
 		</tbody>
 	</table>
 
-	<!-- Use this slot footer -->
+	<!-- @slot Use this slot footer -->
 	<slot name="footer"></slot>
 </template>
 
