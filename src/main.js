@@ -5,8 +5,8 @@ function parseFile(path) {
   return parseFile(path);
 }
 
-function parseSource(src) {
-	return parseSource(src);
+function parseSource(src, path) {
+	return parseSource(src, path);
 }
 
 export {
