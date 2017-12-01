@@ -1,7 +1,5 @@
-# vue-docgen-api (Fork)
+# vue-docgen-api
 [![npm](https://img.shields.io/npm/v/vue-docgen-api.svg)](https://www.npmjs.com/package/vue-docgen-api)
-
-**This fork adds a `parseSource` method to parse plain sources instead of files only**
 
 `vue-docgen-api` is a toolbox to help extracting information from [Vue][] components, and generate documentation from it.
 
@@ -12,7 +10,7 @@ Use [babel][] and [jsdoc-api][] to compile the code and analyze the contents of 
 Install the module directly from npm:
 
 ```
-npm install git://github.com/Radiergummi/vue-docgen-api --save-dev
+npm install vue-docgen-api --save-dev
 ```
 
 ## API
@@ -20,14 +18,16 @@ npm install git://github.com/Radiergummi/vue-docgen-api --save-dev
 The tool can be used programmatically to extract component information and customize the extraction process:
 
 ```js
-const vueDocs = require('vue-docgen-api');
-
-// from file
-const componentFileInfo = vueDocs.parseFile(filePath);
-
-// from source
-const componentSourceInfo = vueDocs.parseSource(sourceCode, filePath);
+var vueDocs = require('vue-docgen-api');
+var componentInfo = vueDocs.parse(filePath);
 ```
+
+### parse(filePath)
+
+| Parameter |  Type | Description |
+| -------------- | ------ | --------------- |
+| filePath       | string | The file path |
+
 
 ## Using JSDoc tags
 
