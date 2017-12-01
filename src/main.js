@@ -1,12 +1,9 @@
 import * as utils from './utils';
-import parse from './parse';
-
-function defaultParse(src) {
-  return parse(src);
-}
+import { parse, parseSource } from './parse';
 
 export {
-	defaultParse as parse,
+	parse,
+	parseSource,
 	utils,
 };
 
