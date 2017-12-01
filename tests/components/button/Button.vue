@@ -1,6 +1,6 @@
 <template>
 	<button class="buttonComponent" @click.prevent="onClick">
-		<!-- Use this slot default -->
+		<!-- @slot Use this slot default -->
 		<slot></slot>
 	</button>
 </template>

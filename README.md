@@ -40,14 +40,14 @@ For the following component
 ```html
 <template>
   <div>
-    <!-- Use this slot header -->
+    <!-- @slot Use this slot header -->
     <slot name="header"></slot>
 
     <table class="grid">
       <!-- -->
     </table>
 
-    <!-- Use this slot footer -->
+    <!-- @slot Use this slot footer -->
     <slot name="footer"></slot>
   </div>
 </template>
@@ -437,10 +437,10 @@ this.$emit('success', {
 ```html
 <template>
   <div>
-    <!-- Use this slot header -->
+    <!-- @slot Use this slot header -->
     <slot name="header"></slot>
 
-    <!-- Use this slot footer -->
+    <!-- @slot Use this slot footer -->
     <slot name="footer"></slot>
   </div>
 </template>
