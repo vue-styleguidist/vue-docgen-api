@@ -34,7 +34,7 @@ export default function getProp(prop, docPart){
 			obj['required'] = prop.required || EMPTY;
 			if (typeof prop.default !== UNDEFINED) {
 				let value;
-				if (typeof prop.default === 'function') {
+				if (typeof prop.default === 'function' && !prop.type) {
 					obj['type'] = { name: 'func' }
 					var func = prop.default.toString().replace(fnNameMatchRegex, 'function');
 					value = JSON.parse(JSON.stringify(func.replace(/\s\s+/g, ' ')))
