@@ -49,6 +49,7 @@
     "vue-template-compiler": "^2.5.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-eslint": "^7.2.3",
     "chai": "^4.0.2",
     "eslint": "^3.19.0",

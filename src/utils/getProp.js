@@ -34,10 +34,12 @@ export default function getProp(prop, docPart){
 			obj['required'] = prop.required || EMPTY;
 			if (typeof prop.default !== UNDEFINED) {
 				let value;
-				if (typeof prop.default === 'function' && !prop.type) {
+				if (typeof prop.default === 'function' && !prop.type || obj['type']['name'].includes('func')) {
 					obj['type'] = { name: 'func' }
 					var func = prop.default.toString().replace(fnNameMatchRegex, 'function');
 					value = JSON.parse(JSON.stringify(func.replace(/\s\s+/g, ' ')))
+				} else if (typeof prop.default === 'function' && prop.type) {
+          value = JSON.stringify(prop.default())
 				} else {
 					if (!prop.type) {
 						obj['type'] = { name: typeof prop.default }
