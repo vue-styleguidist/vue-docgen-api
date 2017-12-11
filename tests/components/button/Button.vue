@@ -56,6 +56,15 @@ export default {
 			default: () => () => null,
 		},
 		/**
+		 * Function default
+		 */
+		funcDefault: {
+      type: Function,
+			default: () => {
+				return 'foo';
+			}
+		},
+		/**
 		 *@ignore
 		 *
 		 */
@@ -87,13 +96,13 @@ export default {
 
 <style scoped>
 .button {
-	padding: .5em 1.5em;
-	color: #666;
-	background-color: #fff;
-	border: 1px solid blue;
-	border-radius: .3em;
-	text-align: center;
-	vertical-align: middle;
-	cursor: pointer;
+  padding: 0.5em 1.5em;
+  color: #666;
+  background-color: #fff;
+  border: 1px solid blue;
+  border-radius: 0.3em;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
 }
 </style>
