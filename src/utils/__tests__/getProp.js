@@ -23,7 +23,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "function() { return function() { return null; }; }",
-				computed: false
+				func: true
 			},
 			tags: {
 				ignore: [
@@ -79,7 +79,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: '"Hello"',
-				computed: false
+				func: false
 			},
 			tags: {},
 			comment: "",
@@ -102,7 +102,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: 'function() { return "Hello"; }',
-				computed: false
+				func: true
 			},
 			tags: {},
 			comment: "",
@@ -139,7 +139,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "3",
-				computed: false
+				func: false
 			},
 			tags: {},
 			comment: "",
@@ -162,7 +162,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "function() { return 3; }",
-				computed: false
+				func: true
 			},
 			tags: {},
 			comment: "",
@@ -199,7 +199,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "true",
-				computed: false
+				func: false
 			},
 			tags: {},
 			comment: "",
@@ -222,7 +222,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "function() { return true; }",
-				computed: false
+				func: true
 			},
 			tags: {},
 			comment: "",
@@ -259,7 +259,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "[]",
-				computed: false
+				func: false
 			},
 			tags: {},
 			comment: "",
@@ -282,7 +282,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "function() { return []; }",
-				computed: false
+				func: true
 			},
 			tags: {},
 			comment: "",
@@ -319,7 +319,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "{}",
-				computed: false
+				func: false
 			},
 			tags: {},
 			comment: "",
@@ -342,7 +342,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "function() { return {}; }",
-				computed: false
+				func: true
 			},
 			tags: {},
 			comment: "",
@@ -379,7 +379,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "function(){}",
-				computed: false
+				func: true
 			},
 			tags: {},
 			comment: "",
@@ -402,7 +402,7 @@ describe("getProp", () => {
 			required: "",
 			defaultValue: {
 				value: "function() { return function() {}; }",
-				computed: false
+				func: true
 			},
 			tags: {},
 			comment: "",
