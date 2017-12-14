@@ -65,6 +65,7 @@ const evalComponentCode = (code) => {
 		const sandbox = {
 			exports: {},
 			Vue: {
+				use: () => {},
 				component: () => {},
 				extended: () => {},
 			},
