@@ -57,6 +57,13 @@ const evalComponentCode = (code) => {
 					mapActions: function(){}
 				}
 			}
+			if (element === 'vue') {
+        return {
+          use: function use() {},
+          component: function component() {},
+          extended: function extended() {},
+        };
+			}
 			return function(){}
 		}
 		requireSanbox.context = function(){
@@ -64,11 +71,6 @@ const evalComponentCode = (code) => {
 		}
 		const sandbox = {
 			exports: {},
-			Vue: {
-				use: () => {},
-				component: () => {},
-				extended: () => {},
-			},
 			module: {
 				exports: {
 				},
