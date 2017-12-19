@@ -1,5 +1,6 @@
 import * as utils from './utils';
-import { parse, parseSource } from './parse';
+import parse from './parse';
+import parseSource from './parseSource';
 
 export {
 	parse,
