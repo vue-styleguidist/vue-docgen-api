@@ -45,16 +45,23 @@
     "htmlparser2": "^3.9.2",
     "jsdoc-api": "^3.0.0",
     "lru-cache": "^4.1.0",
+    "pug": "^2.0.0-rc.4",
     "require-extension-hooks": "^0.3.2",
+    "require-extension-hooks-babel": "^0.1.1",
     "require-extension-hooks-vue": "^0.4.1",
-    "vue": "^2.5.2",
-    "vue-template-compiler": "^2.5.2"
+    "vue": "^2.5.0",
+    "vue-template-compiler": "^2.5.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-vue-jsx": "^3.5.0",
     "chai": "^4.0.2",
     "eslint": "^3.19.0",
     "mocha": "^3.4.2",
-    "vue-property-decorator": "^6.0.0"
+    "vue-class-component": "^6.1.2",
+    "vue-property-decorator": "^6.0.0",
+    "vuex": "^3.0.1"
   }
 }

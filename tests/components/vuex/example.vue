@@ -2,7 +2,6 @@
 </template>
 <script>
 		import {mapGetters} from 'vuex'
-		const ctx = require.context('some/path', true, /.jpg$/);
 
 		/**
 		* Partial mapping, object spread operator example
