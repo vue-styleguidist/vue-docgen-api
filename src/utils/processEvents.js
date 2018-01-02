@@ -11,6 +11,7 @@ export default function processMethods(docFile) {
 		listDocMethods[docPart.name] = {
 			description: getDescription(docPart),
 			type: docPart.type,
+			tags: docPart.tags,
 			comment: getComment(docPart),
 		}
 		}
