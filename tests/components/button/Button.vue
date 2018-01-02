@@ -83,11 +83,13 @@ export default {
 				 * Success event.
 				 *
 				 * @event success
-				 * @type {object}
+				 * @property {object} demo - example
+				 * @property {number} called - test called
+				 * @property {boolean} isPacked - Indicates whether the snowball is tightly packed.
 				 */
 				this.$emit('success', {
 					demo: 'example',
-				})
+				}, 10, false)
 			}, 1000);
 		}
 	}
