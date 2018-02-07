@@ -4,7 +4,7 @@ export default function processProps(docFile, component) {
 	docFile = docFile.slice();
 	let props = component.props;
 	let mixins = component.mixins;
-	if ( mixins ) {
+	if (mixins) {
 		mixins.forEach(mixin => {
 			const pMixin = mixin.props;
 			if (pMixin) {
@@ -12,21 +12,22 @@ export default function processProps(docFile, component) {
 			}
 		});
 	}
-	if ( props ) {
+	if (props) {
 		const listDocProps = {};
-		if ( Array.isArray(props) ) {
-			props.forEach( propName => {
+		if (Array.isArray(props)) {
+			props.forEach(propName => {
 				listDocProps[propName] = getProp();
 			});
 		} else {
 			const listDocParts = [];
-			Object.keys(props).forEach( key => {
+			Object.keys(props).forEach(key => {
 				let propName = key;
-				const docPart = docFile.reverse().filter( comment => {
-					return (comment.longname.indexOf('props.' + propName) > -1 &&
-						listDocParts.indexOf(comment.longname) === -1)
+				const docPart = docFile.reverse().filter(comment => {
+					const propNameDoc = comment.longname.split('props.')[1];
+					return (propNameDoc === propName &&
+						listDocParts.indexOf(propNameDoc) === -1)
 				})[0];
-				if ( docPart ) {
+				if (docPart) {
 					listDocParts.push(docPart.longname);
 				}
 				const prop = props[propName];

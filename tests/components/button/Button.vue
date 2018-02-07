@@ -28,6 +28,20 @@ export default {
 			default: 'normal'
 		},
 		/**
+		 * Number of columns (1-12) the column should span.
+		 */
+		span: {
+			type: [String, Number],
+		},
+		/** Sm breakpoint and above */
+		spanSm: {
+			type: [String, Number],
+		},
+		/** Md breakpoint and above */
+		spanMd: {
+			type: [String, Number],
+		},
+		/**
 		 * The example props
 		 */
 		example: {
@@ -83,11 +97,13 @@ export default {
 				 * Success event.
 				 *
 				 * @event success
-				 * @type {object}
+				 * @property {object} demo - example
+				 * @property {number} called - test called
+				 * @property {boolean} isPacked - Indicates whether the snowball is tightly packed.
 				 */
 				this.$emit('success', {
 					demo: 'example',
-				})
+				}, 10, false)
 			}, 1000);
 		}
 	}
