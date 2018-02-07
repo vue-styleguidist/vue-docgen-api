@@ -6,7 +6,7 @@ var exampleVuex = path.join(__dirname, "./components/vuex/example.vue");
 const expect = require("chai").expect;
 let docGrid;
 let docButton;
-/*
+
 describe("tests grid", () => {
 	docGrid = api.parse(grid);
 
@@ -128,10 +128,9 @@ describe("tests grid", () => {
 		);
 	});
 });
-*/
+
 describe("tests button", () => {
 	docButton = api.parse(button);
-	console.log(JSON.stringify(docButton, null, 2));
 
 	it("should return an object", () => {
 		expect(docButton).to.be.an("object");
@@ -191,8 +190,34 @@ describe("tests button", () => {
 		expect(typeof docButton["tags"]["version"] !== "undefined").to.be.true;
 	});
 
-	it("should the component has nine props", () => {
-		expect(Object.keys(docButton["props"]).length).to.equal(9);
+	it("should the component has twelve props", () => {
+		expect(Object.keys(docButton["props"]).length).to.equal(12);
+	});
+
+	it("should span to be string|number", () => {
+		expect(docButton["props"]["span"]["type"]["name"]).to.equal("string|number");
+	});
+
+	it("should span has as description 'Number of columns (1-12) the column should span.'", () => {
+		expect(docButton["props"]["span"]["description"]).to.equal(
+			"Number of columns (1-12) the column should span."
+		);
+	});
+
+	it("should span has as description 'Sm breakpoint and above'", () => {
+		expect(docButton["props"]["spanSm"]["description"]).to.equal(
+			"Sm breakpoint and above"
+		);
+	});
+
+	it("should spanMd has as description 'Md breakpoint and above'", () => {
+		expect(docButton["props"]["spanMd"]["description"]).to.equal(
+			"Md breakpoint and above"
+		);
+	});
+
+	it("should spanSm to be string|number", () => {
+		expect(docButton["props"]["spanSm"]["type"]["name"]).to.equal("string|number");
 	});
 
 	it("should funcDefault to be string", () => {
@@ -289,7 +314,7 @@ describe("tests button", () => {
 		);
 	});
 });
-/*
+
 describe("test example vuex", () => {
 	const docVuex = api.parse(exampleVuex);
 
@@ -319,4 +344,3 @@ describe("test example vuex", () => {
 		expect(Object.keys(docVuex["slots"]).length).to.equal(0);
 	});
 });
-*/

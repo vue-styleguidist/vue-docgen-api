@@ -28,6 +28,20 @@ export default {
 			default: 'normal'
 		},
 		/**
+		 * Number of columns (1-12) the column should span.
+		 */
+		span: {
+			type: [String, Number],
+		},
+		/** Sm breakpoint and above */
+		spanSm: {
+			type: [String, Number],
+		},
+		/** Md breakpoint and above */
+		spanMd: {
+			type: [String, Number],
+		},
+		/**
 		 * The example props
 		 */
 		example: {
