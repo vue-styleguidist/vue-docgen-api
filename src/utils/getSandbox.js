@@ -2,7 +2,7 @@ import stateDoc from './stateDoc';
 const fs = require('fs');
 const path = require('path');
 const getRequires = require('./getRequires');
-const getParseBabel = require('./getParseBabel');
+const { parseModule } = require('./parseModule')
 import vm from 'vm';
 
 function clone(obj) {
@@ -27,8 +27,8 @@ function getMixins(code, file) {
 					const source = fs.readFileSync(pathRequire, { encoding: 'utf-8' });
 					stateDoc.saveMixin(source, pathRequire);
 					if (stateDoc.isMixin()){
-						const babelifycode = getParseBabel(source);
-						const mixin = evalComponentCode(babelifycode.code);
+						const parsedSource = parseModule(source, stateDoc.jscodeLang);
+						const mixin = evalComponentCode(parsedSource);
 						if (Object.keys(mixin.exports).length === 0 ) {
 							mixin.exports.default = mixin.module.exports;
 						}
@@ -59,9 +59,15 @@ const evalComponentCode = (code) => {
 			}
 			if (element === 'vue') {
         return {
+					__esModule: true,
           use: function use() {},
           component: function component() {},
-          extended: function extended() {},
+					extended: function extended() {},
+          default: {
+						extend(obj) {
+							return obj
+						},
+					},
         };
 			}
 			return function(){}
@@ -106,10 +112,10 @@ const evalComponentCode = (code) => {
 	}
 };
 
-module.exports = function getSandbox(jscodeReqest, file) {
-	const babelifycode = getParseBabel(jscodeReqest);
-	let component = evalComponentCode(babelifycode.code).exports;
-	const mixins = getMixins(babelifycode.code, file).reverse();
+module.exports = function getSandbox(stateDoc, file) {
+	const parsedSource = parseModule(stateDoc.jscodeReqest, stateDoc.jscodeLang);
+	let component = evalComponentCode(parsedSource).exports;
+	const mixins = getMixins(parsedSource, file).reverse();
 	component.default.mixins = mixins;
 	return component;
 };

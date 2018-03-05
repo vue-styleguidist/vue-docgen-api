@@ -9,7 +9,7 @@ export const parse = function(file) {
 	}
 	stateDoc.file = file;
 	stateDoc.saveComponent(source, file);
-	const component = utils.getSandbox(stateDoc.jscodeReqest, file).default;
+	const component = utils.getSandbox(stateDoc, file).default;
 	const vueDoc = utils.getVueDoc(stateDoc, component);
 	return vueDoc;
 }
@@ -21,7 +21,7 @@ export const parseSource = function(source, path) {
 
 	stateDoc.file = path;
 	stateDoc.saveComponent(source, path);
-	const component = utils.getSandbox(stateDoc.jscodeReqest, path).default;
+	const component = utils.getSandbox(stateDoc, path).default;
 	const vueDoc = utils.getVueDoc(stateDoc, component);
 	return vueDoc;
 }

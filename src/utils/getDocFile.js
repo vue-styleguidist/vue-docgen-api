@@ -1,12 +1,12 @@
 const jsdoc = require('jsdoc-api');
-const getParseBabel = require('./getParseBabel');
 const path = require('path');
+const { parseModule } = require('./parseModule')
 
-export default function getDocFile (jscodeReqest, file) {
+export default function getDocFile (source, file, lang) {
 	try {
-		const babelifycode = getParseBabel(jscodeReqest, '2017', true);
+		const parsedSource = parseModule(source, lang, '2017')
 		let docReturn = jsdoc.explainSync({
-				source: babelifycode.code,
+				source: parsedSource,
 				configure: path.join(path.dirname(__dirname), '..', 'config.json'),
 		}).filter(obj => obj.undocumented !== true)
 			.map( obj => {

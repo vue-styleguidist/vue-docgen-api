@@ -45,6 +45,7 @@
     "htmlparser2": "^3.9.2",
     "jsdoc-api": "^3.0.0",
     "lru-cache": "^4.1.0",
+    "typescript": "^2.5.0",
     "vue": "^2.5.2",
     "vue-template-compiler": "^2.5.2"
   },

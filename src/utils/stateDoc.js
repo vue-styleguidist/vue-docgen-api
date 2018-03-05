@@ -10,6 +10,7 @@ class stateDoc {
 		this.sourceComponent = '';
 		this.docMixins = [];
 		this.jscodeReqest = '';
+		this.jscodeLang = undefined;
 		this.docTemp = '';
 		this.slots;
 	}
@@ -23,13 +24,14 @@ class stateDoc {
 			const parts = parser(source, 'name');
 			this.slots = getSlots(parts);
 			this.jscodeReqest = getComponentModuleJSCode(parts, source, file);
-			const doc = this.getDocFile(this.jscodeReqest, file);
+			this.jscodeLang = parts.script.lang
+			const doc = this.getDocFile(this.jscodeReqest, file, this.jscodeLang);
 			this.docComponent = doc;
 		}
 	}
 
-	getDocFile(source, file){
-		this.docTemp = getDocFile(source, file)
+	getDocFile(source, file, lang){
+		this.docTemp = getDocFile(source, file, lang)
 		return this.docTemp;
 	}
 
