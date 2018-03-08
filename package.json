@@ -45,15 +45,16 @@
     "htmlparser2": "^3.9.2",
     "jsdoc-api": "^3.0.0",
     "lru-cache": "^4.1.0",
-    "typescript": "^2.5.0",
-    "vue": "^2.5.2",
-    "vue-template-compiler": "^2.5.2"
+    "vue": "2.5.3",
+    "vue-template-compiler": "2.5.3"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "chai": "^4.0.2",
     "eslint": "^3.19.0",
     "mocha": "^3.4.2",
+    "tslint": "^5.9.1",
+    "typescript": "^2.5.0",
     "vue-property-decorator": "^6.0.0"
   }
 }
