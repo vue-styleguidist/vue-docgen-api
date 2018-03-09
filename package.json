@@ -10,7 +10,8 @@
     "build": "babel src/ -d --out-dir dist/ --ignore __tests__,__mocks__",
     "build:watch": "babel src/ --watch -d --out-dir dist/ --ignore __tests__,__mocks__",
     "prepublish": "npm run build",
-    "test": "mocha -c src/__tests__ tests src/utils/__tests__",
+    "mocha": "mocha",
+    "test": "mocha -c src/__tests__ tests/**/*.test.js --recursive src/utils/__tests__",
     "test:watch": "mocha -c src/__tests__ tests/**/*.test.js --recursive src/utils/__tests__"
   },
   "files": [
