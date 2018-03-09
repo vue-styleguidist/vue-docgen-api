@@ -1,7 +1,5 @@
-var path = require("path");
-var fs = require("fs");
-const expect = require("chai").expect;
-var parse = require("../../dist/main");
+const expect = require('chai').expect
+const parse = require('../../dist/parse')
 
 describe("parse", () => {
 	it("should return an function", () => {

@@ -1,10 +1,4 @@
-import * as utils from './utils';
-import parse from './parse';
-import parseSource from './parseSource';
+import * as utils from './utils'
+import { parse, parseSource } from './parse'
 
-export {
-	parse,
-	parseSource,
-	utils,
-};
-
+export { parse, parseSource, utils }
