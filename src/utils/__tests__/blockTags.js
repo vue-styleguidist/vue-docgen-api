@@ -1,5 +1,5 @@
-var blockTags = require('../../../dist/utils/blockTags');
-const expect = require("chai").expect;
+var blockTags = require('../../../dist/utils/blockTags')
+const expect = require('chai').expect
 
 describe('blockTags', () => {
 	it('should return an array', () => {

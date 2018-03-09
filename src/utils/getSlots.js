@@ -1,30 +1,30 @@
-import htmlparser2 from 'htmlparser2';
+import htmlparser2 from 'htmlparser2'
 
-const HtmlParser = htmlparser2.Parser;
+const HtmlParser = htmlparser2.Parser
 
 export default function getSlots(parts) {
-	const output = {};
+	const output = {}
 	if (parts.template && parts.template.content) {
-		const template = parts.template.content;
+		const template = parts.template.content
 		let lastComment = null
 
 		const parser = new HtmlParser({
-			oncomment: (data) => {
+			oncomment: data => {
 				if (data.search(/\@slot/) !== -1) {
 					lastComment = data.replace('@slot', '').trim()
 				}
 			},
-			ontext: (text) => {
+			ontext: text => {
 				if (text.trim()) {
 					lastComment = null
 				}
 			},
 			onopentag: (name, attrs) => {
 				if (name === 'slot') {
-					const nameSlot = attrs.name || 'default';
+					const nameSlot = attrs.name || 'default'
 					output[nameSlot] = {
 						description: lastComment,
-					};
+					}
 
 					lastComment = null
 				}
@@ -32,8 +32,8 @@ export default function getSlots(parts) {
 		})
 
 		parser.write(template)
-		parser.end();
-		return output;
+		parser.end()
+		return output
 	}
-	return {};
-};
+	return {}
+}

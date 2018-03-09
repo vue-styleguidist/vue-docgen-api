@@ -1,5 +1,5 @@
-var main = require('../../dist/main');
-const expect = require("chai").expect;
+var main = require('../../dist/main')
+const expect = require('chai').expect
 
 describe('main', () => {
 	it('should return an object', () => {

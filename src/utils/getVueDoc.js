@@ -1,40 +1,41 @@
-import { IGNORE_DEFAULT, getDescription, getComment , EMPTY} from './variables';
-import processTags from './processTags';
-import processProps from './processProps';
-import processMethods from './processMethods';
-import processEvents from './processEvents';
+import { IGNORE_DEFAULT, getDescription, getComment, EMPTY } from './variables'
+import processTags from './processTags'
+import processProps from './processProps'
+import processMethods from './processMethods'
+import processEvents from './processEvents'
 
 export default function getVueDoc(stateDoc, component) {
-
-	let docJsFile = stateDoc.getDocJs();
-	let displayName;
-	let docComponent;
+	let docJsFile = stateDoc.getDocJs()
+	let displayName
+	let docComponent
 	if (!component.name || component.name === '') {
-		throw new Error("The component has no name, add 'name' property on the Vue component");
+		throw new Error(
+			"The component has no name, add 'name' property on the Vue component"
+		)
 	}
-	displayName = component.name;
+	displayName = component.name
 	if (docJsFile) {
-		docJsFile = docJsFile.filter( comment => {
+		docJsFile = docJsFile.filter(comment => {
 			return comment.kind !== 'package'
-		});
+		})
 		docComponent = docJsFile.filter(comment => {
 			return comment.longname === 'module.exports'
-		})[0];
+		})[0]
 	} else {
-		docJsFile = [];
-		docComponent = false;
+		docJsFile = []
+		docComponent = false
 	}
-	let description = EMPTY;
-	let comment = EMPTY;
-	let tags = {};
+	let description = EMPTY
+	let comment = EMPTY
+	let tags = {}
 	if (docComponent) {
-		description = getDescription(docComponent);
-		comment = getComment(docComponent);
-		tags = processTags(docComponent, IGNORE_DEFAULT);
+		description = getDescription(docComponent)
+		comment = getComment(docComponent)
+		tags = processTags(docComponent, IGNORE_DEFAULT)
 	}
-	const props = processProps(docJsFile, component);
-	const methods = processMethods(docJsFile, component);
-	const events = processEvents(docJsFile, component);
+	const props = processProps(docJsFile, component)
+	const methods = processMethods(docJsFile, component)
+	const events = processEvents(docJsFile, component)
 
 	return {
 		description,

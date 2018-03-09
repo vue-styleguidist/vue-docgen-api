@@ -1,12 +1,12 @@
-import { getDescription, getComment } from './variables';
+import { getDescription, getComment } from './variables'
 
 export default function processMethods(docFile) {
-	docFile = docFile.slice().reverse();
-	const listDocMethods = {};
+	docFile = docFile.slice().reverse()
+	const listDocMethods = {}
 	const docParts = docFile.filter(comment => {
 		return comment.kind === 'event'
-	});
-	docParts.forEach(function (docPart) {
+	})
+	docParts.forEach(function(docPart) {
 		if (docPart.name) {
 			listDocMethods[docPart.name] = {
 				description: getDescription(docPart),
@@ -15,6 +15,6 @@ export default function processMethods(docFile) {
 				comment: getComment(docPart),
 			}
 		}
-	});
-	return listDocMethods;
+	})
+	return listDocMethods
 }
