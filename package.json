@@ -47,6 +47,7 @@
     "htmlparser2": "^3.9.2",
     "jsdoc-api": "^3.0.0",
     "lru-cache": "^4.1.0",
+    "typescript": "^2.5.0",
     "vue": "^2.4.2",
     "vue-template-compiler": "^2.4.2"
   },
@@ -58,7 +59,6 @@
     "eslint-plugin-import": "^2.9.0",
     "mocha": "^3.4.2",
     "tslint": "^5.9.1",
-    "typescript": "^2.5.0",
     "vue-property-decorator": "^6.0.0"
   }
 }
