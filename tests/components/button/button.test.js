@@ -3,9 +3,13 @@ const expect = require('chai').expect
 
 const api = require('../../../dist/main')
 const button = path.join(__dirname, './Button.vue')
+let docButton
 
 describe('tests button', () => {
-	docButton = api.parse(button)
+	before(function(done) {
+		docButton = api.parse(button)
+		done()
+	})
 
 	it('should return an object', () => {
 		expect(docButton).to.be.an('object')

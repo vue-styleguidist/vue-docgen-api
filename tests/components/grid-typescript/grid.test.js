@@ -1,11 +1,15 @@
 const path = require('path')
 const expect = require('chai').expect
+const assert = require('chai').assert
 
 var api = require('../../../dist/main')
 var typescriptGrid = path.join(__dirname, './Grid.vue')
 
 describe('tests typescript grid', () => {
-	docGrid = api.parse(typescriptGrid)
+	before(function(done) {
+		docGrid = api.parse(typescriptGrid)
+		done()
+	})
 
 	it('should return an object', () => {
 		expect(docGrid).to.be.an('object')

@@ -2,7 +2,11 @@
 	"parser": "babel-eslint",
 	"plugins": ["import", "prettier"],
 	"rules": {
-		"prettier/prettier": "error",
+		"prettier/prettier": ["error", {
+			"singleQuote": true,
+			"trailingComma": "es5",
+			"semi": false
+		}]],
 		"comma-dangle": [1, "always-multiline"],
 		"no-underscore-dangle": 0,
 		"import/no-named-as-default-member": "error",

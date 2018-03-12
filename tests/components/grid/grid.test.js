@@ -3,9 +3,13 @@ const expect = require('chai').expect
 
 const api = require('../../../dist/main')
 const grid = path.join(__dirname, './Grid.vue')
+let docGrid
 
 describe('tests grid', () => {
-	const docGrid = api.parse(grid)
+	before(function(done) {
+		docGrid = api.parse(grid)
+		done()
+	})
 
 	it('should return an object', () => {
 		expect(docGrid).to.be.an('object')

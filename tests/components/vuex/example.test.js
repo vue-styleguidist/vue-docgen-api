@@ -3,9 +3,14 @@ const expect = require('chai').expect
 
 var api = require('../../../dist/main')
 var exampleVuex = path.join(__dirname, './example.vue')
+let docVuex
 
 describe('test example vuex', () => {
-	const docVuex = api.parse(exampleVuex)
+	before(function(done) {
+		docVuex = api.parse(exampleVuex)
+		done()
+	})
+
 	it('should return an object', () => {
 		expect(docVuex).to.be.an('object')
 	})
