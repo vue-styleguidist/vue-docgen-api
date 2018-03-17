@@ -58,6 +58,7 @@ const evalComponentCode = code => {
 					mapMutations: function() {},
 					mapGetters: function() {},
 					mapActions: function() {},
+					createNamespacedHelpers: function() {},
 				}
 			}
 			if (element === 'vue') {
