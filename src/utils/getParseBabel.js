@@ -2,7 +2,6 @@ const babel = require('babel-core')
 
 module.exports = function getParseBabel(
 	code,
-	preset = '2015',
 	comments = false
 ) {
 	const options = {
