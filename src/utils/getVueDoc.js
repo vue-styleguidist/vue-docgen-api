@@ -1,4 +1,9 @@
-import { IGNORE_DEFAULT, getDescription, getComment, EMPTY } from './variables'
+import {
+	IGNORE_DEFAULT,
+	getDescription,
+	getComment,
+	EMPTY
+} from './variables'
 import processTags from './processTags'
 import processProps from './processProps'
 import processMethods from './processMethods'
@@ -19,7 +24,7 @@ export default function getVueDoc(stateDoc, component) {
 			return comment.kind !== 'package'
 		})
 		docComponent = docJsFile.filter(comment => {
-			return comment.longname === 'module.exports'
+			return comment.longname === 'module.exports' || comment.longname === 'default'
 		})[0]
 	} else {
 		docJsFile = []

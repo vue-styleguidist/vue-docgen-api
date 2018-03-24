@@ -7,6 +7,7 @@ let docButton
 
 describe('tests button', () => {
 	before(function(done) {
+		this.timeout(10000)
 		docButton = api.parse(button)
 		done()
 	})

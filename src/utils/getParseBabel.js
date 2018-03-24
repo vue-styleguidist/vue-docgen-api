@@ -5,18 +5,17 @@ module.exports = function getParseBabel(
 	preset = '2015',
 	comments = false
 ) {
-	let presets
-
-	if (preset === '2017') {
-		presets = ['babel-preset-es2017', 'babel-preset-stage-3']
-	} else {
-		presets = ['babel-preset-es2015', 'babel-preset-stage-2']
-	}
-
 	const options = {
 		ast: false,
 		comments,
-		presets,
+		presets: [
+			["env", {
+				"targets": {
+					"chrome": 52
+				}
+			}]
+		],
+		plugins: ["transform-object-rest-spread"]
 	}
 	return babel.transform(code, options)
 }
