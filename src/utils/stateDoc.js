@@ -25,8 +25,7 @@ class stateDoc {
       this.slots = getSlots(parts)
       this.jscodeReqest = getComponentModuleJSCode(parts, source, file)
       this.jscodeLang = parts.script.lang
-      const doc = this.getDocFile(this.jscodeReqest, file, this.jscodeLang)
-      this.docComponent = doc
+      this.docComponent = this.getDocFile(this.jscodeReqest, file, this.jscodeLang)
     }
   }
 
@@ -51,8 +50,7 @@ class stateDoc {
     return this.docComponent.concat(docMixins)
   }
 
-  saveMixin(source, file) {
-    let doc = this.getDocFile(source, file)
+  saveMixin(doc, file) {
     if (this.isMixin(doc)) {
       doc = doc
         .map(docPart => {
@@ -75,9 +73,7 @@ class stateDoc {
           index = id
         }
       })
-      if (index) {
-        this.docMixins[index] = doc
-      } else {
+      if (!index) {
         this.docMixins.push(doc)
       }
     }

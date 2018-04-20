@@ -1,4 +1,5 @@
 import hash from 'hash-sum'
+
 const compiler = require('vue-template-compiler')
 const cache = require('lru-cache')(100)
 
