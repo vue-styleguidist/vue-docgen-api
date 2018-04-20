@@ -81,6 +81,16 @@ export default {
       },
     },
     /**
+     * Object or array defaults must be returned from
+     * a factory function
+     */
+    propE: {
+      type: Object,
+      default: () => {
+        return { message: 'hello' }
+      },
+    },
+    /**
      *@ignore
      *
      */
