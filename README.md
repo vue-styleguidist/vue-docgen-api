@@ -365,8 +365,10 @@ we are getting this output:
 
 ```
 
-## Mixins
-If you import a mixin, for it to be documented you need to add in the header the mixin tag **@mixin**, for example
+## Mixins or Extends
+If you import a [mixin](https://vuejs.org/v2/guide/mixins.html) or [extends](https://vuejs.org/v2/api/#extends), for it to be documented you need to add in the header the mixin tag **@mixin**, for example
+
+Case Mixin:
 
 ```javascript
 // src/mixins/colorMixin.js
@@ -387,6 +389,35 @@ module.exports = {
 }
 ```
 
+Case Extends:
+
+```vue
+// src/extends/Base.vue
+
+<template>
+  <div>
+    <h4>{{ color }}</h4>
+    <!--the appropriate input should go here-->
+  </div>
+</template>
+<script>
+/**
+ * @mixin
+ */
+export default {
+  props: {
+    /**
+    * The color for the button example
+    */
+    colorExtends: {
+      type: String,
+      default: '#333'
+    },
+  },
+}
+</script>
+```
+
 ```html
 <template>
 <!-- -->
@@ -395,9 +426,11 @@ module.exports = {
 // src/components/Button/Button.vue
 
 import colorMixin from '../../mixins/colorMixin';
+import Base from '../../extends/Base';
 export default {
   name: 'buttonComponent',
   mixins: [colorMixin],
+  extends: Base,
   props: {
     /**
     * The size of the button
