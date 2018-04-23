@@ -74,7 +74,7 @@ class stateDoc {
         }
       })
       if (!index) {
-        this.docMixins.push(doc)
+        this.docMixins.unshift(doc)
       }
     }
   }
