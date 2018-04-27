@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import stateDoc from './stateDoc'
 import parseModule from './parseModule'
 import evalComponentCode from './evalComponentCode'
@@ -6,7 +7,15 @@ import evalComponentCode from './evalComponentCode'
 module.exports = function getMixin(listRequire) {
   const output = []
   listRequire.forEach(filePath => {
-    const pathRequire = filePath + '.js'
+    let pathRequire;
+    try {
+      fs.lstatSync(filePath).isDirectory();
+      // Path is a folder, add 'index.js' filename
+      pathRequire = path.join(filePath, 'index.js');
+    }catch(e) {
+      // Path is a file, add '.js' extension
+      pathRequire = filePath + '.js'
+    }
     if (fs.existsSync(pathRequire)) {
       const source = fs.readFileSync(pathRequire, {
         encoding: 'utf-8',
