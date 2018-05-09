@@ -6,11 +6,15 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { ClientTable } from 'vue-tables-2'
 import anotherMixin from '../../mixins/anotherMixin'
 import model from '../../utils/model.json'
 import genericMixin from './genericMixin'
 import colorMixin from './colorMixin'
 import review from '../../utils/review.json'
+
+Vue.use(ClientTable)
 
 const NAME = 'buttonComponent'
 

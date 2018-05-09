@@ -14,25 +14,31 @@ module.exports = function evalComponentCode(code) {
     const script = new vm.Script(code, {})
     let requireSanbox = function (element) {
       if (element === 'vuex') {
-        return {
+        const outputVuex = {
           mapState: function () {},
           mapMutations: function () {},
           mapGetters: function () {},
           mapActions: function () {},
           createNamespacedHelpers: function () {},
         }
+        return {
+          ...outputVuex,
+          default: outputVuex,
+        }
       }
       if (element === 'vue') {
-        return {
+        const outputVue = {
           __esModule: true,
           use: function use() {},
           component: function component() {},
           extended: function extended() {},
-          default: {
-            extend(obj) {
-              return obj
-            },
+          extend(obj) {
+            return obj
           },
+        }
+        return {
+          ...outputVue,
+          default: outputVue,
         }
       }
       return function () {}
