@@ -21,7 +21,10 @@ export default function processProps(docFile, component) {
       }
     })
   }
-  if (props) {
+
+  const hasPropsInMixin = propsMixins && Object.keys(propsMixins).length
+  const hasPropsInComponent = props && Object.keys(props).length
+  if (hasPropsInMixin || hasPropsInComponent) {
     const listDocProps = {}
     if (Array.isArray(props)) {
       const newProps = {}

@@ -7,7 +7,8 @@
 
 <script>
 import Vue from 'vue'
-import { ClientTable } from 'vue-tables-2'
+import { ClientTable } from 'some-plugin'
+import another from '../../mixins/another'
 import anotherMixin from '../../mixins/anotherMixin'
 import model from '../../utils/model.json'
 import genericMixin from './genericMixin'
@@ -25,7 +26,7 @@ const NAME = 'buttonComponent'
  */
 export default {
   name: NAME,
-  mixins: [genericMixin, colorMixin],
+  mixins: [another, genericMixin, colorMixin],
   props: {
     /**
      * The size of the button

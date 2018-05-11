@@ -7,13 +7,14 @@ import evalComponentCode from './evalComponentCode'
 module.exports = function getMixin(listRequire) {
   const output = []
   listRequire.forEach(filePath => {
-    let pathRequire;
+    let pathRequire = filePath
     try {
-      fs.lstatSync(filePath).isDirectory();
-      // Path is a folder, add 'index.js' filename
-      pathRequire = path.join(filePath, 'index.js');
-    }catch(e) {
-      // Path is a file, add '.js' extension
+      if (fs.lstatSync(pathRequire).isDirectory()) {
+        pathRequire = path.join(pathRequire, 'index.js')
+      }
+    } catch (e) {}
+    const hasJSExt = path.extname(pathRequire) === '.js'
+    if (!hasJSExt) {
       pathRequire = filePath + '.js'
     }
     if (fs.existsSync(pathRequire)) {
@@ -33,6 +34,6 @@ module.exports = function getMixin(listRequire) {
         }
       }
     }
-  });
+  })
   return output
 }
