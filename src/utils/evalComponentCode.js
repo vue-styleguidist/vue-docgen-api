@@ -30,6 +30,7 @@ module.exports = function evalComponentCode(code) {
         const outputVue = {
           __esModule: true,
           use: function use() {},
+          directive: function use() {},
           component: function component() {},
           extended: function extended() {},
           extend(obj) {
