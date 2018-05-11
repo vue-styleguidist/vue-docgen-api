@@ -6,7 +6,7 @@ const button = path.join(__dirname, './Button.vue')
 let docButton
 
 describe('tests button', () => {
-  before(function (done) {
+  before(function(done) {
     this.timeout(10000)
     docButton = api.parse(button)
     done()
@@ -70,8 +70,14 @@ describe('tests button', () => {
     expect(typeof docButton['tags']['version'] !== 'undefined').to.be.true
   })
 
-  it('should the component has thirteen props', () => {
-    expect(Object.keys(docButton['props']).length).to.equal(13)
+  it('should the component has fourteen props', () => {
+    expect(Object.keys(docButton['props']).length).to.equal(14)
+  })
+
+  it('should the component has propsAnother prop default equal #333', () => {
+    expect(
+      docButton['props']['propsAnother']['defaultValue']['value']
+    ).to.equal('"blue"')
   })
 
   it('should span to be string|number', () => {
@@ -148,7 +154,7 @@ describe('tests button', () => {
 
   it('should value default propE to be a funtion', () => {
     expect(docButton['props']['propE']['defaultValue']['value']).to.equal(
-      '() => { return { message: \'hello\' }; }'
+      "() => { return { message: 'hello' }; }"
     )
     expect(docButton['props']['propE']['defaultValue']['func']).to.equal(true)
   })
