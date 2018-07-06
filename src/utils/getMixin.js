@@ -24,7 +24,7 @@ module.exports = function getMixin(listRequire) {
       const doc = stateDoc.getDocFile(source, pathRequire)
       stateDoc.saveMixin(doc, pathRequire)
       if (stateDoc.isMixin()) {
-        const parsedSource = parseModule(source, stateDoc.jscodeLang)
+        const parsedSource = parseModule(source, filePath, stateDoc.jscodeLang)
         const mixin = evalComponentCode(parsedSource)
         if (Object.keys(mixin.exports).length === 0) {
           mixin.exports.default = mixin.module.exports

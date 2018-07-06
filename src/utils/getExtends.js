@@ -20,7 +20,7 @@ module.exports = function getExtends(listRequire) {
       const doc = stateDoc.getDocFile(jscode, filePath, jscodeLang)
       stateDoc.saveMixin(doc, filePath)
       if (stateDoc.isMixin()) {
-        const parsedSource = parseModule(jscode, stateDoc.jscodeLang)
+        const parsedSource = parseModule(jscode, filePath, stateDoc.jscodeLang)
         const mixin = evalComponentCode(parsedSource)
         if (Object.keys(mixin.exports).length === 0) {
           mixin.exports.default = mixin.module.exports
