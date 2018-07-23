@@ -135,12 +135,6 @@ describe('tests button', () => {
     expect(docButton['props']['propE']['defaultValue']['func']).to.equal(true)
   })
 
-  it('should value default propE props description to be "Object or array defaults must be returned from\na factory function"', () => {
-    expect(docButton['props']['propE']['description']).to.equal(
-      'Object or array defaults must be returned from\ra factory function'
-    )
-  })
-
   it('should example3 to be number', () => {
     expect(docButton['props']['example3']['type']['name']).to.equal('number')
   })
