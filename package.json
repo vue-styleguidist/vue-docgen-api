@@ -1,6 +1,6 @@
 {
   "name": "vue-docgen-api",
-  "version": "2.3.13",
+  "version": "2.3.12",
   "description": "Toolbox to extract information from Vue component files for documentation generation purposes.",
   "bugs": {
     "url": "https://github.com/vue-styleguidist/vue-docgen-api/issues"
@@ -57,7 +57,7 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
     "lint-staged": "^7.2.0",
-    "mocha": "^3.4.2",
+    "mocha": "^5.2.0",
     "prettier": "^1.13.7",
     "tslint": "^5.9.1",
     "typescript": "^2.7.2",
