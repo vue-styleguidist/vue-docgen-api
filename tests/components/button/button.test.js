@@ -154,7 +154,7 @@ describe('tests button', () => {
 
   it('should value default propE to be a funtion', () => {
     expect(docButton['props']['propE']['defaultValue']['value']).to.equal(
-      "() => { return { message: 'hello' }; }"
+      "function() { return { message: 'hello' }; }"
     )
     expect(docButton['props']['propE']['defaultValue']['func']).to.equal(true)
   })
