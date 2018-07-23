@@ -1,7 +1,17 @@
 {
-	"useTabs": false,
-	"singleQuote": true,
-	"trailingComma": "es5",
-	"semi": false,
-	"bracketSpacing": true
+  "printWidth": 100,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "semi": false,
+  "bracketSpacing": true,
+  "useTabs": false,
+  "overrides": [{
+    "files": "*.md",
+    "options": {
+      "printWidth": 70,
+      "useTabs": false,
+      "semi": false,
+      "trailingComma": "none"
+    }
+  }]
 }

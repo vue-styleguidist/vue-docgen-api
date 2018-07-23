@@ -42,11 +42,9 @@ class stateDoc {
   }
 
   getDocJs() {
-    let docMixins = [].concat
-      .apply([], this.docMixins)
-      .filter(function (docPart) {
-        return docPart.kind !== 'package'
-      })
+    let docMixins = [].concat.apply([], this.docMixins).filter(function(docPart) {
+      return docPart.kind !== 'package'
+    })
     return this.docComponent.concat(docMixins)
   }
 
@@ -66,7 +64,7 @@ class stateDoc {
         })
       let index
       this.docMixins.forEach((docMixin, id) => {
-        const packages = docMixin.filter(function (docPart) {
+        const packages = docMixin.filter(function(docPart) {
           return docPart.kind === 'package'
         })[0]
         if (packages && packages.files[0] === file) {

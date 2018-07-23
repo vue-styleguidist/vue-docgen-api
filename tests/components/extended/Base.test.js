@@ -6,7 +6,7 @@ const Base = path.join(__dirname, './Base.vue')
 let docBase
 
 describe('tests Base', () => {
-  before(function (done) {
+  before(function(done) {
     this.timeout(10000)
     docBase = api.parse(Base)
     done()

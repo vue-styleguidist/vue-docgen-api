@@ -1,10 +1,10 @@
 module.exports = {
-	props: {
-		/**
-		 * Error
-		 */
-		right: {
-			default: 'example',
-		},
-	},
+  props: {
+    /**
+     * Error
+     */
+    right: {
+      default: 'example',
+    },
+  },
 }

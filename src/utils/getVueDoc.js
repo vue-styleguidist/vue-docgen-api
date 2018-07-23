@@ -1,9 +1,4 @@
-import {
-  IGNORE_DEFAULT,
-  getDescription,
-  getComment,
-  EMPTY,
-} from './variables'
+import { IGNORE_DEFAULT, getDescription, getComment, EMPTY } from './variables'
 import processTags from './processTags'
 import processProps from './processProps'
 import processMethods from './processMethods'
@@ -14,9 +9,7 @@ export default function getVueDoc(stateDoc, component) {
   let displayName
   let docComponent
   if (!component.name || component.name === '') {
-    throw new Error(
-      "The component has no name, add 'name' property on the Vue component"
-    )
+    throw new Error("The component has no name, add 'name' property on the Vue component")
   }
   displayName = component.name
   if (docJsFile) {

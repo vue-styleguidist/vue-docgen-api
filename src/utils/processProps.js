@@ -39,9 +39,7 @@ export default function processProps(docFile, component) {
       let propName = key
       const docPart = docFile.filter(comment => {
         const propNameDoc = comment.longname.split('props.')[1]
-        return (
-          propNameDoc === propName && listDocParts.indexOf(propNameDoc) === -1
-        )
+        return propNameDoc === propName && listDocParts.indexOf(propNameDoc) === -1
       })[0]
       if (docPart) {
         listDocParts.push(docPart.longname)

@@ -27,11 +27,11 @@ module.exports = function getExtends(listRequire) {
         }
         if (mixin.exports.default) {
           const component = mixin.exports.default
-          delete component.title;
+          delete component.title
           output.push(component)
         }
       }
     }
-  });
+  })
   return output
 }

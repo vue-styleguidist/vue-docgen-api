@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - 9
+install:
+  # Use npm 5.7.x since it has introduced `npm ci`
+  - if [[ `npm -v` != 5.7* ]]; then npm install -g npm@'>=5.7.1'; fi
+  - npm ci
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
+stages:
+  - lint
+  - test
+jobs:
+  include:
+    - stage: lint
+      script:
+        - npm run lint

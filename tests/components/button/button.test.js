@@ -31,27 +31,19 @@ describe('tests button', () => {
   })
 
   it('should the component has size prop default equal normal', () => {
-    expect(docButton['props']['size']['defaultValue']['value']).to.equal(
-      '"normal"'
-    )
+    expect(docButton['props']['size']['defaultValue']['value']).to.equal('"normal"')
   })
 
   it('should the component has size prop description equal The size of the button', () => {
-    expect(docButton['props']['size']['description']).to.equal(
-      'The size of the button'
-    )
+    expect(docButton['props']['size']['description']).to.equal('The size of the button')
   })
 
   it('should the component has color prop description equal The color for the button example', () => {
-    expect(docButton['props']['color']['description']).to.equal(
-      'The color for the button example'
-    )
+    expect(docButton['props']['color']['description']).to.equal('The color for the button example')
   })
 
   it('should the component has color prop default equal #333', () => {
-    expect(docButton['props']['color']['defaultValue']['value']).to.equal(
-      '"#333"'
-    )
+    expect(docButton['props']['color']['defaultValue']['value']).to.equal('"#333"')
   })
 
   it('should the component has authors', () => {
@@ -75,9 +67,7 @@ describe('tests button', () => {
   })
 
   it('should the component has propsAnother prop default equal #333', () => {
-    expect(
-      docButton['props']['propsAnother']['defaultValue']['value']
-    ).to.equal('"blue"')
+    expect(docButton['props']['propsAnother']['defaultValue']['value']).to.equal('"blue"')
   })
 
   it('should span to be string|number', () => {
@@ -91,21 +81,15 @@ describe('tests button', () => {
   })
 
   it("should span has as description 'Sm breakpoint and above'", () => {
-    expect(docButton['props']['spanSm']['description']).to.equal(
-      'Sm breakpoint and above'
-    )
+    expect(docButton['props']['spanSm']['description']).to.equal('Sm breakpoint and above')
   })
 
   it("should spanMd has as description 'Md breakpoint and above'", () => {
-    expect(docButton['props']['spanMd']['description']).to.equal(
-      'Md breakpoint and above'
-    )
+    expect(docButton['props']['spanMd']['description']).to.equal('Md breakpoint and above')
   })
 
   it('should spanSm to be string|number', () => {
-    expect(docButton['props']['spanSm']['type']['name']).to.equal(
-      'string|number'
-    )
+    expect(docButton['props']['spanSm']['type']['name']).to.equal('string|number')
   })
 
   it('should funcDefault to be string', () => {
@@ -121,15 +105,11 @@ describe('tests button', () => {
   })
 
   it('should value default example to be false', () => {
-    expect(docButton['props']['example']['defaultValue']['value']).to.equal(
-      'false'
-    )
+    expect(docButton['props']['example']['defaultValue']['value']).to.equal('false')
   })
 
   it('should value default example props description to be The example props', () => {
-    expect(docButton['props']['example']['description']).to.equal(
-      'The example props'
-    )
+    expect(docButton['props']['example']['description']).to.equal('The example props')
   })
 
   it('should v-model to be string', () => {
@@ -137,15 +117,11 @@ describe('tests button', () => {
   })
 
   it('should value default v-model to be example model', () => {
-    expect(docButton['props']['v-model']['defaultValue']['value']).to.equal(
-      '"example model"'
-    )
+    expect(docButton['props']['v-model']['defaultValue']['value']).to.equal('"example model"')
   })
 
   it('should value default v-model props description to be Model example2', () => {
-    expect(docButton['props']['v-model']['description']).to.equal(
-      'Model example2'
-    )
+    expect(docButton['props']['v-model']['description']).to.equal('Model example2')
   })
 
   it('should propE to be string', () => {
@@ -170,21 +146,15 @@ describe('tests button', () => {
   })
 
   it('should value default example3 to be 16', () => {
-    expect(docButton['props']['example3']['defaultValue']['value']).to.equal(
-      '16'
-    )
+    expect(docButton['props']['example3']['defaultValue']['value']).to.equal('16')
   })
 
   it('should value default example3 props description to be The example3 props', () => {
-    expect(docButton['props']['example3']['description']).to.equal(
-      'The example3 props'
-    )
+    expect(docButton['props']['example3']['description']).to.equal('The example3 props')
   })
 
   it('should onCustomClick to be ignored', () => {
-    expect(docButton['props']['onCustomClick']['tags']['ignore']).to.be.an(
-      'array'
-    )
+    expect(docButton['props']['onCustomClick']['tags']['ignore']).to.be.an('array')
   })
 
   it('should prop1 to be ignored', () => {
@@ -200,9 +170,7 @@ describe('tests button', () => {
   })
 
   it('should the description of success event is Success event.', () => {
-    expect(docButton['events']['success']['description']).to.equal(
-      'Success event.'
-    )
+    expect(docButton['events']['success']['description']).to.equal('Success event.')
   })
 
   it('should have a slot.', () => {
@@ -214,8 +182,6 @@ describe('tests button', () => {
   })
 
   it('the default slot should have "Use this slot default" as description', () => {
-    expect(docButton['slots']['default']['description']).to.equal(
-      'Use this slot default'
-    )
+    expect(docButton['slots']['default']['description']).to.equal('Use this slot default')
   })
 })

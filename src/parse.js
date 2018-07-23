@@ -2,9 +2,9 @@ import fs from 'fs'
 import * as utils from './utils'
 import stateDoc from './utils/stateDoc'
 
-export const parse = function (file) {
+export const parse = function(file) {
   const source = fs.readFileSync(file, {
-    encoding: 'utf-8'
+    encoding: 'utf-8',
   })
   if (source === '') {
     throw new Error('The document is empty')
@@ -17,7 +17,7 @@ export const parse = function (file) {
   return vueDoc
 }
 
-export const parseSource = function (source, path) {
+export const parseSource = function(source, path) {
   if (source === '') {
     throw new Error('The document is empty')
   }

@@ -1,4 +1,5 @@
 # vue-docgen-api
+
 [![npm](https://img.shields.io/npm/v/vue-docgen-api.svg)](https://www.npmjs.com/package/vue-docgen-api)
 
 `vue-docgen-api` is a toolbox to help extracting information from [Vue][] components, and generate documentation from it.
@@ -18,16 +19,15 @@ npm install vue-docgen-api --save-dev
 The tool can be used programmatically to extract component information and customize the extraction process:
 
 ```js
-var vueDocs = require('vue-docgen-api');
-var componentInfo = vueDocs.parse(filePath);
+var vueDocs = require('vue-docgen-api')
+var componentInfo = vueDocs.parse(filePath)
 ```
 
 ### parse(filePath)
 
-| Parameter |  Type | Description |
-| -------------- | ------ | --------------- |
-| filePath       | string | The file path |
-
+| Parameter | Type   | Description   |
+| --------- | ------ | ------------- |
+| filePath  | string | The file path |
 
 ## Using JSDoc tags
 
@@ -177,11 +177,13 @@ we are getting this output:
 
 ```json
 {
-  "description": "This is an example of creating a reusable grid component and using it with external data.",
+  "description":
+    "This is an example of creating a reusable grid component and using it with external data.",
   "methods": [
     {
       "name": "sortBy",
-      "comment": "/**\n   * Sets the order\n   *\n   * @public\n   * @version 1.0.5\n   * @since Version 1.0.1\n   * @param {string} key Key to order\n   * @returns {string} Test\n   */",
+      "comment":
+        "/**\n   * Sets the order\n   *\n   * @public\n   * @version 1.0.5\n   * @since Version 1.0.1\n   * @param {string} key Key to order\n   * @returns {string} Test\n   */",
       "modifiers": [],
       "params": [
         {
@@ -257,7 +259,8 @@ we are getting this output:
         "see": [
           {
             "title": "see",
-            "description": "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
+            "description":
+              "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
           }
         ],
         "since": [
@@ -275,12 +278,15 @@ we are getting this output:
         "link": [
           {
             "title": "link",
-            "description": "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
+            "description":
+              "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
           }
         ]
       },
-      "comment": "/**\n     * object/array defaults should be returned from a factory function\n     * @version 1.0.5\n     * @since Version 1.0.1\n     * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     */",
-      "description": "object/array defaults should be returned from a factory function"
+      "comment":
+        "/**\n     * object/array defaults should be returned from a factory function\n     * @version 1.0.5\n     * @since Version 1.0.1\n     * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     */",
+      "description":
+        "object/array defaults should be returned from a factory function"
     },
     "v-model": {
       "type": {
@@ -321,7 +327,8 @@ we are getting this output:
       "description": "filter key"
     }
   },
-  "comment": "/**\n * This is an example of creating a reusable grid component and using it with external data.\n * @version 1.0.5\n * @author [Rafael](https://github.com/rafaesc92)\n * @since Version 1.0.1\n */",
+  "comment":
+    "/**\n * This is an example of creating a reusable grid component and using it with external data.\n * @version 1.0.5\n * @author [Rafael](https://github.com/rafaesc92)\n * @since Version 1.0.1\n */",
   "tags": {
     "author": [
       {
@@ -346,11 +353,10 @@ we are getting this output:
     "success": {
       "description": "Success event.",
       "type": {
-        "names": [
-          "object"
-        ]
+        "names": ["object"]
       },
-      "comment": "/**\n     * Success event.\n     *\n     * @event success\n     * @type {object}\n     */"
+      "comment":
+        "/**\n     * Success event.\n     *\n     * @event success\n     * @type {object}\n     */"
     }
   },
   "slots": {
@@ -362,10 +368,10 @@ we are getting this output:
     }
   }
 }
-
 ```
 
 ## Mixins or Extends
+
 If you import a [mixin](https://vuejs.org/v2/guide/mixins.html) or [extends](https://vuejs.org/v2/api/#extends), for it to be documented you need to add in the header the mixin tag **@mixin**, for example
 
 Case Mixin:
@@ -379,12 +385,12 @@ Case Mixin:
 module.exports = {
   props: {
     /**
-    * The color for the button example
-    */
+     * The color for the button example
+     */
     color: {
       type: String,
       default: '#333'
-    },
+    }
   }
 }
 ```
@@ -407,13 +413,13 @@ Case Extends:
 export default {
   props: {
     /**
-    * The color for the button example
-    */
+     * The color for the button example
+     */
     colorExtends: {
       type: String,
       default: '#333'
-    },
-  },
+    }
+  }
 }
 </script>
 ```
@@ -461,7 +467,7 @@ export default {
  * @type {object}
  */
 this.$emit('success', {
-  demo: 'example',
+  demo: 'example'
 })
 ```
 
@@ -479,7 +485,6 @@ this.$emit('success', {
 </template>
 ```
 
-
 ## Change log
 
 The change log can be found on the [Releases page](https://github.com/vue-styleguidist/vue-docgen-api/releases).
@@ -490,8 +495,7 @@ The change log can be found on the [Releases page](https://github.com/vue-styleg
 
 MIT License.
 
-
-[JSDoc]: http://usejsdoc.org/
+[jsdoc]: http://usejsdoc.org/
 [vue]: https://vuejs.org/
 [babel]: https://www.npmjs.com/package/babel-core
 [jsdoc-api]: https://www.npmjs.com/package/jsdoc-api

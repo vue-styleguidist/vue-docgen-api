@@ -17,27 +17,22 @@ const SIMPLE_STRING_REGEX = /^"([^"]+)"$|^'([^']+)'$/
  * @returns {Array}
  */
 module.exports = function getRequires(code) {
-	const requires = {}
-	code.replace(REQUIRE_ANYTHING_REGEX, function(
-		requireExprMatch,
-		requiredExpr
-	) {
-		const requireStrMatch = SIMPLE_STRING_REGEX.exec(requiredExpr.trim())
-		if (!requireStrMatch) {
-			throw new Error(
-				`Requires using expressions are not supported in examples. (Used: ${requireExprMatch})`
-			)
-		}
-		const requiredString = requireStrMatch[1]
-			? requireStrMatch[1]
-			: requireStrMatch[2]
-		requires[requiredString] = requiredString
-	})
-	return requires
+  const requires = {}
+  code.replace(REQUIRE_ANYTHING_REGEX, function(requireExprMatch, requiredExpr) {
+    const requireStrMatch = SIMPLE_STRING_REGEX.exec(requiredExpr.trim())
+    if (!requireStrMatch) {
+      throw new Error(
+        `Requires using expressions are not supported in examples. (Used: ${requireExprMatch})`
+      )
+    }
+    const requiredString = requireStrMatch[1] ? requireStrMatch[1] : requireStrMatch[2]
+    requires[requiredString] = requiredString
+  })
+  return requires
 }
 
 Object.assign(module.exports, {
-	REQUIRE_ANYTHING_BASE,
-	REQUIRE_ANYTHING_REGEX,
-	SIMPLE_STRING_REGEX,
+  REQUIRE_ANYTHING_BASE,
+  REQUIRE_ANYTHING_REGEX,
+  SIMPLE_STRING_REGEX,
 })

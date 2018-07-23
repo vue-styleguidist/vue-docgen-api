@@ -6,7 +6,7 @@ const InputText = path.join(__dirname, './InputText.vue')
 let docInputText
 
 describe('tests InputText', () => {
-  before(function (done) {
+  before(function(done) {
     this.timeout(10000)
     docInputText = api.parse(InputText)
     done()
@@ -21,9 +21,7 @@ describe('tests InputText', () => {
   })
 
   it('The component should has a description', () => {
-    expect(docInputText.description).to.equal(
-      'Description InputText'
-    )
+    expect(docInputText.description).to.equal('Description InputText')
   })
 
   it('should has props', () => {
