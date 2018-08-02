@@ -1,3 +1,4 @@
+import path from 'path'
 import { IGNORE_DEFAULT, getDescription, getComment, EMPTY } from './variables'
 import processTags from './processTags'
 import processProps from './processProps'
@@ -6,12 +7,14 @@ import processEvents from './processEvents'
 
 export default function getVueDoc(stateDoc, component) {
   let docJsFile = stateDoc.getDocJs()
-  let displayName
   let docComponent
-  if (!component.name || component.name === '') {
-    throw new Error("The component has no name, add 'name' property on the Vue component")
-  }
-  displayName = component.name
+
+  const displayName =
+    !component.name || component.name === ''
+      ? // if component does not have a name, use the name of the file containing it
+        path.basename(stateDoc.file, path.extname(stateDoc.file))
+      : (displayName = component.name)
+
   if (docJsFile) {
     docJsFile = docJsFile.filter(comment => {
       return comment.kind !== 'package'
