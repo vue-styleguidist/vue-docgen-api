@@ -13,7 +13,7 @@ export default function getVueDoc(stateDoc, component) {
     !component.name || component.name === ''
       ? // if component does not have a name, use the name of the file containing it
         path.basename(stateDoc.file, path.extname(stateDoc.file))
-      : (displayName = component.name)
+      : component.name
 
   if (docJsFile) {
     docJsFile = docJsFile.filter(comment => {
