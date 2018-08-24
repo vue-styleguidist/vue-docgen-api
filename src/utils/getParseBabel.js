@@ -2,7 +2,7 @@ const babel = require('babel-core')
 const path = require('path')
 const process = require('process')
 
-module.exports = function getParseBabel(code, filename, comments = false) {
+module.exports = function getJsxBabel(code, filename, comments = false) {
   // Provide filename and cwd to babel for:
   //  a) Proper loading of .babelrc
   //  b) Error messages saying where any SyntaxErrors are
@@ -22,9 +22,9 @@ module.exports = function getParseBabel(code, filename, comments = false) {
             chrome: 52,
           },
         },
-      ],
+      ]
     ],
-    plugins: ['transform-object-rest-spread'],
+    plugins: ['transform-object-rest-spread', 'transform-vue-jsx'],
     sourceRoot: cwd,
   }
 
