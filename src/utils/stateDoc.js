@@ -9,7 +9,7 @@ class stateDoc {
     this.docComponent = {}
     this.sourceComponent = ''
     this.docMixins = []
-    this.jscodeReqest = ''
+    this.jscodeRequest = ''
     this.jscodeLang = undefined
     this.docTemp = ''
     this.slots
@@ -23,9 +23,9 @@ class stateDoc {
     if (this.isMainComponent(file) && this.sourceComponent !== source) {
       const parts = parser(source, 'name')
       this.slots = getSlots(parts)
-      this.jscodeReqest = getComponentModuleJSCode(parts, source, file)
+      this.jscodeRequest = getComponentModuleJSCode(parts, source, file)
       this.jscodeLang = parts.script.lang
-      this.docComponent = this.getDocFile(this.jscodeReqest, file, this.jscodeLang)
+      this.docComponent = this.getDocFile(this.jscodeRequest, file, this.jscodeLang)
     }
   }
 
@@ -82,7 +82,7 @@ class stateDoc {
     this.docComponent = {}
     this.sourceComponent = ''
     this.docMixins = []
-    this.jscodeReqest = ''
+    this.jscodeRequest = ''
     this.jscodeLang = undefined
     this.docTemp = ''
   }
