@@ -12,14 +12,25 @@ function clone(obj) {
 module.exports = function evalComponentCode(code) {
   try {
     const script = new vm.Script(code, {})
-    let requireSanbox = function(element) {
+
+    // Fake require
+    function fakeRequire() {}
+    fakeRequire.default = fakeRequire
+
+
+    let requireSanbox = function (element) {
+      if (element === '@babel/runtime/helpers/interopRequireDefault') {
+        return function (value) {
+          return value
+        }
+      }
       if (element === 'vuex') {
         const outputVuex = {
-          mapState: function() {},
-          mapMutations: function() {},
-          mapGetters: function() {},
-          mapActions: function() {},
-          createNamespacedHelpers: function() {},
+          mapState: function () {},
+          mapMutations: function () {},
+          mapGetters: function () {},
+          mapActions: function () {},
+          createNamespacedHelpers: function () {},
         }
         return {
           ...outputVuex,
@@ -42,10 +53,10 @@ module.exports = function evalComponentCode(code) {
           default: outputVue,
         }
       }
-      return function() {}
+      return fakeRequire
     }
-    requireSanbox.context = function() {
-      return function() {}
+    requireSanbox.context = function () {
+      return function () {}
     }
     const sandbox = {
       exports: {},
