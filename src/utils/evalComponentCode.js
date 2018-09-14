@@ -17,20 +17,22 @@ module.exports = function evalComponentCode(code) {
     function fakeRequire() {}
     fakeRequire.default = fakeRequire
 
-
-    let requireSanbox = function (element) {
-      if (element === '@babel/runtime/helpers/interopRequireDefault') {
-        return function (value) {
+    let requireSanbox = function(element) {
+      // depending on the preset that one is running,
+      // babel will not always use the root interopRequireDefault
+      // for babel es6, it uses .../builtin/es6/interop...
+      if (/\/@babel\/runtime\/helpers\/.*interopRequireDefault$/.test(element)) {
+        return function(value) {
           return value
         }
       }
       if (element === 'vuex') {
         const outputVuex = {
-          mapState: function () {},
-          mapMutations: function () {},
-          mapGetters: function () {},
-          mapActions: function () {},
-          createNamespacedHelpers: function () {},
+          mapState: function() {},
+          mapMutations: function() {},
+          mapGetters: function() {},
+          mapActions: function() {},
+          createNamespacedHelpers: function() {},
         }
         return {
           ...outputVuex,
@@ -55,8 +57,8 @@ module.exports = function evalComponentCode(code) {
       }
       return fakeRequire
     }
-    requireSanbox.context = function () {
-      return function () {}
+    requireSanbox.context = function() {
+      return function() {}
     }
     const sandbox = {
       exports: {},
