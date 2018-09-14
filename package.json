@@ -13,8 +13,9 @@
     "compile:watch": "babel src/ --watch -d --out-dir dist/ --ignore __tests__,__mocks__",
     "prepublishOnly": "npm run compile",
     "mocha": "mocha",
-    "test": "mocha -c src/__tests__ tests/**/*.test.js --recursive src/utils/__tests__",
-    "test:watch": "mocha -c src/__tests__ tests/**/*.test.js --recursive src/utils/__tests__"
+    "test": "npm run unit && npm run e2e",
+    "unit": "mocha -c src/__tests__ --recursive src/utils/__tests__",
+    "e2e": "mocha -c tests/**/*.test.js"
   },
   "files": [
     "dist",
