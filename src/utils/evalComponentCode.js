@@ -21,7 +21,7 @@ module.exports = function evalComponentCode(code) {
       // depending on the preset that one is running,
       // babel will not always use the root interopRequireDefault
       // for babel es6, it uses .../builtin/es6/interop...
-      if (/@babel\/runtime\/helpers\/.*interopRequireDefault$/.test(element)) {
+      if (/@babel[\\,\/]runtime\/helpers\/.*interopRequireDefault$/.test(element)) {
         return function(value) {
           return value
         }
