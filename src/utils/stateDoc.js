@@ -23,9 +23,12 @@ class stateDoc {
     if (this.isMainComponent(file) && this.sourceComponent !== source) {
       const parts = parser(source, 'name')
       this.slots = getSlots(parts)
-      this.jscodeRequest = getComponentModuleJSCode(parts, source, file)
-      this.jscodeLang = parts.script.lang
-      this.docComponent = this.getDocFile(this.jscodeRequest, file, this.jscodeLang)
+      this.docComponent = []
+      if (parts.script) {
+        this.jscodeRequest = getComponentModuleJSCode(parts, source, file)
+        this.jscodeLang = parts.script.lang
+        this.docComponent = this.getDocFile(this.jscodeRequest, file, this.jscodeLang)
+      }
     }
   }
 

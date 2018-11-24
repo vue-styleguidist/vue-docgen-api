@@ -7,6 +7,7 @@ import parseModule from './parseModule'
 module.exports = function getSandbox(stateDoc, file) {
   const parsedSource = parseModule(stateDoc.jscodeRequest, file, stateDoc.jscodeLang)
   const sandbox = evalComponentCode(parsedSource).exports
+  sandbox.default = sandbox.default || {}
   const component = sandbox.default
   const listRequire = getSourceInRequire(parsedSource, file)
   const mixins = getMixin(listRequire).reverse()
