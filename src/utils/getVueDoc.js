@@ -23,7 +23,7 @@ export default function getVueDoc(stateDoc, component) {
       return comment.kind !== 'package'
     })
     docComponent = docJsFile.filter(comment => {
-      return comment.longname === 'module.exports' || comment.longname === 'default' || comment.longname === '_default'
+      return comment.longname === 'module.exports' || comment.longname.match(/(_)?default(\d+)?$/g)
     })[0]
   } else {
     docJsFile = []
