@@ -9,6 +9,8 @@ script:
 stages:
   - lint
   - test
+  - name: release
+    if: type != pull_request AND branch = master
 jobs:
   include:
     - stage: lint
@@ -20,3 +22,7 @@ jobs:
         - npm run compile
         # Run integration tests
         - npm run test
+    - stage: release
+      script:
+        - npm install --no-save node-fetch semantic-release
+        - npx semantic-release
