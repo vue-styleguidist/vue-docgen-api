@@ -5,7 +5,7 @@ const api = require('../../../dist/main')
 const button = path.join(__dirname, './MyButton.vue')
 let docButton
 
-describe.only('tests button', () => {
+describe('tests button', () => {
   before(function(done) {
     this.timeout(10000)
     docButton = api.parse(button)
