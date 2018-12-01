@@ -26,7 +26,7 @@ import colorMixin from './colorMixin'
  * @version 1.0.5
  */
 @Component
-export class MyComponent extends Vue {
+export default class MyComponent extends Vue {
   @Prop() propA: number
 
   @Prop({ default: 'default value' })

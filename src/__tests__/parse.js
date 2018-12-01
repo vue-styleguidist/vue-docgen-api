@@ -1,8 +1,7 @@
-var parse = require('../../dist/parse')
-const expect = require('chai').expect
+var parse = require('../../src/parse')
 
 describe('parse', () => {
   it('should return an function', () => {
-    expect(parse.parse).to.be.an('function')
+    expect(typeof parse.parse).toEqual('function')
   })
 })

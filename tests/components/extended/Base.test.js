@@ -1,34 +1,32 @@
 const path = require('path')
-const expect = require('chai').expect
 
-const api = require('../../../dist/main')
+const api = require('../../../src/main')
 const Base = path.join(__dirname, './Base.vue')
 let docBase
 
 describe('tests Base', () => {
-  before(function(done) {
-    this.timeout(10000)
+  beforeAll(function(done) {
     docBase = api.parse(Base)
     done()
   })
 
   it('should return an object', () => {
-    expect(docBase).to.be.an('object')
+    expect(typeof docBase).toBe('object')
   })
 
   it('The component name should be Base', () => {
-    expect(docBase.displayName).to.equal('Base')
+    expect(docBase.displayName).toEqual('Base')
   })
 
   it('The component should has a description', () => {
-    expect(docBase.description).to.equal('')
+    expect(docBase.description).toEqual('')
   })
 
   it('should has props', () => {
-    expect(typeof docBase['props'] !== 'undefined').to.be.true
+    expect(typeof docBase['props'] !== 'undefined').toBe(true)
   })
 
   it('should the component has one prop', () => {
-    expect(Object.keys(docBase['props']).length).to.equal(1)
+    expect(Object.keys(docBase['props']).length).toEqual(1)
   })
 })

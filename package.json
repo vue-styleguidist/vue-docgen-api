@@ -14,8 +14,8 @@
     "prepublishOnly": "npm run compile",
     "mocha": "mocha",
     "test": "npm run unit && npm run e2e",
-    "unit": "mocha -c src/__tests__ --recursive src/utils/__tests__",
-    "e2e": "mocha -c tests/**/*.test.js"
+    "unit": "jest --config ./jest.unit.config.js ",
+    "e2e": "jest --config ./jest.e2e.config.js "
   },
   "files": [
     "dist",
@@ -42,6 +42,7 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/runtime": "^7.0.0",
+    "babel-core": "7.0.0-bridge.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
@@ -60,16 +61,16 @@
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "babel-eslint": "^8.2.6",
-    "chai": "^4.1.2",
+    "babel-jest": "^23.6.0",
     "eslint": "^5.4.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^2.6.2",
+    "jest": "^23.6.0",
     "lint-staged": "^7.2.0",
-    "mocha": "^5.2.0",
     "prettier": "^1.14.2",
     "tslint": "^5.9.1",
     "typescript": "^2.7.2",
-    "vue-property-decorator": "^6.0.0"
+    "vue-property-decorator": "^7.2.0"
   },
   "lint-staged": {
     "*.js": [

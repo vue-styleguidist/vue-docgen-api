@@ -1,8 +1,7 @@
-var main = require('../../dist/main')
-const expect = require('chai').expect
+var main = require('../../src/main')
 
 describe('main', () => {
   it('should return an object', () => {
-    expect(main).to.be.an('object')
+    expect(main).not.toBeUndefined()
   })
 })

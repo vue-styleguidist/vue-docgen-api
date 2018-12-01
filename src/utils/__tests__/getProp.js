@@ -1,5 +1,4 @@
-var getProp = require('../../../dist/utils/getProp').default
-const expect = require('chai').expect
+var getProp = require('../getProp').default
 
 describe('getProp', () => {
   it('should return a object', () => {
@@ -16,13 +15,13 @@ describe('getProp', () => {
           ignore: true,
         }
       )
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'func',
       },
       required: '',
       defaultValue: {
-        value: 'function() { return function() { return null } }',
+        value: 'function() { return function () { return null; }; }',
         func: true,
       },
       tags: {
@@ -48,7 +47,7 @@ describe('getProp', () => {
           ignore: true,
         }
       )
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'string',
       },
@@ -72,7 +71,7 @@ describe('getProp', () => {
         default: 'Hello',
         type: String,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'string',
       },
@@ -95,13 +94,13 @@ describe('getProp', () => {
         },
         type: String,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'string',
       },
       required: '',
       defaultValue: {
-        value: "function() { return 'Hello' }",
+        value: "function() { return 'Hello'; }",
         func: true,
       },
       tags: {},
@@ -115,7 +114,7 @@ describe('getProp', () => {
       getProp({
         type: Number,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'number',
       },
@@ -132,7 +131,7 @@ describe('getProp', () => {
         default: 3,
         type: Number,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'number',
       },
@@ -155,13 +154,13 @@ describe('getProp', () => {
         },
         type: Number,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'number',
       },
       required: '',
       defaultValue: {
-        value: 'function() { return 3 }',
+        value: 'function() { return 3; }',
         func: true,
       },
       tags: {},
@@ -175,7 +174,7 @@ describe('getProp', () => {
       getProp({
         type: Boolean,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'boolean',
       },
@@ -192,7 +191,7 @@ describe('getProp', () => {
         default: true,
         type: Boolean,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'boolean',
       },
@@ -215,13 +214,13 @@ describe('getProp', () => {
         },
         type: Boolean,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'boolean',
       },
       required: '',
       defaultValue: {
-        value: 'function() { return true }',
+        value: 'function() { return true; }',
         func: true,
       },
       tags: {},
@@ -235,7 +234,7 @@ describe('getProp', () => {
       getProp({
         type: Array,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'array',
       },
@@ -252,7 +251,7 @@ describe('getProp', () => {
         default: [],
         type: Array,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'array',
       },
@@ -275,13 +274,13 @@ describe('getProp', () => {
         },
         type: Array,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'array',
       },
       required: '',
       defaultValue: {
-        value: 'function() { return [] }',
+        value: 'function() { return []; }',
         func: true,
       },
       tags: {},
@@ -295,7 +294,7 @@ describe('getProp', () => {
       getProp({
         type: Object,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'object',
       },
@@ -312,7 +311,7 @@ describe('getProp', () => {
         default: {},
         type: Object,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'object',
       },
@@ -335,13 +334,13 @@ describe('getProp', () => {
         },
         type: Object,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'object',
       },
       required: '',
       defaultValue: {
-        value: 'function() { return {} }',
+        value: 'function() { return {}; }',
         func: true,
       },
       tags: {},
@@ -355,7 +354,7 @@ describe('getProp', () => {
       getProp({
         type: Function,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'func',
       },
@@ -372,7 +371,7 @@ describe('getProp', () => {
         default: function() {},
         type: Function,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'func',
       },
@@ -395,13 +394,13 @@ describe('getProp', () => {
         },
         type: Function,
       })
-    ).to.deep.equal({
+    ).toEqual({
       type: {
         name: 'func',
       },
       required: '',
       defaultValue: {
-        value: 'function() { return function() {} }',
+        value: 'function() { return function () {}; }',
         func: true,
       },
       tags: {},
