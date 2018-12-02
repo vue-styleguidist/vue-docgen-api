@@ -1,37 +1,36 @@
 const path = require('path')
-const expect = require('chai').expect
 
-var api = require('../../../dist/main')
+var api = require('../../../src/main')
 var exampleVuex = path.join(__dirname, './example.vue')
 let docVuex
 
 describe('test example vuex', () => {
-  before(function(done) {
+  beforeAll(function(done) {
     docVuex = api.parse(exampleVuex)
     done()
   })
 
   it('should return an object', () => {
-    expect(docVuex).to.be.an('object')
+    expect(typeof docVuex).toBe('object')
   })
 
   it('The component name should be example', () => {
-    expect(docVuex.displayName).to.equal('example')
+    expect(docVuex.displayName).toEqual('example')
   })
 
   it('The component should has a description', () => {
-    expect(docVuex.description).to.equal('Partial mapping, object spread operator example')
+    expect(docVuex.description).toEqual('Partial mapping, object spread operator example')
   })
 
   it('should has a method', () => {
-    expect(docVuex['methods'].length).to.equal(1)
+    expect(docVuex['methods'].length).toEqual(1)
   })
 
   it('should has "submit" method', () => {
-    expect(docVuex['methods'][0]['name']).to.equal('onSubmit')
+    expect(docVuex['methods'][0]['name']).toEqual('onSubmit')
   })
 
   it('should dont have slots.', () => {
-    expect(Object.keys(docVuex['slots']).length).to.equal(0)
+    expect(Object.keys(docVuex['slots']).length).toEqual(0)
   })
 })

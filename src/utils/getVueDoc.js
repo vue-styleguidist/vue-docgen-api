@@ -1,10 +1,5 @@
 import path from 'path'
-import {
-  IGNORE_DEFAULT,
-  getDescription,
-  getComment,
-  EMPTY
-} from './variables'
+import { IGNORE_DEFAULT, getDescription, getComment, EMPTY } from './variables'
 import processTags from './processTags'
 import processProps from './processProps'
 import processMethods from './processMethods'
@@ -14,9 +9,10 @@ export default function getVueDoc(stateDoc, component) {
   let docJsFile = stateDoc.getDocJs()
   let docComponent
 
-  const displayName = !component.name || component.name === '' ? // if component does not have a name, use the name of the file containing it
-    path.basename(stateDoc.file, path.extname(stateDoc.file)) :
-    component.name
+  const displayName =
+    !component.name || component.name === '' // if component does not have a name, use the name of the file containing it
+      ? path.basename(stateDoc.file, path.extname(stateDoc.file))
+      : component.name
 
   if (docJsFile) {
     docJsFile = docJsFile.filter(comment => {
@@ -29,6 +25,7 @@ export default function getVueDoc(stateDoc, component) {
     docJsFile = []
     docComponent = false
   }
+
   let description = EMPTY
   let comment = EMPTY
   let tags = {}
