@@ -22,7 +22,7 @@ module.exports = function getJsxBabel(code, filename, comments = false) {
             chrome: 52,
           },
         },
-      ]
+      ],
     ],
     plugins: ['@babel/plugin-proposal-object-rest-spread', 'babel-plugin-transform-vue-jsx'],
     sourceRoot: cwd,
