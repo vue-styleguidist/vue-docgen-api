@@ -1,4 +1,4 @@
-const babel = require('babel-core')
+const babel = require('@babel/core')
 const path = require('path')
 const process = require('process')
 
@@ -14,6 +14,17 @@ module.exports = function getJsxBabel(code, filename, comments = false) {
     comments,
     filename,
     filenameRelative,
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          targets: {
+            chrome: 52,
+          },
+        },
+      ],
+    ],
+    plugins: ['@babel/plugin-proposal-object-rest-spread', 'babel-plugin-transform-vue-jsx'],
     sourceRoot: cwd,
   }
 
