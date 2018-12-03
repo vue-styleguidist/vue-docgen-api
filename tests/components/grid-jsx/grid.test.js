@@ -4,7 +4,7 @@ const api = require('../../../src/main')
 const grid = path.join(__dirname, './Grid.vue')
 let docGrid
 
-describe('tests grid', () => {
+describe('tests grid jsx', () => {
   beforeAll(function(done) {
     docGrid = api.parse(grid)
     done()
