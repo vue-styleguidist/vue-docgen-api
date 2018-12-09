@@ -4,7 +4,7 @@ import stateDoc from './stateDoc'
 import parseModule from './parseModule'
 import evalComponentCode from './evalComponentCode'
 
-module.exports = function getMixin(listRequire) {
+export default function getMixin(listRequire) {
   const output = []
   listRequire.forEach(filePath => {
     let pathRequire = filePath

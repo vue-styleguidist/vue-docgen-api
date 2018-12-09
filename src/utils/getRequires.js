@@ -16,7 +16,7 @@ const SIMPLE_STRING_REGEX = /^"([^"]+)"$|^'([^']+)'$/
  * @param {string} code
  * @returns {Array}
  */
-module.exports = function getRequires(code) {
+export default function getRequires(code) {
   const requires = {}
   code.replace(REQUIRE_ANYTHING_REGEX, function(requireExprMatch, requiredExpr) {
     const requireStrMatch = SIMPLE_STRING_REGEX.exec(requiredExpr.trim())

@@ -1,7 +1,7 @@
 import getParseTypescript from './getParseTypescript'
 import getParseBabel from './getParseBabel'
 
-module.exports = function parseModule(source, filename, type, preset) {
+export default function parseModule(source, filename, type, preset) {
   const comment = !!preset
   switch (type) {
     case 'ts':

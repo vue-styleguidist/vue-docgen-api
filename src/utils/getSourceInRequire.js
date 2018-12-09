@@ -1,7 +1,7 @@
 import path from 'path'
 import getRequires from './getRequires'
 
-module.exports = function getSourceInRequire(code, file) {
+export default function getSourceInRequire(code, file) {
   try {
     const requiresFromComponent = getRequires(code)
     let output = []

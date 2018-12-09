@@ -4,8 +4,8 @@ import getMixin from './getMixin'
 import getExtends from './getExtends'
 import parseModule from './parseModule'
 
-module.exports = function getSandbox(stateDoc, file) {
-  const parsedSource = parseModule(stateDoc.jscodeRequest, file, stateDoc.jscodeLang)
+export default function getSandbox(stateDoc, file) {
+  const parsedSource = parseModule(stateDoc.jscodeReqest, stateDoc.jscodeLang)
   const sandbox = evalComponentCode(parsedSource).exports
   sandbox.default = sandbox.default || {}
   const component = sandbox.default

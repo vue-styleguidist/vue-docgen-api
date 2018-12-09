@@ -6,7 +6,7 @@ import stateDoc from './stateDoc'
 import parseModule from './parseModule'
 import evalComponentCode from './evalComponentCode'
 
-module.exports = function getExtends(listRequire) {
+export default function getExtends(listRequire) {
   const output = []
   listRequire.forEach(filePath => {
     const isComponent = path.extname(filePath) === '.vue'
