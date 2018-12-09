@@ -3,6 +3,8 @@ import * as utils from './utils'
 import stateDoc from './utils/stateDoc'
 
 export const parse = function(file) {
+  var time2 = 'parse'
+  console.time(time2)
   const source = fs.readFileSync(file, {
     encoding: 'utf-8',
   })
@@ -14,6 +16,7 @@ export const parse = function(file) {
   const component = utils.getSandbox(stateDoc, file).default
   const vueDoc = utils.getVueDoc(stateDoc, component)
   stateDoc.reset()
+  console.timeEnd(time2)
   return vueDoc
 }
 
