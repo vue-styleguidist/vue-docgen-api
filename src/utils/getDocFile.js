@@ -20,7 +20,7 @@ function executeHandlers(handlers, componentDefinitions) {
 
 export default function getDocFile(source, file, lang) {
   try {
-    const parsedSource = parseModule(source, lang, '2017')
+    const parsedSource = parseModule(source, file, lang, '2017')
     let docReturn = jsdoc
       .explainSync({
         source: parsedSource,

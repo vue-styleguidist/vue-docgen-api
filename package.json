@@ -45,6 +45,7 @@
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
+    "babylon": "^6.18.0",
     "doctrine": "^2.1.0",
     "hash-sum": "^1.0.2",
     "htmlparser2": "^3.9.2",
@@ -54,6 +55,8 @@
     "pug-lexer": "^3.1.0",
     "pug-parser": "^2.0.2",
     "pug-runtime": "^2.0.4",
+    "react-docgen": "^2.21.0",
+    "recast": "^0.16.1",
     "vue": "^2.4.2",
     "vue-template-compiler": "^2.4.2"
   },
