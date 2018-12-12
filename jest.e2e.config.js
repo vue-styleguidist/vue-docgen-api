@@ -1,6 +1,6 @@
+var jestBase = require('./jest.config')
+
 module.exports = {
   testMatch: ['<rootDir>/tests/**/*.test.js'],
-  transform: {
-    '^.+\\.js$': 'babel-jest',
-  },
+  ...jestBase,
 }
