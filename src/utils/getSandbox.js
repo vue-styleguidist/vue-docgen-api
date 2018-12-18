@@ -5,7 +5,7 @@ import getExtends from './getExtends'
 import parseModule from './parseModule'
 
 export default function getSandbox(stateDoc, file) {
-  const parsedSource = parseModule(stateDoc.jscodeReqest, stateDoc.jscodeLang)
+  const parsedSource = parseModule(stateDoc.jscodeReqest, file, stateDoc.jscodeLang)
   const sandbox = evalComponentCode(parsedSource).exports
   sandbox.default = sandbox.default || {}
   const component = sandbox.default
