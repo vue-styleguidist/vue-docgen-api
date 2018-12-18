@@ -1,5 +1,4 @@
 import jsdoc from 'jsdoc-api'
-import { utils } from 'react-docgen'
 import path from 'path'
 import recast from 'recast'
 import babylon from './babylon'
@@ -14,7 +13,7 @@ function executeHandlers(handlers, componentDefinitions) {
   return componentDefinitions.map(componentDefinition => {
     var documentation = new Documentation()
     handlers.forEach(handler => handler(documentation, componentDefinition))
-    return utils.postProcessDocumentation(documentation.toObject())
+    return documentation.toObject()
   })
 }
 
@@ -45,7 +44,7 @@ export default function getDocFile(source, file, lang) {
       if (componentDefinitions.length === 0) {
         // throw new Error(ERROR_MISSING_DEFINITION)
       }
-      console.log(executeHandlers([propTypeHandler], componentDefinitions))
+      console.log(executeHandlers([propTypeHandler], componentDefinitions[0]))
     } else if (componentDefinitions) {
       console.log(executeHandlers([propTypeHandler], [componentDefinitions])[0])
     }
