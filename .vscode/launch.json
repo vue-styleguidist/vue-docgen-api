@@ -7,6 +7,18 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Jest ast",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": ["ast"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Jest e2e",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": ["--config", "./jest.e2e.config.js"],

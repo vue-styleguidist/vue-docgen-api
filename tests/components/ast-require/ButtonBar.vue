@@ -6,6 +6,10 @@
 <script>
 import Button from './Button'
 
+const nonExported = {
+  name: 'notdisplayed',
+}
+
 export default {
   name: 'buttonBar',
   components: { Button },
