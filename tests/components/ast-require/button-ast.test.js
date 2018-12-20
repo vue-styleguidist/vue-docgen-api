@@ -11,6 +11,14 @@ describe('tests button', () => {
   })
   
   it('should use the name in other file as the default', function(){
-    expect(docButton['props']['listofButtonNames']['defaultValue']['value']).toEqual('"normal"')
+    expect(docButton).toMatchObject({
+      props: {
+        listofButtonNames: {
+          defaultValue: {
+            value: "normal"
+          }
+        }
+      }
+    })
   })
 })

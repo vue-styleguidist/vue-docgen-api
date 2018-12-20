@@ -18,7 +18,7 @@ function getDefaultValue(path) {
   if (types.Literal.check(node)) {
     return node.raw
   } else {
-    console.log(path)
+    // console.log(path)
   }
 }
 

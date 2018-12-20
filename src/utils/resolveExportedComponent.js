@@ -1,18 +1,6 @@
 import { utils } from 'react-docgen'
-// import isExportsOrModuleAssignment from 'react-docgen/utils/isExportsOrModuleAssignment'
-// import isReactComponentClass from 'react-docgen/utils/isReactComponentClass'
-// import isReactCreateClassCall from 'react-docgen/utils/isReactCreateClassCall'
-// import isStatelessComponent from 'react-docgen/utils/isStatelessComponent'
-// import normalizeClassDefinition from 'react-docgen/utils/normalizeClassDefinition'
-// import resolveExportDeclaration from 'react-docgen/utils/resolveExportDeclaration'
-// import resolveToValue from 'react-docgen/utils/resolveToValue'
-// import resolveHOC from 'react-docgen/utils/resolveHOC'
 
-const {
-  isExportsOrModuleAssignment,
-  resolveExportDeclaration,
-  resolveToValue,
-} = utils
+const { isExportsOrModuleAssignment, resolveExportDeclaration, resolveToValue } = utils
 
 function ignore() {
   return false
@@ -41,16 +29,15 @@ export default function resolveExportedComponent(ast, recast) {
   var types = recast.types.namedTypes
   var components = []
 
+  // function run for every non assignment export declaration
+  // in extenso export default or export myvar
   function exportDeclaration(path) {
-    var definitions = resolveExportDeclaration(path, types).reduce(
-      (acc, definition) => {
-        if (isComponentDefinition(definition, types)) {
-          acc.push(definition)
-        }
-        return acc
-      },
-      []
-    )
+    var definitions = resolveExportDeclaration(path, types).reduce((acc, definition) => {
+      if (isComponentDefinition(definition, types)) {
+        acc.push(definition)
+      }
+      return acc
+    }, [])
 
     if (definitions.length === 0) {
       return false
@@ -82,6 +69,8 @@ export default function resolveExportedComponent(ast, recast) {
     visitExportDefaultDeclaration: exportDeclaration,
 
     visitAssignmentExpression: function(path) {
+      // function run on every assignments (with an =)
+
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
       if (!isExportsOrModuleAssignment(path)) {
