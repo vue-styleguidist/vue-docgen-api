@@ -1,4 +1,4 @@
-var parse = require('../../src/parse')
+var parse = require('../parse')
 
 describe('parse', () => {
   it('should return an function', () => {

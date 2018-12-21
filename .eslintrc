@@ -34,5 +34,24 @@
     "PropDescriptor": true,
     "PropTypeDescriptor": true,
     "Resolver": true
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "tests/**/*.test.js",
+        "**/__tests__/*.js"
+      ],
+      "env": { "jest": true },
+      "globals": {
+          "spyOn": false,
+          "jasmine": false,
+          "fail": false,
+          "beforeAll": false,
+          "afterAll": false,
+          "beforeEach": false,
+          "afterEach": false,
+          "currentEjAjaxOpts": false
+      }
+    }
+  ]
 }

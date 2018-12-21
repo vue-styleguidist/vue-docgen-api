@@ -1,34 +1,44 @@
 import fs from 'fs'
-import * as utils from './utils'
-import stateDoc from './utils/stateDoc'
+import recast from 'recast'
+import parser from './utils/parser'
+import babylon from './utils/babylon'
+import resolveExportedComponent from './utils/resolveExportedComponent'
+import Documentation from './Documentation'
+import propHandler from './handlers/propHandler'
+
+const ERROR_MISSING_DEFINITION = 'No suitable component definition found.'
+
+function executeHandlers(handlers, componentDefinitions) {
+  return componentDefinitions.map(compDef => {
+    var documentation = new Documentation()
+    handlers.forEach(handler => handler(documentation, compDef))
+    return documentation.toObject()
+  })
+}
 
 export const parse = function(file) {
-  var time2 = 'parse'
-  console.time(time2)
   const source = fs.readFileSync(file, {
     encoding: 'utf-8',
   })
-  if (source === '') {
-    throw new Error('The document is empty')
-  }
-  stateDoc.file = file
-  stateDoc.saveComponent(source, file)
-  const component = utils.getSandbox(stateDoc, file).default
-  const vueDoc = utils.getVueDoc(stateDoc, component)
-  stateDoc.reset()
-  console.timeEnd(time2)
-  return vueDoc
+  return parseSource(source)
 }
 
-export const parseSource = function(source, path) {
+export const parseSource = function(source) {
+  var time2 = 'parse'
+  console.time(time2)
   if (source === '') {
     throw new Error('The document is empty')
   }
+  const blocks = parser(source)
+  var ast = recast.parse(blocks.script.content, babylon)
 
-  stateDoc.file = path
-  stateDoc.saveComponent(source, path)
-  const component = utils.getSandbox(stateDoc, path).default
-  const vueDoc = utils.getVueDoc(stateDoc, component)
-  stateDoc.reset()
-  return vueDoc
+  var componentDefinitions = resolveExportedComponent(ast.program, recast)
+
+  if (componentDefinitions.length === 0) {
+    throw new Error(ERROR_MISSING_DEFINITION)
+  }
+
+  const vueDoc = executeHandlers([propHandler], componentDefinitions)
+  console.timeEnd(time2)
+  return vueDoc.length ? vueDoc[0] : undefined
 }

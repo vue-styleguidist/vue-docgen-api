@@ -1,4 +1,4 @@
-var main = require('../../src/main')
+var main = require('../main')
 
 describe('main', () => {
   it('should return an object', () => {

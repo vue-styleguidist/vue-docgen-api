@@ -1,29 +1,58 @@
-const babylon = require('babylon')
+const parser = require('@babel/parser')
 
-const options = {
+const babelParserOptions = {
   sourceType: 'module',
   strictMode: false,
-  locations: true,
-  ranges: true,
-  ecmaVersion: 7,
-  features: {
-    'es7.classProperties': true,
-    'es7.decorators': true,
-    'es7.comprehensions': true,
-    'es7.asyncFunctions': true,
-    'es7.exportExtensions': true,
-    'es7.trailingFunctionCommas': true,
-    'es7.objectRestSpread': true,
-    'es7.doExpressions': true,
-    'es7.functionBind': true,
-  },
-  plugins: { jsx: true, flow: true },
+  tokens: true,
+  plugins: [
+    'jsx',
+    'flow',
+    'estree',
+    'doExpressions',
+    'objectRestSpread',
+    'classProperties',
+    'classPrivateProperties',
+    'classPrivateMethods',
+    'exportDefaultFrom',
+    'exportNamespaceFrom',
+    'asyncGenerators',
+    'functionBind',
+    'functionSent',
+    'dynamicImport',
+    'numericSeparator',
+    'optionalChaining',
+    'importMeta',
+    'bigInt',
+    'optionalCatchBinding',
+    'throwExpressions',
+    ['pipelineOperator', { proposal: 'minimal' }],
+    'nullishCoalescingOperator',
+  ],
 }
 
-export default {
-  parse(src) {
-    const file = babylon.parse(src, options)
-    file.program.comments = file.comments
-    return file.program
-  },
+function buildOptions(options = {}) {
+  const parserOptions = {
+    ...babelParserOptions,
+    plugins: [...babelParserOptions.plugins],
+  }
+  if (options.legacyDecorators) {
+    parserOptions.plugins.push('decorators-legacy')
+  } else {
+    parserOptions.plugins.push([
+      'decorators',
+      { decoratorsBeforeExport: options.decoratorsBeforeExport || false },
+    ])
+  }
+
+  return parserOptions
+}
+
+export default function buildParse(options) {
+  const parserOptions = buildOptions(options)
+
+  return {
+    parse(src) {
+      return parser.parse(src, parserOptions)
+    },
+  }
 }

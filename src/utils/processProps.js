@@ -1,6 +1,7 @@
 import getProp from './getProp'
 
 export default function processProps(docFile, component) {
+  console.log('component', component)
   docFile = docFile.slice()
   let props = component.props
   let mixins = component.mixins
@@ -37,12 +38,9 @@ export default function processProps(docFile, component) {
     const listDocParts = []
     Object.keys(props).forEach(key => {
       let propName = key
-      const docPart = docFile.filter(comment => {
-        const propNameDoc = comment.longname.split('props.')[1]
-        return propNameDoc === propName && listDocParts.indexOf(propNameDoc) === -1
-      })[0]
-      if (docPart) {
-        listDocParts.push(docPart.longname)
+      const docPart = docFile.filter(tk => tk.props)
+      if (docPart.length) {
+        listDocParts.push(docPart[0].longname)
       }
       const prop = props[propName]
       const docProp = getProp(prop, docPart)
