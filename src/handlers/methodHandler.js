@@ -1,9 +1,7 @@
 import recast from 'recast'
 import { getDocblock } from '../utils/getDocblock'
 
-const {
-  types: { namedTypes: types },
-} = recast
+const types = recast.types.namedTypes
 
 export default function methodHandler(documentation, path) {
   const methodsPath = path
@@ -11,12 +9,14 @@ export default function methodHandler(documentation, path) {
     .filter(propertyPath => types.Property.check(propertyPath.node))
     .filter(p => p.node.key.name === 'methods')
 
-  // if no prop return
+  // if no method return
   if (!methodsPath.length) {
     return
   }
 
   const methodsObject = methodsPath[0].get('value')
+
+  const methods = []
 
   methodsObject
     .get('properties')
@@ -27,21 +27,23 @@ export default function methodHandler(documentation, path) {
           types.FunctionExpression.check(propertyPath.node))
     )
     .forEach(method => {
-      const methodDescriptor = documentation.getPropDescriptor(method.get('key').name)
+      const methodDescriptor = {}
 
       // description
       methodDescriptor.description = getDocblock(method)
 
-      const propPropertiesPath = method.get('value').get('properties')
+      // params
+      describeParams(method, methodDescriptor)
 
-      // default
-      describeParams(propPropertiesPath, methodDescriptor)
+      methods.push(methodDescriptor)
     })
+  if (methods.length) {
+    documentation.set('methods', methods)
+  }
 }
 
-function describeParams(propPropertiesPath, propDescriptor) {
-  const defaultArray = propPropertiesPath.filter(p => p.node.key.name === 'default')
-  if (defaultArray.length) {
-    propDescriptor.defaultValue = recast.print(defaultArray[0].get('value')).code
-  }
+function describeParams(methodPath, methodDescriptor) {
+  const params = []
+  // here the parameters of the method will be described
+  methodDescriptor.params = params
 }

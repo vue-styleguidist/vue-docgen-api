@@ -1,8 +1,6 @@
 import recast from 'recast'
 
-const {
-  types: { namedTypes: types },
-} = recast
+const types = recast.types.namedTypes
 
 export default function propHandler(documentation, path) {
   const namePath = path

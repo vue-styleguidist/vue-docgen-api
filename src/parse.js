@@ -3,7 +3,7 @@ import parser from './utils/parser'
 import babylon from './utils/babylon'
 import resolveExportedComponent from './utils/resolveExportedComponent'
 import Documentation from './Documentation'
-import propHandler from './handlers/propHandler'
+import handlers from './handlers'
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.'
 
@@ -29,7 +29,7 @@ export default function parseSource(source) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }
 
-  const vueDoc = executeHandlers([propHandler], componentDefinitions)
+  const vueDoc = executeHandlers(handlers, componentDefinitions)
   console.timeEnd(time2)
   return vueDoc.length ? vueDoc[0] : undefined
 }

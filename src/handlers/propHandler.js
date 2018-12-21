@@ -1,9 +1,7 @@
 import recast from 'recast'
 import { getDocblock } from '../utils/getDocblock'
 
-const {
-  types: { namedTypes: types },
-} = recast
+const types = recast.types.namedTypes
 
 export default function propHandler(documentation, path) {
   const propsPath = path
