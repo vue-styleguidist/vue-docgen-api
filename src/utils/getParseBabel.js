@@ -1,4 +1,7 @@
 const babel = require('@babel/core')
+const presetEnv = require('@babel/preset-env');
+const pluginObjectRestSpread = require('@babel/plugin-proposal-object-rest-spread');
+const pluginTransformVueJsx = require('babel-plugin-transform-vue-jsx');
 const path = require('path')
 const process = require('process')
 
@@ -16,7 +19,7 @@ module.exports = function getJsxBabel(code, filename, comments = false) {
     filenameRelative,
     presets: [
       [
-        '@babel/preset-env',
+        presetEnv,
         {
           targets: {
             chrome: 52,
@@ -24,7 +27,7 @@ module.exports = function getJsxBabel(code, filename, comments = false) {
         },
       ],
     ],
-    plugins: ['@babel/plugin-proposal-object-rest-spread', 'babel-plugin-transform-vue-jsx'],
+    plugins: [pluginObjectRestSpread, pluginTransformVueJsx],
     sourceRoot: cwd,
   }
 

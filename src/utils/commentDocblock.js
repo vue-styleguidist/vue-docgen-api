@@ -30,8 +30,7 @@ export function getDocblock(path, trailing = false) {
     )
   } else if (path.node.comments) {
     comments = path.node.comments.filter(
-      comment =>
-        comment.leading && comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value)
+      comment => comment.leading && comment.type === 'Block' && DOCBLOCK_HEADER.test(comment.value)
     )
   }
 

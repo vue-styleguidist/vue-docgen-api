@@ -1,6 +1,6 @@
 import { utils } from 'react-docgen'
-
-const { isExportsOrModuleAssignment, resolveExportDeclaration, resolveToValue } = utils
+import resolveExportDeclaration from './resolveExportDeclaration'
+import isExportedAssignment from './isExportedAssignment'
 
 function ignore() {
   return false
@@ -12,10 +12,6 @@ function isComponentDefinition(path, types) {
 
 /**
  * Given an AST, this function tries to find the exported component definitions.
- *
- * The component definitions are either the ObjectExpression passed to
- * `React.createClass` or a `class` definition extending `React.Component` or
- * having a `render()` method.
  *
  * If a definition is part of the following statements, it is considered to be
  * exported:
@@ -73,14 +69,14 @@ export default function resolveExportedComponent(ast, recast) {
 
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
-      if (!isExportsOrModuleAssignment(path)) {
+      if (!isExportedAssignment(path)) {
         return false
       }
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
-      path = resolveToValue(path.get('right'))
+      path = utils.resolveToValue(path.get('right'))
       if (!isComponentDefinition(path)) {
-        path = resolveToValue(path)
+        path = utils.resolveToValue(path)
         if (!isComponentDefinition(path)) {
           return false
         }

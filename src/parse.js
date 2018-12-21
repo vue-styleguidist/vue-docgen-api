@@ -1,4 +1,3 @@
-import fs from 'fs'
 import recast from 'recast'
 import parser from './utils/parser'
 import babylon from './utils/babylon'
@@ -16,14 +15,7 @@ function executeHandlers(handlers, componentDefinitions) {
   })
 }
 
-export const parse = function(file) {
-  const source = fs.readFileSync(file, {
-    encoding: 'utf-8',
-  })
-  return parseSource(source)
-}
-
-export const parseSource = function(source) {
+export default function parseSource(source) {
   var time2 = 'parse'
   console.time(time2)
   if (source === '') {
@@ -31,7 +23,6 @@ export const parseSource = function(source) {
   }
   const blocks = parser(source)
   var ast = recast.parse(blocks.script.content, babylon)
-
   var componentDefinitions = resolveExportedComponent(ast.program, recast)
 
   if (componentDefinitions.length === 0) {

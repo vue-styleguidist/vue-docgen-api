@@ -14,6 +14,9 @@ export default {
   name: 'buttonBar',
   components: { Button },
   props: {
+    /**
+     * list of all buttons
+     */
     listofButtonNames: {
       type: Array,
       default: () => [BUTTON_NAME],
