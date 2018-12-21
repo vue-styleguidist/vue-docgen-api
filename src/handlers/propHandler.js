@@ -1,5 +1,5 @@
 import recast from 'recast'
-import { getDocblock } from '../utils/commentDocblock'
+import { getDocblock } from '../utils/getDocblock'
 
 const {
   types: { namedTypes: types },

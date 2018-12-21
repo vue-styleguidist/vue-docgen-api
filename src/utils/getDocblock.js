@@ -2,8 +2,6 @@
  * Helper functions to work with docblock comments.
  */
 
-const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim
-
 function parseDocblock(str) {
   const lines = str.split('\n')
   for (let i = 0, l = lines.length; i < l; i++) {
@@ -38,19 +36,4 @@ export function getDocblock(path, trailing = false) {
     return parseDocblock(comments[comments.length - 1].value)
   }
   return null
-}
-
-/**
- * Given a string, this functions returns an object with doclet names as keys
- * and their "content" as values.
- */
-export function getDoclets(str) {
-  const doclets = Object.create(null)
-  let match = DOCLET_PATTERN.exec(str)
-
-  for (; match; match = DOCLET_PATTERN.exec(str)) {
-    doclets[match[1]] = match[2] || true
-  }
-
-  return doclets
 }
