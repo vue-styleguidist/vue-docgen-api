@@ -34,8 +34,16 @@ describe('tests grid', () => {
     expect(typeof docGrid['methods'] !== 'undefined').toBe(true)
   })
 
-  it('should the component has one method', () => {
-    expect(Object.keys(docGrid['methods']).length).toEqual(1)
+  it('should return one method for the component', () => {
+    expect(docGrid.methods.length).toEqual(1)
+  })
+
+  it('should return one param for this method', () => {
+    expect(docGrid.methods[0].params.length).toEqual(1)
+  })
+
+  it('should return the correct object for this param', () => {
+    expect(docGrid.methods[0].params[0]).toMatchObject({name: "key", description: "Key to order"})
   })
 
   it('should has props', () => {
