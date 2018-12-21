@@ -23,25 +23,29 @@ export default function propHandler(documentation, path) {
     .filter(propertyPath => types.Property.check(propertyPath.node))
     .forEach(prop => {
       const propDescriptor = documentation.getPropDescriptor(prop.get('key').name)
-      if (types.ObjectExpression.check(prop.get('value').value)) {
+      const propValuePath = prop.get('value')
+      const isObjectExpression = types.ObjectExpression.check(propValuePath.value)
+      const isIdentifier = types.Identifier.check(propValuePath.value)
+      if (isIdentifier || isObjectExpression) {
         // description
-        describeComment(prop, propDescriptor)
+        propDescriptor.description = getDocblock(prop)
 
-        const propPropertiesPath = prop.get('value').get('properties')
-        // type
-        describeType(propPropertiesPath, propDescriptor)
+        if (isObjectExpression) {
+          const propPropertiesPath = propValuePath.get('properties')
+          // type
+          describeType(propPropertiesPath, propDescriptor)
 
-        // required
-        describeRequired(propPropertiesPath, propDescriptor)
+          // required
+          describeRequired(propPropertiesPath, propDescriptor)
 
-        // default
-        describeDefault(propPropertiesPath, propDescriptor)
+          // default
+          describeDefault(propPropertiesPath, propDescriptor)
+        } else if (isIdentifier) {
+          // contents of the prop is it's type
+          propDescriptor.type = propValuePath.node.name
+        }
       }
     })
-}
-
-function describeComment(prop, propDescriptor) {
-  propDescriptor.description = getDocblock(prop)
 }
 
 function describeType(propPropertiesPath, propDescriptor) {

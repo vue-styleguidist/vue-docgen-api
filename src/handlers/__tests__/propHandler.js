@@ -45,6 +45,23 @@ describe('propHandler', () => {
     })
   })
 
+  it('should return the right props type', () => {
+    const src = `
+    export default {
+      name: 'name-123',
+      components: {
+        testComp: {}
+      },
+      props: {
+        test: Array
+      }
+    }
+    `
+    test(src, {
+      type: 'Array',
+    })
+  })
+
   it('should return the right required props', () => {
     const src = `
     export default {
