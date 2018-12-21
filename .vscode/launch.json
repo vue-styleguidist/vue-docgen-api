@@ -10,6 +10,9 @@
       "name": "Jest e2e",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": ["--config", "./jest.e2e.config.js"],
+      "runtimeArgs": ["--inspect-brk=127.0.0.1:5858"],
+      "port": 5858,
+      "sourceMaps": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "windows": {
@@ -22,6 +25,9 @@
       "name": "Jest unit",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": ["--config", "./jest.unit.config.js"],
+      "runtimeArgs": ["--inspect-brk=127.0.0.1:5858"],
+      "port": 5858,
+      "sourceMaps": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "windows": {
@@ -33,7 +39,10 @@
       "request": "launch",
       "name": "Jest Current File",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": ["${relativeFile}"],
+      "args": ["${relativeFile}", "--no-cache"],
+      "runtimeArgs": ["--inspect-brk=127.0.0.1:5858"],
+      "port": 5858,
+      "sourceMaps": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "windows": {
