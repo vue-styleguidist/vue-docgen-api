@@ -4,10 +4,7 @@ import { getDocblock } from '../utils/getDocblock'
 const types = recast.types.namedTypes
 
 export default function propHandler(documentation, path) {
-  const propsPath = path
-    .get('properties')
-    .filter(propertyPath => types.Property.check(propertyPath.node))
-    .filter(p => p.node.key.name === 'props')
+  const propsPath = path.get('properties').filter(p => p.node.key.name === 'props')
 
   // if no prop return
   if (!propsPath.length) {
@@ -18,7 +15,8 @@ export default function propHandler(documentation, path) {
 
   propsObject
     .get('properties')
-    .filter(propertyPath => types.Property.check(propertyPath.node))
+    // filter non object properties
+    .filter(p => types.Property.check(p.node))
     .forEach(prop => {
       const propDescriptor = documentation.getPropDescriptor(prop.get('key').name)
       const propValuePath = prop.get('value')
