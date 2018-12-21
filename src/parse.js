@@ -1,6 +1,6 @@
 import recast from 'recast'
 import parser from './utils/parser'
-import babylon from './utils/babylon'
+import babylon from './babylon'
 import resolveExportedComponent from './utils/resolveExportedComponent'
 import Documentation from './Documentation'
 import handlers from './handlers'
