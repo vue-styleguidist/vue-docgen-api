@@ -2,10 +2,7 @@ import recast from 'recast'
 import { utils } from 'react-docgen'
 
 const { resolveToValue } = utils
-
-const {
-  types: { namedTypes: _types },
-} = recast
+const _types = recast.types.namedTypes
 
 export default function resolveExportDeclaration(path, types = _types) {
   const definitions = []

@@ -1,8 +1,6 @@
 import recast from 'recast'
 
-const {
-  types: { namedTypes: types },
-} = recast
+const types = recast.types.namedTypes
 
 /**
  * true if the left part of the expression of the NodePath is of form `exports.foo = ...;` or
