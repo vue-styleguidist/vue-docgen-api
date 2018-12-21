@@ -1,6 +1,6 @@
 import recast from 'recast'
 import doctrine from 'doctrine'
-import { getDocblock } from '../utils/getDocblock'
+import getDocblock from '../utils/getDocblock'
 
 const types = recast.types.namedTypes
 

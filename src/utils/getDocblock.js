@@ -16,7 +16,7 @@ const DOCBLOCK_HEADER = /^\*\s/
  * Given a path, this function returns the closest preceding docblock if it
  * exists.
  */
-export function getDocblock(path, trailing = false) {
+export default function getDocblock(path, trailing = false) {
   let comments = []
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(

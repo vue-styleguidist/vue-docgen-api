@@ -131,7 +131,7 @@ describe('methodHandler', () => {
     })
   })
 
-  it.only('should allow description of params without naming them', () => {
+  it('should allow description of params without naming them', () => {
     const src = `
     export default {
       name: 'name-123',

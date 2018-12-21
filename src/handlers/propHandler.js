@@ -1,5 +1,5 @@
 import recast from 'recast'
-import { getDocblock } from '../utils/getDocblock'
+import getDocblock from '../utils/getDocblock'
 
 const types = recast.types.namedTypes
 
