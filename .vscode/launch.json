@@ -1,0 +1,44 @@
+{
+  // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+  // Pointez pour afficher la description des attributs existants.
+  // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest e2e",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": ["--config", "./jest.e2e.config.js"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest unit",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": ["--config", "./jest.unit.config.js"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Current File",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["${relativeFile}"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    }
+  ]
+}
