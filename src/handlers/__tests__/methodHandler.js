@@ -1,6 +1,6 @@
 import recast from 'recast'
 import propHandler from '../methodHandler'
-import babylon from '../../utils/babylon'
+import babylon from '../../babylon'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
 
 jest.mock('../../Documentation')
@@ -34,8 +34,17 @@ describe('methodHandler', () => {
         testComp: {}
       },
       methods: {
+        testFunction: function(param){
+          return param + 1;
+        },
         test() {
           return {};
+        },
+        otherTest(param){
+          return 2 * param;
+        },
+        lastTest(param1, param2){
+          return param2 * param1;
         }
       }
     }
