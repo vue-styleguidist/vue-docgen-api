@@ -15,7 +15,7 @@ function executeHandlers(handlers, componentDefinitions) {
   })
 }
 
-export default function parseSource(source) {
+export default function parse(source) {
   var time2 = 'parse'
   console.time(time2)
   if (source === '') {

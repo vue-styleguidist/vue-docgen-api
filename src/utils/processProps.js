@@ -1,7 +1,6 @@
 import getProp from './getProp'
 
 export default function processProps(docFile, component) {
-  console.log('component', component)
   docFile = docFile.slice()
   let props = component.props
   let mixins = component.mixins

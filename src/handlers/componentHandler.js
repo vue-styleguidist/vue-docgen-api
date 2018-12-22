@@ -1,4 +1,4 @@
-import doctrine from 'doctrine'
+import getDoclets from '../utils/getDoclets'
 import getDocblock from '../utils/getDocblock'
 
 export default function propHandler(documentation, path) {
@@ -9,13 +9,13 @@ export default function propHandler(documentation, path) {
     return
   }
 
-  const jsDoc = doctrine.parse(docBlock)
+  const jsDoc = getDoclets(docBlock)
 
   if (jsDoc.description) {
     documentation.set('description', jsDoc.description)
   }
 
   if (jsDoc.comment) {
-    documentation.set('comment', jsDoc.comment)
+    documentation.set('comment', docBlock)
   }
 }
