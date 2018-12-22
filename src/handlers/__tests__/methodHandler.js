@@ -138,8 +138,9 @@ describe('methodHandler', () => {
       methods: {
         /**
          * @param {string} - unanmed param
+         * @param {number} - another unanmed param
          */
-        describedParams(p){
+        describedParams(p, p2){
           return p * 2;
         }
       }
@@ -149,7 +150,10 @@ describe('methodHandler', () => {
       methods: [
         {
           name: 'describedParams',
-          params: [{ name: 'p', description: 'unanmed param', type: { name: 'string' } }],
+          params: [
+            { name: 'p', description: 'unanmed param', type: { name: 'string' } },
+            { name: 'p2', description: 'another unanmed param', type: { name: 'number' } },
+          ],
         },
       ],
     })

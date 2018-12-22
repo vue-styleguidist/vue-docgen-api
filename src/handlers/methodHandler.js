@@ -1,6 +1,6 @@
 import recast from 'recast'
-import doctrine from 'doctrine'
 import getDocblock from '../utils/getDocblock'
+import getDoclets from '../utils/getDoclets'
 
 const types = recast.types.namedTypes
 
@@ -29,13 +29,13 @@ export default function methodHandler(documentation, path) {
 
       const docBlock = getDocblock(method)
 
-      const jsDoc = doctrine.parse(docBlock || '')
+      const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
 
       // params
       describeParams(method, methodDescriptor, jsDoc.tags.filter(tag => tag.title === 'param'))
 
       // description
-      if (jsDoc.description.length) {
+      if (jsDoc.description) {
         methodDescriptor.description = jsDoc.description
       }
 
@@ -59,14 +59,14 @@ function describeParams(methodPath, methodDescriptor, jsDocParamTags) {
 
     // if tag is not namely described try finding it by its order
     if (!jsDocTag) {
-      if (jsDocParamTags[i] && jsDocParamTags[i].name === 'null-null') {
+      if (jsDocParamTags[i] && !jsDocParamTags[i].name) {
         jsDocTag = jsDocParamTags[i]
       }
     }
 
     if (jsDocTag) {
       if (jsDocTag.type) {
-        param.type = convertJsDocTypeToDocGen(jsDocTag.type)
+        param.type = jsDocTag.type
       }
       if (jsDocTag.description) {
         param.description = jsDocTag.description
@@ -78,52 +78,5 @@ function describeParams(methodPath, methodDescriptor, jsDocParamTags) {
 
   if (params.length) {
     methodDescriptor.params = params
-  }
-}
-
-/**
- * Adapts types coming out of doctrine into readable types
- * @param {Object} tagType
- */
-function convertJsDocTypeToDocGen(tagType) {
-  if (!tagType) {
-    return null
-  }
-
-  const { type, name, expression, elements, applications } = tagType
-
-  switch (type) {
-    case 'NameExpression':
-      // {a}
-      return { name }
-    case 'UnionType':
-      // {a|b}
-      return {
-        name: 'union',
-        elements: elements.map(element => convertJsDocTypeToDocGen(element)),
-      }
-    case 'AllLiteral':
-      // {*}
-      return { name: 'mixed' }
-    case 'TypeApplication':
-      // {Array<string>} or {string[]}
-      return {
-        name: expression.name,
-        elements: applications.map(element => convertJsDocTypeToDocGen(element)),
-      }
-    case 'ArrayType':
-      // {[number, string]}
-      return {
-        name: 'tuple',
-        elements: elements.map(element => convertJsDocTypeToDocGen(element)),
-      }
-    default: {
-      const typeName = name ? name : expression ? expression.name : null
-      if (typeName) {
-        return { name: typeName }
-      } else {
-        return null
-      }
-    }
   }
 }
