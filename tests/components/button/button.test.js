@@ -18,7 +18,7 @@ describe('tests button', () => {
     expect(docButton.displayName).toEqual('buttonComponent')
   })
 
-  it('The component should has a description', () => {
+  it('The component should have a description', () => {
     expect(docButton.description).toEqual(
       'This is an example of creating a reusable button component and using it with external data.'
     )
