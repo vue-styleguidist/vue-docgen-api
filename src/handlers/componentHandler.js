@@ -18,4 +18,8 @@ export default function propHandler(documentation, path) {
   if (jsDoc.comment) {
     documentation.set('comment', docBlock)
   }
+
+  if (jsDoc.tags) {
+    documentation.set('tags', jsDoc.tags)
+  }
 }

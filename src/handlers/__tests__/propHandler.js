@@ -20,7 +20,7 @@ describe('propHandler', () => {
     documentation.getPropDescriptor.mockReturnValue(mockPropDescriptor)
   })
 
-  function test(src, matchedObj) {
+  function tester(src, matchedObj) {
     const def = parse(src)
     propHandler(documentation, def[0])
     expect(mockPropDescriptor).toMatchObject(matchedObj)
@@ -40,7 +40,7 @@ describe('propHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       type: 'Array',
     })
   })
@@ -57,7 +57,7 @@ describe('propHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       type: 'Array',
     })
   })
@@ -76,7 +76,7 @@ describe('propHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       required: true,
     })
   })
@@ -91,8 +91,23 @@ describe('propHandler', () => {
       }
     }
     `
-    test(src, {
-      defaultValue: "['hello']",
+    tester(src, {
+      defaultValue: { value: "['hello']" },
+    })
+  })
+
+  it('should be ok with just the default', () => {
+    const src = `
+    export default {
+      props: {
+        test: {
+          default: 'normal'
+        }
+      }
+    }
+    `
+    tester(src, {
+      defaultValue: { value: "'normal'" },
     })
   })
 
@@ -109,7 +124,7 @@ describe('propHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       description: 'test description',
     })
   })

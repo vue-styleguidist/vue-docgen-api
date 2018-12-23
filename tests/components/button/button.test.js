@@ -28,8 +28,8 @@ describe('tests button', () => {
     expect(Object.keys(docButton['tags']).length).toEqual(2)
   })
 
-  it('should the component has size prop default equal normal', () => {
-    expect(docButton['props']['size']['defaultValue']['value']).toEqual('"normal"')
+  it('should give the component a size prop with default value to "normal"', () => {
+    expect(docButton['props']['size']['defaultValue']['value']).toEqual("'normal'")
   })
 
   it('should the component has size prop description equal The size of the button', () => {

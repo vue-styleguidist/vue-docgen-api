@@ -2,6 +2,7 @@ import recast from 'recast'
 import componentHandler from '../componentHandler'
 import babylon from '../../babylon'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
+import { version } from 'core-js'
 
 jest.mock('../../Documentation')
 
@@ -29,5 +30,22 @@ describe('componentHandler', () => {
     const def = parse(src)
     componentHandler(documentation, def[0])
     expect(documentation.set).toHaveBeenCalledWith('description', 'An empty component')
+  })
+
+  it('should return the right component name', () => {
+    const src = `
+    /**
+     * An empty component
+     * @version 12.5.7 
+     */
+    export default {
+      name: 'name-123',
+    }
+    `
+    const def = parse(src)
+    componentHandler(documentation, def[0])
+    expect(documentation.set).toHaveBeenCalledWith('tags', [
+      { title: 'version', content: '12.5.7' },
+    ])
   })
 })

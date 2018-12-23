@@ -18,7 +18,7 @@ export default function propHandler(documentation, path) {
     // filter non object properties
     .filter(p => types.Property.check(p.node))
     .forEach(prop => {
-      const propDescriptor = documentation.getPropDescriptor(prop.get('key').name)
+      const propDescriptor = documentation.getPropDescriptor(prop.get('key').node.name)
       const propValuePath = prop.get('value')
       const isObjectExpression = types.ObjectExpression.check(propValuePath.value)
       const isIdentifier = types.Identifier.check(propValuePath.value)
@@ -61,6 +61,6 @@ function describeRequired(propPropertiesPath, propDescriptor) {
 function describeDefault(propPropertiesPath, propDescriptor) {
   const defaultArray = propPropertiesPath.filter(p => p.node.key.name === 'default')
   if (defaultArray.length) {
-    propDescriptor.defaultValue = recast.print(defaultArray[0].get('value')).code
+    propDescriptor.defaultValue = { value: recast.print(defaultArray[0].get('value')).code }
   }
 }

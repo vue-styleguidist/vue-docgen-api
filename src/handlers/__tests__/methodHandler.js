@@ -20,7 +20,7 @@ describe('methodHandler', () => {
     documentation.set.mockImplementation((key, methods) => (mockPropDescriptor[key] = methods))
   })
 
-  function test(src, matchedObj) {
+  function tester(src, matchedObj) {
     const def = parse(src)
     propHandler(documentation, def[0])
     expect(mockPropDescriptor).toMatchObject(matchedObj)
@@ -43,7 +43,7 @@ describe('methodHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       methods: [
         {
           name: 'testFunction',
@@ -69,7 +69,7 @@ describe('methodHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       methods: [
         {
           name: 'testWithParam',
@@ -97,7 +97,7 @@ describe('methodHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       methods: [
         {
           name: 'describedFunc',
@@ -121,7 +121,7 @@ describe('methodHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       methods: [
         {
           name: 'describedParams',
@@ -146,7 +146,7 @@ describe('methodHandler', () => {
       }
     }
     `
-    test(src, {
+    tester(src, {
       methods: [
         {
           name: 'describedParams',
