@@ -30,4 +30,19 @@ describe('methodHandler', () => {
     displayNameHandler(documentation, def[0])
     expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123')
   })
+
+  it('should return the right component name as a constant', () => {
+    const src = `
+    const NAME = 'name-123';
+    export default {
+      name: NAME,
+      components: {
+        testComp: {}
+      }
+    }
+    `
+    const def = parse(src)
+    displayNameHandler(documentation, def[0])
+    expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123')
+  })
 })
