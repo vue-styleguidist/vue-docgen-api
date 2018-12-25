@@ -90,7 +90,7 @@ describe('tests button', () => {
     expect(docButton['props']['spanSm']['type']['name']).toEqual('string|number')
   })
 
-  it('should funcDefault to be string', () => {
+  it('should set funcDefault prop as a function (type "func")', () => {
     expect(docButton['props']['funcDefault']['type']['name']).toEqual('func')
   })
 
