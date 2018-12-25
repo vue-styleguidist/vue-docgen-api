@@ -1,24 +1,7 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- *
- *  @flow
- *
- */
-
 class Documentation {
-  constructor() {
-    this._props = new Map()
-    this._composes = new Set()
-    this._data = new Map()
-  }
-
-  addComposes(moduleName) {
-    this._composes.add(moduleName)
+  constructor(initDocuemntation) {
+    this._props = new Map(initDocuemntation.props)
+    this._data = new Map(initDocuemntation.data)
   }
 
   set(key, value) {
@@ -51,9 +34,6 @@ class Documentation {
       }
     }
 
-    if (this._composes.size > 0) {
-      obj.composes = Array.from(this._composes)
-    }
     return obj
   }
 }
