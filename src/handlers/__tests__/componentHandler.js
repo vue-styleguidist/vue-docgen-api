@@ -36,7 +36,8 @@ describe('componentHandler', () => {
     const src = `
     /**
      * An empty component
-     * @version 12.5.7 
+     * @version 12.5.7
+     * @author [Rafael]
      */
     export default {
       name: 'name-123',
@@ -44,8 +45,9 @@ describe('componentHandler', () => {
     `
     const def = parse(src)
     componentHandler(documentation, def[0])
-    expect(documentation.set).toHaveBeenCalledWith('tags', [
-      { title: 'version', content: '12.5.7' },
-    ])
+    expect(documentation.set).toHaveBeenCalledWith('tags', {
+      version: '12.5.7',
+      author: '[Rafael]',
+    })
   })
 })

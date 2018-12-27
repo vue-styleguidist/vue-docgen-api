@@ -20,6 +20,13 @@ export default function propHandler(documentation, path) {
   }
 
   if (jsDoc.tags) {
-    documentation.set('tags', jsDoc.tags)
+    documentation.set('tags', transformTags(jsDoc.tags))
   }
+}
+
+function transformTags(tags) {
+  return tags.reduce((acc, i) => {
+    acc[i.title] = i.content
+    return acc
+  }, {})
 }
