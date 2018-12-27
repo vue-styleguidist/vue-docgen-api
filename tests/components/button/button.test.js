@@ -48,11 +48,11 @@ describe('tests button', () => {
     expect(typeof docButton['tags']['author'] !== 'undefined').toBe(true)
   })
 
-  it('should dont has methods', () => {
+  it('should not see the method without tag @public', () => {
     expect(docButton['methods'].length).toEqual(0)
   })
 
-  it('should has props', () => {
+  it('should have props', () => {
     expect(typeof docButton['props'] !== 'undefined').toBe(true)
   })
 
@@ -64,7 +64,7 @@ describe('tests button', () => {
     expect(Object.keys(docButton['props']).length).toEqual(14)
   })
 
-  it('should the component has propsAnother prop default equal #333', () => {
+  it('should the component has propsAnother prop default equal "blue"', () => {
     expect(docButton['props']['propsAnother']['defaultValue']['value']).toEqual('"blue"')
   })
 
