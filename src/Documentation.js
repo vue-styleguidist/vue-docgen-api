@@ -1,5 +1,5 @@
 class Documentation {
-  constructor(initDocuemntation) {
+  constructor(initDocuemntation = {}) {
     this._props = new Map(initDocuemntation.props)
     this._data = new Map(initDocuemntation.data)
   }
