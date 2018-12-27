@@ -26,6 +26,31 @@ describe('methodHandler', () => {
     expect(mockPropDescriptor).toMatchObject(matchedObj)
   }
 
+  it('should ignore every method not tagged as @public', () => {
+    const src = `
+    export default {
+      name: 'name-123',
+      methods:{
+        testIgnore(){
+          return 1;
+        }
+        /**
+         * @public
+         */
+        testPublic() {
+          return {};
+        }
+      }
+    }`
+    tester(src, {
+      methods: [
+        {
+          name: 'testPublic',
+        },
+      ],
+    })
+  })
+
   it('should return the methods of the component', () => {
     const src = `
     export default {
@@ -34,9 +59,15 @@ describe('methodHandler', () => {
         testComp: {}
       },
       methods: {
+        /**
+         * @public
+         */
         testFunction: function(){
           return 1;
         },
+        /**
+         * @public
+         */
         testMethod() {
           return {};
         }
@@ -60,9 +91,15 @@ describe('methodHandler', () => {
     export default {
       name: 'name-123',
       methods: {
+        /**
+         * @public
+         */
         testWithParam(param){
           return 2 * param;
         },
+        /**
+         * @public
+         */
         testWithMultipleParams(param1, param2){
           return param2 + param1;
         }
@@ -90,6 +127,7 @@ describe('methodHandler', () => {
       methods: {
         /**
          * it returns 2
+         * @public
          */
         describedFunc(){
           return 2;
@@ -113,6 +151,7 @@ describe('methodHandler', () => {
       name: 'name-123',
       methods: {
         /**
+         * @public
          * @param {string} p1 - multiplicateur
          */
         describedParams(p1){
@@ -137,6 +176,7 @@ describe('methodHandler', () => {
       name: 'name-123',
       methods: {
         /**
+         * @public
          * @param {string} - unanmed param
          * @param {number} - another unanmed param
          */

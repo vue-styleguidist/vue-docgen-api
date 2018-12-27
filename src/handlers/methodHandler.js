@@ -31,6 +31,10 @@ export default function methodHandler(documentation, path) {
 
       const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
 
+      if (!jsDoc.tags.find(t => t.title === 'public')) {
+        return
+      }
+
       // params
       describeParams(method, methodDescriptor, jsDoc.tags.filter(tag => tag.title === 'param'))
 
@@ -41,9 +45,7 @@ export default function methodHandler(documentation, path) {
 
       methods.push(methodDescriptor)
     })
-  if (methods.length) {
-    documentation.set('methods', methods)
-  }
+  documentation.set('methods', methods)
 }
 
 function describeParams(methodPath, methodDescriptor, jsDocParamTags) {
