@@ -95,7 +95,7 @@ describe('tests button', () => {
   })
 
   it('should prop1 to be string', () => {
-    expect(docButton['props']['prop1']['type']['name']).toEqual('string')
+    expect(docButton['props']['prop1']['type']).toMatchObject({name:'string'})
   })
 
   it('should example to be boolean', () => {

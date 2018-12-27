@@ -1,5 +1,6 @@
 import recast from 'recast'
 import getDocblock from '../utils/getDocblock'
+import getDoclets from '../utils/getDoclets'
 
 const types = recast.types.namedTypes
 
@@ -24,7 +25,15 @@ export default function propHandler(documentation, path) {
       const isIdentifier = types.Identifier.check(propValuePath.value)
       if (isIdentifier || isObjectExpression) {
         // description
-        propDescriptor.description = getDocblock(prop)
+        const docBlock = getDocblock(prop)
+        const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
+
+        // ignore every prop that has the ignore tag
+        if (jsDoc.tags.some(t => t.title === 'ignore')) {
+          return
+        }
+
+        propDescriptor.description = jsDoc.description
 
         if (isObjectExpression) {
           const propPropertiesPath = propValuePath.get('properties')
@@ -38,7 +47,14 @@ export default function propHandler(documentation, path) {
           describeDefault(propPropertiesPath, propDescriptor)
         } else if (isIdentifier) {
           // contents of the prop is it's type
-          propDescriptor.type = propValuePath.node.name
+          propDescriptor.type = getTypeFromTypePath(propValuePath)
+        }
+
+        if (jsDoc.tags.some(t => t.title === 'model')) {
+          const propDescriptorModel = documentation.getPropDescriptor('v-model')
+          for (let propKey of Object.keys(propDescriptor)) {
+            propDescriptorModel[propKey] = propDescriptor[propKey]
+          }
         }
       }
     })
@@ -47,12 +63,22 @@ export default function propHandler(documentation, path) {
 function describeType(propPropertiesPath, propDescriptor) {
   const typeArray = propPropertiesPath.filter(p => p.node.key.name === 'type')
   if (typeArray.length) {
-    const typeNode = typeArray[0].get('value').node
-    propDescriptor.type = {
-      name: types.ArrayExpression.check(typeNode)
-        ? typeNode.elements.map(t => t.name.toLowerCase()).join('|')
-        : typeNode.name,
+    propDescriptor.type = getTypeFromTypePath(typeArray[0].get('value'))
+  } else {
+    // deduce the type from default expression
+    const defaultArray = propPropertiesPath.filter(p => p.node.key.name === 'default')
+    if (defaultArray.length) {
+      propDescriptor.type = { name: typeof defaultArray[0].node.value.value }
     }
+  }
+}
+
+function getTypeFromTypePath(typePath) {
+  const typeNode = typePath.node
+  return {
+    name: types.ArrayExpression.check(typeNode)
+      ? typeNode.elements.map(t => t.name.toLowerCase()).join('|')
+      : typeNode.name.toLowerCase(),
   }
 }
 

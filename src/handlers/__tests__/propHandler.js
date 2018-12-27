@@ -25,6 +25,7 @@ describe('propHandler', () => {
     propHandler(documentation, def[0])
     expect(mockPropDescriptor).toMatchObject(matchedObj)
   }
+
   describe('type', () => {
     it('should return the right props type', () => {
       const src = `
@@ -41,7 +42,7 @@ describe('propHandler', () => {
     }
     `
       tester(src, {
-        type: { name: 'Array' },
+        type: { name: 'array' },
       })
     })
 
@@ -77,7 +78,35 @@ describe('propHandler', () => {
     }
     `
       tester(src, {
-        type: { name: 'Array' },
+        type: { name: 'array' },
+      })
+    })
+
+    it('should return the right props type string', () => {
+      const src = `
+    export default {
+      props: {
+        test: String
+      }
+    }
+    `
+      tester(src, {
+        type: { name: 'string' },
+      })
+    })
+
+    it('should deduce the prop type from the default value', () => {
+      const src = `
+    export default {
+      props: {
+        test:{
+          default: false
+        }
+      }
+    }
+    `
+      tester(src, {
+        type: { name: 'boolean' },
       })
     })
   })
@@ -152,6 +181,30 @@ describe('propHandler', () => {
       tester(src, {
         description: 'test description',
       })
+    })
+  })
+
+  describe('v-model', () => {
+    it('should clone the @model property as v-model', () => {
+      const mockPropDescriptorModel = {}
+      documentation.getPropDescriptor.mockImplementation(key =>
+        key === 'v-model' ? mockPropDescriptorModel : mockPropDescriptor
+      )
+      const src = `
+      export default {
+        props: {
+          /**
+           * test description
+           * @model
+           */
+          test: String
+        }
+      }
+      `
+      tester(src, {
+        description: 'test description',
+      })
+      expect(mockPropDescriptorModel).toEqual(mockPropDescriptor)
     })
   })
 })
