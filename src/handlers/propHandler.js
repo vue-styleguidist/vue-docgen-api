@@ -1,6 +1,7 @@
 import recast from 'recast'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
+import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 const types = recast.types.namedTypes
 
@@ -28,9 +29,8 @@ export default function propHandler(documentation, path) {
         const docBlock = getDocblock(prop)
         const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
 
-        // ignore every prop that has the ignore tag
-        if (jsDoc.tags.some(t => t.title === 'ignore')) {
-          return
+        if (jsDoc.tags.length) {
+          propDescriptor.tags = transformTagsIntoObject(jsDoc.tags)
         }
 
         propDescriptor.description = jsDoc.description

@@ -95,6 +95,9 @@ export default {
         return { message: 'hello' }
       },
     },
+    /**
+     * @ignore
+     */
     prop1: String,
   },
   data() {

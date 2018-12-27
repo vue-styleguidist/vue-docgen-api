@@ -1,3 +1,4 @@
+import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 import getDoclets from '../utils/getDoclets'
 import getDocblock from '../utils/getDocblock'
 
@@ -20,13 +21,6 @@ export default function propHandler(documentation, path) {
   }
 
   if (jsDoc.tags) {
-    documentation.set('tags', transformTags(jsDoc.tags))
+    documentation.set('tags', transformTagsIntoObject(jsDoc.tags))
   }
-}
-
-function transformTags(tags) {
-  return tags.reduce((acc, i) => {
-    acc[i.title] = i.content
-    return acc
-  }, {})
 }

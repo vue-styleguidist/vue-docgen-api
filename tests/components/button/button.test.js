@@ -115,7 +115,7 @@ describe('tests button', () => {
   })
 
   it('should value default v-model to be example model', () => {
-    expect(docButton['props']['v-model']['defaultValue']['value']).toEqual('"example model"')
+    expect(docButton['props']['v-model']['defaultValue']['value']).toEqual("'example model'")
   })
 
   it('should value default v-model props description to be Model example2', () => {
@@ -128,7 +128,7 @@ describe('tests button', () => {
 
   it('should value default propE to be a funtion', () => {
     expect(docButton['props']['propE']['defaultValue']['value']).toEqual(
-      "() => { return { message: 'hello' }; }"
+      "() => { return { message: 'hello' }}"
     )
     expect(docButton['props']['propE']['defaultValue']['func']).toEqual(true)
   })
