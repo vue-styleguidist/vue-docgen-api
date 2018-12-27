@@ -25,9 +25,9 @@ describe('propHandler', () => {
     propHandler(documentation, def[0])
     expect(mockPropDescriptor).toMatchObject(matchedObj)
   }
-
-  it('should return the right props type', () => {
-    const src = `
+  describe('type', () => {
+    it('should return the right props type', () => {
+      const src = `
     export default {
       name: 'name-123',
       components: {
@@ -40,13 +40,32 @@ describe('propHandler', () => {
       }
     }
     `
-    tester(src, {
-      type: 'Array',
+      tester(src, {
+        type: { name: 'Array' },
+      })
     })
-  })
 
-  it('should return the right props type', () => {
-    const src = `
+    it('should return the right props composite type', () => {
+      const src = `
+    export default {
+      name: 'name-123',
+      components: {
+        testComp: {}
+      },
+      props: {
+        test: {
+          type: [String, Number]
+        }
+      }
+    }
+    `
+      tester(src, {
+        type: { name: 'string|number' },
+      })
+    })
+
+    it('should return the right props type', () => {
+      const src = `
     export default {
       name: 'name-123',
       components: {
@@ -57,32 +76,36 @@ describe('propHandler', () => {
       }
     }
     `
-    tester(src, {
-      type: 'Array',
+      tester(src, {
+        type: { name: 'Array' },
+      })
     })
   })
 
-  it('should return the right required props', () => {
-    const src = `
-    export default {
-      name: 'name-123',
-      components: {
-        testComp: {}
-      },
-      props: {
-        test: {
-          required: true
+  describe('required', () => {
+    it('should return the right required props', () => {
+      const src = `
+      export default {
+        name: 'name-123',
+        components: {
+          testComp: {}
+        },
+        props: {
+          test: {
+            required: true
+          }
         }
       }
-    }
-    `
-    tester(src, {
-      required: true,
+      `
+      tester(src, {
+        required: true,
+      })
     })
   })
 
-  it('should return the right default', () => {
-    const src = `
+  describe('defaultValue', () => {
+    it('should return the right default', () => {
+      const src = `
     export default {
       props: {
         test: {
@@ -91,13 +114,13 @@ describe('propHandler', () => {
       }
     }
     `
-    tester(src, {
-      defaultValue: { value: "['hello']" },
+      tester(src, {
+        defaultValue: { value: "['hello']" },
+      })
     })
-  })
 
-  it('should be ok with just the default', () => {
-    const src = `
+    it('should be ok with just the default', () => {
+      const src = `
     export default {
       props: {
         test: {
@@ -106,13 +129,15 @@ describe('propHandler', () => {
       }
     }
     `
-    tester(src, {
-      defaultValue: { value: "'normal'" },
+      tester(src, {
+        defaultValue: { value: "'normal'" },
+      })
     })
   })
 
-  it('should return the right description', () => {
-    const src = `
+  describe('description', () => {
+    it('should return the right description', () => {
+      const src = `
     export default {
       props: {
         /**
@@ -124,8 +149,9 @@ describe('propHandler', () => {
       }
     }
     `
-    tester(src, {
-      description: 'test description',
+      tester(src, {
+        description: 'test description',
+      })
     })
   })
 })

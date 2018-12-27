@@ -47,7 +47,12 @@ export default function propHandler(documentation, path) {
 function describeType(propPropertiesPath, propDescriptor) {
   const typeArray = propPropertiesPath.filter(p => p.node.key.name === 'type')
   if (typeArray.length) {
-    propDescriptor.type = typeArray[0].get('value').node.name
+    const typeNode = typeArray[0].get('value').node
+    propDescriptor.type = {
+      name: types.ArrayExpression.check(typeNode)
+        ? typeNode.elements.map(t => t.name.toLowerCase()).join('|')
+        : typeNode.name,
+    }
   }
 }
 
