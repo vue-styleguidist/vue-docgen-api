@@ -2,7 +2,6 @@ import recast from 'recast'
 import componentHandler from '../componentHandler'
 import babylon from '../../babylon'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
-import { version } from 'core-js'
 
 jest.mock('../../Documentation')
 
