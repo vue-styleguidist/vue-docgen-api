@@ -99,6 +99,7 @@ function resolveRequired(ast, recast, varNameFilter, types) {
 
     visitImportDeclaration: importDeclaration,
 
+    // TODO: add the dealings of es5 require instead of import
     visitVariableDeclaration: ignore,
   })
 
