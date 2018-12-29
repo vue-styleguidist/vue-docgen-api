@@ -1,6 +1,8 @@
 import path from 'path'
 import { parse } from '../main'
 
+// TODO: split this into multiple unit testable files
+
 /**
  * @returns {object} an object containing the documentations for each mixin
  * key: mixin variable name

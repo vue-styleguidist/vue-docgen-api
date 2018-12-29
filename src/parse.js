@@ -50,5 +50,8 @@ export default function parse(source, filePath) {
   }, {})
 
   const vueDoc = executeHandlers(handlers, componentDefinitions, mixinDocs)
-  return vueDoc.length ? vueDoc[0] : undefined
+  const ret = vueDoc.length ? vueDoc[0] : undefined
+  // get events from comments
+  // get slots from template
+  return ret
 }
