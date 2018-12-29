@@ -16,22 +16,32 @@ function executeHandlers(handlers, componentDefinitions, mixinsDocumentations) {
   })
 }
 
-export default function parse(source) {
+export default function parse(source, singleFileComponent, filePath) {
   var time2 = 'parse'
   console.time(time2)
   if (source === '') {
     throw new Error('The document is empty')
   }
-  const blocks = parser(source)
-  var ast = recast.parse(blocks.script.content, babylon)
-  var mixinsDocumentations = getRequiredMixinDocumentations(ast.program, recast)
+  const script = singleFileComponent ? parser(source).script.content : source
+  var ast = recast.parse(script, babylon)
   var componentDefinitions = resolveExportedComponent(ast.program, recast)
+  var mixinsDocumentations = getRequiredMixinDocumentations(
+    ast.program,
+    recast,
+    componentDefinitions,
+    filePath
+  )
 
   if (componentDefinitions.length === 0) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }
 
-  const vueDoc = executeHandlers(handlers, componentDefinitions, mixinsDocumentations)
+  // merge all the varnames found in the mixins
+  const mixinDocs = Object.keys(mixinsDocumentations).reduce((acc, mixinVar) => {
+    return Object.assign(acc, mixinsDocumentations[mixinVar])
+  }, {})
+
+  const vueDoc = executeHandlers(handlers, componentDefinitions, mixinDocs)
   console.timeEnd(time2)
   return vueDoc.length ? vueDoc[0] : undefined
 }

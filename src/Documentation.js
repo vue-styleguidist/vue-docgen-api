@@ -1,7 +1,7 @@
 class Documentation {
-  constructor(initDocuemntation = {}) {
-    this._props = new Map(initDocuemntation.props)
-    this._data = new Map(initDocuemntation.data)
+  constructor(initDocumentation = {}) {
+    this._props = new Map(adaptToKeyValue(initDocumentation.props))
+    this._data = new Map(adaptToKeyValue(initDocumentation.data))
   }
 
   set(key, value) {
@@ -36,6 +36,10 @@ class Documentation {
 
     return obj
   }
+}
+
+function adaptToKeyValue(obj) {
+  return obj ? Object.keys(obj).map(k => [k, obj[k]]) : []
 }
 
 module.exports = Documentation

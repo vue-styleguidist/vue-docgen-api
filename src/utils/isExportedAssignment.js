@@ -16,7 +16,7 @@ export default function isExportedAssignment(path) {
   ) {
     return false
   }
-  const pathLeft = path.get('left')
+  const pathLeft = path.get('left').node
   const isSimpleExports = types.Identifier.check(pathLeft) && pathLeft.name === 'exports'
   const isModuleExports =
     types.MemberExpression.check(pathLeft) &&

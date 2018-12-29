@@ -25,7 +25,7 @@ export default function resolveExportedComponent(ast, recast) {
   var types = recast.types.namedTypes
   var components = []
 
-  // function run for every non assignment export declaration
+  // function run for every non "assignment" export declaration
   // in extenso export default or export myvar
   function exportDeclaration(path) {
     var definitions = resolveExportDeclaration(path, types).reduce((acc, definition) => {
@@ -75,9 +75,9 @@ export default function resolveExportedComponent(ast, recast) {
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
       path = utils.resolveToValue(path.get('right'))
-      if (!isComponentDefinition(path)) {
+      if (!isComponentDefinition(path, types)) {
         path = utils.resolveToValue(path)
-        if (!isComponentDefinition(path)) {
+        if (!isComponentDefinition(path, types)) {
           return false
         }
       }

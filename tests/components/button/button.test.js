@@ -41,7 +41,7 @@ describe('tests button', () => {
   })
 
   it('should the component has color prop default equal #333', () => {
-    expect(docButton['props']['color']['defaultValue']['value']).toEqual('"#333"')
+    expect(docButton['props']['color']['defaultValue']['value']).toEqual("'#333'")
   })
 
   it('should the component has authors', () => {
