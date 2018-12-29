@@ -6,6 +6,7 @@ import babylon from './babylon'
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations'
 import resolveExportedComponent from './utils/resolveExportedComponent'
 import getSlots from './utils/getSlots'
+import getEvents from './utils/getEvents'
 import Documentation from './Documentation'
 import handlers from './handlers'
 
@@ -29,7 +30,8 @@ function executeHandlers(handlers, componentDefinitions, mixinsDocumentations) {
 export default function parse(source, filePath) {
   const singleFileComponent = /\.vue/i.test(path.extname(filePath))
   let parts,
-    vueDoc = []
+    vueDocArray = [],
+    ast
   if (singleFileComponent) {
     parts = parser(source)
   }
@@ -39,7 +41,7 @@ export default function parse(source, filePath) {
   }
   let script = parts ? (parts.script ? parts.script.content : undefined) : source
   if (script) {
-    var ast = recast.parse(script, babylon)
+    ast = recast.parse(script, babylon)
     var componentDefinitions = resolveExportedComponent(ast.program, recast)
     var mixinsDocumentations = getRequiredMixinDocumentations(
       ast.program,
@@ -57,14 +59,19 @@ export default function parse(source, filePath) {
       return deepmerge(acc, mixinsDocumentations[mixinVar])
     }, {})
 
-    vueDoc = executeHandlers(handlers, componentDefinitions, mixinDocs)
+    vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs)
   }
-  const ret = vueDoc.length ? vueDoc[0] : {}
+  const doc = vueDocArray.length ? vueDocArray[0] : {}
+
   // get events from comments
+  if (ast) {
+    doc.events = getEvents(ast.comments, recast)
+  }
 
   // get slots from template
   if (parts) {
-    ret.slots = getSlots(parts)
+    doc.slots = getSlots(parts)
   }
-  return ret
+
+  return doc
 }
