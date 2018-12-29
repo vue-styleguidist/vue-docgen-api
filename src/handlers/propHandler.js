@@ -15,47 +15,51 @@ export default function propHandler(documentation, path) {
 
   const propsObject = propsPath[0].get('value')
 
-  propsObject
-    .get('properties')
-    // filter non object properties
-    .filter(p => types.Property.check(p.node))
-    .forEach(prop => {
-      // description
-      const docBlock = getDocblock(prop)
-      const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
+  if (types.ObjectExpression.check(propsObject.node)) {
+    propsObject
+      .get('properties')
+      // filter non object properties
+      .filter(p => types.Property.check(p.node))
+      .forEach(prop => {
+        // description
+        const docBlock = getDocblock(prop)
+        const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
 
-      // if it's the v-model describe it as such
-      const propName = jsDoc.tags.some(t => t.title === 'model')
-        ? 'v-model'
-        : prop.get('key').node.name
+        // if it's the v-model describe it as such
+        const propName = jsDoc.tags.some(t => t.title === 'model')
+          ? 'v-model'
+          : prop.get('key').node.name
 
-      const propDescriptor = documentation.getPropDescriptor(propName)
-      const propValuePath = prop.get('value')
-      const isObjectExpression = types.ObjectExpression.check(propValuePath.value)
-      const isIdentifier = types.Identifier.check(propValuePath.value)
-      if (isIdentifier || isObjectExpression) {
-        if (jsDoc.tags.length) {
-          propDescriptor.tags = transformTagsIntoObject(jsDoc.tags)
+        const propDescriptor = documentation.getPropDescriptor(propName)
+        const propValuePath = prop.get('value')
+        const isObjectExpression = types.ObjectExpression.check(propValuePath.value)
+        const isIdentifier = types.Identifier.check(propValuePath.value)
+        if (isIdentifier || isObjectExpression) {
+          if (jsDoc.tags.length) {
+            propDescriptor.tags = transformTagsIntoObject(jsDoc.tags)
+          }
+
+          propDescriptor.description = jsDoc.description
+
+          if (isObjectExpression) {
+            const propPropertiesPath = propValuePath.get('properties')
+            // type
+            describeType(propPropertiesPath, propDescriptor)
+
+            // required
+            describeRequired(propPropertiesPath, propDescriptor)
+
+            // default
+            describeDefault(propPropertiesPath, propDescriptor)
+          } else if (isIdentifier) {
+            // contents of the prop is it's type
+            propDescriptor.type = getTypeFromTypePath(propValuePath)
+          }
         }
-
-        propDescriptor.description = jsDoc.description
-
-        if (isObjectExpression) {
-          const propPropertiesPath = propValuePath.get('properties')
-          // type
-          describeType(propPropertiesPath, propDescriptor)
-
-          // required
-          describeRequired(propPropertiesPath, propDescriptor)
-
-          // default
-          describeDefault(propPropertiesPath, propDescriptor)
-        } else if (isIdentifier) {
-          // contents of the prop is it's type
-          propDescriptor.type = getTypeFromTypePath(propValuePath)
-        }
-      }
-    })
+      })
+  } else if (types.ArrayExpression.check(propsObject.node)) {
+    // TODO: deal with array expressions properties
+  }
 }
 
 function describeType(propPropertiesPath, propDescriptor) {
@@ -66,8 +70,11 @@ function describeType(propPropertiesPath, propDescriptor) {
     // deduce the type from default expression
     const defaultArray = propPropertiesPath.filter(p => p.node.key.name === 'default')
     if (defaultArray.length) {
+      const func =
+        types.ArrowFunctionExpression.check(defaultArray[0].node.value) ||
+        types.FunctionExpression.check(defaultArray[0].node.value)
       const typeName = typeof defaultArray[0].node.value.value
-      propDescriptor.type = { name: typeName === 'function' ? 'func' : typeName }
+      propDescriptor.type = { name: func ? 'func' : typeName }
     }
   }
 }

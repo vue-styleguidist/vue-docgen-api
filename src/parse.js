@@ -28,36 +28,38 @@ function executeHandlers(handlers, componentDefinitions, mixinsDocumentations) {
  */
 export default function parse(source, filePath) {
   const singleFileComponent = /\.vue/i.test(path.extname(filePath))
-  let parts
-  function getParts(src) {
-    parts = parser(src)
-    return parts
+  let parts,
+    vueDoc = []
+  if (singleFileComponent) {
+    parts = parser(source)
   }
 
   if (source === '') {
     throw new Error(ERROR_EMPTY_DOCUMENT)
   }
-  const script = singleFileComponent ? getParts(source).script.content : source
-  var ast = recast.parse(script, babylon)
-  var componentDefinitions = resolveExportedComponent(ast.program, recast)
-  var mixinsDocumentations = getRequiredMixinDocumentations(
-    ast.program,
-    recast,
-    componentDefinitions,
-    filePath
-  )
+  let script = parts ? (parts.script ? parts.script.content : undefined) : source
+  if (script) {
+    var ast = recast.parse(script, babylon)
+    var componentDefinitions = resolveExportedComponent(ast.program, recast)
+    var mixinsDocumentations = getRequiredMixinDocumentations(
+      ast.program,
+      recast,
+      componentDefinitions,
+      filePath
+    )
 
-  if (componentDefinitions.length === 0) {
-    throw new Error(ERROR_MISSING_DEFINITION)
+    if (componentDefinitions.length === 0) {
+      throw new Error(ERROR_MISSING_DEFINITION)
+    }
+
+    // merge all the varnames found in the mixins
+    const mixinDocs = Object.keys(mixinsDocumentations).reduce((acc, mixinVar) => {
+      return deepmerge(acc, mixinsDocumentations[mixinVar])
+    }, {})
+
+    vueDoc = executeHandlers(handlers, componentDefinitions, mixinDocs)
   }
-
-  // merge all the varnames found in the mixins
-  const mixinDocs = Object.keys(mixinsDocumentations).reduce((acc, mixinVar) => {
-    return deepmerge(acc, mixinsDocumentations[mixinVar])
-  }, {})
-
-  const vueDoc = executeHandlers(handlers, componentDefinitions, mixinDocs)
-  const ret = vueDoc.length ? vueDoc[0] : undefined
+  const ret = vueDoc.length ? vueDoc[0] : {}
   // get events from comments
 
   // get slots from template
