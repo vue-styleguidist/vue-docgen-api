@@ -74,7 +74,7 @@ function resolveRequired(ast, recast, varNameFilter, types) {
       if (types.ImportDefaultSpecifier.check(sp) || types.ImportSpecifier.check(sp)) {
         const varNameDefault = sp.local.name
         if (varNameFilter.indexOf(varNameDefault) > -1) {
-          mixinVarToFilePath[varNameDefault] = astPath.get('source').value.value
+          mixinVarToFilePath[varNameDefault] = astPath.get('source').node.value
         }
       }
     })

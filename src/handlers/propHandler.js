@@ -20,15 +20,20 @@ export default function propHandler(documentation, path) {
     // filter non object properties
     .filter(p => types.Property.check(p.node))
     .forEach(prop => {
-      const propDescriptor = documentation.getPropDescriptor(prop.get('key').node.name)
+      // description
+      const docBlock = getDocblock(prop)
+      const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
+
+      // if it's the v-model describe it as such
+      const propName = jsDoc.tags.some(t => t.title === 'model')
+        ? 'v-model'
+        : prop.get('key').node.name
+
+      const propDescriptor = documentation.getPropDescriptor(propName)
       const propValuePath = prop.get('value')
       const isObjectExpression = types.ObjectExpression.check(propValuePath.value)
       const isIdentifier = types.Identifier.check(propValuePath.value)
       if (isIdentifier || isObjectExpression) {
-        // description
-        const docBlock = getDocblock(prop)
-        const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
-
         if (jsDoc.tags.length) {
           propDescriptor.tags = transformTagsIntoObject(jsDoc.tags)
         }
@@ -49,13 +54,6 @@ export default function propHandler(documentation, path) {
           // contents of the prop is it's type
           propDescriptor.type = getTypeFromTypePath(propValuePath)
         }
-
-        if (jsDoc.tags.some(t => t.title === 'model')) {
-          const propDescriptorModel = documentation.getPropDescriptor('v-model')
-          for (let propKey of Object.keys(propDescriptor)) {
-            propDescriptorModel[propKey] = propDescriptor[propKey]
-          }
-        }
       }
     })
 }
@@ -68,17 +66,19 @@ function describeType(propPropertiesPath, propDescriptor) {
     // deduce the type from default expression
     const defaultArray = propPropertiesPath.filter(p => p.node.key.name === 'default')
     if (defaultArray.length) {
-      propDescriptor.type = { name: typeof defaultArray[0].node.value.value }
+      const typeName = typeof defaultArray[0].node.value.value
+      propDescriptor.type = { name: typeName === 'function' ? 'func' : typeName }
     }
   }
 }
 
 function getTypeFromTypePath(typePath) {
   const typeNode = typePath.node
+  const typeName = types.ArrayExpression.check(typeNode)
+    ? typeNode.elements.map(t => t.name.toLowerCase()).join('|')
+    : typeNode.name.toLowerCase()
   return {
-    name: types.ArrayExpression.check(typeNode)
-      ? typeNode.elements.map(t => t.name.toLowerCase()).join('|')
-      : typeNode.name.toLowerCase(),
+    name: typeName === 'function' ? 'func' : typeName,
   }
 }
 
@@ -92,6 +92,16 @@ function describeRequired(propPropertiesPath, propDescriptor) {
 function describeDefault(propPropertiesPath, propDescriptor) {
   const defaultArray = propPropertiesPath.filter(p => p.node.key.name === 'default')
   if (defaultArray.length) {
-    propDescriptor.defaultValue = { value: recast.print(defaultArray[0].get('value')).code }
+    const defaultNode = defaultArray[0].get('value')
+    const func =
+      types.ArrowFunctionExpression.check(defaultNode.node) ||
+      types.FunctionExpression.check(defaultNode.node)
+    propDescriptor.defaultValue = {
+      func,
+      value: recast
+        .print(defaultNode)
+        .code.replace(/[\n\r]/g, '')
+        .replace(/  /g, ' '),
+    }
   }
 }

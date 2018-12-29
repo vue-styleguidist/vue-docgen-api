@@ -38,6 +38,11 @@ class Documentation {
   }
 }
 
+/**
+ * Transforms an object into an array of tuples [key, value]
+ * @param {Object} obj
+ * @returns {Array<[key, value]>} the reansfromed array and [] if obj is null
+ */
 function adaptToKeyValue(obj) {
   return obj ? Object.keys(obj).map(k => [k, obj[k]]) : []
 }

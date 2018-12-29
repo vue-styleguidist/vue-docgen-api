@@ -64,8 +64,8 @@ describe('tests button', () => {
     expect(Object.keys(docButton['props']).length).toEqual(14)
   })
 
-  it('should the component has propsAnother prop default equal "blue"', () => {
-    expect(docButton['props']['propsAnother']['defaultValue']['value']).toEqual('"blue"')
+  it('should the component has propsAnother prop default equal \'blue\'', () => {
+    expect(docButton['props']['propsAnother']['defaultValue']['value']).toEqual("'blue'")
   })
 
   it('should span to be string|number', () => {
