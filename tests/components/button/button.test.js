@@ -158,7 +158,7 @@ describe('tests button', () => {
   })
 
   it('should the component has event, it called success', () => {
-    expect(typeof docButton['events']['success'] !== 'undefined').toBe(true)
+    expect(docButton['events']['success']).not.toBeUndefined()
   })
 
   it('should the description of success event is Success event.', () => {

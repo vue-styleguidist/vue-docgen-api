@@ -65,7 +65,7 @@ export default function parse(source, filePath) {
 
   // get events from comments
   if (ast) {
-    doc.events = getEvents(ast.comments, recast)
+    doc.events = getEvents(ast.program, recast)
   }
 
   // get slots from template

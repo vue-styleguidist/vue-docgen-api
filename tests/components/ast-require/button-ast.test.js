@@ -15,7 +15,7 @@ describe('tests button', () => {
       props: {
         listofButtonNames: {
           defaultValue: {
-            value: "normal"
+            func: true
           }
         }
       }

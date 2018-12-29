@@ -2,7 +2,7 @@
  * Helper functions to work with docblock comments.
  */
 
-function parseDocblock(str) {
+export function parseDocblock(str) {
   const lines = str.split('\n')
   for (let i = 0, l = lines.length; i < l; i++) {
     lines[i] = lines[i].replace(/^\s*\*\s?/, '')
