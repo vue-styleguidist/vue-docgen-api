@@ -5,6 +5,7 @@ import parser from './utils/parser'
 import babylon from './babylon'
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations'
 import resolveExportedComponent from './utils/resolveExportedComponent'
+import getSlots from './utils/getSlots'
 import Documentation from './Documentation'
 import handlers from './handlers'
 
@@ -27,10 +28,16 @@ function executeHandlers(handlers, componentDefinitions, mixinsDocumentations) {
  */
 export default function parse(source, filePath) {
   const singleFileComponent = /\.vue/i.test(path.extname(filePath))
+  let parts
+  function getParts(src) {
+    parts = parser(src)
+    return parts
+  }
+
   if (source === '') {
     throw new Error(ERROR_EMPTY_DOCUMENT)
   }
-  const script = singleFileComponent ? parser(source).script.content : source
+  const script = singleFileComponent ? getParts(source).script.content : source
   var ast = recast.parse(script, babylon)
   var componentDefinitions = resolveExportedComponent(ast.program, recast)
   var mixinsDocumentations = getRequiredMixinDocumentations(
@@ -52,6 +59,10 @@ export default function parse(source, filePath) {
   const vueDoc = executeHandlers(handlers, componentDefinitions, mixinDocs)
   const ret = vueDoc.length ? vueDoc[0] : undefined
   // get events from comments
+
   // get slots from template
+  if (parts) {
+    ret.slots = getSlots(parts)
+  }
   return ret
 }
