@@ -12,15 +12,9 @@ export default function propHandler(documentation, path) {
 
   const jsDoc = getDoclets(docBlock)
 
-  if (jsDoc.description) {
-    documentation.set('description', jsDoc.description)
-  }
+  documentation.set('comment', docBlock)
 
-  if (jsDoc.comment) {
-    documentation.set('comment', docBlock)
-  }
+  documentation.set('description', jsDoc.description || '')
 
-  if (jsDoc.tags) {
-    documentation.set('tags', transformTagsIntoObject(jsDoc.tags))
-  }
+  documentation.set('tags', transformTagsIntoObject(jsDoc.tags))
 }

@@ -1,6 +1,10 @@
+import blockTags from './blockTags'
+
 export default function transformTagsIntoObject(tags) {
   return tags.reduce((acc, i) => {
-    acc[i.title] = i.content
+    if (blockTags.indexOf(i.title) > -1) {
+      acc[i.title] = i.content
+    }
     return acc
   }, {})
 }

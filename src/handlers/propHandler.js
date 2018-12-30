@@ -25,7 +25,7 @@ export default function propHandler(documentation, path) {
         const docBlock = getDocblock(prop)
         const jsDoc = docBlock ? getDoclets(docBlock) : { tags: [] }
 
-        // if it's the v-model describe it as such
+        // if it's the v-model describe it only as such
         const propName = jsDoc.tags.some(t => t.title === 'model')
           ? 'v-model'
           : prop.get('key').node.name
@@ -34,7 +34,8 @@ export default function propHandler(documentation, path) {
         const propValuePath = prop.get('value')
         const isObjectExpression = types.ObjectExpression.check(propValuePath.value)
         const isIdentifier = types.Identifier.check(propValuePath.value)
-        if (isIdentifier || isObjectExpression) {
+        const isTupple = types.ArrayExpression.check(propValuePath.value)
+        if (isIdentifier || isObjectExpression || isTupple) {
           if (jsDoc.tags.length) {
             propDescriptor.tags = transformTagsIntoObject(jsDoc.tags)
           }
@@ -54,6 +55,9 @@ export default function propHandler(documentation, path) {
           } else if (isIdentifier) {
             // contents of the prop is it's type
             propDescriptor.type = getTypeFromTypePath(propValuePath)
+          } else if (isTupple) {
+            // I am not sure this case is valid vuejs
+            propDescriptor.type = { name: 'array' }
           }
         }
       })

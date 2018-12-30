@@ -50,7 +50,7 @@ export default function getDocblockTags(str) {
 
   for (; match; match = DOCLET_PATTERN.exec(str)) {
     const title = match[1]
-    if (title === 'param' || title === 'property') {
+    if (title === 'param' || title === 'property' || title === 'type') {
       tags.push({ title, ...getParamInfo(match[2]) })
     } else {
       tags.push({ title, content: match[2] || true })

@@ -106,8 +106,8 @@ describe('tests grid', () => {
     expect(docGrid['events']['error']['description']).toEqual('Error event.')
   })
 
-  it('should the type of error event is object.', () => {
-    expect(docGrid['events']['error']['type']['names'][0]).toEqual('object')
+  it('should make the type of error event an object.', () => {
+    expect(docGrid['events']['error']).toMatchObject({type:{names:['object']}})
   })
 
   it('should have two slots.', () => {

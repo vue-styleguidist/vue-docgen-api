@@ -16,6 +16,10 @@ export default function getEvents(ast, recast) {
       const doc = getDoclets(parseDocblock(comment.value))
       const eventTag = doc.tags.find(t => t.title === 'event')
       if (eventTag) {
+        const typeTags = doc.tags.filter(t => t.title === 'type')
+        if (typeTags.length) {
+          doc.type = { names: typeTags.map(t => t.type.name) }
+        }
         eventCommentBlocksDoclets[eventTag.content] = doc
       }
       return false
