@@ -42,6 +42,7 @@ export default function parse(source, filePath) {
   }
   let script = parts ? (parts.script ? parts.script.content : undefined) : source
   if (script) {
+    // TODO: for typescript compat, compile code here
     ast = recast.parse(script, babylon)
     var componentDefinitions = resolveExportedComponent(ast.program, recast)
 
