@@ -9,7 +9,7 @@ export default function getEvents(ast, recast) {
   recast.visit(ast, {
     visitComment: path => {
       const comment = path.node.comments[0]
-      if (!types.Block.check(comment)) {
+      if (!types.CommentBlock.check(comment)) {
         return false
       }
 
