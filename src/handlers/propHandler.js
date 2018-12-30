@@ -83,7 +83,7 @@ function describeType(propPropertiesPath, propDescriptor) {
       const func =
         types.ArrowFunctionExpression.check(defaultArray[0].node.value) ||
         types.FunctionExpression.check(defaultArray[0].node.value)
-      const typeName = typeof defaultArray[0].node.value.value
+      const typeName = typeof defaultArray[0].get('value').node.value
       propDescriptor.type = { name: func ? 'func' : typeName }
     }
   }

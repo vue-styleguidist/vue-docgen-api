@@ -14,6 +14,8 @@ export default function getEvents(ast, recast) {
       }
 
       const doc = getDoclets(parseDocblock(comment.value))
+
+      // filter comments where a tag is @event
       const eventTag = doc.tags.find(t => t.title === 'event')
       if (eventTag) {
         const typeTags = doc.tags.filter(t => t.title === 'type')
@@ -25,12 +27,6 @@ export default function getEvents(ast, recast) {
       return false
     },
   })
-
-  // filter comments where a tag is @event
-  /*const eventCommentBlocksDoclets = astComments
-    .filter(path => types.CommentBlock.check(path))
-    .map(path => getDoclets(path.value))
-    .filter(d => d.tags.some(t => t.title === 'event'))*/
 
   // make objects for it
   return eventCommentBlocksDoclets

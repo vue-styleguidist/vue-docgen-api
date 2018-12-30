@@ -1,4 +1,3 @@
-import { utils } from 'react-docgen'
 import resolveExportDeclaration from './resolveExportDeclaration'
 import isExportedAssignment from './isExportedAssignment'
 
@@ -88,9 +87,8 @@ export default function resolveExportedComponent(ast, recast) {
       }
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
-      path = utils.resolveToValue(path.get('right'))
+      path = path.get('right')
       if (!isComponentDefinition(path, types)) {
-        path = utils.resolveToValue(path)
         if (!isComponentDefinition(path, types)) {
           return false
         }

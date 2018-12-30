@@ -134,7 +134,7 @@ describe('tests button', () => {
   })
 
   it('should example3 to be number', () => {
-    expect(docButton['props']['example3']['type']['name']).toEqual('number')
+    expect(docButton['props']['example3']).toMatchObject({type:{name:'number'}})
   })
 
   it('should value default example3 to be 16', () => {

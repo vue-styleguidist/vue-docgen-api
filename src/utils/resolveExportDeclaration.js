@@ -1,7 +1,5 @@
 import recast from 'recast'
-import { utils } from 'react-docgen'
 
-const { resolveToValue } = utils
 const _types = recast.types.namedTypes
 
 export default function resolveExportDeclaration(path, types = _types) {
@@ -21,5 +19,5 @@ export default function resolveExportDeclaration(path, types = _types) {
         definitions.push(specifier.node.id ? specifier.get('id') : specifier.get('local'))
       )
   }
-  return definitions.map(definition => resolveToValue(definition))
+  return definitions
 }
