@@ -3,6 +3,7 @@ import path from 'path'
 import deepmerge from 'deepmerge'
 import parser from './utils/parser'
 import babylon from './babylon'
+import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations'
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations'
 import resolveExportedComponent from './utils/resolveExportedComponent'
 import getSlots from './utils/getSlots'
@@ -43,6 +44,16 @@ export default function parse(source, filePath) {
   if (script) {
     ast = recast.parse(script, babylon)
     var componentDefinitions = resolveExportedComponent(ast.program, recast)
+
+    if (componentDefinitions.length === 0) {
+      throw new Error(ERROR_MISSING_DEFINITION)
+    }
+
+    // extends management
+    var extendsDocumentations =
+      getRequiredExtendsDocumentations(ast.program, recast, componentDefinitions, filePath) || {}
+
+    // mixins management
     var mixinsDocumentations = getRequiredMixinDocumentations(
       ast.program,
       recast,
@@ -50,14 +61,10 @@ export default function parse(source, filePath) {
       filePath
     )
 
-    if (componentDefinitions.length === 0) {
-      throw new Error(ERROR_MISSING_DEFINITION)
-    }
-
     // merge all the varnames found in the mixins
     const mixinDocs = Object.keys(mixinsDocumentations).reduce((acc, mixinVar) => {
       return deepmerge(acc, mixinsDocumentations[mixinVar])
-    }, {})
+    }, extendsDocumentations)
 
     vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs)
   }
