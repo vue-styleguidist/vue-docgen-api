@@ -33,6 +33,7 @@ describe('propHandler', () => {
           props: ['testArray']
         }`
       tester(src, {})
+      expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testArray')
     })
   })
 

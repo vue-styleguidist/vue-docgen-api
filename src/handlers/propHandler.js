@@ -58,7 +58,13 @@ export default function propHandler(documentation, path) {
         }
       })
   } else if (types.ArrayExpression.check(propsObject.node)) {
-    // TODO: deal with array expressions properties
+    propsObject
+      .get('elements')
+      .value.filter(e => types.Literal.check(e))
+      .forEach(e => {
+        const propDescriptor = documentation.getPropDescriptor(e.value)
+        propDescriptor.type = { name: 'any' }
+      })
   }
 }
 
