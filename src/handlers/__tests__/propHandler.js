@@ -32,7 +32,9 @@ describe('propHandler', () => {
         export default {
           props: ['testArray']
         }`
-      tester(src, {})
+      tester(src, {
+        type: { name: 'undefined' },
+      })
       expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testArray')
     })
   })

@@ -23,7 +23,7 @@ describe('tests InputText', () => {
   })
 
   it('should has props', () => {
-    expect(typeof docInputText['props'] !== 'undefined').toBe(true)
+    expect(docInputText['props']).not.toBeUndefined()
   })
 
   it('should the component has two props', () => {

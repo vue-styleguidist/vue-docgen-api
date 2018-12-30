@@ -63,7 +63,7 @@ export default function propHandler(documentation, path) {
       .value.filter(e => types.Literal.check(e))
       .forEach(e => {
         const propDescriptor = documentation.getPropDescriptor(e.value)
-        propDescriptor.type = { name: 'any' }
+        propDescriptor.type = { name: 'undefined' }
       })
   }
 }
