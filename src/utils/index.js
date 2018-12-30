@@ -1,1 +1,1 @@
-export { default as parser } from './parser'
+export { default as parser } from './sfc-parser'

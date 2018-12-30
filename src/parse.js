@@ -1,8 +1,8 @@
 import recast from 'recast'
 import path from 'path'
 import deepmerge from 'deepmerge'
-import parser from './utils/parser'
-import babylon from './babylon'
+import scfParser from './utils/sfc-parser'
+import babelParser from './babel-parser'
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations'
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations'
 import resolveExportedComponent from './utils/resolveExportedComponent'
@@ -34,7 +34,7 @@ export default function parse(source, filePath) {
     vueDocArray = [],
     ast
   if (singleFileComponent) {
-    parts = parser(source)
+    parts = scfParser(source)
   }
 
   if (source === '') {
@@ -49,9 +49,9 @@ export default function parse(source, filePath) {
           target: 'es2017',
         },
       }).outputText
-      ast = recast.parse(jsSource, babylon)
+      ast = recast.parse(jsSource, babelParser)
     } else {
-      ast = recast.parse(originalSource, babylon)
+      ast = recast.parse(originalSource, babelParser)
     }
 
     var componentDefinitions = resolveExportedComponent(ast.program, recast)

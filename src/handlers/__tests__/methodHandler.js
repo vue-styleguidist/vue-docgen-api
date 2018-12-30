@@ -1,6 +1,6 @@
 import recast from 'recast'
 import propHandler from '../methodHandler'
-import babylon from '../../babylon'
+import babylon from '../../babel-parser'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
 
 jest.mock('../../Documentation')
