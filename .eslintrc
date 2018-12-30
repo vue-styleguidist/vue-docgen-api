@@ -26,15 +26,6 @@
     "node": true,
     "es6": true
   },
-  "globals": {
-    "ASTNode": true,
-    "FlowTypeDescriptor": true,
-    "Handler": true,
-    "NodePath": true,
-    "PropDescriptor": true,
-    "PropTypeDescriptor": true,
-    "Resolver": true
-  },
   "overrides": [
     {
       "files": [
