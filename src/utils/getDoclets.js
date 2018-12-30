@@ -5,7 +5,7 @@ function getParamInfo(content) {
 
   const typeSliceArray = /^\{([^}]+)\}/.exec(content)
   const typeSlice = typeSliceArray.length ? typeSliceArray[1] : '*'
-  param.type = getTypeObjectFromtyepString(typeSlice)
+  param.type = getTypeObjectFromTypeString(typeSlice)
 
   content = content.replace(`{${typeSlice}} `, '')
 
@@ -23,13 +23,13 @@ function getParamInfo(content) {
   return param
 }
 
-function getTypeObjectFromtyepString(typeSlice) {
+function getTypeObjectFromTypeString(typeSlice) {
   if (typeSlice === '' || typeSlice === '*') {
     return { name: 'mixed' }
   } else if (/\w+\|\w+/.test(typeSlice)) {
     return {
       name: 'union',
-      elements: typeSlice.split('|').map(type => getTypeObjectFromtyepString(type)),
+      elements: typeSlice.split('|').map(type => getTypeObjectFromTypeString(type)),
     }
   } else {
     return {
