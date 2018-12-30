@@ -7,7 +7,12 @@ function ignore() {
 }
 
 function isComponentDefinition(path, types) {
-  return types.ObjectExpression.check(path.node)
+  return (
+    types.ObjectExpression.check(path.node) ||
+    (types.CallExpression.check(path.node) &&
+      path.node.callee.object.name === 'Vue' &&
+      path.node.callee.property.name === 'extend')
+  )
 }
 
 /**
@@ -25,6 +30,16 @@ export default function resolveExportedComponent(ast, recast) {
   var types = recast.types.namedTypes
   var components = []
 
+  function setComponent(definition) {
+    if (definition && components.indexOf(definition) === -1) {
+      if (types.ObjectExpression.check(definition.node)) {
+        components.push(definition)
+      } else {
+        components.push(definition.get('arguments', 0))
+      }
+    }
+  }
+
   // function run for every non "assignment" export declaration
   // in extenso export default or export myvar
   function exportDeclaration(path) {
@@ -38,10 +53,9 @@ export default function resolveExportedComponent(ast, recast) {
     if (definitions.length === 0) {
       return false
     }
+
     definitions.forEach(definition => {
-      if (definition && components.indexOf(definition) === -1) {
-        components.push(definition)
-      }
+      setComponent(definition)
     })
     return false
   }
@@ -81,10 +95,8 @@ export default function resolveExportedComponent(ast, recast) {
           return false
         }
       }
-      const definition = path
-      if (definition && components.indexOf(definition) === -1) {
-        components.push(definition)
-      }
+
+      setComponent(path)
       return false
     },
   })

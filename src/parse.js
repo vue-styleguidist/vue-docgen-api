@@ -29,7 +29,7 @@ function executeHandlers(handlers, componentDefinitions, mixinsDocumentations) {
  * @returns {object} documentation object
  */
 export default function parse(source, filePath) {
-  const singleFileComponent = /\.vue/i.test(path.extname(filePath))
+  const singleFileComponent = /\.vue$/i.test(path.extname(filePath))
   let parts,
     vueDocArray = [],
     ast
@@ -40,10 +40,20 @@ export default function parse(source, filePath) {
   if (source === '') {
     throw new Error(ERROR_EMPTY_DOCUMENT)
   }
-  let script = parts ? (parts.script ? parts.script.content : undefined) : source
-  if (script) {
-    // TODO: for typescript compat, compile code here
-    ast = recast.parse(script, babylon)
+  const originalSource = parts ? (parts.script ? parts.script.content : undefined) : source
+  if (originalSource) {
+    if ((parts && parts.script.lang === 'ts') || /\.tsx?$/i.test(path.extname(filePath))) {
+      const typescript = require('typescript')
+      const jsSource = typescript.transpileModule(originalSource, {
+        compilerOptions: {
+          target: 'es2017',
+        },
+      }).outputText
+      ast = recast.parse(jsSource, babylon)
+    } else {
+      ast = recast.parse(originalSource, babylon)
+    }
+
     var componentDefinitions = resolveExportedComponent(ast.program, recast)
 
     if (componentDefinitions.length === 0) {
