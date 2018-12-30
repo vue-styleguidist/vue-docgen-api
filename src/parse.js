@@ -2,7 +2,7 @@ import recast from 'recast'
 import path from 'path'
 import deepmerge from 'deepmerge'
 import scfParser from './utils/sfc-parser'
-import babelParser from './babel-parser'
+import buildParser from './babel-parser'
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations'
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations'
 import resolveExportedComponent from './utils/resolveExportedComponent'
@@ -40,6 +40,7 @@ export default function parse(source, filePath) {
   if (source === '') {
     throw new Error(ERROR_EMPTY_DOCUMENT)
   }
+
   const originalSource = parts ? (parts.script ? parts.script.content : undefined) : source
   if (originalSource) {
     if ((parts && parts.script.lang === 'ts') || /\.tsx?$/i.test(path.extname(filePath))) {
@@ -49,9 +50,9 @@ export default function parse(source, filePath) {
           target: 'es2017',
         },
       }).outputText
-      ast = recast.parse(jsSource, babelParser)
+      ast = recast.parse(jsSource, { parser: buildParser() })
     } else {
-      ast = recast.parse(originalSource, babelParser)
+      ast = recast.parse(originalSource, { parser: buildParser() })
     }
 
     var componentDefinitions = resolveExportedComponent(ast.program, recast)
