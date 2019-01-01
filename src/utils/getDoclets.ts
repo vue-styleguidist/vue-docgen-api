@@ -5,6 +5,10 @@ interface ParamType {
   elements?: ParamType[];
 }
 
+interface EventType {
+  names: string[];
+}
+
 interface Param {
   type: ParamType;
   name?: string;
@@ -15,15 +19,16 @@ interface RootTag {
   title: string;
 }
 
-interface Tag extends RootTag {
+export interface Tag extends RootTag {
   content: string | boolean;
 }
 
-interface ParamTag extends RootTag, Param {}
+export interface ParamTag extends RootTag, Param {}
 
-interface DocBlockTags {
+export interface DocBlockTags {
   description: string;
   tags: Array<ParamTag | Tag>;
+  type?: EventType;
 }
 
 function getParamInfo(content: string) {
