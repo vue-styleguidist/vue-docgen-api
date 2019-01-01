@@ -1,16 +1,13 @@
+import { namedTypes as types } from 'ast-types'
 import getDoclets from './getDoclets'
 import { parseDocblock } from './getDocblock'
 
-export default function getEvents(ast, recast) {
-  const types = recast.types.namedTypes
-
-  const eventCommentBlocksDoclets = {}
-
-  recast.visit(ast, {
-    visitComment: path => {
-      const comment = path.node.comments[0]
+export default function getEvents(ast) {
+  if (Array.isArray(ast.comments)) {
+    const eventCommentBlocksDoclets = ast.comments.reduce((acc, comment) => {
+      // only observe block comments
       if (!types.CommentBlock.check(comment)) {
-        return false
+        return acc
       }
 
       const doc = getDoclets(parseDocblock(comment.value))
@@ -22,12 +19,13 @@ export default function getEvents(ast, recast) {
         if (typeTags.length) {
           doc.type = { names: typeTags.map(t => t.type.name) }
         }
-        eventCommentBlocksDoclets[eventTag.content] = doc
+        acc[eventTag.content] = doc
       }
-      return false
-    },
-  })
-
-  // make objects for it
-  return eventCommentBlocksDoclets
+      return acc
+    }, [])
+    // make objects for it
+    return eventCommentBlocksDoclets
+  } else {
+    return []
+  }
 }

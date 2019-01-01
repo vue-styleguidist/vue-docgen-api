@@ -1,3 +1,4 @@
+import { namedTypes as types, visit } from 'ast-types'
 import resolveExportDeclaration from './resolveExportDeclaration'
 import isExportedAssignment from './isExportedAssignment'
 
@@ -25,8 +26,7 @@ function isComponentDefinition(path, types) {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(ast, recast) {
-  var types = recast.types.namedTypes
+export default function resolveExportedComponent(ast) {
   var components = []
 
   function setComponent(definition) {
@@ -59,7 +59,7 @@ export default function resolveExportedComponent(ast, recast) {
     return false
   }
 
-  recast.visit(ast, {
+  visit(ast, {
     visitFunctionDeclaration: ignore,
     visitFunctionExpression: ignore,
     visitClassDeclaration: ignore,

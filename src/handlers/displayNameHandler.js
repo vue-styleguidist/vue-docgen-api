@@ -1,6 +1,4 @@
-import recast from 'recast'
-
-const types = recast.types.namedTypes
+import { namedTypes as types } from 'ast-types'
 
 export default function propHandler(documentation, path) {
   const namePath = path.get('properties').filter(p => p.node.key.name === 'name')

@@ -1,4 +1,3 @@
-import recast from 'recast'
 import propHandler from '../propHandler'
 import babylon from '../../babel-parser'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -6,8 +5,8 @@ import resolveExportedComponent from '../../utils/resolveExportedComponent'
 jest.mock('../../Documentation')
 
 function parse(src) {
-  var ast = recast.parse(src, babylon)
-  return resolveExportedComponent(ast.program, recast)
+  const ast = babylon().parse(src)
+  return resolveExportedComponent(ast.program)
 }
 
 describe('propHandler', () => {
@@ -157,7 +156,7 @@ describe('propHandler', () => {
         }
         `
       tester(src, {
-        defaultValue: { value: "['hello']" },
+        defaultValue: { value: '["hello"]' },
       })
     })
 
@@ -172,7 +171,7 @@ describe('propHandler', () => {
         }
         `
       tester(src, {
-        defaultValue: { value: "'normal'" },
+        defaultValue: { value: '"normal"' },
       })
     })
   })

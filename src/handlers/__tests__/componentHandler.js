@@ -1,4 +1,4 @@
-import recast from 'recast'
+import types from 'ast-types'
 import componentHandler from '../componentHandler'
 import babylon from '../../babel-parser'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -6,8 +6,8 @@ import resolveExportedComponent from '../../utils/resolveExportedComponent'
 jest.mock('../../Documentation')
 
 function parse(src) {
-  var ast = recast.parse(src, babylon)
-  return resolveExportedComponent(ast.program, recast)
+  var ast = babylon().parse(src)
+  return resolveExportedComponent(ast.program, types)
 }
 
 describe('componentHandler', () => {

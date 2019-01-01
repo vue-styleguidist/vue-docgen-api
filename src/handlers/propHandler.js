@@ -1,9 +1,8 @@
 import recast from 'recast'
+import { namedTypes as types } from 'ast-types'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
-
-const types = recast.types.namedTypes
 
 export default function propHandler(documentation, path) {
   const propsPath = path.get('properties').filter(p => p.node.key.name === 'props')
@@ -113,12 +112,10 @@ function describeDefault(propPropertiesPath, propDescriptor) {
     const func =
       types.ArrowFunctionExpression.check(defaultNode.node) ||
       types.FunctionExpression.check(defaultNode.node)
+
     propDescriptor.defaultValue = {
       func,
-      value: recast
-        .print(defaultNode)
-        .code.replace(/[\n\r]/g, '')
-        .replace(/  /g, ' '),
+      value: recast.prettyPrint(defaultNode.node, { tabWidth: 2 }).code,
     }
   }
 }

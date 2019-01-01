@@ -1,4 +1,3 @@
-import recast from 'recast'
 import path from 'path'
 import deepmerge from 'deepmerge'
 import scfParser from './utils/sfc-parser'
@@ -50,12 +49,12 @@ export default function parse(source, filePath) {
           target: 'es2017',
         },
       }).outputText
-      ast = recast.parse(jsSource, { parser: buildParser() })
+      ast = buildParser().parse(jsSource)
     } else {
-      ast = recast.parse(originalSource, { parser: buildParser() })
+      ast = buildParser().parse(originalSource)
     }
 
-    var componentDefinitions = resolveExportedComponent(ast.program, recast)
+    var componentDefinitions = resolveExportedComponent(ast.program)
 
     if (componentDefinitions.length === 0) {
       throw new Error(ERROR_MISSING_DEFINITION)
@@ -63,12 +62,11 @@ export default function parse(source, filePath) {
 
     // extends management
     var extendsDocumentations =
-      getRequiredExtendsDocumentations(ast.program, recast, componentDefinitions, filePath) || {}
+      getRequiredExtendsDocumentations(ast.program, componentDefinitions, filePath) || {}
 
     // mixins management
     var mixinsDocumentations = getRequiredMixinDocumentations(
       ast.program,
-      recast,
       componentDefinitions,
       filePath
     )
@@ -84,7 +82,7 @@ export default function parse(source, filePath) {
 
   // get events from comments
   if (ast) {
-    doc.events = getEvents(ast.program, recast)
+    doc.events = getEvents(ast)
   }
 
   // get slots from template

@@ -1,6 +1,4 @@
-import recast from 'recast'
-
-const types = recast.types.namedTypes
+import { namedTypes as types } from 'ast-types'
 
 /**
  * true if the left part of the expression of the NodePath is of form `exports.foo = ...;` or

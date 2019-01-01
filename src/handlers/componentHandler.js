@@ -1,9 +1,7 @@
-import recast from 'recast'
+import { namedTypes as types } from 'ast-types'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 import getDoclets from '../utils/getDoclets'
 import getDocblock from '../utils/getDocblock'
-
-const types = recast.types.namedTypes
 
 export default function propHandler(documentation, path) {
   let componentCommentedPath = path.parent

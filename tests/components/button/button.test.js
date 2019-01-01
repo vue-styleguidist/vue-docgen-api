@@ -29,7 +29,7 @@ describe('tests button', () => {
   })
 
   it('should give the component a size prop with default value to "normal"', () => {
-    expect(docButton['props']['size']['defaultValue']['value']).toEqual("'normal'")
+    expect(docButton['props']['size']['defaultValue']['value']).toEqual('"normal"')
   })
 
   it('should the component has size prop description equal The size of the button', () => {
@@ -41,7 +41,7 @@ describe('tests button', () => {
   })
 
   it('should the component has color prop default equal #333', () => {
-    expect(docButton['props']['color']['defaultValue']['value']).toEqual("'#333'")
+    expect(docButton['props']['color']['defaultValue']['value']).toEqual('"#333"')
   })
 
   it('should the component has authors', () => {
@@ -65,7 +65,7 @@ describe('tests button', () => {
   })
 
   it('should the component has propsAnother prop default equal \'blue\'', () => {
-    expect(docButton['props']['propsAnother']['defaultValue']['value']).toEqual("'blue'")
+    expect(docButton['props']['propsAnother']['defaultValue']['value']).toEqual('"blue"')
   })
 
   it('should span to be string|number', () => {
@@ -115,7 +115,7 @@ describe('tests button', () => {
   })
 
   it('should value default v-model to be example model', () => {
-    expect(docButton['props']['v-model']['defaultValue']['value']).toEqual("'example model'")
+    expect(docButton['props']['v-model']['defaultValue']['value']).toEqual('"example model"')
   })
 
   it('should value default v-model props description to be Model example2', () => {
@@ -128,9 +128,12 @@ describe('tests button', () => {
 
   it('should value default propE to be a funtion', () => {
     expect(docButton['props']['propE']['defaultValue']['value']).toEqual(
-      "() => { return { message: 'hello' }}"
-    )
-    expect(docButton['props']['propE']['defaultValue']['func']).toEqual(true)
+      ['() => {',
+      '  return {',
+      '    message: "hello"',
+      '  };',
+      '}'].join('\n'))
+    expect(docButton['props']['propE']['defaultValue']['func']).toBeTruthy()
   })
 
   it('should example3 to be number', () => {

@@ -1,8 +1,6 @@
-import recast from 'recast'
+import { namedTypes as types } from 'ast-types'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
-
-const types = recast.types.namedTypes
 
 export default function methodHandler(documentation, path) {
   const methodsPath = path

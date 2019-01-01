@@ -1,8 +1,6 @@
-import recast from 'recast'
+import { namedTypes as types } from 'ast-types'
 
-const _types = recast.types.namedTypes
-
-export default function resolveExportDeclaration(path, types = _types) {
+export default function resolveExportDeclaration(path) {
   const definitions = []
   if (path.node.default) {
     definitions.push(path.get('declaration'))

@@ -1,4 +1,5 @@
 import path from 'path'
+import { namedTypes as types } from 'ast-types'
 import resolveRequired from './resolveRequired'
 import { parse } from '../main'
 
@@ -9,18 +10,15 @@ import { parse } from '../main'
  */
 export default function getRequiredMixinDocumentations(
   astPath,
-  recast,
   componentDefinitions,
   originalFilePath
 ) {
-  const types = recast.types.namedTypes
-
   const originalDirName = path.dirname(originalFilePath)
   // filter only mixins
-  const mixinVariableNames = getMixinsVariableNames(componentDefinitions, types)
+  const mixinVariableNames = getMixinsVariableNames(componentDefinitions)
 
   // get all require / import statements
-  const mixinVarToFilePath = resolveRequired(astPath, recast, mixinVariableNames, types)
+  const mixinVarToFilePath = resolveRequired(astPath, mixinVariableNames)
 
   const mixinVarToDoc = {}
   const mixinFileToDoc = {}
@@ -40,7 +38,7 @@ export default function getRequiredMixinDocumentations(
   return mixinVarToDoc
 }
 
-function getMixinsVariableNames(componentDefinitions, types) {
+function getMixinsVariableNames(componentDefinitions) {
   const allMixins = componentDefinitions.map(compDef => {
     const mixinProp = compDef.get('properties').filter(p => p.node.key.name === 'mixins')
     return mixinProp.length ? mixinProp[0] : undefined

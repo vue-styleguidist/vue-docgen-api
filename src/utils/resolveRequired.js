@@ -1,8 +1,10 @@
+import { namedTypes as types, visit } from 'ast-types'
+
 function ignore() {
   return false
 }
 
-export default function resolveRequired(ast, recast, varNameFilter, types) {
+export default function resolveRequired(ast, varNameFilter) {
   const varToFilePath = {}
 
   function importDeclaration(astPath) {
@@ -22,7 +24,7 @@ export default function resolveRequired(ast, recast, varNameFilter, types) {
     return false
   }
 
-  recast.visit(ast, {
+  visit(ast, {
     visitFunctionDeclaration: ignore,
     visitFunctionExpression: ignore,
     visitClassDeclaration: ignore,
