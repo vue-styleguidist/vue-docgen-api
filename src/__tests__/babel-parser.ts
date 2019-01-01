@@ -1,18 +1,25 @@
-import babelParser from '../babel-parser'
+import { File as BabelFile } from '@babel/types';
+import babelParser from '../babel-parser';
+
 describe('babel-parser', () => {
+  let parser: { parse: (src: string) => BabelFile };
+  beforeEach(() => {
+    parser = babelParser();
+  });
+
   it('should parse js with no trouble', () => {
-    const src = `let bonjour = 'test'`
+    const src = `let bonjour = 'test'`;
     expect(() => {
-      babelParser().parse(src)
-    }).not.toThrow()
-  })
+      parser.parse(src);
+    }).not.toThrow();
+  });
 
   it('should parse jsx with no trouble', () => {
-    const src = `let bonjour = (<a>test</a>)`
+    const src = `let bonjour = (<a>test</a>)`;
     expect(() => {
-      babelParser().parse(src)
-    }).not.toThrow()
-  })
+      parser.parse(src);
+    }).not.toThrow();
+  });
   it('should parse complex jsx with no trouble', () => {
     const src = `export default {
         render() {
@@ -33,9 +40,9 @@ describe('babel-parser', () => {
         </table>
         )
     }
-    }`
+    }`;
     expect(() => {
-      babelParser().parse(src)
-    }).not.toThrow()
-  })
-})
+      parser.parse(src);
+    }).not.toThrow();
+  });
+});
