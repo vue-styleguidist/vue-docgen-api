@@ -10,11 +10,9 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["node"],
     "strictFunctionTypes": false,
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "outdir": "dist",
+    "types": ["jest"]
   },
   "include": ["src/**/*.ts", "tests/**/*.vue", "tests/**/*.ts"],
   "exclude": ["node_modules"]
