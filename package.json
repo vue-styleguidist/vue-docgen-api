@@ -65,7 +65,6 @@
     "jest": "^23.6.0",
     "lint-staged": "^7.2.0",
     "prettier": "^1.14.2",
-    "ts-jest": "^23.10.5",
     "tslint": "^5.9.1",
     "typescript": "^2.7.2",
     "vue": "^2.4.2",
