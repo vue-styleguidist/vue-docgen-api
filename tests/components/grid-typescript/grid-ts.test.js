@@ -121,4 +121,8 @@ describe('tests typescript grid', () => {
   it('the footer slot should have "Use this slot footer" as description', () => {
     expect(docGrid['slots']['footer']['description']).toEqual('Use this slot footer')
   })
+
+  it('should match the snapshot', () => {
+    expect(docGrid).toMatchSnapshot()
+  })
 })

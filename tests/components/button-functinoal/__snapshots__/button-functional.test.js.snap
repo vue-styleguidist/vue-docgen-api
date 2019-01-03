@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tests button should match the snapshot 1`] = `
+Object {
+  "comment": "",
+  "description": "",
+  "displayName": "MyButton",
+  "events": Object {},
+  "methods": Array [],
+  "props": Object {
+    "size": Object {
+      "comment": "/**
+            * The size of the button
+            */",
+      "defaultValue": Object {
+        "func": false,
+        "value": "\\"normal\\"",
+      },
+      "description": "The size of the button",
+      "required": "",
+      "tags": Object {},
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+  "slots": Object {
+    "default": Object {
+      "description": "Use this slot default",
+    },
+  },
+  "tags": Object {},
+}
+`;

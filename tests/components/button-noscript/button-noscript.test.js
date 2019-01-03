@@ -21,4 +21,8 @@ describe('tests button', () => {
   it('the default slot should have "Use this slot default" as description', () => {
     expect(docButton['slots']['default']['description']).toEqual('Use this slot default')
   })
+
+  it('should match the snapshot', () => {
+    expect(docButton).toMatchSnapshot()
+  })
 })

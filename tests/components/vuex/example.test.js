@@ -33,4 +33,8 @@ describe('test example vuex', () => {
   it('should dont have slots.', () => {
     expect(Object.keys(docVuex['slots']).length).toEqual(0)
   })
+
+  it('should match the snapshot', () => {
+    expect(docVuex).toMatchSnapshot()
+  })
 })
