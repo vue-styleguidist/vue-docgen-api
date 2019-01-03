@@ -18,7 +18,7 @@ describe('tests button', () => {
     expect(docButton.displayName).toEqual('buttonComponent')
   })
 
-  it('The component should has a description', () => {
+  it('The component should have a description', () => {
     expect(docButton.description).toEqual(
       'This is an example of creating a reusable button component and using it with external data.'
     )
@@ -28,7 +28,7 @@ describe('tests button', () => {
     expect(Object.keys(docButton['tags']).length).toEqual(2)
   })
 
-  it('should the component has size prop default equal normal', () => {
+  it('should give the component a size prop with default value to "normal"', () => {
     expect(docButton['props']['size']['defaultValue']['value']).toEqual('"normal"')
   })
 
@@ -48,11 +48,11 @@ describe('tests button', () => {
     expect(typeof docButton['tags']['author'] !== 'undefined').toBe(true)
   })
 
-  it('should dont has methods', () => {
+  it('should not see the method without tag @public', () => {
     expect(docButton['methods'].length).toEqual(0)
   })
 
-  it('should has props', () => {
+  it('should have props', () => {
     expect(typeof docButton['props'] !== 'undefined').toBe(true)
   })
 
@@ -64,7 +64,7 @@ describe('tests button', () => {
     expect(Object.keys(docButton['props']).length).toEqual(14)
   })
 
-  it('should the component has propsAnother prop default equal #333', () => {
+  it('should the component has propsAnother prop default equal \'blue\'', () => {
     expect(docButton['props']['propsAnother']['defaultValue']['value']).toEqual('"blue"')
   })
 
@@ -90,12 +90,12 @@ describe('tests button', () => {
     expect(docButton['props']['spanSm']['type']['name']).toEqual('string|number')
   })
 
-  it('should funcDefault to be string', () => {
+  it('should set funcDefault prop as a function (type "func")', () => {
     expect(docButton['props']['funcDefault']['type']['name']).toEqual('func')
   })
 
   it('should prop1 to be string', () => {
-    expect(docButton['props']['prop1']['type']['name']).toEqual('string')
+    expect(docButton['props']['prop1']['type']).toMatchObject({name:'string'})
   })
 
   it('should example to be boolean', () => {
@@ -128,13 +128,16 @@ describe('tests button', () => {
 
   it('should value default propE to be a funtion', () => {
     expect(docButton['props']['propE']['defaultValue']['value']).toEqual(
-      "() => { return { message: 'hello' }; }"
-    )
-    expect(docButton['props']['propE']['defaultValue']['func']).toEqual(true)
+      ['() => {',
+      '  return {',
+      '    message: "hello"',
+      '  };',
+      '}'].join('\n'))
+    expect(docButton['props']['propE']['defaultValue']['func']).toBeTruthy()
   })
 
   it('should example3 to be number', () => {
-    expect(docButton['props']['example3']['type']['name']).toEqual('number')
+    expect(docButton['props']['example3']).toMatchObject({type:{name:'number'}})
   })
 
   it('should value default example3 to be 16', () => {
@@ -158,7 +161,7 @@ describe('tests button', () => {
   })
 
   it('should the component has event, it called success', () => {
-    expect(typeof docButton['events']['success'] !== 'undefined').toBe(true)
+    expect(docButton['events']['success']).not.toBeUndefined()
   })
 
   it('should the description of success event is Success event.', () => {

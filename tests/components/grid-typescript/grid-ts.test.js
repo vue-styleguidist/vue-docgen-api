@@ -19,19 +19,19 @@ describe('tests typescript grid', () => {
   })
 
   it('should the component has tags', () => {
-    expect(typeof docGrid['tags'] !== 'undefined').toBe(true)
+    expect(docGrid['tags']).not.toBeUndefined()
   })
 
   it('should the component has authors', () => {
-    expect(typeof docGrid['tags']['author'] !== 'undefined').toBe(true)
+    expect(docGrid['tags']['author']).not.toBeUndefined()
   })
 
   it('should the component has description', () => {
-    expect(typeof docGrid['description'] !== 'undefined').toBe(true)
+    expect(docGrid['description']).not.toBeUndefined()
   })
 
-  it('should has methods', () => {
-    expect(typeof docGrid['methods'] !== 'undefined').toBe(true)
+  it('should have methods', () => {
+    expect(docGrid['methods']).not.toBeUndefined()
   })
 
   it('should the component has one method', () => {
