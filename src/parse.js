@@ -78,7 +78,9 @@ export default function parse(source, filePath) {
 
     vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs)
   }
-  const doc = vueDocArray.length ? vueDocArray[0] : {}
+  const doc = vueDocArray.length
+    ? vueDocArray[0]
+    : { comment: '', description: '', methods: [], props: undefined, tags: {} }
 
   // a component should always have a display name
   if (!doc.displayName) {
@@ -86,14 +88,10 @@ export default function parse(source, filePath) {
   }
 
   // get events from comments
-  if (ast) {
-    doc.events = getEvents(ast)
-  }
+  doc.events = ast ? getEvents(ast) : {}
 
   // get slots from template
-  if (parts) {
-    doc.slots = getSlots(parts)
-  }
+  doc.slots = parts ? getSlots(parts) : {}
 
   return doc
 }
