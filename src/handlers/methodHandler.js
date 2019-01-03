@@ -8,14 +8,15 @@ export default function methodHandler(documentation, path) {
     .filter(propertyPath => types.Property.check(propertyPath.node))
     .filter(p => p.node.key.name === 'methods')
 
+  const methods = []
+
   // if no method return
   if (!methodsPath.length) {
+    documentation.set('methods', methods)
     return
   }
 
   const methodsObject = methodsPath[0].get('value')
-
-  const methods = []
 
   methodsObject
     .get('properties')

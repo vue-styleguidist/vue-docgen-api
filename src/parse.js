@@ -80,6 +80,11 @@ export default function parse(source, filePath) {
   }
   const doc = vueDocArray.length ? vueDocArray[0] : {}
 
+  // a component should always have a display name
+  if (!doc.displayName) {
+    doc.displayName = path.basename(filePath).replace(/\.\w+$/, '')
+  }
+
   // get events from comments
   if (ast) {
     doc.events = getEvents(ast)

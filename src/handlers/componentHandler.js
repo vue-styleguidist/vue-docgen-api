@@ -13,6 +13,9 @@ export default function propHandler(documentation, path) {
 
   // if no prop return
   if (!docBlock || !docBlock.length) {
+    documentation.set('comment', '')
+    documentation.set('description', '')
+    documentation.set('tags', {})
     return
   }
 

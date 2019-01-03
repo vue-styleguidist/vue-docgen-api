@@ -35,9 +35,7 @@ export default function propHandler(documentation, path) {
         const isIdentifier = types.Identifier.check(propValuePath.value)
         const isTupple = types.ArrayExpression.check(propValuePath.value)
         if (isIdentifier || isObjectExpression || isTupple) {
-          if (jsDoc.tags.length) {
-            propDescriptor.tags = transformTagsIntoObject(jsDoc.tags)
-          }
+          propDescriptor.tags = jsDoc.tags.length ? transformTagsIntoObject(jsDoc.tags) : {}
 
           propDescriptor.description = jsDoc.description
 
@@ -100,9 +98,7 @@ function getTypeFromTypePath(typePath) {
 
 function describeRequired(propPropertiesPath, propDescriptor) {
   const requiredArray = propPropertiesPath.filter(p => p.node.key.name === 'required')
-  if (requiredArray.length) {
-    propDescriptor.required = requiredArray[0].get('value').node.value
-  }
+  propDescriptor.required = requiredArray.length ? requiredArray[0].get('value').node.value : ''
 }
 
 function describeDefault(propPropertiesPath, propDescriptor) {
