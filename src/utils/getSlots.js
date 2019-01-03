@@ -1,10 +1,11 @@
 import htmlparser2 from 'htmlparser2'
 
+import { Lexer as lex } from 'pug-lexer'
+import { Parser as parse } from 'pug-parser'
+import wrap from 'pug-runtime/wrap'
+import generateCode from 'pug-code-gen'
+
 const HtmlParser = htmlparser2.Parser
-const lex = require('pug-lexer');
-const parse = require('pug-parser');
-const wrap = require('pug-runtime/wrap');
-const generateCode = require('pug-code-gen');
 
 export default function getSlots(parts) {
   const output = {}
@@ -12,15 +13,15 @@ export default function getSlots(parts) {
     let template = parts.template.content
     let lastComment = ''
 
-    if(parts.template.attrs.lang === 'pug') {
-        const funcStr = generateCode(parse(lex(parts.template.content)), {
-          compileDebug: false,
-          pretty: true,
-          inlineRuntimeFunctions: false,
-          templateName: '_parse',
-        });
-        const func = wrap(funcStr, '_parse');
-        template = func();
+    if (parts.template.attrs.lang === 'pug') {
+      const funcStr = generateCode(parse(lex(parts.template.content)), {
+        compileDebug: false,
+        pretty: true,
+        inlineRuntimeFunctions: false,
+        templateName: '_parse',
+      })
+      const func = wrap(funcStr, '_parse')
+      template = func()
     }
 
     const parser = new HtmlParser({
