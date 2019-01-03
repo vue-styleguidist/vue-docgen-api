@@ -33,4 +33,8 @@ describe('tests InputTextDoc', () => {
   it('should the component has placeholder of type string', () => {
     expect(docInputTextDoc['props']['placeholder']['type']['name']).toEqual('string')
   })
+
+  it('should match the snapshot', () => {
+    expect(docInputTextDoc).toMatchSnapshot()
+  })
 })

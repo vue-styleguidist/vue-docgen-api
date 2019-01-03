@@ -127,12 +127,8 @@ describe('tests button', () => {
   })
 
   it('should value default propE to be a funtion', () => {
-    expect(docButton['props']['propE']['defaultValue']['value']).toEqual(
-      ['() => {',
-      '  return {',
-      '    message: "hello"',
-      '  };',
-      '}'].join('\n'))
+    const functionNoSpaceNoReturn = docButton['props']['propE']['defaultValue']['value'].replace(/[ \n\r]/g, '')
+    expect(functionNoSpaceNoReturn).toEqual(`()=>{return{message:'hello'};}`)
     expect(docButton['props']['propE']['defaultValue']['func']).toBeTruthy()
   })
 
@@ -178,5 +174,9 @@ describe('tests button', () => {
 
   it('the default slot should have "Use this slot default" as description', () => {
     expect(docButton['slots']['default']['description']).toEqual('Use this slot default')
+  })
+
+  it('should match the snapshot', () => {
+    expect(docButton).toMatchSnapshot()
   })
 })

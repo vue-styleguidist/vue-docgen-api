@@ -29,4 +29,8 @@ describe('tests InputText', () => {
   it('should the component has two props', () => {
     expect(Object.keys(docInputText['props']).length).toEqual(2)
   })
+
+  it('should match the snapshot', () => {
+    expect(docInputText).toMatchSnapshot()
+  })
 })

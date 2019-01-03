@@ -102,4 +102,7 @@ describe('tests grid jsx', () => {
     expect(docGrid['events']['error']['type']['names'][0]).toEqual('object')
   })
 
+  it('should match the snapshot', () => {
+    expect(docGrid).toMatchSnapshot()
+  })
 })

@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test example vuex should match the snapshot 1`] = `
+Object {
+  "comment": "/**
+                                                          * Partial mapping, object spread operator example
+                                                          */",
+  "description": "Partial mapping, object spread operator example",
+  "displayName": "example",
+  "events": Object {},
+  "methods": Array [
+    Object {
+      "comment": "/**
+              * Sets the order
+              *
+              * @public
+              * @version 1.0.5
+              * @since Version 1.0.1
+              * @param {string} key Key to order
+              * @returns {string} Test
+              */",
+      "description": "Sets the order",
+      "modifiers": Array [],
+      "name": "onSubmit",
+      "params": Array [
+        Object {
+          "description": "Key to order",
+          "name": "key",
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
+      "returns": Object {
+        "description": "Test",
+        "type": Object {
+          "name": "string",
+        },
+      },
+      "tags": Object {
+        "access": Array [
+          Object {
+            "description": "public",
+            "title": "access",
+          },
+        ],
+        "params": Array [
+          Object {
+            "description": "Key to order",
+            "name": "key",
+            "title": "param",
+            "type": Object {
+              "name": "string",
+              "type": "NameExpression",
+            },
+          },
+        ],
+        "returns": Array [
+          Object {
+            "description": "Test",
+            "title": "returns",
+            "type": Object {
+              "name": "string",
+              "type": "NameExpression",
+            },
+          },
+        ],
+        "since": Array [
+          Object {
+            "description": "Version 1.0.1",
+            "title": "since",
+          },
+        ],
+        "version": Array [
+          Object {
+            "description": "1.0.5",
+            "title": "version",
+          },
+        ],
+      },
+    },
+  ],
+  "props": undefined,
+  "slots": Object {},
+  "tags": Object {},
+}
+`;
