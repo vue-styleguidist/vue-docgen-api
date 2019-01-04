@@ -1,6 +1,7 @@
 declare module 'ast-types' {
+  import { Node } from '@babel/types'
   interface AstNodeType {
-    check: (testedNode: Node) => boolean
+    check: (testedNode: Node | null) => boolean
   }
 
   export const namedTypes: {
@@ -16,4 +17,14 @@ declare module 'ast-types' {
     CallExpression: AstNodeType
     ImportDefaultSpecifier: AstNodeType
   }
+
+  export interface NodePath {
+    node: Node
+    parent?: NodePath
+    parentPath?: NodePath
+    get(...name: (string | number)[]): NodePath
+    each(callback: (path: NodePath) => any, context?: any): void
+  }
+
+  export function visit(path: NodePath, visitors: { [key: string]: (path: NodePath) => any }): void
 }

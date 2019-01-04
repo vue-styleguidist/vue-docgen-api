@@ -1,18 +1,26 @@
-import { namedTypes as types, visit } from 'ast-types'
-import resolveExportDeclaration from './resolveExportDeclaration'
-import isExportedAssignment from './isExportedAssignment'
+import { visit, NodePath } from 'ast-types';
+import resolveExportDeclaration from './resolveExportDeclaration';
+import isExportedAssignment from './isExportedAssignment';
+import {
+  isObjectExpression,
+  isCallExpression,
+  isMemberExpression,
+  isIdentifier,
+} from '@babel/types';
 
-function ignore() {
-  return false
+function ignore(): boolean {
+  return false;
 }
 
-function isComponentDefinition(path, types) {
+function isComponentDefinition(path: NodePath): boolean {
   return (
-    types.ObjectExpression.check(path.node) ||
-    (types.CallExpression.check(path.node) &&
+    isObjectExpression(path.node) ||
+    (isCallExpression(path.node) &&
+      isMemberExpression(path.node.callee) &&
+      isIdentifier(path.node.callee.object) &&
       path.node.callee.object.name === 'Vue' &&
       path.node.callee.property.name === 'extend')
-  )
+  );
 }
 
 /**
@@ -26,37 +34,40 @@ function isComponentDefinition(path, types) {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(ast) {
-  var components = []
+export default function resolveExportedComponent(ast: NodePath): NodePath[] {
+  const components: NodePath[] = [];
 
-  function setComponent(definition) {
+  function setComponent(definition: NodePath) {
     if (definition && components.indexOf(definition) === -1) {
-      if (types.ObjectExpression.check(definition.node)) {
-        components.push(definition)
+      if (isObjectExpression(definition.node)) {
+        components.push(definition);
       } else {
-        components.push(definition.get('arguments', 0))
+        components.push(definition.get('arguments', 0));
       }
     }
   }
 
   // function run for every non "assignment" export declaration
   // in extenso export default or export myvar
-  function exportDeclaration(path) {
-    var definitions = resolveExportDeclaration(path, types).reduce((acc, definition) => {
-      if (isComponentDefinition(definition, types)) {
-        acc.push(definition)
-      }
-      return acc
-    }, [])
+  function exportDeclaration(path: NodePath) {
+    const definitions = resolveExportDeclaration(path).reduce(
+      (acc: NodePath[], definition: NodePath) => {
+        if (isComponentDefinition(definition)) {
+          acc.push(definition);
+        }
+        return acc;
+      },
+      [],
+    );
 
     if (definitions.length === 0) {
-      return false
+      return false;
     }
 
-    definitions.forEach(definition => {
-      setComponent(definition)
-    })
-    return false
+    definitions.forEach((definition: NodePath) => {
+      setComponent(definition);
+    });
+    return false;
   }
 
   visit(ast, {
@@ -77,27 +88,27 @@ export default function resolveExportedComponent(ast) {
     visitExportNamedDeclaration: exportDeclaration,
     visitExportDefaultDeclaration: exportDeclaration,
 
-    visitAssignmentExpression: function(path) {
+    visitAssignmentExpression(path) {
       // function run on every assignments (with an =)
 
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
       if (!isExportedAssignment(path)) {
-        return false
+        return false;
       }
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
-      path = path.get('right')
-      if (!isComponentDefinition(path, types)) {
-        if (!isComponentDefinition(path, types)) {
-          return false
+      path = path.get('right');
+      if (!isComponentDefinition(path)) {
+        if (!isComponentDefinition(path)) {
+          return false;
         }
       }
 
-      setComponent(path)
-      return false
+      setComponent(path);
+      return false;
     },
-  })
+  });
 
-  return components
+  return components;
 }

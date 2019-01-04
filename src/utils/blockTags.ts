@@ -1,3 +1,9 @@
+export interface BlockTag {
+  title: string;
+  content?: string;
+  description?: string;
+}
+
 export default [
   'abstract',
   'access',

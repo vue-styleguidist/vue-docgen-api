@@ -1,10 +1,4 @@
-import blockTags from './blockTags';
-
-interface BlockTag {
-  title: string;
-  content?: string;
-  description?: string;
-}
+import blockTags, { BlockTag } from './blockTags';
 
 export default function transformTagsIntoObject(tags: BlockTag[]): { [key: string]: BlockTag[] } {
   return tags.reduce((acc: { [key: string]: BlockTag[] }, tag) => {
