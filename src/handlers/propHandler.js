@@ -36,8 +36,9 @@ export default function propHandler(documentation, path) {
         const isTupple = types.ArrayExpression.check(propValuePath.value)
         if (isIdentifier || isObjectExpression || isTupple) {
           propDescriptor.tags = jsDoc.tags.length ? transformTagsIntoObject(jsDoc.tags) : {}
-
-          propDescriptor.description = jsDoc.description
+          if (jsDoc.description) {
+            propDescriptor.description = jsDoc.description
+          }
 
           if (isObjectExpression) {
             const propPropertiesPath = propValuePath.get('properties')

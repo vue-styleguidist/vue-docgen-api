@@ -5,10 +5,6 @@ interface ParamType {
   elements?: ParamType[];
 }
 
-interface EventType {
-  names: string[];
-}
-
 interface Param {
   type: ParamType;
   name?: string;
@@ -28,22 +24,25 @@ export interface ParamTag extends RootTag, Param {}
 export interface DocBlockTags {
   description: string;
   tags: Array<ParamTag | Tag>;
-  type?: EventType;
 }
 
-function getParamInfo(content: string) {
+function getParamInfo(content: string, hasName: boolean) {
   const typeSliceArray = /^\{([^}]+)\}/.exec(content);
   const typeSlice = typeSliceArray && typeSliceArray.length ? typeSliceArray[1] : '*';
   const param: Param = { type: getTypeObjectFromTypeString(typeSlice) };
 
   content = content.replace(`{${typeSlice}} `, '');
 
-  const nameSliceArray = /^(\w+) - /.exec(content);
-  if (nameSliceArray) {
-    param.name = nameSliceArray[1];
-  }
+  if (hasName) {
+    const nameSliceArray = /^(\w+)( - )?/.exec(content);
+    if (nameSliceArray) {
+      param.name = nameSliceArray[1];
+    }
 
-  content = content.replace(/^(\w+)? ?(- )?/, '');
+    if (param.name) {
+      content = content.replace(new RegExp(`^${param.name} (- )?`), '');
+    }
+  }
 
   if (content.length) {
     param.description = content;
@@ -67,6 +66,8 @@ function getTypeObjectFromTypeString(typeSlice: string): ParamType {
   }
 }
 
+const TYPED_TAG_TITLES = ['param', 'property', 'type', 'returns'];
+
 /**
  * Given a string, this functions returns an object with
  * two keys:
@@ -79,8 +80,8 @@ export default function getDocblockTags(str: string): DocBlockTags {
 
   for (; match; match = DOCLET_PATTERN.exec(str)) {
     const title = match[1];
-    if (title === 'param' || title === 'property' || title === 'type') {
-      tags.push({ title, ...getParamInfo(match[2]) });
+    if (TYPED_TAG_TITLES.indexOf(title) > -1) {
+      tags.push({ title, ...getParamInfo(match[2], title !== 'returns') });
     } else {
       tags.push({ title, content: match[2] || true });
     }

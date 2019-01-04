@@ -15,7 +15,15 @@ class Documentation {
   getPropDescriptor(propName) {
     var propDescriptor = this._props.get(propName)
     if (!propDescriptor) {
-      this._props.set(propName, (propDescriptor = {}))
+      this._props.set(
+        propName,
+        (propDescriptor = {
+          comment: '',
+          description: '',
+          required: '',
+          tags: {},
+        })
+      )
     }
     return propDescriptor
   }
@@ -32,6 +40,8 @@ class Documentation {
       for (var [name, descriptor] of this._props) {
         obj.props[name] = descriptor
       }
+    } else {
+      obj.props = undefined
     }
 
     return obj

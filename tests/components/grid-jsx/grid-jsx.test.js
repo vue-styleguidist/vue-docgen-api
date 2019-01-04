@@ -102,6 +102,10 @@ describe('tests grid jsx', () => {
     expect(docGrid['events']['error']['type']['names'][0]).toEqual('object')
   })
 
+  it('should define the return type of the first method', () => {
+    expect(docGrid['methods'][0]['returns']['description']).toEqual('Test')
+  })
+
   it('should match the snapshot', () => {
     expect(docGrid).toMatchSnapshot()
   })

@@ -122,6 +122,10 @@ describe('tests typescript grid', () => {
     expect(docGrid['slots']['footer']['description']).toEqual('Use this slot footer')
   })
 
+  it('should define the return type of the first method', () => {
+    expect(docGrid['methods'][0]['tags']['returns'][0]['description']).toEqual('Test')
+  })
+
   it('should match the snapshot', () => {
     expect(docGrid).toMatchSnapshot()
   })

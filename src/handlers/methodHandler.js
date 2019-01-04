@@ -1,6 +1,7 @@
 import { namedTypes as types } from 'ast-types'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
+import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 export default function methodHandler(documentation, path) {
   const methodsPath = path
@@ -41,6 +42,15 @@ export default function methodHandler(documentation, path) {
       if (jsDoc.description) {
         methodDescriptor.description = jsDoc.description
       }
+
+      // returns
+      const tagReturns = jsDoc.tags.find(t => t.title === 'returns')
+      if (tagReturns) {
+        methodDescriptor.returns = tagReturns
+      }
+
+      // tags
+      methodDescriptor.tags = transformTagsIntoObject(jsDoc.tags)
 
       methods.push(methodDescriptor)
     })
