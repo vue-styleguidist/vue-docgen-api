@@ -14,8 +14,9 @@ export default function isExportedAssignment(path: NodePath) {
   if (isExpressionStatement(path.node)) {
     path = path.get('expression');
   }
-  // if we are not looking at `a.b = blabla`
-  if (!isAssignmentExpression(path.node) || isMemberExpression(path.node.left)) {
+
+  // check if we are looking at obj.member = value`
+  if (!isAssignmentExpression(path.node) || !isMemberExpression(path.node.left)) {
     return false;
   }
   const pathLeft = path.get('left').node;

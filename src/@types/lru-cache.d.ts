@@ -1,3 +1,8 @@
 declare module 'lru-cache' {
-  export default compiler
+  class LRUCache {
+    constructor(num: number)
+    get(key: string): any
+    set(key: string, obj: any): void
+  }
+  export = LRUCache
 }

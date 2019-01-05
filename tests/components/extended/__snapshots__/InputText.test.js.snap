@@ -2,9 +2,7 @@
 
 exports[`tests InputText should match the snapshot 1`] = `
 Object {
-  "comment": "/**
- * Description InputText
- */",
+  "comment": "Description InputText",
   "description": "Description InputText",
   "displayName": "InputText",
   "events": Object {},

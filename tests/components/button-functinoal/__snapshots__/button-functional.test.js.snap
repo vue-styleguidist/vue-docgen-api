@@ -9,9 +9,7 @@ Object {
   "methods": Array [],
   "props": Object {
     "size": Object {
-      "comment": "/**
-            * The size of the button
-            */",
+      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "\\"normal\\"",

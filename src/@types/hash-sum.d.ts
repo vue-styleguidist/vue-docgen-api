@@ -1,3 +1,4 @@
 declare module 'hash-sum' {
-  export default function(key: any): string
+  function makehash(key: any): string
+  export = makehash
 }

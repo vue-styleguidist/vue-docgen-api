@@ -45,8 +45,8 @@ describe('componentHandler', () => {
     const def = parse(src)
     componentHandler(documentation, def[0])
     expect(documentation.set).toHaveBeenCalledWith('tags', {
-      version: '12.5.7',
-      author: '[Rafael]',
+      author: [{ description: '[Rafael]', title: 'author' }],
+      version: [{ description: '12.5.7', title: 'version' }],
     })
   })
 })

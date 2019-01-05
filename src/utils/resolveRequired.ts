@@ -1,5 +1,5 @@
-import { namedTypes as types, visit, NodePath } from 'ast-types';
-import { isImportDefaultSpecifier, isImportSpecifier, isStringLiteral } from '@babel/types';
+import { visit, NodePath } from 'ast-types';
+import { isImportDefaultSpecifier, isImportSpecifier, isLiteral, StringLiteral } from '@babel/types';
 
 function ignore() {
   return false;
@@ -22,8 +22,8 @@ export default function resolveRequired(ast: NodePath, varNameFilter: string[]) 
         const varNameDefault = nodeSpecifier.local.name;
         if (varNameFilter.indexOf(varNameDefault) > -1) {
           const nodeSource = astPath.get('source').node;
-          if (isStringLiteral(nodeSource)) {
-            varToFilePath[varNameDefault] = nodeSource.value;
+          if (isLiteral(nodeSource)) {
+            varToFilePath[varNameDefault] = (nodeSource as StringLiteral).value;
           }
         }
       }
