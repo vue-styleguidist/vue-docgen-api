@@ -1,7 +1,9 @@
 declare module 'vue-sfc' {
-  interface Template {
+  export interface Template {
     content: string
-    lang?: string
+    attrs?: {
+      lang?: string
+    }
   }
 
   export interface CompiledSFC {

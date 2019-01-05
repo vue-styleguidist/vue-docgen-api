@@ -91,7 +91,7 @@ export default function parse(source, filePath) {
   doc.events = ast ? getEvents(ast) : {}
 
   // get slots from template
-  doc.slots = parts ? getSlots(parts) : {}
+  doc.slots = parts && parts.template ? getSlots(parts.template) : {}
 
   return doc
 }

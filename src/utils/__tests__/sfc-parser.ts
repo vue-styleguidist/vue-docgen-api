@@ -6,17 +6,17 @@ describe('sfc-parser', () => {
   beforeEach(() => {
     compiledSfc = scfParser(
       `
-    <template><div/></template>
-    <script>
+    <template lang="pug"><div/></template>
+    <script lang="ts">
     export default {}
     </script>
-    <style>test{display:block;}</style>
+    <style lang="scss">.test{display:block;}</style>
     `,
       'test',
     );
   });
 
   it('should parse sfc templates', () => {
-    expect(compiledSfc.script.content).toContain('export default {}');
+    expect(compiledSfc).toMatchSnapshot();
   });
 });
