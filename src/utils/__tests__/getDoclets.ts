@@ -34,6 +34,13 @@ describe('getDoclets', () => {
     ]);
   });
 
+  it('should extract param description without the dash', () => {
+    const src = `@param {string} - the compiled object`;
+    expect(getDocLets(src).tags).toMatchObject([
+      { title: 'param', description: 'the compiled object' },
+    ]);
+  });
+
   it('should extract description', () => {
     const src = ['awesome method', ' ', '@version 1.2.3'].join('\n');
     expect(getDocLets(src).description).toEqual('awesome method');

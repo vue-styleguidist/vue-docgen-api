@@ -40,9 +40,11 @@ function getParamInfo(content: string, hasName: boolean) {
     }
 
     if (param.name) {
-      content = content.replace(new RegExp(`^${param.name} (- )?`), '');
+      content = content.replace(new RegExp(`^${param.name} `), '');
     }
   }
+
+  content = content.replace(/^- /, '');
 
   if (content.length) {
     param.description = content;
