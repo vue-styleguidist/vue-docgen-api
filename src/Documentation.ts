@@ -1,10 +1,12 @@
 import { BlockTag } from './utils/blockTags';
 
-interface PropDescriptor {
+export interface PropDescriptor {
+  type?: { name: string; func?: boolean };
   comment: string;
   description: string;
   required: string | boolean;
-  tags: { [title: string]: BlockTag };
+  defaultValue?: { value: string; func?: boolean };
+  tags: { [title: string]: BlockTag[] };
 }
 
 interface MethodDescriptor {
@@ -17,26 +19,30 @@ interface ComponentDoc {
   [key: string]: any;
 }
 
-export class Documentation {
-  private _props: Map<string, any>;
-  private _data: Map<string, any>;
+export interface IDocumentation {
+  getPropDescriptor(propName: string): PropDescriptor;
+}
+
+export class Documentation implements IDocumentation {
+  private propsMap: Map<string, any>;
+  private dataMap: Map<string, any>;
   constructor(initDocumentation: { props?: any; data?: any } = {}) {
-    this._props = new Map(adaptToKeyValue(initDocumentation.props));
-    this._data = new Map(adaptToKeyValue(initDocumentation.data));
+    this.propsMap = new Map(adaptToKeyValue(initDocumentation.props));
+    this.dataMap = new Map(adaptToKeyValue(initDocumentation.data));
   }
 
   public set(key: string, value: any) {
-    this._data.set(key, value);
+    this.dataMap.set(key, value);
   }
 
   public get(key: string): any {
-    return this._data.get(key);
+    return this.dataMap.get(key);
   }
 
   public getPropDescriptor(propName: string): PropDescriptor {
-    let propDescriptor: PropDescriptor = this._props.get(propName) as PropDescriptor;
+    let propDescriptor: PropDescriptor = this.propsMap.get(propName) as PropDescriptor;
     if (!propDescriptor) {
-      this._props.set(
+      this.propsMap.set(
         propName,
         (propDescriptor = {
           comment: '',
@@ -55,13 +61,13 @@ export class Documentation {
       methods: undefined,
     };
 
-    for (const [key, value] of this._data) {
+    for (const [key, value] of this.dataMap) {
       obj[key] = value;
     }
 
-    if (this._props.size > 0) {
+    if (this.propsMap.size > 0) {
       obj.props = {};
-      for (const [name, descriptor] of this._props) {
+      for (const [name, descriptor] of this.propsMap) {
         obj.props[name] = descriptor;
       }
     }

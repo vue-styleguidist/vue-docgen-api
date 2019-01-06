@@ -1,8 +1,6 @@
-export interface BlockTag {
-  title: string;
-  content?: string;
-  description?: string;
-}
+import { Tag, ParamTag } from './getDoclets';
+
+export type BlockTag = ParamTag | Tag;
 
 export default [
   'abstract',

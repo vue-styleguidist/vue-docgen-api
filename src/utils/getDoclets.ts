@@ -6,7 +6,7 @@ interface ParamType {
 }
 
 interface Param {
-  type: ParamType;
+  type?: ParamType;
   name?: string;
   description?: string;
 }

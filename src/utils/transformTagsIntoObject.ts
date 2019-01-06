@@ -1,14 +1,22 @@
 import blockTags, { BlockTag } from './blockTags';
+import { Tag, ParamTag } from './getDoclets';
 
 export default function transformTagsIntoObject(tags: BlockTag[]): { [key: string]: BlockTag[] } {
   return tags.reduce((acc: { [key: string]: BlockTag[] }, tag) => {
     if (blockTags.indexOf(tag.title) > -1) {
-      if (tag.content) {
-        tag.description = tag.content;
-        delete tag.content;
+      if (isContentTag(tag)) {
+        const newTag: ParamTag = {
+          description: typeof tag.content === 'string' ? tag.content : '',
+          title: tag.title,
+        };
+        tag = newTag;
       }
       acc[tag.title] = [tag];
     }
     return acc;
   }, {});
+}
+
+function isContentTag(tag: any): tag is Tag {
+  return tag.content !== undefined;
 }

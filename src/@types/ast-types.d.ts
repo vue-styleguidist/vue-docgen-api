@@ -18,12 +18,15 @@ declare module 'ast-types' {
     ImportDefaultSpecifier: AstNodeType
   }
 
-  export interface NodePath {
-    node: Node
+  export interface NodePath<T extends Node = Node> {
+    node: T
     parent?: NodePath
-    parentPath?: NodePath
+    parentPath?: Node
     get(...name: (string | number)[]): NodePath
+    // array properies
+    length: number
     each(callback: (path: NodePath) => any, context?: any): void
+    filter(predicate: (path: NodePath) => boolean): NodePath[]
   }
 
   export function visit(path: NodePath, visitors: { [key: string]: (path: NodePath) => any }): void
