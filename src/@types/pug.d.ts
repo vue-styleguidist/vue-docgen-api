@@ -1,13 +1,23 @@
+interface Token {
+  type: string
+  line: number
+  col: number
+  val?: string
+  name?: string
+  mustEscape?: boolean
+}
+
 declare module 'pug-lexer' {
   export class Lexer {
-    tokens: any[]
     constructor(content: string, options?: any)
+    getTokens(): Token[]
   }
 }
 
 declare module 'pug-parser' {
   export class Parser {
-    constructor(lexed: any)
+    constructor(lexedTokens: Token[])
+    parse(): { type: string; nodes: any[]; line: number; filename?: string }
   }
 }
 

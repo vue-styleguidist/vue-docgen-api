@@ -14,8 +14,8 @@ export default function getSlots(tpl: Template) {
 
     if (tpl.attrs && tpl.attrs.lang === 'pug') {
       const lexed = new Lexer(tpl.content);
-      const parsed = new Parser(lexed.tokens);
-      const funcStr = generateCode(parsed, {
+      const parsed = new Parser(lexed.getTokens());
+      const funcStr = generateCode(parsed.parse(), {
         compileDebug: false,
         pretty: true,
         inlineRuntimeFunctions: false,

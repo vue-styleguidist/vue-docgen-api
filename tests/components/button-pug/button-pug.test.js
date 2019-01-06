@@ -4,7 +4,7 @@ const api = require('../../../src/main')
 const button = path.join(__dirname, './MyButton.vue')
 let docButton
 
-xdescribe('tests button with pug', () => {
+describe('tests button with pug', () => {
   beforeEach(function(done) {
     docButton = api.parse(button)
     done()
@@ -15,7 +15,7 @@ xdescribe('tests button with pug', () => {
   })
 
   it('should have a default slot.', () => {
-    expect(typeof docButton['slots']['default'] !== 'undefined').toBe(true)
+    expect(docButton['slots']['default']).not.toBeUndefined()
   })
 
   it('the default slot should have "Use this slot default" as description', () => {
