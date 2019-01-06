@@ -12,7 +12,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "strictFunctionTypes": false,
-    "types": ["jest", "node"]
+    "types": ["jest", "node", "htmlparser2"]
   },
   "include": ["src/**/*.ts", "tests/**/*.vue", "tests/**/*.ts"],
   "exclude": ["node_modules"]
