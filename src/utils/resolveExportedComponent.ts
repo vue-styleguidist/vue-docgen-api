@@ -6,6 +6,7 @@ import {
   isCallExpression,
   isMemberExpression,
   isIdentifier,
+  Program,
 } from '@babel/types';
 
 function ignore(): boolean {
@@ -34,7 +35,7 @@ function isComponentDefinition(path: NodePath): boolean {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(ast: NodePath): NodePath[] {
+export default function resolveExportedComponent(ast: Program): NodePath[] {
   const components: NodePath[] = [];
 
   function setComponent(definition: NodePath) {

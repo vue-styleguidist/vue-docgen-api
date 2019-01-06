@@ -1,5 +1,5 @@
 import recast from 'recast';
-import { namedTypes as types, NodePath } from 'ast-types';
+import { NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
 import getDoclets, { DocBlockTags } from '../utils/getDoclets';
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';

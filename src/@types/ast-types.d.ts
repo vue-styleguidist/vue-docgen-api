@@ -1,5 +1,5 @@
 declare module 'ast-types' {
-  import { Node } from '@babel/types'
+  import { Node, Program } from '@babel/types'
   interface AstNodeType {
     check: (testedNode: Node | null) => boolean
   }
@@ -20,7 +20,7 @@ declare module 'ast-types' {
 
   export interface NodePath<T extends Node = Node> {
     node: T
-    parent?: NodePath
+    parent: NodePath
     parentPath?: Node
     get(...name: (string | number)[]): NodePath
     // array properies
@@ -29,5 +29,8 @@ declare module 'ast-types' {
     filter(predicate: (path: NodePath) => boolean): NodePath[]
   }
 
-  export function visit(path: NodePath, visitors: { [key: string]: (path: NodePath) => any }): void
+  export function visit(
+    path: NodePath | Program,
+    visitors: { [key: string]: (path: NodePath) => any }
+  ): void
 }
