@@ -7,7 +7,7 @@ Object {
   "displayName": "MyButton",
   "events": Object {},
   "methods": Array [],
-  "props": undefined,
+  "props": Object {},
   "slots": Object {
     "default": Object {
       "description": "Use this slot default",

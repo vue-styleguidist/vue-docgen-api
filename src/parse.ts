@@ -88,12 +88,12 @@ export default function parse(source: string, filePath: string): ComponentDoc {
 
     vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs);
   }
-  const doc = vueDocArray.length
+  const doc: ComponentDoc = vueDocArray.length
     ? vueDocArray[0]
-    : { comment: '', description: '', methods: [], props: undefined, tags: {} };
+    : { displayName: '', comment: '', description: '', methods: [], props: {}, tags: {} };
 
   // a component should always have a display name
-  if (!doc.displayName) {
+  if (!doc.displayName || !doc.displayName.length) {
     doc.displayName = path.basename(filePath).replace(/\.\w+$/, '');
   }
 

@@ -1,7 +1,7 @@
-var main = require('../main')
+import { parse } from '../main'
 
 describe('main', () => {
   it('should return an object', () => {
-    expect(main).not.toBeUndefined()
+    expect(parse).not.toBeUndefined()
   })
 })

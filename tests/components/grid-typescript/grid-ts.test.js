@@ -39,11 +39,11 @@ describe('tests typescript grid', () => {
   })
 
   it('should has props', () => {
-    expect(typeof docGrid['props'] !== 'undefined').toBe(true)
+    expect(typeof docGrid['props']).not.toBeUndefined()
   })
 
   it('should the component has version', () => {
-    expect(typeof docGrid['tags']['version'] !== 'undefined').toBe(true)
+    expect(typeof docGrid['tags']['version']).not.toBeUndefined()
   })
 
   it('should the component has four props', () => {
@@ -83,7 +83,7 @@ describe('tests typescript grid', () => {
   })
 
   it('should the component has event, it called success', () => {
-    expect(typeof docGrid['events']['success'] !== 'undefined').toBe(true)
+    expect(typeof docGrid['events']['success']).not.toBeUndefined()
   })
 
   it('should the description of success event is Success event.', () => {
@@ -91,7 +91,7 @@ describe('tests typescript grid', () => {
   })
 
   it('should the component has event, it called error', () => {
-    expect(typeof docGrid['events']['error'] !== 'undefined').toBe(true)
+    expect(typeof docGrid['events']['error']).not.toBeUndefined()
   })
 
   it('should the description of error event is Error event.', () => {
@@ -107,7 +107,7 @@ describe('tests typescript grid', () => {
   })
 
   it('should have a slot named header.', () => {
-    expect(typeof docGrid['slots']['header'] !== 'undefined').toBe(true)
+    expect(typeof docGrid['slots']['header']).not.toBeUndefined()
   })
 
   it('the header slot should have "Use this slot header" as description', () => {
@@ -115,7 +115,7 @@ describe('tests typescript grid', () => {
   })
 
   it('should have a slot named footer.', () => {
-    expect(typeof docGrid['slots']['footer'] !== 'undefined').toBe(true)
+    expect(typeof docGrid['slots']['footer']).not.toBeUndefined()
   })
 
   it('the footer slot should have "Use this slot footer" as description', () => {

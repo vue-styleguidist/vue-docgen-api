@@ -1,5 +1,4 @@
-import { File as BabelFile } from '@babel/types';
-import { namedTypes as types } from 'ast-types';
+import { File as BabelFile, isBlock, Comment } from '@babel/types';
 import getDoclets, { Tag, ParamTag, DocBlockTags, ParamType } from './getDoclets';
 import { parseDocblock } from './getDocblock';
 
@@ -24,9 +23,9 @@ interface TypedParamTag extends ParamTag {
 
 export default function getEvents(ast: BabelFile) {
   if (Array.isArray(ast.comments)) {
-    const eventCommentBlocksDoclets = ast.comments.reduce((acc, comment) => {
+    const eventCommentBlocksDoclets = ast.comments.reduce((acc, comment: Comment) => {
       // only observe block comments
-      if (!types.CommentBlock.check(comment)) {
+      if (comment.type !== 'CommentBlock') {
         return acc;
       }
 

@@ -14,8 +14,9 @@ interface MethodDescriptor {
 }
 
 export interface ComponentDoc {
-  props: { [propName: string]: PropDescriptor } | undefined;
-  methods: MethodDescriptor[] | undefined;
+  displayName: string;
+  props: { [propName: string]: PropDescriptor };
+  methods: MethodDescriptor[];
   [key: string]: any;
 }
 
