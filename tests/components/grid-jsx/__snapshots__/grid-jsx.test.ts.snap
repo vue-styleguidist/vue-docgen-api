@@ -2,10 +2,6 @@
 
 exports[`tests grid jsx should match the snapshot 1`] = `
 Object {
-  "comment": "This is an example of creating a reusable grid component and using it with external data.
-@version 1.0.5
-@author [Rafael](https://github.com/rafaesc92)
-@since Version 1.0.1",
   "description": "This is an example of creating a reusable grid component and using it with external data.",
   "displayName": "grid",
   "events": Object {
@@ -93,7 +89,6 @@ Object {
   ],
   "props": Object {
     "columns": Object {
-      "comment": "",
       "description": "get columns list",
       "required": "",
       "tags": Object {},
@@ -102,7 +97,6 @@ Object {
       },
     },
     "data": Object {
-      "comment": "",
       "description": "describe data",
       "required": "",
       "tags": Object {
@@ -118,7 +112,6 @@ Object {
       },
     },
     "filterKey": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "\\"example\\"",
@@ -138,7 +131,6 @@ Object {
       },
     },
     "images": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": true,
         "value": "function() {
@@ -153,7 +145,6 @@ Object {
       },
     },
     "msg": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "text",
@@ -191,7 +182,6 @@ Object {
       },
     },
     "propFunc": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": true,
         "value": "function() {}",

@@ -2,14 +2,12 @@
 
 exports[`tests InputText should match the snapshot 1`] = `
 Object {
-  "comment": "Description InputText",
   "description": "Description InputText",
   "displayName": "InputText",
   "events": Object {},
   "methods": Array [],
   "props": Object {
     "placeholder": Object {
-      "comment": "",
       "description": "",
       "required": "",
       "tags": Object {},
@@ -18,7 +16,6 @@ Object {
       },
     },
     "question": Object {
-      "comment": "",
       "description": "",
       "required": "",
       "tags": Object {},

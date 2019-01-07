@@ -2,9 +2,6 @@
 
 exports[`tests button should match the snapshot 1`] = `
 Object {
-  "comment": "This is an example of creating a reusable button component and using it with external data.
-@author [Rafael](https://github.com/rafaesc92)
-@version 1.0.5",
   "description": "This is an example of creating a reusable button component and using it with external data.",
   "displayName": "buttonComponent",
   "events": Object {
@@ -46,7 +43,6 @@ Object {
   "methods": Array [],
   "props": Object {
     "color": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "\\"#333\\"",
@@ -59,7 +55,6 @@ Object {
       },
     },
     "example": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "false",
@@ -72,7 +67,6 @@ Object {
       },
     },
     "example3": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "16",
@@ -85,7 +79,6 @@ Object {
       },
     },
     "funcDefault": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": true,
         "value": "() => {
@@ -100,7 +93,6 @@ Object {
       },
     },
     "onCustomClick": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": true,
         "value": "() => () => null",
@@ -120,7 +112,6 @@ Object {
       },
     },
     "prop1": Object {
-      "comment": "",
       "description": "",
       "required": "",
       "tags": Object {
@@ -136,7 +127,6 @@ Object {
       },
     },
     "propE": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": true,
         "value": "() => {
@@ -154,7 +144,6 @@ a factory function",
       },
     },
     "propsAnother": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "\\"blue\\"",
@@ -167,7 +156,6 @@ a factory function",
       },
     },
     "secret": Object {
-      "comment": "",
       "description": "Another mixin",
       "required": "",
       "tags": Object {},
@@ -176,7 +164,6 @@ a factory function",
       },
     },
     "size": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "\\"normal\\"",
@@ -189,7 +176,6 @@ a factory function",
       },
     },
     "span": Object {
-      "comment": "",
       "description": "Number of columns (1-12) the column should span.",
       "required": "",
       "tags": Object {},
@@ -198,7 +184,6 @@ a factory function",
       },
     },
     "spanMd": Object {
-      "comment": "",
       "description": "Md breakpoint and above",
       "required": "",
       "tags": Object {},
@@ -207,7 +192,6 @@ a factory function",
       },
     },
     "spanSm": Object {
-      "comment": "",
       "description": "Sm breakpoint and above",
       "required": "",
       "tags": Object {},
@@ -216,7 +200,6 @@ a factory function",
       },
     },
     "v-model": Object {
-      "comment": "",
       "defaultValue": Object {
         "func": false,
         "value": "\\"example model\\"",
