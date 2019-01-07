@@ -1,13 +1,13 @@
-import * as path from 'path'
-import { ComponentDoc } from '../../../src/Documentation'
-import { parse } from '../../../src/main'
+import * as path from 'path';
+import { ComponentDoc } from '../../../src/Documentation';
+import { parse } from '../../../src/main';
 
-const typescriptGrid = path.join(__dirname, './Grid.vue')
+const typescriptGrid = path.join(__dirname, './Grid.vue');
 let docGrid: ComponentDoc;
 describe('tests typescript grid', () => {
   beforeAll((done) => {
-    docGrid = parse(typescriptGrid)
-    done()
+    docGrid = parse(typescriptGrid);
+    done();
   });
 
   it('should return an object', () => {
