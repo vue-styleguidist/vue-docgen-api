@@ -57,7 +57,7 @@ Object {
       },
     },
   ],
-  "props": Object {},
+  "props": undefined,
   "slots": Object {},
   "tags": Object {},
 }

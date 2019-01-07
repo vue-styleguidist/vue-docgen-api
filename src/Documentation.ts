@@ -20,7 +20,7 @@ export interface MethodDescriptor {
 
 export interface ComponentDoc {
   displayName: string;
-  props: { [propName: string]: PropDescriptor };
+  props: { [propName: string]: PropDescriptor } | undefined;
   methods: MethodDescriptor[];
   [key: string]: any;
 }
@@ -57,13 +57,15 @@ export class Documentation {
   }
 
   public toObject(): ComponentDoc {
-    let props: { [propName: string]: PropDescriptor } = {};
+    let props: { [propName: string]: PropDescriptor } | undefined;
 
     if (this.propsMap.size > 0) {
       props = {};
       for (const [name, descriptor] of this.propsMap) {
         props[name] = descriptor;
       }
+    } else {
+      props = undefined;
     }
 
     const obj: { [key: string]: any } = {};
