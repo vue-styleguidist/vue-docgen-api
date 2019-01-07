@@ -23,7 +23,7 @@ export interface ParamTag extends RootTag, Param {}
 
 export interface DocBlockTags {
   description: string;
-  tags: Array<ParamTag | Tag>;
+  tags?: Array<ParamTag | Tag>;
 }
 
 function getParamInfo(content: string, hasName: boolean) {

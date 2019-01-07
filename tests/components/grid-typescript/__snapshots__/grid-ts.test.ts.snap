@@ -8,7 +8,6 @@ Object {
     "error": Object {
       "description": "Error event.",
       "properties": undefined,
-      "tags": Array [],
       "type": Object {
         "names": Array [
           "object",
@@ -18,7 +17,6 @@ Object {
     "success": Object {
       "description": "Success event.",
       "properties": undefined,
-      "tags": Array [],
       "type": Object {
         "names": Array [
           "object",

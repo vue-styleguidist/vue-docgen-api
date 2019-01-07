@@ -51,9 +51,15 @@ export default function getEvents(ast: BabelFile) {
         }
 
         // remove the property an type tags from the tag array
-        doc.tags = doc.tags.filter(
+        const tags = doc.tags.filter(
           (t: Tag | ParamTag) => t.title !== 'type' && t.title !== 'property' && t.title !== 'event',
         );
+
+        if (tags.length) {
+          doc.tags = tags;
+        } else {
+          delete doc.tags;
+        }
 
         if (typeof eventTag.content === 'string') {
           acc[eventTag.content] = doc;
