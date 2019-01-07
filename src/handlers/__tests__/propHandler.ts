@@ -1,17 +1,17 @@
 import propHandler from '../propHandler';
 import babylon from '../../babel-parser';
-import { IDocumentation, PropDescriptor } from '../../Documentation';
+import { PropDescriptor, Documentation } from '../../Documentation';
 import resolveExportedComponent from '../../utils/resolveExportedComponent';
 
 jest.mock('../../Documentation');
 
-function parse(src) {
+function parse(src: string) {
   const ast = babylon().parse(src);
   return resolveExportedComponent(ast.program);
 }
 
 describe('propHandler', () => {
-  let documentation: IDocumentation;
+  let documentation: Documentation;
   let mockPropDescriptor: PropDescriptor;
 
   beforeEach(() => {
@@ -21,8 +21,8 @@ describe('propHandler', () => {
       required: '',
       tags: {},
     };
-    const MockDocumentaion = require('../../Documentation');
-    documentation = new MockDocumentaion();
+    const MockDocumentation = require('../../Documentation');
+    documentation = new MockDocumentation();
     const mockGetPropDescriptor = documentation.getPropDescriptor as jest.Mock;
     mockGetPropDescriptor.mockReturnValue(mockPropDescriptor);
   });

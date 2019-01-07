@@ -1,28 +1,33 @@
-import propHandler from '../methodHandler'
-import babylon from '../../babel-parser'
-import resolveExportedComponent from '../../utils/resolveExportedComponent'
+import propHandler, { MethodDescriptor } from '../methodHandler';
+import babylon from '../../babel-parser';
+import resolveExportedComponent from '../../utils/resolveExportedComponent';
+import { Documentation } from '../../Documentation';
 
-jest.mock('../../Documentation')
+jest.mock('../../Documentation');
 
 function parse(src) {
-  const ast = babylon().parse(src)
-  return resolveExportedComponent(ast.program)
+  const ast = babylon().parse(src);
+  return resolveExportedComponent(ast.program);
 }
 
 describe('methodHandler', () => {
-  let documentation
-  let mockPropDescriptor
+  let documentation: Documentation;
+  let mockMethodDescriptor: MethodDescriptor;
 
   beforeEach(() => {
-    mockPropDescriptor = {}
-    documentation = new (require('../../Documentation'))()
-    documentation.set.mockImplementation((key, methods) => (mockPropDescriptor[key] = methods))
-  })
+    mockMethodDescriptor = { name: '', description: '' };
+    const MockDocumentation = require('../../Documentation');
+    documentation = new MockDocumentation();
+    const mockSetMethodDescriptor = documentation.set as jest.Mock;
+    mockSetMethodDescriptor.mockImplementation(
+      (key, methods) => (mockMethodDescriptor[key] = methods),
+    );
+  });
 
   function tester(src, matchedObj) {
-    const def = parse(src)
-    propHandler(documentation, def[0])
-    expect(mockPropDescriptor).toMatchObject(matchedObj)
+    const def = parse(src);
+    propHandler(documentation, def[0]);
+    expect(mockMethodDescriptor).toMatchObject(matchedObj);
   }
 
   it('should ignore every method not tagged as @public', () => {
@@ -40,15 +45,15 @@ describe('methodHandler', () => {
           return {};
         }
       }
-    }`
+    }`;
     tester(src, {
       methods: [
         {
           name: 'testPublic',
         },
       ],
-    })
-  })
+    });
+  });
 
   it('should return the methods of the component', () => {
     const src = `
@@ -72,7 +77,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `
+    `;
     tester(src, {
       methods: [
         {
@@ -82,8 +87,8 @@ describe('methodHandler', () => {
           name: 'testMethod',
         },
       ],
-    })
-  })
+    });
+  });
 
   it('should return their parameters', () => {
     const src = `
@@ -104,7 +109,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `
+    `;
     tester(src, {
       methods: [
         {
@@ -116,8 +121,8 @@ describe('methodHandler', () => {
           params: [{ name: 'param1' }, { name: 'param2' }],
         },
       ],
-    })
-  })
+    });
+  });
 
   it('should allow description of methods', () => {
     const src = `
@@ -133,7 +138,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `
+    `;
     tester(src, {
       methods: [
         {
@@ -141,8 +146,8 @@ describe('methodHandler', () => {
           description: 'it returns 2',
         },
       ],
-    })
-  })
+    });
+  });
 
   it('should allow description of params', () => {
     const src = `
@@ -158,7 +163,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `
+    `;
     tester(src, {
       methods: [
         {
@@ -166,8 +171,8 @@ describe('methodHandler', () => {
           params: [{ name: 'p1', description: 'multiplicateur', type: { name: 'string' } }],
         },
       ],
-    })
-  })
+    });
+  });
 
   it('should allow description of params without naming them', () => {
     const src = `
@@ -184,7 +189,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `
+    `;
     tester(src, {
       methods: [
         {
@@ -195,6 +200,6 @@ describe('methodHandler', () => {
           ],
         },
       ],
-    })
-  })
-})
+    });
+  });
+});

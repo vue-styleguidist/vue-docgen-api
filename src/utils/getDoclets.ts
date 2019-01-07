@@ -1,11 +1,11 @@
 const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim;
 
-interface ParamType {
+export interface ParamType {
   name: string;
   elements?: ParamType[];
 }
 
-interface Param {
+export interface Param {
   type?: ParamType;
   name?: string;
   description?: string;

@@ -19,11 +19,7 @@ interface ComponentDoc {
   [key: string]: any;
 }
 
-export interface IDocumentation {
-  getPropDescriptor(propName: string): PropDescriptor;
-}
-
-export class Documentation implements IDocumentation {
+export class Documentation {
   private propsMap: Map<string, any>;
   private dataMap: Map<string, any>;
   constructor(initDocumentation: { props?: any; data?: any } = {}) {
