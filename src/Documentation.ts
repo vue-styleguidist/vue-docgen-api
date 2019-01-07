@@ -13,7 +13,7 @@ interface MethodDescriptor {
   name: string;
 }
 
-interface ComponentDoc {
+export interface ComponentDoc {
   props: { [propName: string]: PropDescriptor } | undefined;
   methods: MethodDescriptor[] | undefined;
   [key: string]: any;
@@ -86,5 +86,3 @@ function adaptToKeyValue(obj: { [key: string]: any } | undefined): Array<[string
     : [];
   return keyValuePairs;
 }
-
-module.exports = Documentation;

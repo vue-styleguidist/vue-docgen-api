@@ -1,11 +1,17 @@
 import { visit, NodePath } from 'ast-types';
-import { isImportDefaultSpecifier, isImportSpecifier, isLiteral, StringLiteral } from '@babel/types';
+import {
+  isImportDefaultSpecifier,
+  isImportSpecifier,
+  isLiteral,
+  StringLiteral,
+  Program,
+} from '@babel/types';
 
 function ignore() {
   return false;
 }
 
-export default function resolveRequired(ast: NodePath, varNameFilter: string[]) {
+export default function resolveRequired(ast: Program, varNameFilter: string[]) {
   const varToFilePath: { [key: string]: string } = {};
 
   function importDeclaration(astPath: NodePath) {

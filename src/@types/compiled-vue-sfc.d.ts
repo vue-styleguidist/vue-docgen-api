@@ -7,9 +7,9 @@ declare module 'vue-sfc' {
   }
 
   export interface CompiledSFC {
-    script: Template
-    template: Template
-    styles: Template
-    customBlock: Template[]
+    script?: Template
+    template?: Template
+    styles?: Template
+    customBlock?: Template[]
   }
 }

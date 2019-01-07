@@ -15,7 +15,7 @@ describe('componentHandler', () => {
   let documentation: Documentation;
 
   beforeEach(() => {
-    documentation = new (require('../../Documentation'))();
+    documentation = new (require('../../Documentation')).Documentation();
   });
 
   it('should return the right component name', () => {

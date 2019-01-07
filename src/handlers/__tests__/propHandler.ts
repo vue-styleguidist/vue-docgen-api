@@ -21,7 +21,7 @@ describe('propHandler', () => {
       required: '',
       tags: {},
     };
-    const MockDocumentation = require('../../Documentation');
+    const MockDocumentation = require('../../Documentation').Documentation;
     documentation = new MockDocumentation();
     const mockGetPropDescriptor = documentation.getPropDescriptor as jest.Mock;
     mockGetPropDescriptor.mockReturnValue(mockPropDescriptor);
