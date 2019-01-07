@@ -1,4 +1,5 @@
 import { BlockTag } from './utils/blockTags';
+import { Param } from './utils/getDoclets';
 
 export interface PropDescriptor {
   type?: { name: string; func?: boolean };
@@ -11,6 +12,8 @@ export interface PropDescriptor {
 
 interface MethodDescriptor {
   name: string;
+  params?: Param[];
+  returns?: Param;
 }
 
 export interface ComponentDoc {
