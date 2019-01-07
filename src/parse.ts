@@ -11,7 +11,7 @@ import { Documentation, ComponentDoc } from './Documentation';
 import handlers from './handlers';
 import { NodePath } from 'ast-types';
 import { CompiledSFC } from 'vue-sfc';
-
+// tslint:disable-next-line:no-var-requires
 const deepmerge = require('deepmerge');
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found';

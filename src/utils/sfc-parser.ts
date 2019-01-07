@@ -1,6 +1,8 @@
 import { parseComponent } from 'vue-template-compiler';
 import { CompiledSFC } from 'vue-sfc';
+// tslint:disable-next-line:no-var-requires
 const LRUCache = require('lru-cache');
+// tslint:disable-next-line:no-var-requires
 const hash = require('hash-sum');
 
 const cache = new LRUCache(250);

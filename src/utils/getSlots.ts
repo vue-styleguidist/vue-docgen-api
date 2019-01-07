@@ -2,8 +2,9 @@ import { Parser as HtmlParser } from 'htmlparser2';
 import { Lexer } from 'pug-lexer';
 import { Parser } from 'pug-parser';
 import { Template } from 'vue-sfc';
-
+// tslint:disable-next-line:no-var-requires
 const generateCode = require('pug-code-gen');
+// tslint:disable-next-line:no-var-requires
 const wrap = require('pug-runtime/wrap');
 
 export default function getSlots(tpl: Template) {
