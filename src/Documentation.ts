@@ -52,24 +52,27 @@ export class Documentation {
     return propDescriptor;
   }
 
-  public toObject() {
-    const obj: ComponentDoc = {
-      props: undefined,
-      methods: undefined,
-    };
+  public toObject(): ComponentDoc {
+    let props: { [propName: string]: PropDescriptor } = {};
 
+    if (this.propsMap.size > 0) {
+      props = {};
+      for (const [name, descriptor] of this.propsMap) {
+        props[name] = descriptor;
+      }
+    }
+
+    const obj: { [key: string]: any } = {};
     for (const [key, value] of this.dataMap) {
       obj[key] = value;
     }
 
-    if (this.propsMap.size > 0) {
-      obj.props = {};
-      for (const [name, descriptor] of this.propsMap) {
-        obj.props[name] = descriptor;
-      }
-    }
-
-    return obj;
+    return {
+      ...obj,
+      props,
+      methods: obj.methods,
+      displayName: obj.displayName,
+    };
   }
 }
 
