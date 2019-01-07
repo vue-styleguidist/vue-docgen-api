@@ -25,6 +25,6 @@ Object {
       "description": "Use this slot default",
     },
   },
-  "tags": Array [],
+  "tags": Object {},
 }
 `;
