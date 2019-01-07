@@ -72,6 +72,8 @@ export class Documentation {
     }
 
     return {
+      description: '',
+      tags: [],
       ...obj,
       props,
       methods: obj.methods,

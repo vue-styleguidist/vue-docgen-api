@@ -2,6 +2,7 @@
 
 exports[`tests button functional should match the snapshot 1`] = `
 Object {
+  "description": "",
   "displayName": "MyButton",
   "events": Object {},
   "methods": Array [],
@@ -24,5 +25,6 @@ Object {
       "description": "Use this slot default",
     },
   },
+  "tags": Array [],
 }
 `;
