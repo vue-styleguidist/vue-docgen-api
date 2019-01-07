@@ -21,7 +21,7 @@ declare module 'ast-types' {
   export interface NodePath<T extends Node = Node> {
     node: T
     parent: NodePath
-    parentPath?: Node
+    parentPath: NodePath
     get(...name: (string | number)[]): NodePath
     // array properies
     length: number
