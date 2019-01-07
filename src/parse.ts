@@ -2,6 +2,7 @@ import path from 'path';
 import deepmerge from 'deepmerge';
 import scfParser from './utils/sfc-parser';
 import buildParser from './babel-parser';
+import { File } from '@babel/types';
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations';
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations';
 import resolveExportedComponent from './utils/resolveExportedComponent';
@@ -35,9 +36,9 @@ function executeHandlers(
  */
 export default function parse(source: string, filePath: string): ComponentDoc {
   const singleFileComponent = /\.vue$/i.test(path.extname(filePath));
-  let parts: CompiledSFC = {};
+  let parts: CompiledSFC | null = null;
   let vueDocArray: ComponentDoc[] = [];
-  let ast;
+  let ast: File | null = null;
   if (singleFileComponent) {
     parts = scfParser(source, filePath);
   }
