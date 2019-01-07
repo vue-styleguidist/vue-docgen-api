@@ -1,5 +1,4 @@
-import path from 'path';
-import deepmerge from 'deepmerge';
+import * as path from 'path';
 import scfParser from './utils/sfc-parser';
 import buildParser from './babel-parser';
 import { File } from '@babel/types';
@@ -12,6 +11,8 @@ import { Documentation, ComponentDoc } from './Documentation';
 import handlers from './handlers';
 import { NodePath } from 'ast-types';
 import { CompiledSFC } from 'vue-sfc';
+
+const deepmerge = require('deepmerge');
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found';
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty';

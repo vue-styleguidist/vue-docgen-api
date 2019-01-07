@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 import * as utils from './utils';
 import parseSource from './parse';
 import { ComponentDoc } from './Documentation';

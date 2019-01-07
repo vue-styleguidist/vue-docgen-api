@@ -1,11 +1,11 @@
-import propHandler, { MethodDescriptor } from '../methodHandler';
+import propHandler from '../methodHandler';
 import babylon from '../../babel-parser';
 import resolveExportedComponent from '../../utils/resolveExportedComponent';
-import { Documentation } from '../../Documentation';
+import { Documentation, MethodDescriptor } from '../../Documentation';
 
 jest.mock('../../Documentation');
 
-function parse(src) {
+function parse(src: string) {
   const ast = babylon().parse(src);
   return resolveExportedComponent(ast.program);
 }
@@ -24,7 +24,7 @@ describe('methodHandler', () => {
     );
   });
 
-  function tester(src, matchedObj) {
+  function tester(src: string, matchedObj: any) {
     const def = parse(src);
     propHandler(documentation, def[0]);
     expect(mockMethodDescriptor).toMatchObject(matchedObj);

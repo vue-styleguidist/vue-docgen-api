@@ -1,10 +1,10 @@
 import { Parser as HtmlParser } from 'htmlparser2';
-
 import { Lexer } from 'pug-lexer';
 import { Parser } from 'pug-parser';
-import wrap from 'pug-runtime/wrap';
-import generateCode from 'pug-code-gen';
 import { Template } from 'vue-sfc';
+
+const generateCode = require('pug-code-gen');
+const wrap = require('pug-runtime/wrap');
 
 export default function getSlots(tpl: Template) {
   const output: { [name: string]: { description?: string } } = {};

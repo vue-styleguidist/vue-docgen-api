@@ -1,4 +1,4 @@
-import recast from 'recast';
+import * as recast from 'recast';
 import { NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
 import getDoclets, { DocBlockTags } from '../utils/getDoclets';

@@ -10,10 +10,13 @@ export interface PropDescriptor {
   tags: { [title: string]: BlockTag[] };
 }
 
-interface MethodDescriptor {
+export interface MethodDescriptor {
   name: string;
+  description: string;
+  returns?: BlockTag;
+  tags?: { [key: string]: BlockTag[] };
   params?: Param[];
-  returns?: Param;
+  [key: string]: any;
 }
 
 export interface ComponentDoc {

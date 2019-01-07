@@ -2,16 +2,8 @@ import { namedTypes as types, NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
 import getDoclets, { DocBlockTags, ParamTag, Tag, Param } from '../utils/getDoclets';
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';
-import { Documentation } from 'src/Documentation';
+import { Documentation, MethodDescriptor } from 'src/Documentation';
 import { isProperty, Property, isFunctionExpression, Identifier } from '@babel/types';
-
-export interface MethodDescriptor {
-  name: string;
-  description: string;
-  returns?: ParamTag | Tag;
-  tags?: { [key: string]: Array<ParamTag | Tag> };
-  params?: Param[];
-}
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   const methodsPath = path

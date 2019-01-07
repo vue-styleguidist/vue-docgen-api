@@ -1,27 +1,27 @@
-import path from 'path';
+import * as path from 'path'
 
-import { parse } from '../../../src/main';
-import { ComponentDoc } from 'src/Documentation';
-const button = path.join(__dirname, './Button.vue');
-let docButton: ComponentDoc;
+import { parse } from '../../../src/main'
+import { ComponentDoc } from 'src/Documentation'
+const button = path.join(__dirname, './Button.vue')
+let docButton: ComponentDoc
 
 describe('tests button', () => {
-  beforeAll((done) => {
-    docButton = parse(button);
+  beforeAll(done => {
+    docButton = parse(button)
     done();
   });
 
   it('should return an object', () => {
-    expect(typeof docButton).toEqual('object');
+    expect(typeof docButton).toEqual('object')
   });
 
   it('The component name should be buttonComponent', () => {
-    expect(docButton.displayName).toEqual('buttonComponent');
+    expect(docButton.displayName).toEqual('buttonComponent')
   });
 
   it('The component should have a description', () => {
     expect(docButton.description).toEqual(
-      'This is an example of creating a reusable button component and using it with external data.',
+      'This is an example of creating a reusable button component and using it with external data.'
     );
   });
 

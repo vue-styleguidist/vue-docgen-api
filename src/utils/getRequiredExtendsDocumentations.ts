@@ -1,5 +1,5 @@
 import { NodePath } from 'ast-types';
-import path from 'path';
+import * as path from 'path';
 import resolveRequired from './resolveRequired';
 import { Program, Property, isIdentifier, isProperty } from '@babel/types';
 import { parse } from '../main';

@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import { ComponentDoc } from '../../../src/Documentation';
 import { parse } from '../../../src/main';
 const exampleVuex = path.join(__dirname, './example.vue');

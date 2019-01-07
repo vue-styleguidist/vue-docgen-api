@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import { ComponentDoc } from '../../../src/Documentation';
 import { parse } from '../../../src/main';
 const InputTextDoc = path.join(__dirname, './InputTextDocumented.vue');

@@ -1,13 +1,13 @@
-import * as path from 'path';
-import { ComponentDoc } from '../../../src/Documentation';
-import { parse } from '../../../src/main';
-const grid = path.join(__dirname, './Grid.vue');
-let docGrid: ComponentDoc;
+import * as path from 'path'
+import { ComponentDoc } from '../../../src/Documentation'
+import { parse } from '../../../src/main'
 
-describe('tests grid', () => {
-  beforeEach((done) => {
-    docGrid = parse(grid);
-    done();
+const typescriptGrid = path.join(__dirname, './Grid.vue')
+let docGrid: ComponentDoc;
+describe('tests typescript grid', () => {
+  beforeAll((done) => {
+    docGrid = parse(typescriptGrid)
+    done()
   });
 
   it('should return an object', () => {
@@ -19,45 +19,31 @@ describe('tests grid', () => {
   });
 
   it('should the component has tags', () => {
-    expect(typeof docGrid.tags !== 'undefined').toBe(true);
+    expect(docGrid.tags).not.toBeUndefined();
   });
 
   it('should the component has authors', () => {
-    expect(typeof docGrid.tags.author !== 'undefined').toBe(true);
+    expect(docGrid.tags.author).not.toBeUndefined();
   });
 
   it('should the component has description', () => {
-    expect(typeof docGrid.description !== 'undefined').toBe(true);
+    expect(docGrid.description).not.toBeUndefined();
   });
 
-  it('should has methods', () => {
-    expect(typeof docGrid.methods !== 'undefined').toBe(true);
+  it('should have methods', () => {
+    expect(docGrid.methods).not.toBeUndefined();
   });
 
-  it('should return one method for the component', () => {
-    expect(docGrid.methods.length).toEqual(1);
-  });
-
-  it('should return one param for this method', () => {
-    const params = docGrid.methods[0].params;
-    expect(params !== undefined ? params.length : 0).toEqual(1);
-  });
-
-  it('should return the correct object for this param', () => {
-    expect(docGrid.methods[0].params).toMatchObject([
-      {
-        name: 'key',
-        description: 'Key to order',
-      },
-    ]);
+  it('should the component has one method', () => {
+    expect(Object.keys(docGrid.methods).length).toEqual(1);
   });
 
   it('should has props', () => {
-    expect(typeof docGrid.props !== 'undefined').toBe(true);
+    expect(typeof docGrid.props).not.toBeUndefined();
   });
 
   it('should the component has version', () => {
-    expect(typeof docGrid.tags.version !== 'undefined').toBe(true);
+    expect(typeof docGrid.tags.version).not.toBeUndefined();
   });
 
   it('should the component has four props', () => {
@@ -97,7 +83,7 @@ describe('tests grid', () => {
   });
 
   it('should the component has event, it called success', () => {
-    expect(typeof docGrid.events.success !== 'undefined').toBe(true);
+    expect(typeof docGrid.events.success).not.toBeUndefined();
   });
 
   it('should the description of success event is Success event.', () => {
@@ -105,15 +91,15 @@ describe('tests grid', () => {
   });
 
   it('should the component has event, it called error', () => {
-    expect(typeof docGrid.events.error !== 'undefined').toBe(true);
+    expect(typeof docGrid.events.error).not.toBeUndefined();
   });
 
   it('should the description of error event is Error event.', () => {
     expect(docGrid.events.error.description).toEqual('Error event.');
   });
 
-  it('should make the type of error event an object.', () => {
-    expect(docGrid.events.error).toMatchObject({ type: { names: ['object'] } });
+  it('should the type of error event is object.', () => {
+    expect(docGrid.events.error.type.names[0]).toEqual('object');
   });
 
   it('should have two slots.', () => {
@@ -121,7 +107,7 @@ describe('tests grid', () => {
   });
 
   it('should have a slot named header.', () => {
-    expect(typeof docGrid.slots.header !== 'undefined').toBe(true);
+    expect(typeof docGrid.slots.header).not.toBeUndefined();
   });
 
   it('the header slot should have "Use this slot header" as description', () => {
@@ -129,7 +115,7 @@ describe('tests grid', () => {
   });
 
   it('should have a slot named footer.', () => {
-    expect(typeof docGrid.slots.footer !== 'undefined').toBe(true);
+    expect(typeof docGrid.slots.footer).not.toBeUndefined();
   });
 
   it('the footer slot should have "Use this slot footer" as description', () => {
