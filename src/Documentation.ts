@@ -3,7 +3,6 @@ import { Param } from './utils/getDoclets';
 
 export interface PropDescriptor {
   type?: { name: string; func?: boolean };
-  comment: string;
   description: string;
   required: string | boolean;
   defaultValue?: { value: string; func?: boolean };
@@ -48,7 +47,6 @@ export class Documentation {
       this.propsMap.set(
         propName,
         (propDescriptor = {
-          comment: '',
           description: '',
           required: '',
           tags: {},

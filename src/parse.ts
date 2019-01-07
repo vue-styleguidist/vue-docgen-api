@@ -91,7 +91,7 @@ export default function parse(source: string, filePath: string): ComponentDoc {
   }
   const doc: ComponentDoc = vueDocArray.length
     ? vueDocArray[0]
-    : { displayName: '', comment: '', description: '', methods: [], props: {}, tags: {} };
+    : { displayName: '', description: '', methods: [], props: {}, tags: {} };
 
   // a component should always have a display name
   if (!doc.displayName || !doc.displayName.length) {

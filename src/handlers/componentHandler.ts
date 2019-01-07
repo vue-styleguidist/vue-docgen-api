@@ -15,15 +15,10 @@ export default function propHandler(documentation: Documentation, path: NodePath
 
   // if no prop return
   if (!docBlock || !docBlock.length) {
-    documentation.set('comment', '');
-    documentation.set('description', '');
-    documentation.set('tags', {});
     return;
   }
 
   const jsDoc = getDoclets(docBlock);
-
-  documentation.set('comment', docBlock);
 
   documentation.set('description', jsDoc.description || '');
 

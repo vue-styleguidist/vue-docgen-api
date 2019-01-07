@@ -16,7 +16,6 @@ describe('propHandler', () => {
 
   beforeEach(() => {
     mockPropDescriptor = {
-      comment: '',
       description: '',
       required: '',
       tags: {},
