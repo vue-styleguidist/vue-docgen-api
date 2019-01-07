@@ -6,6 +6,7 @@
     "url": "https://github.com/vue-styleguidist/vue-docgen-api/issues"
   },
   "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
     "lint": "tslint -p . --fix",
     "format": "prettier --write **/*.{js,ts,md}",
