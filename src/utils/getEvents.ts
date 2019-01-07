@@ -1,6 +1,6 @@
 import { File as BabelFile } from '@babel/types';
 import { namedTypes as types } from 'ast-types';
-import getDoclets, { Tag, ParamTag, DocBlockTags } from './getDoclets';
+import getDoclets, { Tag, ParamTag, DocBlockTags, ParamType } from './getDoclets';
 import { parseDocblock } from './getDocblock';
 
 interface EventType {
@@ -16,6 +16,10 @@ interface EventProperty {
 interface DocBlockTagEvent extends DocBlockTags {
   type?: EventType;
   properties: EventProperty[] | undefined;
+}
+
+interface TypedParamTag extends ParamTag {
+  type: ParamType;
 }
 
 export default function getEvents(ast: BabelFile) {
@@ -37,12 +41,12 @@ export default function getEvents(ast: BabelFile) {
         const typeTags = doc.tags.filter((t) => t.title === 'type');
 
         doc.type = typeTags.length
-          ? { names: typeTags.map((t: ParamTag) => t.type.name) }
+          ? { names: typeTags.map((t: TypedParamTag) => t.type.name) }
           : undefined;
 
         const propertyTags = doc.tags.filter((t) => t.title === 'property');
         if (propertyTags.length) {
-          doc.properties = propertyTags.map((t: ParamTag) => {
+          doc.properties = propertyTags.map((t: TypedParamTag) => {
             return { type: { names: [t.type.name] }, name: t.name, description: t.description };
           });
         }

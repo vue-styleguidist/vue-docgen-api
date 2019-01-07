@@ -8,7 +8,7 @@ import {
 } from '@babel/types';
 
 export default function resolveExportDeclaration(path: NodePath) {
-  const definitions = [];
+  const definitions: NodePath[] = [];
   const node = path.node;
   if (isExportDefaultDeclaration(node)) {
     definitions.push(path.get('declaration'));

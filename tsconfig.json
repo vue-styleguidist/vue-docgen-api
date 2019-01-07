@@ -1,6 +1,6 @@
 {
-  "outdir": "dist",
   "compilerOptions": {
+    "outDir": "dist",
     "target": "es2015",
     "module": "es2015",
     "strict": true,

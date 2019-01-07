@@ -44,9 +44,8 @@ function getExtendsVariableName(componentDefinitions: NodePath[]) {
   }, []);
 
   if (extendsVariable.length) {
-    const extendsValue = isProperty(extendsVariable[0].node)
-      ? extendsVariable[0].node.value
-      : undefined;
+    const extendedPath = extendsVariable[0];
+    const extendsValue = isProperty(extendedPath.node) ? extendedPath.node.value : undefined;
     return extendsValue && isIdentifier(extendsValue) ? extendsValue.name : undefined;
   }
   return undefined;

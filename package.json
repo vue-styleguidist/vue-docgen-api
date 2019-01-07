@@ -9,9 +9,8 @@
   "scripts": {
     "lint": "eslint . --cache --fix",
     "format": "prettier --write **/*.{js,md}",
-    "compile": "babel src/ -d --extensions \".ts,.js\" --out-dir dist/ --ignore __tests__,__mocks__",
+    "compile": "tsc -p ./tsconfig.build.json",
     "prepublishOnly": "npm run compile",
-    "mocha": "mocha",
     "test": "npm run unit && npm run e2e",
     "unit": "jest --config ./jest.unit.config.js ",
     "e2e": "jest --config ./jest.e2e.config.js "
