@@ -1,6 +1,7 @@
 import { File as BabelFile, isBlock, Comment } from '@babel/types';
 import getDoclets, { Tag, ParamTag, DocBlockTags, ParamType } from './getDoclets';
 import { parseDocblock } from './getDocblock';
+import { BlockTag } from './blockTags';
 
 interface EventType {
   names: string[];
@@ -35,15 +36,17 @@ export default function getEvents(ast: BabelFile) {
       };
 
       // filter comments where a tag is @event
-      const eventTag: Tag | undefined = doc.tags.find((t) => t.title === 'event') as Tag;
+      const nonNullTags: BlockTag[] = doc.tags ? doc.tags : [];
+      const eventTag: Tag | undefined = nonNullTags.find((t) => t.title === 'event') as Tag;
+
       if (eventTag) {
-        const typeTags = doc.tags.filter((t) => t.title === 'type');
+        const typeTags = nonNullTags.filter((t) => t.title === 'type');
 
         doc.type = typeTags.length
           ? { names: typeTags.map((t: TypedParamTag) => t.type.name) }
           : undefined;
 
-        const propertyTags = doc.tags.filter((t) => t.title === 'property');
+        const propertyTags = nonNullTags.filter((t) => t.title === 'property');
         if (propertyTags.length) {
           doc.properties = propertyTags.map((t: TypedParamTag) => {
             return { type: { names: [t.type.name] }, name: t.name, description: t.description };
@@ -51,7 +54,7 @@ export default function getEvents(ast: BabelFile) {
         }
 
         // remove the property an type tags from the tag array
-        const tags = doc.tags.filter(
+        const tags = nonNullTags.filter(
           (t: Tag | ParamTag) => t.title !== 'type' && t.title !== 'property' && t.title !== 'event',
         );
 

@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { ComponentDoc } from '../../../src/Documentation';
+import { ComponentDoc, PropDescriptor } from '../../../src/Documentation';
 import { parse } from '../../../src/main';
 
 const typescriptGrid = path.join(__dirname, './Grid.vue');
@@ -46,36 +46,44 @@ describe('tests typescript grid', () => {
     expect(typeof docGrid.tags.version).not.toBeUndefined();
   });
 
-  it('should the component has four props', () => {
-    expect(Object.keys(docGrid.props).length).toEqual(6);
-  });
+  describe('props', () => {
+    let props: { [propName: string]: PropDescriptor };
 
-  it('grid component should have a msg prop as string|number type', () => {
-    expect(docGrid.props.msg.type).toMatchObject({ name: 'string|number' });
-  });
+    beforeAll(() => {
+      props = docGrid.props ? docGrid.props : {};
+    });
 
-  it('grid component should have a filterKey prop as string type', () => {
-    expect(docGrid.props.filterKey.type).toMatchObject({ name: 'string' });
-  });
+    it('should the component has four props', () => {
+      expect(Object.keys(props).length).toEqual(6);
+    });
 
-  it('grid component should have a propFunc prop as func type', () => {
-    expect(docGrid.props.propFunc.type).toMatchObject({ name: 'func' });
-  });
+    it('grid component should have a msg prop as string|number type', () => {
+      expect(props.msg.type).toMatchObject({ name: 'string|number' });
+    });
 
-  it('grid component should have a images prop as Array type', () => {
-    expect(docGrid.props.images.type).toMatchObject({ name: 'array' });
-  });
+    it('grid component should have a filterKey prop as string type', () => {
+      expect(props.filterKey.type).toMatchObject({ name: 'string' });
+    });
 
-  it('grid component should have a data prop as Array type', () => {
-    expect(docGrid.props.data.type).toMatchObject({ name: 'array' });
-  });
+    it('grid component should have a propFunc prop as func type', () => {
+      expect(props.propFunc.type).toMatchObject({ name: 'func' });
+    });
 
-  it('grid component should have a columns prop as Array type', () => {
-    expect(docGrid.props.columns.type).toMatchObject({ name: 'array' });
-  });
+    it('grid component should have a images prop as Array type', () => {
+      expect(props.images.type).toMatchObject({ name: 'array' });
+    });
 
-  it('should the prop msg has four tags', () => {
-    expect(Object.keys(docGrid.props.msg.tags).length).toEqual(4);
+    it('grid component should have a data prop as Array type', () => {
+      expect(props.data.type).toMatchObject({ name: 'array' });
+    });
+
+    it('grid component should have a columns prop as Array type', () => {
+      expect(props.columns.type).toMatchObject({ name: 'array' });
+    });
+
+    it('should the prop msg has four tags', () => {
+      expect(Object.keys(props.msg.tags).length).toEqual(4);
+    });
   });
 
   it('should the component has two event', () => {

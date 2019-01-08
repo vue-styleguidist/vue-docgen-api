@@ -28,6 +28,6 @@ describe('tests Base', () => {
   });
 
   it('should the component has one prop', () => {
-    expect(Object.keys(docBase.props).length).toEqual(1);
+    expect(Object.keys(docBase.props || {}).length).toEqual(1);
   });
 });

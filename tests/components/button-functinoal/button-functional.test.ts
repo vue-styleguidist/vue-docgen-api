@@ -24,7 +24,7 @@ describe('tests button functional', () => {
   });
 
   it('should the component has size prop description equal The size of the button', () => {
-    expect(docButton.props.size.description).toEqual('The size of the button');
+    expect(docButton.props).toMatchObject({ size: { description: 'The size of the button' } });
   });
 
   it('should match the snapshot', () => {
