@@ -1,4 +1,4 @@
-import { namedTypes as types, NodePath } from 'ast-types';
+import { NodePath } from 'ast-types';
 import { Documentation } from 'src/Documentation';
 import {
   Property,

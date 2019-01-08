@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { NodePath } from 'ast-types';
 import resolveRequired from './resolveRequired';
-import { Program, Property, isIdentifier, isProperty, isArrayExpression } from '@babel/types';
+import { Program, Property, isIdentifier, isArrayExpression } from '@babel/types';
 import { ComponentDoc } from 'src/Documentation';
 import { parse } from '../main';
 

@@ -1,4 +1,3 @@
-import { File as BabelFile } from '@babel/types';
 
 /**
  * Helper functions to work with docblock comments.

@@ -1,4 +1,3 @@
-import { NodePath } from 'ast-types';
 import componentHandler from '../componentHandler';
 import babylon from '../../babel-parser';
 import resolveExportedComponent from '../../utils/resolveExportedComponent';

@@ -1,6 +1,6 @@
-import { namedTypes as types, NodePath } from 'ast-types';
+import { NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
-import getDoclets, { DocBlockTags, ParamTag, Tag, Param, ParamType } from '../utils/getDoclets';
+import getDoclets, { DocBlockTags, ParamTag, Param, ParamType } from '../utils/getDoclets';
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';
 import { Documentation, MethodDescriptor } from 'src/Documentation';
 import {

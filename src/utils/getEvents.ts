@@ -1,4 +1,4 @@
-import { File as BabelFile, isBlock, Comment } from '@babel/types';
+import { File as BabelFile, Comment } from '@babel/types';
 import getDoclets, { Tag, ParamTag, DocBlockTags, ParamType } from './getDoclets';
 import { parseDocblock } from './getDocblock';
 import { BlockTag } from './blockTags';
