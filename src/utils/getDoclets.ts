@@ -27,6 +27,7 @@ export interface DocBlockTags {
 }
 
 function getParamInfo(content: string, hasName: boolean) {
+  content = content || '';
   const typeSliceArray = /^\{([^}]+)\}/.exec(content);
   const typeSlice = typeSliceArray && typeSliceArray.length ? typeSliceArray[1] : '*';
   const param: Param = { type: getTypeObjectFromTypeString(typeSlice) };
