@@ -1,36 +1,34 @@
 <template>
-	<!-- @slot Use this slot header -->
-	<slot name="header"></slot>
-	<table class="grid">
-		<thead>
-			<tr>
-				<th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">
-					{{ key | capitalize }}
-					<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-					</span>
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for="entry in filteredData">
-				<td v-for="key in columns">
-					{{entry[key]}}
-				</td>
-			</tr>
-		</tbody>
-	</table>
+  <!-- @slot Use this slot header -->
+  <slot name="header"></slot>
+  <table class="grid">
+    <thead>
+      <tr>
+        <th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">
+          {{ key | capitalize }}
+          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="entry in filteredData">
+        <td v-for="key in columns">{{entry[key]}}</td>
+      </tr>
+    </tbody>
+  </table>
 
-	<!-- @slot Use this slot footer -->
-	<slot name="footer"></slot>
+  <!-- @slot Use this slot footer -->
+  <slot name="footer"></slot>
 </template>
 
 <script lang='ts'>
 import Vue from 'vue'
-import { text } from "./utils";
+import { text } from './utils'
 
 interface IData {
   sortKey: string
   sortOrders: Record<string, number>
+  filterKey?: string
 }
 /**
  * This is an example of creating a reusable grid component and using it with external data.
@@ -39,7 +37,7 @@ interface IData {
  * @since Version 1.0.1
  */
 export default Vue.extend({
-  name: "grid",
+  name: 'grid',
   props: {
     /**
      * object/array defaults should be returned from a factory function
@@ -50,25 +48,25 @@ export default Vue.extend({
      */
     msg: {
       type: [String, Number],
-      default: text
+      default: text,
     },
     /**
      * describe data
      * @version 1.0.5
      */
-    data: Array,
+    dataTable: Array,
 
     images: {
       type: Array,
       default: function() {
-        return [{}];
-      }
+        return [{}]
+      },
     },
     /**
      * prop function
      */
     propFunc: {
-      default: function() {}
+      default: function() {},
     },
     /**
      * get columns list
@@ -82,88 +80,89 @@ export default Vue.extend({
      */
     filterKey: {
       type: String,
-      default: "example"
+      default: 'example',
+    },
+  },
+  data(): IData {
+    var sortOrders: { [key: string]: number } = {}
+    ;(this as any).columns.forEach(function(key: string) {
+      sortOrders[key] = 1
+    })
+    return {
+      sortKey: '',
+      sortOrders: sortOrders,
+      filterKey: undefined,
     }
   },
-  data() : IData {
-    var sortOrders = {};
-    ;(this as any).columns.forEach(function(key) {
-      sortOrders[key] = 1;
-    });
-    return {
-      sortKey: "",
-      sortOrders: sortOrders
-    };
-  },
   computed: {
-    filteredData() : IData {
-      var sortKey = this.sortKey;
-      var filterKey = this.filterKey && this.filterKey.toLowerCase();
-      var order = this.sortOrders[sortKey] || 1;
-      var data = this.data;
+    filteredData(): IData {
+      var sortKey = this.sortKey
+      var filterKey: string = this.filterKey ? this.filterKey.toLowerCase() : ''
+      var order = this.sortOrders[sortKey] || 1
+      var data = this.dataTable
       if (filterKey) {
-        data = data.filter(function(row) {
+        data = data.filter(function(row: { [key: string]: string }) {
           return Object.keys(row).some(function(key) {
             return (
               String(row[key])
                 .toLowerCase()
                 .indexOf(filterKey) > -1
-            );
-          });
-        });
+            )
+          })
+        })
       }
       if (sortKey) {
-        data = data.slice().sort(function(a, b) {
-          a = a[sortKey];
-          b = b[sortKey];
-          return (a === b ? 0 : a > b ? 1 : -1) * order;
-        });
+        data = data.slice().sort(function(a: any, b: any) {
+          a = a[sortKey]
+          b = b[sortKey]
+          return (a === b ? 0 : a > b ? 1 : -1) * order
+        })
       }
-      return data;
-    }
+      return data
+    },
   },
   filters: {
-    capitalize(str: string) : string {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    capitalize(str: string): string {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
   },
   methods: {
-   /**
-   * Sets the order
-   *
-   * @public
-   * @version 1.0.5
-   * @since Version 1.0.1
-   * @param {string} key Key to order
-   * @returns {string} Test
-   */
-    sortBy(key: string) : void {
-      this.sortKey = key;
-      this.sortOrders[key] = this.sortOrders[key] * -1;
+    /**
+     * Sets the order
+     *
+     * @public
+     * @version 1.0.5
+     * @since Version 1.0.1
+     * @param {string} key Key to order
+     * @returns {string} Test
+     */
+    sortBy(key: string): void {
+      this.sortKey = key
+      this.sortOrders[key] = this.sortOrders[key] * -1
 
       /**
-			 * Success event.
-			 *
-			 * @event success
-			 * @type {object}
-			 */
-      this.$emit("example", {
-        demo: "example success"
-      });
+       * Success event.
+       *
+       * @event success
+       * @type {object}
+       */
+      this.$emit('example', {
+        demo: 'example success',
+      })
     },
 
-    hiddenMethod() : void {
+    hiddenMethod(): void {
       /**
-			 * Error event.
-			 *
-			 * @event error
-			 * @type {object}
-			 */
-      this.$emit("error", {
-        demo: "example error"
-      });
-    }
-  }
+       * Error event.
+       *
+       * @event error
+       * @type {object}
+       */
+      this.$emit('error', {
+        demo: 'example error',
+      })
+    },
+  },
 })
 </script>
 
