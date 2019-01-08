@@ -10,6 +10,11 @@ function parse(src: string) {
   return resolveExportedComponent(ast.program);
 }
 
+function parseTS(src: string) {
+  const ast = babylon({ plugins: ['typescript'] }).parse(src);
+  return resolveExportedComponent(ast.program);
+}
+
 describe('methodHandler', () => {
   let documentation: Documentation;
   let mockMethodDescriptor: MethodDescriptor;
@@ -29,6 +34,34 @@ describe('methodHandler', () => {
     propHandler(documentation, def[0]);
     expect(mockMethodDescriptor).toMatchObject(matchedObj);
   }
+
+  it('should deduce the type of params from the typescript type', () => {
+    const src = `
+    export default {
+      methods:{
+        /**
+         * @public
+         */
+        publicMethod(param: string, paramObscure: ObscureInterface) {
+          console.log('test', test, param)
+        }
+      }
+    }
+    `;
+    const def = parseTS(src);
+    propHandler(documentation, def[0]);
+    expect(mockMethodDescriptor).toMatchObject({
+      methods: [
+        {
+          name: 'publicMethod',
+          params: [
+            { name: 'param', type: { name: 'string' } },
+            { name: 'paramObscure', type: { name: 'ObscureInterface' } },
+          ],
+        },
+      ],
+    });
+  });
 
   it('should ignore every method not tagged as @public', () => {
     const src = `
