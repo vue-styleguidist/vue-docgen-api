@@ -11,6 +11,7 @@ import { Documentation, ComponentDoc } from './Documentation';
 import handlers from './handlers';
 import { NodePath } from 'ast-types';
 import { CompiledSFC } from 'vue-sfc';
+import { ParserPlugin } from '@babel/parser';
 
 // tslint:disable-next-line:no-var-requires
 const deepmerge = require('deepmerge');
@@ -51,14 +52,13 @@ export default function parse(source: string, filePath: string): ComponentDoc {
 
   const originalSource = parts ? (parts.script ? parts.script.content : undefined) : source;
   if (originalSource) {
-    if (
+    const plugins: ParserPlugin[] =
       (parts && parts.script && parts.script.attrs && parts.script.attrs.lang === 'ts') ||
       /\.tsx?$/i.test(path.extname(filePath))
-    ) {
-      ast = buildParser({ plugins: ['typescript'] }).parse(originalSource);
-    } else {
-      ast = buildParser({ plugins: ['flow'] }).parse(originalSource);
-    }
+        ? ['typescript']
+        : ['flow'];
+
+    ast = buildParser({ plugins }).parse(originalSource);
 
     const componentDefinitions = resolveExportedComponent(ast.program);
 
