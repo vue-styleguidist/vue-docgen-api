@@ -7,7 +7,6 @@ const babelParserOptions: ParserOptions = {
   tokens: true,
   plugins: [
     'jsx',
-    'flow',
     'estree',
     'doExpressions',
     'objectRestSpread',
@@ -30,10 +29,17 @@ const babelParserOptions: ParserOptions = {
   ],
 };
 
-export default function buildParse(): { parse: (src: string) => BabelFile } {
+export default function buildParse(
+  options: ParserOptions = {},
+): { parse: (src: string) => BabelFile } {
+  options = {
+    ...babelParserOptions,
+    ...options,
+    plugins: [...(babelParserOptions.plugins || []), ...(options.plugins || [])],
+  };
   return {
     parse(src: string): BabelFile {
-      return parse(src, babelParserOptions);
+      return parse(src, options);
     },
   };
 }

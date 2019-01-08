@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { ComponentDoc, PropDescriptor } from '../../../src/Documentation';
 import { parse } from '../../../src/main';
+import { Param } from '../../../src/utils/getDoclets';
 
 const typescriptGrid = path.join(__dirname, './Grid.vue');
 let docGrid: ComponentDoc;
@@ -35,7 +36,7 @@ describe('tests typescript grid', () => {
   });
 
   it('should the component has one method', () => {
-    expect(Object.keys(docGrid.methods).length).toEqual(1);
+    expect(Object.keys(docGrid.methods).length).toEqual(2);
   });
 
   it('should has props', () => {
@@ -83,6 +84,24 @@ describe('tests typescript grid', () => {
 
     it('should the prop msg has four tags', () => {
       expect(Object.keys(props.msg.tags).length).toEqual(4);
+    });
+  });
+
+  it('should extract the type of the argument from typescript', () => {
+    const publicMethod = docGrid.methods.find((m) => m.name === 'publicMethod');
+    const safePublicMethodParams: Param[] =
+      publicMethod && publicMethod.params ? publicMethod.params : [];
+
+    expect(safePublicMethodParams[0]).toMatchObject({
+      type: {
+        name: 'number',
+      },
+    });
+
+    expect(safePublicMethodParams[1]).toMatchObject({
+      type: {
+        name: 'ForParam',
+      },
     });
   });
 

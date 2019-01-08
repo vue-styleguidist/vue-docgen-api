@@ -1,9 +1,18 @@
 import { namedTypes as types, NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
-import getDoclets, { DocBlockTags, ParamTag, Tag, Param } from '../utils/getDoclets';
+import getDoclets, { DocBlockTags, ParamTag, Tag, Param, ParamType } from '../utils/getDoclets';
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';
 import { Documentation, MethodDescriptor } from 'src/Documentation';
-import { isProperty, Property, isFunctionExpression, Identifier } from '@babel/types';
+import {
+  isProperty,
+  Property,
+  isFunctionExpression,
+  Identifier,
+  isTSTypeAnnotation,
+  TSType,
+  isTSTypeReference,
+  isIdentifier,
+} from '@babel/types';
 import { BlockTag } from 'src/utils/blockTags';
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
@@ -94,6 +103,15 @@ function describeParams(
         }
       }
 
+      if (!param.type && par.typeAnnotation) {
+        const tsType = isTSTypeAnnotation(par.typeAnnotation)
+          ? par.typeAnnotation.typeAnnotation
+          : undefined;
+        if (tsType) {
+          param.type = getTypeObjectFromTSType(tsType);
+        }
+      }
+
       params.push(param);
     });
   }
@@ -101,4 +119,29 @@ function describeParams(
   if (params.length) {
     methodDescriptor.params = params;
   }
+}
+
+function getTypeObjectFromTSType(type: TSType): ParamType {
+  const typeNameMap: { [name: string]: string } = {
+    TSAnyKeyword: 'any',
+    TSUnknownKeyword: 'unknown',
+    TSNumberKeyword: 'number',
+    TSObjectKeyword: 'object',
+    TSBooleanKeyword: 'boolean',
+    TSStringKeyword: 'string',
+    TSSymbolKeyword: 'symbol',
+    TSVoidKeyword: 'void',
+    TSUndefinedKeyword: 'undefined',
+    TSNullKeyword: 'null',
+    TSNeverKeyword: 'never',
+  };
+
+  const name =
+    isTSTypeReference(type) && isIdentifier(type.typeName)
+      ? type.typeName.name
+      : typeNameMap[type.type]
+      ? typeNameMap[type.type]
+      : type.type;
+
+  return { name };
 }

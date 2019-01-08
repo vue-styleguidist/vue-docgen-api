@@ -84,6 +84,32 @@ Object {
         ],
       },
     },
+    Object {
+      "description": "",
+      "name": "publicMethod",
+      "params": Array [
+        Object {
+          "name": "test",
+          "type": Object {
+            "name": "number",
+          },
+        },
+        Object {
+          "name": "param",
+          "type": Object {
+            "name": "ForParam",
+          },
+        },
+      ],
+      "tags": Object {
+        "public": Array [
+          Object {
+            "description": true,
+            "title": "public",
+          },
+        ],
+      },
+    },
   ],
   "props": Object {
     "columns": Object {

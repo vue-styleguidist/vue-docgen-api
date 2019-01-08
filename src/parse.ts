@@ -11,8 +11,6 @@ import { Documentation, ComponentDoc } from './Documentation';
 import handlers from './handlers';
 import { NodePath } from 'ast-types';
 import { CompiledSFC } from 'vue-sfc';
-import * as typescript from 'typescript';
-import { ScriptTarget } from 'typescript';
 
 // tslint:disable-next-line:no-var-requires
 const deepmerge = require('deepmerge');
@@ -57,14 +55,9 @@ export default function parse(source: string, filePath: string): ComponentDoc {
       (parts && parts.script && parts.script.attrs && parts.script.attrs.lang === 'ts') ||
       /\.tsx?$/i.test(path.extname(filePath))
     ) {
-      const jsSource = typescript.transpileModule(originalSource, {
-        compilerOptions: {
-          target: ScriptTarget.ES2017,
-        },
-      }).outputText;
-      ast = buildParser().parse(jsSource);
+      ast = buildParser({ plugins: ['typescript'] }).parse(originalSource);
     } else {
-      ast = buildParser().parse(originalSource);
+      ast = buildParser({ plugins: ['flow'] }).parse(originalSource);
     }
 
     const componentDefinitions = resolveExportedComponent(ast.program);

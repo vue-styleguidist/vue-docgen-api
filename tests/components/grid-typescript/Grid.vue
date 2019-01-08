@@ -30,6 +30,11 @@ interface IData {
   sortOrders: Record<string, number>
   filterKey?: string
 }
+
+interface ForParam {
+  color: string
+}
+
 /**
  * This is an example of creating a reusable grid component and using it with external data.
  * @version 1.0.5
@@ -149,6 +154,13 @@ export default Vue.extend({
       this.$emit('example', {
         demo: 'example success',
       })
+    },
+
+    /**
+     * @public
+     */
+    publicMethod(test: number, param: ForParam) {
+      console.log('test', test, param)
     },
 
     hiddenMethod(): void {
