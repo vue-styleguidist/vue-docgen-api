@@ -54,7 +54,7 @@ export default Vue.extend({
      * describe data
      * @version 1.0.5
      */
-    dataTable: Array,
+    data: Array,
 
     images: {
       type: Array,
@@ -99,7 +99,7 @@ export default Vue.extend({
       var sortKey = this.sortKey
       var filterKey: string = this.filterKey ? this.filterKey.toLowerCase() : ''
       var order = this.sortOrders[sortKey] || 1
-      var data = this.dataTable
+      var data = this.data
       if (filterKey) {
         data = data.filter(function(row: { [key: string]: string }) {
           return Object.keys(row).some(function(key) {
