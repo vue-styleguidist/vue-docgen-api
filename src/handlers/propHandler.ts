@@ -18,6 +18,7 @@ import {
   Property,
 } from '@babel/types';
 import { Documentation, PropDescriptor } from 'src/Documentation';
+import { BlockTag } from 'src/utils/blockTags';
 
 type ValueLitteral = StringLiteral | BooleanLiteral | NumericLiteral;
 
@@ -44,9 +45,10 @@ export default function propHandler(documentation: Documentation, path: NodePath
         // description
         const docBlock = getDocblock(prop);
         const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] };
+        const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : [];
 
         // if it's the v-model describe it only as such
-        const propName = jsDoc.tags.some((t) => t.title === 'model') ? 'v-model' : propNode.key.name;
+        const propName = jsDocTags.some((t) => t.title === 'model') ? 'v-model' : propNode.key.name;
 
         const propDescriptor = documentation.getPropDescriptor(propName);
         const propValuePath = prop.get('value');
@@ -54,7 +56,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
         const identifier = isIdentifier(propValuePath.node);
         const isTupple = isArrayExpression(propValuePath.node);
         if (identifier || objectExpression || isTupple) {
-          propDescriptor.tags = jsDoc.tags.length ? transformTagsIntoObject(jsDoc.tags) : {};
+          propDescriptor.tags = jsDocTags.length ? transformTagsIntoObject(jsDocTags) : {};
           if (jsDoc.description) {
             propDescriptor.description = jsDoc.description;
           }

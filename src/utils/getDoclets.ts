@@ -8,7 +8,7 @@ export interface ParamType {
 export interface Param {
   type?: ParamType;
   name?: string;
-  description?: string;
+  description?: string | boolean;
 }
 
 interface RootTag {

@@ -6,7 +6,7 @@ export default function transformTagsIntoObject(tags: BlockTag[]): { [key: strin
     if (blockTags.indexOf(tag.title) > -1) {
       if (isContentTag(tag)) {
         const newTag: ParamTag = {
-          description: typeof tag.content === 'string' ? tag.content : '',
+          description: tag.content,
           title: tag.title,
         };
         tag = newTag;

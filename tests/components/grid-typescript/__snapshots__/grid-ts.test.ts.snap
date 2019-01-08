@@ -57,7 +57,7 @@ Object {
         ],
         "public": Array [
           Object {
-            "description": "",
+            "description": true,
             "title": "public",
           },
         ],
@@ -119,7 +119,7 @@ Object {
       "tags": Object {
         "ignore": Array [
           Object {
-            "description": "",
+            "description": true,
             "title": "ignore",
           },
         ],

@@ -101,7 +101,7 @@ Object {
       "tags": Object {
         "ignore": Array [
           Object {
-            "description": "",
+            "description": true,
             "title": "ignore",
           },
         ],
@@ -116,7 +116,7 @@ Object {
       "tags": Object {
         "ignore": Array [
           Object {
-            "description": "",
+            "description": true,
             "title": "ignore",
           },
         ],
@@ -208,7 +208,7 @@ a factory function",
       "tags": Object {
         "model": Array [
           Object {
-            "description": "",
+            "description": true,
             "title": "model",
           },
         ],

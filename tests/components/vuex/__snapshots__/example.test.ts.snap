@@ -29,7 +29,7 @@ Object {
         ],
         "public": Array [
           Object {
-            "description": "",
+            "description": true,
             "title": "public",
           },
         ],

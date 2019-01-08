@@ -10,7 +10,7 @@ interface EventType {
 interface EventProperty {
   type: EventType;
   name?: string;
-  description?: string;
+  description?: string | boolean;
 }
 
 interface DocBlockTagEvent extends DocBlockTags {

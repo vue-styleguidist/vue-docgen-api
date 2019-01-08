@@ -4,6 +4,7 @@ import getDoclets, { DocBlockTags, ParamTag, Tag, Param } from '../utils/getDocl
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';
 import { Documentation, MethodDescriptor } from 'src/Documentation';
 import { isProperty, Property, isFunctionExpression, Identifier } from '@babel/types';
+import { BlockTag } from 'src/utils/blockTags';
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   const methodsPath = path
@@ -32,13 +33,14 @@ export default function methodHandler(documentation: Documentation, path: NodePa
       const docBlock = getDocblock(method);
 
       const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] };
+      const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : [];
 
-      if (!jsDoc.tags.find((t) => t.title === 'public')) {
+      if (!jsDocTags.find((t) => t.title === 'public')) {
         return;
       }
 
       // params
-      describeParams(method, methodDescriptor, jsDoc.tags.filter((tag) => tag.title === 'param'));
+      describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'));
 
       // description
       if (jsDoc.description) {
@@ -46,13 +48,13 @@ export default function methodHandler(documentation: Documentation, path: NodePa
       }
 
       // returns
-      const tagReturns = jsDoc.tags.find((t) => t.title === 'returns');
+      const tagReturns = jsDocTags.find((t) => t.title === 'returns');
       if (tagReturns) {
         methodDescriptor.returns = tagReturns;
       }
 
       // tags
-      methodDescriptor.tags = transformTagsIntoObject(jsDoc.tags);
+      methodDescriptor.tags = transformTagsIntoObject(jsDocTags);
 
       methods.push(methodDescriptor);
     });
