@@ -39,11 +39,11 @@ describe('tests typescript grid', () => {
   });
 
   it('should has props', () => {
-    expect(typeof docGrid.props).not.toBeUndefined();
+    expect(docGrid.props).not.toBeUndefined();
   });
 
   it('should the component has version', () => {
-    expect(typeof docGrid.tags.version).not.toBeUndefined();
+    expect(docGrid.tags.version).not.toBeUndefined();
   });
 
   describe('props', () => {
