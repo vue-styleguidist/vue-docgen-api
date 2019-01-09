@@ -49,6 +49,7 @@
     "pug-runtime": "^2.0.4",
     "ts-map": "^1.0.3",
     "typescript": "^2.7.2",
+    "vue": "^2.5.21",
     "vue-template-compiler": "^2.5.21"
   },
   "devDependencies": {
@@ -61,7 +62,6 @@
     "prettier": "^1.14.2",
     "ts-jest": "^23.10.5",
     "tslint": "^5.9.1",
-    "vue": "^2.4.2",
     "vue-property-decorator": "^7.2.0"
   },
   "lint-staged": {

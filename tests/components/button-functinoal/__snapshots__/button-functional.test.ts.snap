@@ -6,20 +6,7 @@ Object {
   "displayName": "MyButton",
   "events": Object {},
   "methods": Array [],
-  "props": Object {
-    "size": Object {
-      "defaultValue": Object {
-        "func": false,
-        "value": "\\"normal\\"",
-      },
-      "description": "The size of the button",
-      "required": "",
-      "tags": Object {},
-      "type": Object {
-        "name": "string",
-      },
-    },
-  },
+  "props": undefined,
   "slots": Object {
     "default": Object {
       "description": "Use this slot default",

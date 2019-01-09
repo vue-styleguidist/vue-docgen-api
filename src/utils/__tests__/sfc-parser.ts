@@ -1,8 +1,8 @@
-import { CompiledSFC } from 'vue-sfc';
+import { SFCDescriptor } from 'vue-template-compiler';
 import scfParser from '../sfc-parser';
 
 describe('sfc-parser', () => {
-  let compiledSfc: CompiledSFC;
+  let compiledSfc: SFCDescriptor;
   beforeEach(() => {
     compiledSfc = scfParser(
       `
