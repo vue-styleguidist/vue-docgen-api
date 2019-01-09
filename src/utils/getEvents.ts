@@ -1,5 +1,5 @@
 import { File as BabelFile, Comment } from '@babel/types';
-import getDoclets, { Tag, ParamTag, DocBlockTags, ParamType } from './getDoclets';
+import getDoclets, { ParamTag, DocBlockTags, ParamType, Tag } from './getDoclets';
 import { parseDocblock } from './getDocblock';
 import { BlockTag } from './blockTags';
 
@@ -37,7 +37,7 @@ export default function getEvents(ast: BabelFile) {
 
       // filter comments where a tag is @event
       const nonNullTags: BlockTag[] = doc.tags ? doc.tags : [];
-      const eventTag: Tag | undefined = nonNullTags.find((t) => t.title === 'event') as Tag;
+      const eventTag = nonNullTags.find((t) => t.title === 'event');
 
       if (eventTag) {
         const typeTags = nonNullTags.filter((t) => t.title === 'type');
@@ -55,7 +55,7 @@ export default function getEvents(ast: BabelFile) {
 
         // remove the property an type tags from the tag array
         const tags = nonNullTags.filter(
-          (t: Tag | ParamTag) => t.title !== 'type' && t.title !== 'property' && t.title !== 'event',
+          (t: BlockTag) => t.title !== 'type' && t.title !== 'property' && t.title !== 'event',
         );
 
         if (tags.length) {
@@ -64,7 +64,7 @@ export default function getEvents(ast: BabelFile) {
           delete doc.tags;
         }
 
-        if (typeof eventTag.content === 'string') {
+        if (isTag(eventTag) && typeof eventTag.content === 'string') {
           acc[eventTag.content] = doc;
         }
       }
@@ -75,4 +75,8 @@ export default function getEvents(ast: BabelFile) {
   } else {
     return {};
   }
+}
+
+function isTag(tag: BlockTag): tag is Tag {
+  return typeof (tag as Tag).content === 'string';
 }
