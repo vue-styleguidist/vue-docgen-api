@@ -10,7 +10,7 @@ import getEvents from './utils/getEvents';
 import { Documentation, ComponentDoc } from './Documentation';
 import handlers from './handlers';
 import { NodePath } from 'ast-types';
-import { CompiledSFC } from 'vue-sfc';
+import { CompiledSFC } from 'vue-template-compiler';
 import { ParserPlugin } from '@babel/parser';
 
 // tslint:disable-next-line:no-var-requires

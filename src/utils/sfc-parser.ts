@@ -1,5 +1,4 @@
-import { parseComponent } from 'vue-template-compiler';
-import { CompiledSFC } from 'vue-sfc';
+import { parseComponent, CompiledSFC } from 'vue-template-compiler';
 // tslint:disable-next-line:no-var-requires
 const LRUCache = require('lru-cache');
 // tslint:disable-next-line:no-var-requires
