@@ -6,7 +6,7 @@ import { Documentation, MethodDescriptor } from '../../Documentation';
 jest.mock('../../Documentation');
 
 function parse(src: string) {
-  const ast = babylon().parse(src);
+  const ast = babylon({ plugins: ['flow'] }).parse(src);
   return resolveExportedComponent(ast.program);
 }
 
@@ -210,19 +210,19 @@ describe('methodHandler', () => {
 
   describe('flow', () => {
     it('should deduce the type of params from the param type', () => {
-      const src = `
-      /* @flow */
-      export default {
-        methods:{
-          /**
-           * @public
-           */
-          publicMethod(param: string, paramObscure: ObscureInterface) {
-            console.log('test', test, param)
-          }
-        }
-      }
-      `;
+      const src = [
+        '/* @flow */',
+        'export default {',
+        '  methods:{',
+        '    /**',
+        '     * @public',
+        '     */',
+        '    publicMethod(param: string, paramObscure: ObscureInterface) {',
+        '      console.log("test", paramObscure)',
+        '    }',
+        '  }',
+        '}',
+      ].join('\n');
 
       const def = parse(src);
       propHandler(documentation, def[0]);

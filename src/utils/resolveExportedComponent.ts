@@ -9,12 +9,21 @@ function ignore(): boolean {
 
 function isComponentDefinition(path: NodePath): boolean {
   return (
+    // export default {}
     bt.isObjectExpression(path.node) ||
+    // export default Vue.extends({})
     (bt.isCallExpression(path.node) &&
       bt.isMemberExpression(path.node.callee) &&
       bt.isIdentifier(path.node.callee.object) &&
       path.node.callee.object.name === 'Vue' &&
-      path.node.callee.property.name === 'extend')
+      path.node.callee.property.name === 'extend') ||
+    // @component
+    // export default class MyComp extends VueComp
+    (bt.isClassDeclaration(path.node) &&
+      !!path.node.superClass &&
+      (path.node.decorators || []).some(
+        (d) => bt.isIdentifier(d.expression) && d.expression.name === 'Component',
+      ))
   );
 }
 

@@ -99,6 +99,11 @@ function describeParams(
           : undefined;
         if (tsType) {
           param.type = getTypeObjectFromTSType(tsType);
+        } else if (bt.isTypeAnnotation(par.typeAnnotation)) {
+          const flowType = par.typeAnnotation.typeAnnotation;
+          if (flowType) {
+            param.type = getTypeObjectFromFlowType(flowType);
+          }
         }
       }
 
@@ -126,37 +131,62 @@ function describeReturns(
       methodNode &&
       (bt.isFunctionExpression(methodNode) || bt.isArrowFunctionExpression(methodNode))
     ) {
-      if (methodNode.returnType && bt.isTSTypeAnnotation(methodNode.returnType)) {
-        methodDescriptor.returns = methodDescriptor.returns || {};
-        methodDescriptor.returns.type = getTypeObjectFromTSType(
-          methodNode.returnType.typeAnnotation,
-        );
+      if (methodNode.returnType) {
+        if (bt.isTSTypeAnnotation(methodNode.returnType)) {
+          methodDescriptor.returns = methodDescriptor.returns || {};
+          methodDescriptor.returns.type = getTypeObjectFromTSType(
+            methodNode.returnType.typeAnnotation,
+          );
+        }
       }
     }
   }
 }
 
-function getTypeObjectFromTSType(type: bt.TSType): ParamType {
-  const typeNameMap: { [name: string]: string } = {
-    TSAnyKeyword: 'any',
-    TSUnknownKeyword: 'unknown',
-    TSNumberKeyword: 'number',
-    TSObjectKeyword: 'object',
-    TSBooleanKeyword: 'boolean',
-    TSStringKeyword: 'string',
-    TSSymbolKeyword: 'symbol',
-    TSVoidKeyword: 'void',
-    TSUndefinedKeyword: 'undefined',
-    TSNullKeyword: 'null',
-    TSNeverKeyword: 'never',
-  };
+const TS_TYPE_NAME_MAP: { [name: string]: string } = {
+  TSAnyKeyword: 'any',
+  TSUnknownKeyword: 'unknown',
+  TSNumberKeyword: 'number',
+  TSObjectKeyword: 'object',
+  TSBooleanKeyword: 'boolean',
+  TSStringKeyword: 'string',
+  TSSymbolKeyword: 'symbol',
+  TSVoidKeyword: 'void',
+  TSUndefinedKeyword: 'undefined',
+  TSNullKeyword: 'null',
+  TSNeverKeyword: 'never',
+};
 
+function getTypeObjectFromTSType(type: bt.TSType): ParamType {
   const name =
     bt.isTSTypeReference(type) && bt.isIdentifier(type.typeName)
       ? type.typeName.name
-      : typeNameMap[type.type]
-      ? typeNameMap[type.type]
+      : TS_TYPE_NAME_MAP[type.type]
+      ? TS_TYPE_NAME_MAP[type.type]
       : type.type;
 
+  return { name };
+}
+
+const FLOW_TYPE_NAME_MAP: { [name: string]: string } = {
+  AnyTypeAnnotation: 'any',
+  UnknownTypeAnnotation: 'unknown',
+  NumberTypeAnnotation: 'number',
+  ObjectTypeAnnotation: 'object',
+  BooleanTypeAnnotation: 'boolean',
+  StringTypeAnnotation: 'string',
+  SymbolTypeAnnotation: 'symbol',
+  VoidTypeAnnotation: 'void',
+  UndefinedTypeAnnotation: 'undefined',
+  NullTypeAnnotation: 'null',
+  NeverTypeAnnotation: 'never',
+};
+
+function getTypeObjectFromFlowType(type: bt.FlowType): ParamType {
+  const name = FLOW_TYPE_NAME_MAP[type.type]
+    ? FLOW_TYPE_NAME_MAP[type.type]
+    : bt.isGenericTypeAnnotation(type)
+    ? type.id.name
+    : type.type;
   return { name };
 }

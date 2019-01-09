@@ -2,7 +2,7 @@ import * as path from 'path';
 import { ComponentDoc } from '../../../src/Documentation';
 import { parse } from '../../../src/main';
 
-const button = path.join(__dirname, './MyButton.vue');
+const button = path.join(__dirname, './Button.vue');
 let docButton: ComponentDoc;
 xdescribe('tests button', () => {
   beforeAll((done) => {
