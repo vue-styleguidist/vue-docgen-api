@@ -40,19 +40,16 @@ export default function methodHandler(documentation: Documentation, path: NodePa
         return;
       }
 
-      // params
-      describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'));
-
       // description
       if (jsDoc.description) {
         methodDescriptor.description = jsDoc.description;
       }
 
+      // params
+      describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'));
+
       // returns
-      const tagReturns = jsDocTags.filter((t) => t.title === 'returns');
-      if (tagReturns.length) {
-        methodDescriptor.returns = tagReturns[0];
-      }
+      describeReturns(method, methodDescriptor, jsDocTags.filter((t) => t.title === 'returns'));
 
       // tags
       methodDescriptor.tags = transformTagsIntoObject(jsDocTags);
@@ -111,6 +108,31 @@ function describeParams(
 
   if (params.length) {
     methodDescriptor.params = params;
+  }
+}
+
+function describeReturns(
+  methodPath: NodePath<bt.Property>,
+  methodDescriptor: MethodDescriptor,
+  jsDocReturnTags: ParamTag[],
+) {
+  if (jsDocReturnTags.length) {
+    methodDescriptor.returns = jsDocReturnTags[0];
+  }
+
+  if (!methodDescriptor.returns || !methodDescriptor.returns.type) {
+    const methodNode = methodPath.node.value;
+    if (
+      methodNode &&
+      (bt.isFunctionExpression(methodNode) || bt.isArrowFunctionExpression(methodNode))
+    ) {
+      if (methodNode.returnType && bt.isTSTypeAnnotation(methodNode.returnType)) {
+        methodDescriptor.returns = methodDescriptor.returns || {};
+        methodDescriptor.returns.type = getTypeObjectFromTSType(
+          methodNode.returnType.typeAnnotation,
+        );
+      }
+    }
   }
 }
 

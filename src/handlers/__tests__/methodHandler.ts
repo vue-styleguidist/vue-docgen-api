@@ -35,34 +35,6 @@ describe('methodHandler', () => {
     expect(mockMethodDescriptor).toMatchObject(matchedObj);
   }
 
-  it('should deduce the type of params from the typescript type', () => {
-    const src = `
-    export default {
-      methods:{
-        /**
-         * @public
-         */
-        publicMethod(param: string, paramObscure: ObscureInterface) {
-          console.log('test', test, param)
-        }
-      }
-    }
-    `;
-    const def = parseTS(src);
-    propHandler(documentation, def[0]);
-    expect(mockMethodDescriptor).toMatchObject({
-      methods: [
-        {
-          name: 'publicMethod',
-          params: [
-            { name: 'param', type: { name: 'string' } },
-            { name: 'paramObscure', type: { name: 'ObscureInterface' } },
-          ],
-        },
-      ],
-    });
-  });
-
   it('should ignore every method not tagged as @public', () => {
     const src = `
     export default {
@@ -233,6 +205,73 @@ describe('methodHandler', () => {
           ],
         },
       ],
+    });
+  });
+
+  describe('typescript', () => {
+    it('should deduce the type of params from the param type', () => {
+      const src = `
+      export default {
+        methods:{
+          /**
+           * @public
+           */
+          publicMethod(param: string, paramObscure: ObscureInterface) {
+            console.log('test', test, param)
+          }
+        }
+      }
+      `;
+
+      const def = parseTS(src);
+      propHandler(documentation, def[0]);
+      expect(mockMethodDescriptor).toMatchObject({
+        methods: [
+          {
+            name: 'publicMethod',
+            params: [
+              { name: 'param', type: { name: 'string' } },
+              { name: 'paramObscure', type: { name: 'ObscureInterface' } },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should deduce the return type from method decoration', () => {
+      const src = `
+      export default {
+        methods: {
+          /**
+           * @public
+           */
+          oneMethod(): string {
+            return "one";
+          },
+          /**
+           * @public
+           */
+          twoMethod: (): number => {
+            return 2;
+          }
+        }
+      };
+      `;
+
+      const def = parseTS(src);
+      propHandler(documentation, def[0]);
+      expect(mockMethodDescriptor).toMatchObject({
+        methods: [
+          {
+            name: 'oneMethod',
+            returns: { type: { name: 'string' } },
+          },
+          {
+            name: 'twoMethod',
+            returns: { type: { name: 'number' } },
+          },
+        ],
+      });
     });
   });
 });

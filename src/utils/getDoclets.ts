@@ -5,10 +5,13 @@ export interface ParamType {
   elements?: ParamType[];
 }
 
-export interface Param {
+export interface UnnamedParam {
   type?: ParamType;
-  name?: string;
   description?: string | boolean;
+}
+
+export interface Param extends UnnamedParam {
+  name?: string;
 }
 
 interface RootTag {

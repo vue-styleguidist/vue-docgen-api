@@ -1,5 +1,5 @@
 import { BlockTag } from './utils/blockTags';
-import { Param } from './utils/getDoclets';
+import { Param, UnnamedParam } from './utils/getDoclets';
 import Map from 'ts-map';
 
 export interface PropDescriptor {
@@ -13,7 +13,7 @@ export interface PropDescriptor {
 export interface MethodDescriptor {
   name: string;
   description: string;
-  returns?: BlockTag;
+  returns?: UnnamedParam;
   tags?: { [key: string]: BlockTag[] };
   params?: Param[];
   [key: string]: any;
