@@ -208,6 +208,38 @@ describe('methodHandler', () => {
     });
   });
 
+  describe('flow', () => {
+    it('should deduce the type of params from the param type', () => {
+      const src = `
+      /* @flow */
+      export default {
+        methods:{
+          /**
+           * @public
+           */
+          publicMethod(param: string, paramObscure: ObscureInterface) {
+            console.log('test', test, param)
+          }
+        }
+      }
+      `;
+
+      const def = parse(src);
+      propHandler(documentation, def[0]);
+      expect(mockMethodDescriptor).toMatchObject({
+        methods: [
+          {
+            name: 'publicMethod',
+            params: [
+              { name: 'param', type: { name: 'string' } },
+              { name: 'paramObscure', type: { name: 'ObscureInterface' } },
+            ],
+          },
+        ],
+      });
+    });
+  });
+
   describe('typescript', () => {
     it('should deduce the type of params from the param type', () => {
       const src = `
