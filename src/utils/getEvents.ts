@@ -40,22 +40,22 @@ export default function getEvents(ast: BabelFile) {
       const eventTag = nonNullTags.filter((t: BlockTag) => t.title === 'event');
 
       if (eventTag.length) {
-        const typeTags = nonNullTags.filter((t) => t.title === 'type');
+        const typeTags = nonNullTags.filter((tg) => tg.title === 'type');
 
         doc.type = typeTags.length
-          ? { names: typeTags.map((t: TypedParamTag) => t.type.name) }
+          ? { names: typeTags.map((tg: TypedParamTag) => tg.type.name) }
           : undefined;
 
-        const propertyTags = nonNullTags.filter((t) => t.title === 'property');
+        const propertyTags = nonNullTags.filter((tg) => tg.title === 'property');
         if (propertyTags.length) {
-          doc.properties = propertyTags.map((t: TypedParamTag) => {
-            return { type: { names: [t.type.name] }, name: t.name, description: t.description };
+          doc.properties = propertyTags.map((tg: TypedParamTag) => {
+            return { type: { names: [tg.type.name] }, name: tg.name, description: tg.description };
           });
         }
 
         // remove the property an type tags from the tag array
         const tags = nonNullTags.filter(
-          (t: BlockTag) => t.title !== 'type' && t.title !== 'property' && t.title !== 'event',
+          (tg: BlockTag) => tg.title !== 'type' && tg.title !== 'property' && tg.title !== 'event',
         );
 
         if (tags.length) {
