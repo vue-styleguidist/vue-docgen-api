@@ -37,9 +37,9 @@ export default function getEvents(ast: BabelFile) {
 
       // filter comments where a tag is @event
       const nonNullTags: BlockTag[] = doc.tags ? doc.tags : [];
-      const eventTag = nonNullTags.find((t) => t.title === 'event');
+      const eventTag = nonNullTags.filter((t: BlockTag) => t.title === 'event');
 
-      if (eventTag) {
+      if (eventTag.length) {
         const typeTags = nonNullTags.filter((t) => t.title === 'type');
 
         doc.type = typeTags.length
@@ -63,9 +63,9 @@ export default function getEvents(ast: BabelFile) {
         } else {
           delete doc.tags;
         }
-
-        if (isTag(eventTag) && typeof eventTag.content === 'string') {
-          acc[eventTag.content] = doc;
+        const t = eventTag[0];
+        if (isTag(t) && typeof t.content === 'string') {
+          acc[t.content] = doc;
         }
       }
       return acc;

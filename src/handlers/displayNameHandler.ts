@@ -42,7 +42,10 @@ function getDeclaredConstantValue(path: NodePath, nameConstId: string): string |
     (a: VariableDeclarator[], declPath) => a.concat(declPath.node.declarations),
     [],
   );
-  const nodeDeclarator = declarators.find((d) => isIdentifier(d.id) && d.id.name === nameConstId);
+  const nodeDeclaratorArray = declarators.filter(
+    (d) => isIdentifier(d.id) && d.id.name === nameConstId,
+  );
+  const nodeDeclarator = nodeDeclaratorArray.length ? nodeDeclaratorArray[0] : undefined;
   return nodeDeclarator && nodeDeclarator.init && isLiteral(nodeDeclarator.init)
     ? (nodeDeclarator.init as StringLiteral).value
     : undefined;

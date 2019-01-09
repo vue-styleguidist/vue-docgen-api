@@ -44,7 +44,8 @@ export default function methodHandler(documentation: Documentation, path: NodePa
       const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] };
       const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : [];
 
-      if (!jsDocTags.find((t) => t.title === 'public')) {
+      // ignore the method if there is no public tag
+      if (!jsDocTags.some((t) => t.title === 'public')) {
         return;
       }
 
@@ -57,9 +58,9 @@ export default function methodHandler(documentation: Documentation, path: NodePa
       }
 
       // returns
-      const tagReturns = jsDocTags.find((t) => t.title === 'returns');
-      if (tagReturns) {
-        methodDescriptor.returns = tagReturns;
+      const tagReturns = jsDocTags.filter((t) => t.title === 'returns');
+      if (tagReturns.length) {
+        methodDescriptor.returns = tagReturns[0];
       }
 
       // tags
@@ -85,7 +86,8 @@ function describeParams(
     fExp.params.forEach((par: Identifier, i) => {
       const param: Param = { name: par.name };
 
-      let jsDocTag = jsDocParamTags.find((tag) => tag.name === param.name);
+      const jsDocTags = jsDocParamTags.filter((tag) => tag.name === param.name);
+      let jsDocTag = jsDocTags.length ? jsDocTags[0] : undefined;
 
       // if tag is not namely described try finding it by its order
       if (!jsDocTag) {

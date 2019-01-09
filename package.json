@@ -47,6 +47,7 @@
     "pug-parser": "^2.0.2",
     "pug-runtime": "^2.0.4",
     "recast": "^0.16.1",
+    "ts-map": "^1.0.3",
     "typescript": "^2.7.2",
     "vue-template-compiler": "^2.4.2"
   },

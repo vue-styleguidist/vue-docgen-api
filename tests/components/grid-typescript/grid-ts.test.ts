@@ -88,7 +88,7 @@ describe('tests typescript grid', () => {
   });
 
   it('should extract the type of the argument from typescript', () => {
-    const publicMethod = docGrid.methods.find((m) => m.name === 'publicMethod');
+    const publicMethod = docGrid.methods.filter((m) => m.name === 'publicMethod')[0];
     const safePublicMethodParams: Param[] =
       publicMethod && publicMethod.params ? publicMethod.params : [];
 

@@ -1,5 +1,6 @@
 import { BlockTag } from './utils/blockTags';
 import { Param } from './utils/getDoclets';
+import Map from 'ts-map';
 
 export interface PropDescriptor {
   type?: { name: string; func?: boolean };
@@ -61,7 +62,7 @@ export class Documentation {
 
     if (this.propsMap.size > 0) {
       props = {};
-      for (const [name, descriptor] of this.propsMap) {
+      for (const [name, descriptor] of this.propsMap.entries()) {
         props[name] = descriptor;
       }
     } else {
@@ -69,7 +70,7 @@ export class Documentation {
     }
 
     const obj: { [key: string]: any } = {};
-    for (const [key, value] of this.dataMap) {
+    for (const [key, value] of this.dataMap.entries()) {
       obj[key] = value;
     }
 
