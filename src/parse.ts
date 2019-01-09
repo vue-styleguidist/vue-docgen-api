@@ -10,7 +10,7 @@ import getEvents from './utils/getEvents';
 import { Documentation, ComponentDoc } from './Documentation';
 import handlers from './handlers';
 import { NodePath } from 'ast-types';
-import { CompiledSFC } from 'vue-template-compiler';
+import { SFCDescriptor } from 'vue-template-compiler';
 import { ParserPlugin } from '@babel/parser';
 
 // tslint:disable-next-line:no-var-requires
@@ -39,7 +39,7 @@ function executeHandlers(
  */
 export default function parse(source: string, filePath: string): ComponentDoc {
   const singleFileComponent = /\.vue$/i.test(path.extname(filePath));
-  let parts: CompiledSFC | null = null;
+  let parts: SFCDescriptor | null = null;
   let vueDocArray: ComponentDoc[] = [];
   let ast: File | null = null;
   if (singleFileComponent) {

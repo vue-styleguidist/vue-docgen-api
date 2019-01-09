@@ -1,30 +1,13 @@
 import { Parser as HtmlParser } from 'htmlparser2';
-import { Lexer } from 'pug-lexer';
-import { Parser } from 'pug-parser';
-import { Template } from 'vue-template-compiler';
-// tslint:disable-next-line:no-var-requires
-const generateCode = require('pug-code-gen');
-// tslint:disable-next-line:no-var-requires
-const wrap = require('pug-runtime/wrap');
+import { SFCBlock } from 'vue-template-compiler';
+import getHtmlFromPug from './getHtmlFromPug';
 
-export default function getSlots(tpl: Template) {
+export default function getSlots(tpl: SFCBlock) {
   const output: { [name: string]: { description?: string } } = {};
   if (tpl && tpl.content) {
-    let template = tpl.content;
+    const template =
+      tpl.attrs && tpl.attrs.lang === 'pug' ? getHtmlFromPug(tpl.content) : tpl.content;
     let lastComment = '';
-
-    if (tpl.attrs && tpl.attrs.lang === 'pug') {
-      const lexed = new Lexer(tpl.content);
-      const parsed = new Parser(lexed.getTokens());
-      const funcStr = generateCode(parsed.parse(), {
-        compileDebug: false,
-        pretty: true,
-        inlineRuntimeFunctions: false,
-        templateName: '_parse',
-      });
-      const func = wrap(funcStr, '_parse');
-      template = func();
-    }
 
     const parser = new HtmlParser({
       oncomment: (data) => {

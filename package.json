@@ -39,6 +39,7 @@
     "@babel/types": "^7.0.0",
     "ast-types": "^0.11.7",
     "deepmerge": "^3.0.0",
+    "escodegen": "^1.11.0",
     "hash-sum": "^1.0.2",
     "htmlparser2": "^3.10.0",
     "lru-cache": "^4.1.5",
@@ -46,10 +47,9 @@
     "pug-lexer": "^3.1.0",
     "pug-parser": "^2.0.2",
     "pug-runtime": "^2.0.4",
-    "escodegen": "^1.11.0",
     "ts-map": "^1.0.3",
     "typescript": "^2.7.2",
-    "vue-template-compiler": "^2.4.2"
+    "vue-template-compiler": "^2.5.21"
   },
   "devDependencies": {
     "@types/escodegen": "0.0.6",
