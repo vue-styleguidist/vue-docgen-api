@@ -137,6 +137,11 @@ function describeReturns(
           methodDescriptor.returns.type = getTypeObjectFromTSType(
             methodNode.returnType.typeAnnotation,
           );
+        } else if (bt.isTypeAnnotation(methodNode.returnType)) {
+          methodDescriptor.returns = methodDescriptor.returns || {};
+          methodDescriptor.returns.type = getTypeObjectFromFlowType(
+            methodNode.returnType.typeAnnotation,
+          );
         }
       }
     }

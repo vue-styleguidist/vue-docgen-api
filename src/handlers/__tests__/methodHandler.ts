@@ -238,6 +238,33 @@ describe('methodHandler', () => {
         ],
       });
     });
+
+    it('should deduce the return type from method', () => {
+      const src = [
+        '/* @flow */',
+        'export default {',
+        '  methods:{',
+        '    /**',
+        '     * @public',
+        '     */',
+        '    publicMethod(): string {',
+        '      console.log("test")',
+        '    }',
+        '  }',
+        '}',
+      ].join('\n');
+
+      const def = parse(src);
+      propHandler(documentation, def[0]);
+      expect(mockMethodDescriptor).toMatchObject({
+        methods: [
+          {
+            name: 'publicMethod',
+            returns: { type: { name: 'string' } },
+          },
+        ],
+      });
+    });
   });
 
   describe('typescript', () => {
