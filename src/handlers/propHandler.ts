@@ -1,4 +1,4 @@
-import * as recast from 'recast';
+import { generate } from 'escodegen';
 import { NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
 import getDoclets, { DocBlockTags } from '../utils/getDoclets';
@@ -154,7 +154,7 @@ function describeDefault(propPropertiesPath: NodePath, propDescriptor: PropDescr
 
     propDescriptor.defaultValue = {
       func,
-      value: recast.prettyPrint(defaultNode.node, { tabWidth: 2 }).code,
+      value: generate(defaultNode.node, { format: { quotes: 'double' } }),
     };
   }
 }
