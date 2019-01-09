@@ -25,6 +25,13 @@ var vueDocs = require('vue-docgen-api')
 var componentInfo = vueDocs.parse(filePath)
 ```
 
+or with typescript/es6
+
+```ts
+import { parse } from 'vue-docgen-api'
+var componentInfo = parse(filePath)
+```
+
 ### parse(filePath)
 
 | Parameter | Type   | Description   |
