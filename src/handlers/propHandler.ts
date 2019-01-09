@@ -127,8 +127,8 @@ function describeRequired(
     (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'required',
   );
   const requiredNode = requiredArray.length ? requiredArray[0].get('value').node : undefined;
-  if (requiredNode && bt.isBooleanLiteral(requiredNode)) {
-    propDescriptor.required = requiredNode.value;
+  if (requiredNode && bt.isLiteral(requiredNode)) {
+    propDescriptor.required = (requiredNode as bt.BooleanLiteral).value;
   }
 }
 

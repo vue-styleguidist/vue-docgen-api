@@ -1,24 +1,12 @@
 <template>
-	<button class="buttonComponent" @click.prevent="onClick">
-		<!-- @slot Use this slot default -->
-		<slot></slot>
-	</button>
+  <button class="buttonComponent" @click.prevent="onClick">
+    <!-- @slot Use this slot default -->
+    <slot></slot>
+  </button>
 </template>
 
 <script lang='ts'>
-import {
-  Component,
-  Emit,
-  Inject,
-  Model,
-  Prop,
-  Provide,
-  Vue,
-  Watch,
-} from 'vue-property-decorator'
-import anotherMixin from '../../mixins/anotherMixin'
-import genericMixin from './genericMixin'
-import colorMixin from './colorMixin'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 /**
  * This is an example of creating a reusable button component and using it with external data.
