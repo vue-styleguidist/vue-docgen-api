@@ -157,8 +157,8 @@ Object {
     "images": Object {
       "defaultValue": Object {
         "func": true,
-        "value": "function() {
-  return [{}];
+        "value": "function () {
+    return [{}];
 }",
       },
       "description": "",
@@ -208,7 +208,8 @@ Object {
     "propFunc": Object {
       "defaultValue": Object {
         "func": true,
-        "value": "function() {}",
+        "value": "function () {
+}",
       },
       "description": "prop function",
       "required": "",
