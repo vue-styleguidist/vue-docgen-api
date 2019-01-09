@@ -2,24 +2,15 @@ import { NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
 import getDoclets, { DocBlockTags, ParamTag, Param, ParamType } from '../utils/getDoclets';
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';
-import { Documentation, MethodDescriptor } from 'src/Documentation';
-import {
-  isProperty,
-  Property,
-  isFunctionExpression,
-  Identifier,
-  isTSTypeAnnotation,
-  TSType,
-  isTSTypeReference,
-  isIdentifier,
-} from '@babel/types';
-import { BlockTag } from 'src/utils/blockTags';
+import { Documentation, MethodDescriptor } from '../Documentation';
+import * as bt from '@babel/types';
+import { BlockTag } from '../utils/blockTags';
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   const methodsPath = path
     .get('properties')
-    .filter((propertyPath) => isProperty(propertyPath.node))
-    .filter((p: NodePath<Property>) => p.node.key.name === 'methods');
+    .filter((propertyPath) => bt.isProperty(propertyPath.node))
+    .filter((p: NodePath<bt.Property>) => p.node.key.name === 'methods');
 
   const methods: MethodDescriptor[] = [];
 
@@ -33,8 +24,8 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 
   methodsObject
     .get('properties')
-    .filter((propertyPath) => isProperty(propertyPath.node))
-    .forEach((method: NodePath<Property>) => {
+    .filter((propertyPath) => bt.isProperty(propertyPath.node))
+    .forEach((method: NodePath<bt.Property>) => {
       const methodDescriptor: MethodDescriptor = { name: '', description: '' };
 
       methodDescriptor.name = method.node.key.name;
@@ -72,18 +63,18 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 }
 
 function describeParams(
-  methodPath: NodePath<Property>,
+  methodPath: NodePath<bt.Property>,
   methodDescriptor: MethodDescriptor,
   jsDocParamTags: ParamTag[],
 ) {
   // if there is no parameter non need to parse them
   const fExp = methodPath.node.value;
-  if (fExp && isFunctionExpression(fExp) && !fExp.params.length) {
+  if (fExp && bt.isFunctionExpression(fExp) && !fExp.params.length) {
     return;
   }
   const params: Param[] = [];
-  if (fExp && isFunctionExpression(fExp)) {
-    fExp.params.forEach((par: Identifier, i) => {
+  if (fExp && bt.isFunctionExpression(fExp)) {
+    fExp.params.forEach((par: bt.Identifier, i) => {
       const param: Param = { name: par.name };
 
       const jsDocTags = jsDocParamTags.filter((tag) => tag.name === param.name);
@@ -106,7 +97,7 @@ function describeParams(
       }
 
       if (!param.type && par.typeAnnotation) {
-        const tsType = isTSTypeAnnotation(par.typeAnnotation)
+        const tsType = bt.isTSTypeAnnotation(par.typeAnnotation)
           ? par.typeAnnotation.typeAnnotation
           : undefined;
         if (tsType) {
@@ -123,7 +114,7 @@ function describeParams(
   }
 }
 
-function getTypeObjectFromTSType(type: TSType): ParamType {
+function getTypeObjectFromTSType(type: bt.TSType): ParamType {
   const typeNameMap: { [name: string]: string } = {
     TSAnyKeyword: 'any',
     TSUnknownKeyword: 'unknown',
@@ -139,7 +130,7 @@ function getTypeObjectFromTSType(type: TSType): ParamType {
   };
 
   const name =
-    isTSTypeReference(type) && isIdentifier(type.typeName)
+    bt.isTSTypeReference(type) && bt.isIdentifier(type.typeName)
       ? type.typeName.name
       : typeNameMap[type.type]
       ? typeNameMap[type.type]

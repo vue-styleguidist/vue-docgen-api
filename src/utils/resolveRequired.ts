@@ -1,18 +1,5 @@
 import { visit, NodePath } from 'ast-types';
-import {
-  isVariableDeclaration,
-  isImportDefaultSpecifier,
-  isImportSpecifier,
-  isLiteral,
-  StringLiteral,
-  Program,
-  Node,
-  isCallExpression,
-  isIdentifier,
-  isObjectPattern,
-  ObjectProperty,
-  isMemberExpression,
-} from '@babel/types';
+import * as bt from '@babel/types';
 
 function ignore() {
   return false;
@@ -24,7 +11,7 @@ function ignore() {
  * @param varNameFilter
  */
 export default function resolveRequired(
-  ast: Program,
+  ast: bt.Program,
   varNameFilter?: string[],
 ): { [key: string]: string } {
   const varToFilePath: { [key: string]: string } = {};
@@ -39,12 +26,12 @@ export default function resolveRequired(
 
     specifiers.each((sp: NodePath) => {
       const nodeSpecifier = sp.node;
-      if (isImportDefaultSpecifier(nodeSpecifier) || isImportSpecifier(nodeSpecifier)) {
+      if (bt.isImportDefaultSpecifier(nodeSpecifier) || bt.isImportSpecifier(nodeSpecifier)) {
         const varNameDefault = nodeSpecifier.local.name;
         if (!varNameFilter || varNameFilter.indexOf(varNameDefault) > -1) {
           const nodeSource = astPath.get('source').node;
-          if (isLiteral(nodeSource)) {
-            varToFilePath[varNameDefault] = (nodeSource as StringLiteral).value;
+          if (bt.isLiteral(nodeSource)) {
+            varToFilePath[varNameDefault] = (nodeSource as bt.StringLiteral).value;
           }
         }
       }
@@ -54,38 +41,38 @@ export default function resolveRequired(
 
   function requireDeclaration(astPath: NodePath) {
     // only look at variable declarations
-    if (!isVariableDeclaration(astPath.node)) {
+    if (!bt.isVariableDeclaration(astPath.node)) {
       return false;
     }
     astPath.node.declarations.forEach((nodeDeclaration) => {
-      let sourceNode: Node;
+      let sourceNode: bt.Node;
       let source: string = '';
       const init =
-        nodeDeclaration.init && isMemberExpression(nodeDeclaration.init)
+        nodeDeclaration.init && bt.isMemberExpression(nodeDeclaration.init)
           ? nodeDeclaration.init.object
           : nodeDeclaration.init;
       if (!init) {
         return false;
       }
 
-      if (isCallExpression(init)) {
-        if (!isIdentifier(init.callee) || init.callee.name !== 'require') {
+      if (bt.isCallExpression(init)) {
+        if (!bt.isIdentifier(init.callee) || init.callee.name !== 'require') {
           return false;
         }
         sourceNode = init.arguments[0];
-        if (!isLiteral(sourceNode)) {
+        if (!bt.isLiteral(sourceNode)) {
           return false;
         }
-        source = (sourceNode as StringLiteral).value;
+        source = (sourceNode as bt.StringLiteral).value;
       } else {
         return false;
       }
 
-      if (isIdentifier(nodeDeclaration.id)) {
+      if (bt.isIdentifier(nodeDeclaration.id)) {
         const varName = nodeDeclaration.id.name;
         varToFilePath[varName] = source;
-      } else if (isObjectPattern(nodeDeclaration.id)) {
-        nodeDeclaration.id.properties.forEach((p: ObjectProperty) => {
+      } else if (bt.isObjectPattern(nodeDeclaration.id)) {
+        nodeDeclaration.id.properties.forEach((p: bt.ObjectProperty) => {
           varToFilePath[p.key.name] = source;
         });
       } else {

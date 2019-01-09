@@ -1,13 +1,7 @@
 import { visit, NodePath } from 'ast-types';
 import resolveExportDeclaration from './resolveExportDeclaration';
 import isExportedAssignment from './isExportedAssignment';
-import {
-  isObjectExpression,
-  isCallExpression,
-  isMemberExpression,
-  isIdentifier,
-  Program,
-} from '@babel/types';
+import * as bt from '@babel/types';
 
 function ignore(): boolean {
   return false;
@@ -15,10 +9,10 @@ function ignore(): boolean {
 
 function isComponentDefinition(path: NodePath): boolean {
   return (
-    isObjectExpression(path.node) ||
-    (isCallExpression(path.node) &&
-      isMemberExpression(path.node.callee) &&
-      isIdentifier(path.node.callee.object) &&
+    bt.isObjectExpression(path.node) ||
+    (bt.isCallExpression(path.node) &&
+      bt.isMemberExpression(path.node.callee) &&
+      bt.isIdentifier(path.node.callee.object) &&
       path.node.callee.object.name === 'Vue' &&
       path.node.callee.property.name === 'extend')
   );
@@ -35,12 +29,12 @@ function isComponentDefinition(path: NodePath): boolean {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(ast: Program): NodePath[] {
+export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
   const components: NodePath[] = [];
 
   function setComponent(definition: NodePath) {
     if (definition && components.indexOf(definition) === -1) {
-      if (isObjectExpression(definition.node)) {
+      if (bt.isObjectExpression(definition.node)) {
         components.push(definition);
       } else {
         components.push(definition.get('arguments', 0));

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import scfParser from './utils/sfc-parser';
 import buildParser from './babel-parser';
-import { File } from '@babel/types';
+import * as bt from '@babel/types';
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations';
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations';
 import resolveExportedComponent from './utils/resolveExportedComponent';
@@ -41,7 +41,7 @@ export default function parse(source: string, filePath: string): ComponentDoc {
   const singleFileComponent = /\.vue$/i.test(path.extname(filePath));
   let parts: SFCDescriptor | null = null;
   let vueDocArray: ComponentDoc[] = [];
-  let ast: File | null = null;
+  let ast: bt.File | null = null;
   if (singleFileComponent) {
     parts = scfParser(source, filePath);
   }

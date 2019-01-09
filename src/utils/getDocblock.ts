@@ -1,5 +1,5 @@
 import { NodePath } from 'ast-types';
-import { Comment } from '@babel/types';
+import * as bt from '@babel/types';
 
 /**
  * Helper functions to work with docblock comments.
@@ -25,14 +25,16 @@ const DOCBLOCK_HEADER = /^\*\s/;
  * exists.
  */
 export default function getDocblock(path: NodePath, trailing = false): string | null {
-  let comments: Comment[] = [];
+  let comments: bt.Comment[] = [];
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
-      (comment: Comment) => comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
+      (comment: bt.Comment) =>
+        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   } else if (path.node.leadingComments) {
     comments = path.node.leadingComments.filter(
-      (comment: Comment) => comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
+      (comment: bt.Comment) =>
+        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   }
 

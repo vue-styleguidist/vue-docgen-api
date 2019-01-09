@@ -1,4 +1,4 @@
-import { Parser as HtmlParser } from 'htmlparser2';
+import { Parser } from 'htmlparser2';
 import { SFCBlock } from 'vue-template-compiler';
 import getHtmlFromPug from './getHtmlFromPug';
 
@@ -9,7 +9,7 @@ export default function getSlots(tpl: SFCBlock) {
       tpl.attrs && tpl.attrs.lang === 'pug' ? getHtmlFromPug(tpl.content) : tpl.content;
     let lastComment = '';
 
-    const parser = new HtmlParser({
+    const parser = new Parser({
       oncomment: (data) => {
         if (data.search(/\@slot/) !== -1) {
           lastComment = data.replace('@slot', '').trim();

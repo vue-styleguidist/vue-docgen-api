@@ -1,7 +1,7 @@
-import { NodePath } from 'ast-types';
 import * as path from 'path';
+import * as bt from '@babel/types';
+import { NodePath } from 'ast-types';
 import resolveRequired from './resolveRequired';
-import { Program, Property, isIdentifier, isProperty } from '@babel/types';
 import { parse } from '../main';
 import { ComponentDoc } from 'src/Documentation';
 
@@ -12,7 +12,7 @@ import { ComponentDoc } from 'src/Documentation';
  * @param {string} originalFilePath
  */
 export default function getRequiredExtendsDocumentations(
-  astPath: Program,
+  astPath: bt.Program,
   componentDefinitions: NodePath[],
   originalFilePath: string,
 ): ComponentDoc | undefined {
@@ -36,7 +36,7 @@ function getExtendsVariableName(componentDefinitions: NodePath[]) {
   const extendsVariable = componentDefinitions.reduce((acc: NodePath[], compDef) => {
     const extendsProp = compDef
       .get('properties')
-      .filter((p: NodePath<Property>) => p.node.key.name === 'extends');
+      .filter((p: NodePath<bt.Property>) => p.node.key.name === 'extends');
     if (extendsProp.length) {
       acc.push(extendsProp[0]);
     }
@@ -45,8 +45,8 @@ function getExtendsVariableName(componentDefinitions: NodePath[]) {
 
   if (extendsVariable.length) {
     const extendedPath = extendsVariable[0];
-    const extendsValue = isProperty(extendedPath.node) ? extendedPath.node.value : undefined;
-    return extendsValue && isIdentifier(extendsValue) ? extendsValue.name : undefined;
+    const extendsValue = bt.isProperty(extendedPath.node) ? extendedPath.node.value : undefined;
+    return extendsValue && bt.isIdentifier(extendsValue) ? extendsValue.name : undefined;
   }
   return undefined;
 }

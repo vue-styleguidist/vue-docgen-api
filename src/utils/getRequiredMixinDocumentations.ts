@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { NodePath } from 'ast-types';
+import * as bt from '@babel/types';
 import resolveRequired from './resolveRequired';
-import { Program, Property, isIdentifier, isArrayExpression } from '@babel/types';
 import { ComponentDoc } from 'src/Documentation';
 import { parse } from '../main';
 
@@ -11,7 +11,7 @@ import { parse } from '../main';
  * value: documentation of named mixin
  */
 export default function getRequiredMixinDocumentations(
-  astPath: Program,
+  astPath: bt.Program,
   componentDefinitions: NodePath[],
   originalFilePath: string,
 ): { [varName: string]: ComponentDoc } {
@@ -44,17 +44,17 @@ function getMixinsVariableNames(componentDefinitions: NodePath[]) {
   const allMixins = componentDefinitions.map((compDef) => {
     const mixinProp = compDef
       .get('properties')
-      .filter((p: NodePath<Property>) => p.node.key.name === 'mixins');
+      .filter((p: NodePath<bt.Property>) => p.node.key.name === 'mixins');
     return mixinProp.length ? mixinProp[0] : undefined;
   });
-  return allMixins.reduce((acc: string[], mixinPath: NodePath<Property>) => {
+  return allMixins.reduce((acc: string[], mixinPath: NodePath<bt.Property>) => {
     if (mixinPath) {
       const mixinPropertyValue =
-        mixinPath.node.value && isArrayExpression(mixinPath.node.value)
+        mixinPath.node.value && bt.isArrayExpression(mixinPath.node.value)
           ? mixinPath.node.value.elements
           : [];
       mixinPropertyValue.forEach((e) => {
-        if (e && isIdentifier(e)) {
+        if (e && bt.isIdentifier(e)) {
           acc.push(e.name);
         }
       });

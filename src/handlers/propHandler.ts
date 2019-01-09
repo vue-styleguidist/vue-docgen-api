@@ -3,29 +3,16 @@ import { NodePath } from 'ast-types';
 import getDocblock from '../utils/getDocblock';
 import getDoclets, { DocBlockTags } from '../utils/getDoclets';
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';
-import {
-  isObjectExpression,
-  isProperty,
-  isIdentifier,
-  isArrayExpression,
-  ObjectProperty,
-  StringLiteral,
-  isArrowFunctionExpression,
-  isFunctionExpression,
-  BooleanLiteral,
-  NumericLiteral,
-  isLiteral,
-  Property,
-} from '@babel/types';
+import * as bt from '@babel/types';
 import { Documentation, PropDescriptor } from 'src/Documentation';
 import { BlockTag } from 'src/utils/blockTags';
 
-type ValueLitteral = StringLiteral | BooleanLiteral | NumericLiteral;
+type ValueLitteral = bt.StringLiteral | bt.BooleanLiteral | bt.NumericLiteral;
 
 export default function propHandler(documentation: Documentation, path: NodePath) {
   const propsPath = path
     .get('properties')
-    .filter((p) => isProperty(p.node) && p.node.key.name === 'props');
+    .filter((p) => bt.isProperty(p.node) && p.node.key.name === 'props');
 
   // if no prop return
   if (!propsPath.length) {
@@ -34,13 +21,13 @@ export default function propHandler(documentation: Documentation, path: NodePath
 
   const propsObject = propsPath[0].get('value');
 
-  if (isObjectExpression(propsObject.node)) {
+  if (bt.isObjectExpression(propsObject.node)) {
     propsObject
       .get('properties')
       // filter non object properties
-      .filter((p: NodePath) => isProperty(p.node))
-      .forEach((prop) => {
-        const propNode = prop.node as Property;
+      .filter((p: NodePath) => bt.isProperty(p.node))
+      .forEach((prop: NodePath<bt.Property>) => {
+        const propNode = prop.node;
 
         // description
         const docBlock = getDocblock(prop);
@@ -52,17 +39,19 @@ export default function propHandler(documentation: Documentation, path: NodePath
 
         const propDescriptor = documentation.getPropDescriptor(propName);
         const propValuePath = prop.get('value');
-        const objectExpression = isObjectExpression(propValuePath.node);
-        const identifier = isIdentifier(propValuePath.node);
-        const isTupple = isArrayExpression(propValuePath.node);
-        if (identifier || objectExpression || isTupple) {
+        const objectExpression = bt.isObjectExpression(propValuePath.node);
+        const identifier = bt.isIdentifier(propValuePath.node);
+        const tupple = bt.isArrayExpression(propValuePath.node);
+        if (identifier || objectExpression || tupple) {
           propDescriptor.tags = jsDocTags.length ? transformTagsIntoObject(jsDocTags) : {};
           if (jsDoc.description) {
             propDescriptor.description = jsDoc.description;
           }
 
           if (objectExpression) {
-            const propPropertiesPath = propValuePath.get('properties') as NodePath<ObjectProperty>;
+            const propPropertiesPath = propValuePath.get('properties') as NodePath<
+              bt.ObjectProperty
+            >;
             // type
             describeType(propPropertiesPath, propDescriptor);
 
@@ -71,44 +60,44 @@ export default function propHandler(documentation: Documentation, path: NodePath
 
             // default
             describeDefault(propPropertiesPath, propDescriptor);
-          } else if (isIdentifier) {
+          } else if (identifier) {
             // contents of the prop is it's type
             propDescriptor.type = getTypeFromTypePath(propValuePath);
-          } else if (isTupple) {
+          } else if (tupple) {
             // I am not sure this case is valid vuejs
             propDescriptor.type = { name: 'array' };
           }
         }
       });
-  } else if (isArrayExpression(propsObject.node)) {
+  } else if (bt.isArrayExpression(propsObject.node)) {
     propsObject
       .get('elements')
-      .filter((e: NodePath) => isLiteral(e.node))
-      .forEach((e) => {
-        const nodeLiteral = e.node as StringLiteral;
-        const propDescriptor = documentation.getPropDescriptor(nodeLiteral.value);
+      .filter((e: NodePath) => bt.isLiteral(e.node))
+      .forEach((e: NodePath<bt.StringLiteral>) => {
+        const propDescriptor = documentation.getPropDescriptor(e.node.value);
         propDescriptor.type = { name: 'undefined' };
       });
   }
 }
 
 function describeType(
-  propPropertiesPath: NodePath<ObjectProperty>,
+  propPropertiesPath: NodePath<bt.ObjectProperty>,
   propDescriptor: PropDescriptor,
 ) {
   const typeArray = propPropertiesPath.filter(
-    (p: NodePath<ObjectProperty>) => p.node.key.name === 'type',
+    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'type',
   );
   if (typeArray.length) {
     propDescriptor.type = getTypeFromTypePath(typeArray[0].get('value'));
   } else {
     // deduce the type from default expression
     const defaultArray = propPropertiesPath.filter(
-      (p: NodePath<ObjectProperty>) => p.node.key.name === 'default',
+      (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'default',
     );
     if (defaultArray.length) {
-      const typeNode = defaultArray[0].node as ObjectProperty;
-      const func = isArrowFunctionExpression(typeNode.value) || isFunctionExpression(typeNode.value);
+      const typeNode = defaultArray[0].node as bt.ObjectProperty;
+      const func =
+        bt.isArrowFunctionExpression(typeNode.value) || bt.isFunctionExpression(typeNode.value);
       const typeValueNode = defaultArray[0].get('value').node as ValueLitteral;
       const typeName = typeof typeValueNode.value;
       propDescriptor.type = { name: func ? 'func' : typeName };
@@ -118,11 +107,11 @@ function describeType(
 
 function getTypeFromTypePath(typePath: NodePath): { name: string; func?: boolean } {
   const typeNode = typePath.node;
-  const typeName = isArrayExpression(typeNode)
+  const typeName = bt.isArrayExpression(typeNode)
     ? typeNode.elements
-        .map((t) => (t && isIdentifier(t) ? t.name.toLowerCase() : 'undefined'))
+        .map((t) => (t && bt.isIdentifier(t) ? t.name.toLowerCase() : 'undefined'))
         .join('|')
-    : typeNode && isIdentifier(typeNode)
+    : typeNode && bt.isIdentifier(typeNode)
     ? typeNode.name.toLowerCase()
     : 'undefined';
   return {
@@ -131,26 +120,26 @@ function getTypeFromTypePath(typePath: NodePath): { name: string; func?: boolean
 }
 
 function describeRequired(
-  propPropertiesPath: NodePath<ObjectProperty>,
+  propPropertiesPath: NodePath<bt.ObjectProperty>,
   propDescriptor: PropDescriptor,
 ) {
   const requiredArray = propPropertiesPath.filter(
-    (p: NodePath<ObjectProperty>) => p.node.key.name === 'required',
+    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'required',
   );
-  const requiredNode = requiredArray.length
-    ? (requiredArray[0].get('value').node as BooleanLiteral)
-    : undefined;
-  propDescriptor.required = requiredNode ? requiredNode.value : '';
+  const requiredNode = requiredArray.length ? requiredArray[0].get('value').node : undefined;
+  if (requiredNode && bt.isBooleanLiteral(requiredNode)) {
+    propDescriptor.required = requiredNode.value;
+  }
 }
 
 function describeDefault(propPropertiesPath: NodePath, propDescriptor: PropDescriptor) {
   const defaultArray = propPropertiesPath.filter(
-    (p: NodePath<ObjectProperty>) => p.node.key.name === 'default',
+    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'default',
   );
   if (defaultArray.length) {
     const defaultNode = defaultArray[0].get('value');
     const func =
-      isArrowFunctionExpression(defaultNode.node) || isFunctionExpression(defaultNode.node);
+      bt.isArrowFunctionExpression(defaultNode.node) || bt.isFunctionExpression(defaultNode.node);
 
     propDescriptor.defaultValue = {
       func,

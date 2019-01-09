@@ -1,8 +1,8 @@
-import { File as BabelFile } from '@babel/types';
+import * as bt from '@babel/types';
 import babelParser from '../babel-parser';
 
 describe('babel-parser', () => {
-  let parser: { parse: (src: string) => BabelFile };
+  let parser: { parse: (src: string) => bt.File };
   beforeEach(() => {
     parser = babelParser();
   });

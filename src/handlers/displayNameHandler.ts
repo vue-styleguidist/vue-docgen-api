@@ -1,20 +1,11 @@
 import { NodePath } from 'ast-types';
 import { Documentation } from 'src/Documentation';
-import {
-  Property,
-  isLiteral,
-  StringLiteral,
-  Identifier,
-  isIdentifier,
-  isVariableDeclaration,
-  VariableDeclaration,
-  VariableDeclarator,
-} from '@babel/types';
+import * as bt from '@babel/types';
 
 export default function propHandler(documentation: Documentation, path: NodePath) {
   const namePath = path
     .get('properties')
-    .filter((p: NodePath<Property>) => p.node.key.name === 'name');
+    .filter((p: NodePath<bt.Property>) => p.node.key.name === 'name');
 
   // if no prop return
   if (!namePath.length) {
@@ -23,10 +14,10 @@ export default function propHandler(documentation: Documentation, path: NodePath
 
   const nameValueNode = namePath[0].get('value').node;
   let displayName;
-  if (isLiteral(nameValueNode)) {
-    displayName = (nameValueNode as StringLiteral).value;
-  } else if (isIdentifier(nameValueNode)) {
-    const nameConstId = (nameValueNode as Identifier).name;
+  if (bt.isLiteral(nameValueNode)) {
+    displayName = (nameValueNode as bt.StringLiteral).value;
+  } else if (bt.isIdentifier(nameValueNode)) {
+    const nameConstId = (nameValueNode as bt.Identifier).name;
     displayName = getDeclaredConstantValue(path.parentPath.parentPath, nameConstId);
   }
   if (displayName) {
@@ -35,18 +26,18 @@ export default function propHandler(documentation: Documentation, path: NodePath
 }
 
 function getDeclaredConstantValue(path: NodePath, nameConstId: string): string | undefined {
-  const globalVariableDeclarations = path.filter((p) => isVariableDeclaration(p.node)) as Array<
-    NodePath<VariableDeclaration>
+  const globalVariableDeclarations = path.filter((p) => bt.isVariableDeclaration(p.node)) as Array<
+    NodePath<bt.VariableDeclaration>
   >;
   const declarators = globalVariableDeclarations.reduce(
-    (a: VariableDeclarator[], declPath) => a.concat(declPath.node.declarations),
+    (a: bt.VariableDeclarator[], declPath) => a.concat(declPath.node.declarations),
     [],
   );
   const nodeDeclaratorArray = declarators.filter(
-    (d) => isIdentifier(d.id) && d.id.name === nameConstId,
+    (d) => bt.isIdentifier(d.id) && d.id.name === nameConstId,
   );
   const nodeDeclarator = nodeDeclaratorArray.length ? nodeDeclaratorArray[0] : undefined;
-  return nodeDeclarator && nodeDeclarator.init && isLiteral(nodeDeclarator.init)
-    ? (nodeDeclarator.init as StringLiteral).value
+  return nodeDeclarator && nodeDeclarator.init && bt.isLiteral(nodeDeclarator.init)
+    ? (nodeDeclarator.init as bt.StringLiteral).value
     : undefined;
 }

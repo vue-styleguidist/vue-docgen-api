@@ -1,4 +1,4 @@
-import { File as BabelFile } from '@babel/types';
+import * as bt from '@babel/types';
 import { parse, ParserOptions } from '@babel/parser';
 
 const babelParserOptions: ParserOptions = {
@@ -31,14 +31,14 @@ const babelParserOptions: ParserOptions = {
 
 export default function buildParse(
   options: ParserOptions = {},
-): { parse: (src: string) => BabelFile } {
+): { parse: (src: string) => bt.File } {
   options = {
     ...babelParserOptions,
     ...options,
     plugins: [...(babelParserOptions.plugins || []), ...(options.plugins || [])],
   };
   return {
-    parse(src: string): BabelFile {
+    parse(src: string): bt.File {
       return parse(src, options);
     },
   };

@@ -1,5 +1,6 @@
 declare module 'ast-types' {
-  import { Node, Program } from '@babel/types'
+  import * as bt from '@babel/types'
+
   interface AstNodeType {
     check: (testedNode: Node | null) => boolean
   }
@@ -18,7 +19,7 @@ declare module 'ast-types' {
     ImportDefaultSpecifier: AstNodeType
   }
 
-  export interface NodePath<T extends Node = Node> {
+  export interface NodePath<T extends bt.Node = bt.Node> {
     node: T
     parent: NodePath
     parentPath: NodePath
@@ -30,7 +31,7 @@ declare module 'ast-types' {
   }
 
   export function visit(
-    path: NodePath | Program,
+    path: NodePath | bt.Program,
     visitors: { [key: string]: (path: NodePath) => any }
   ): void
 }
