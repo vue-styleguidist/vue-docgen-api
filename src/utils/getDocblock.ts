@@ -1,3 +1,5 @@
+import { NodePath } from 'ast-types';
+import { Comment } from '@babel/types';
 
 /**
  * Helper functions to work with docblock comments.
@@ -22,20 +24,15 @@ const DOCBLOCK_HEADER = /^\*\s/;
  * Given a path, this function returns the closest preceding docblock if it
  * exists.
  */
-export default function getDocblock(path: any, trailing = false): string | null {
-  let comments: any[] = [];
+export default function getDocblock(path: NodePath, trailing = false): string | null {
+  let comments: Comment[] = [];
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
-      (comment: any) => comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
+      (comment: Comment) => comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   } else if (path.node.leadingComments) {
     comments = path.node.leadingComments.filter(
-      (comment: any) => comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
-    );
-  } else if (path.node.comments) {
-    comments = path.node.comments.filter(
-      (comment: any) =>
-        comment.leading && comment.type === 'Block' && DOCBLOCK_HEADER.test(comment.value),
+      (comment: Comment) => comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   }
 
