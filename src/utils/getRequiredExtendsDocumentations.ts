@@ -27,25 +27,38 @@ export default function getRequiredExtendsDocumentations(
   const extendsFilePath = resolveRequired(astPath, [extendsVariableName]);
 
   const originalDirName = path.dirname(originalFilePath);
-  const fullFilePath = resolvePathFrom(extendsFilePath[extendsVariableName], originalDirName);
 
-  return parse(fullFilePath);
+  // only look for documentation in the current project
+  if (/^\./.test(extendsFilePath[extendsVariableName])) {
+    const fullFilePath = resolvePathFrom(extendsFilePath[extendsVariableName], originalDirName);
+    return parse(fullFilePath);
+  }
 }
 
 function getExtendsVariableName(componentDefinitions: NodePath[]) {
   const extendsVariable = componentDefinitions.reduce((acc: NodePath[], compDef) => {
-    const extendsProp = compDef
-      .get('properties')
-      .filter((p: NodePath<bt.Property>) => p.node.key.name === 'extends');
-    if (extendsProp.length) {
-      acc.push(extendsProp[0]);
+    if (
+      bt.isClassDeclaration(compDef.node) &&
+      compDef.node.superClass &&
+      bt.isIdentifier(compDef.node.superClass)
+    ) {
+      acc.push(compDef.get('superClass'));
+    } else {
+      const extendsProp = compDef
+        .get('properties')
+        .filter((p: NodePath<bt.Property>) => p.node.key.name === 'extends');
+      if (extendsProp.length) {
+        acc.push(extendsProp[0]);
+      }
     }
     return acc;
   }, []);
 
   if (extendsVariable.length) {
     const extendedPath = extendsVariable[0];
-    const extendsValue = bt.isProperty(extendedPath.node) ? extendedPath.node.value : undefined;
+    const extendsValue = bt.isProperty(extendedPath.node)
+      ? extendedPath.node.value
+      : extendedPath.node;
     return extendsValue && bt.isIdentifier(extendsValue) ? extendsValue.name : undefined;
   }
   return undefined;

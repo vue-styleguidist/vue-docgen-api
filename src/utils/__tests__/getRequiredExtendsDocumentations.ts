@@ -17,38 +17,51 @@ describe('getRequiredExtendsDocumentations', () => {
     resolveRequiredMock = resolveRequired as jest.Mock<
       (ast: bt.Program, varNameFilter?: string[]) => { [key: string]: string }
     >;
-    resolveRequiredMock.mockReturnValue({ testComponent: 'componentPath' });
+    resolveRequiredMock.mockReturnValue({ testComponent: './componentPath' });
 
     mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>;
-    mockResolvePathFrom.mockReturnValue('component/full/path');
+    mockResolvePathFrom.mockReturnValue('./component/full/path');
 
     mockParse = parse as jest.Mock;
     mockParse.mockReturnValue({ component: 'documentation' });
   });
 
-  it.each([
-    [
+  function parseItExtends(src: string) {
+    const ast = babylon().parse(src);
+    const path = resolveExportedComponent(ast.program);
+    getRequiredExtendsDocumentations(ast.program, path, '');
+  }
+
+  it('should resolve extended modules variables', () => {
+    const src = [
       'import testComponent from "./testComponent"',
       'export default {',
       '  extends:testComponent',
       '}',
-    ].join('\n'),
-    [
-      'import { testComponent, other } from "./testComponent"',
-      'export default {',
-      '  extends:testComponent',
-      '}',
-    ].join('\n'),
-    [
+    ].join('\n');
+    parseItExtends(src);
+    expect(parse).toHaveBeenCalledWith('./component/full/path');
+  });
+
+  it('should resolve extended modules variables', () => {
+    const src = [
       'const testComponent = require("./testComponent");',
       'export default {',
       '  extends:testComponent',
       '}',
-    ].join('\n'),
-  ])('should resolve extended modules variables', (src) => {
-    const ast = babylon().parse(src);
-    const path = resolveExportedComponent(ast.program);
-    getRequiredExtendsDocumentations(ast.program, path, '');
-    expect(parse).toHaveBeenCalledWith('component/full/path');
+    ].join('\n');
+    parseItExtends(src);
+    expect(parse).toHaveBeenCalledWith('./component/full/path');
+  });
+
+  it('should resolve extended modules variables', () => {
+    const src = [
+      'import { testComponent, other } from "./testComponent"',
+      'export default {',
+      '  extends:testComponent',
+      '}',
+    ].join('\n');
+    parseItExtends(src);
+    expect(parse).toHaveBeenCalledWith('./component/full/path');
   });
 });

@@ -42,12 +42,14 @@ export default function getRequiredMixinDocumentations(
 }
 
 function getMixinsVariableNames(componentDefinitions: NodePath[]) {
-  const allMixins = componentDefinitions.map((compDef) => {
-    const mixinProp = compDef
-      .get('properties')
-      .filter((p: NodePath<bt.Property>) => p.node.key.name === 'mixins');
-    return mixinProp.length ? mixinProp[0] : undefined;
-  });
+  const allMixins = componentDefinitions
+    .filter((comp) => bt.isObjectExpression(comp.node))
+    .map((compDef) => {
+      const mixinProp = compDef
+        .get('properties')
+        .filter((p: NodePath<bt.Property>) => p.node.key.name === 'mixins');
+      return mixinProp.length ? mixinProp[0] : undefined;
+    });
   return allMixins.reduce((acc: string[], mixinPath: NodePath<bt.Property>) => {
     if (mixinPath) {
       const mixinPropertyValue =
