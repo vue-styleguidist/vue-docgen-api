@@ -1,11 +1,11 @@
-import buildParser from './babel-parser';
-import * as bt from '@babel/types';
-import { ComponentDoc, Documentation } from './Documentation';
-import { NodePath } from 'ast-types';
 import { ParserPlugin } from '@babel/parser';
-import resolveExportedComponent from './utils/resolveExportedComponent';
+import * as bt from '@babel/types';
+import { NodePath } from 'ast-types';
+import buildParser from './babel-parser';
+import { ComponentDoc, Documentation } from './Documentation';
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations';
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations';
+import resolveExportedComponent from './utils/resolveExportedComponent';
 
 // tslint:disable-next-line:no-var-requires
 const deepmerge = require('deepmerge');

@@ -1,4 +1,4 @@
-import { Tag, ParamTag } from './getDoclets';
+import { ParamTag, Tag } from './getDoclets';
 
 export type BlockTag = ParamTag | Tag;
 

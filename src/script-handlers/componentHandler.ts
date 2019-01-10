@@ -1,9 +1,9 @@
-import { NodePath } from 'ast-types';
-import transformTagsIntoObject from '../utils/transformTagsIntoObject';
-import getDoclets from '../utils/getDoclets';
-import getDocblock from '../utils/getDocblock';
-import { Documentation } from '../Documentation';
 import * as bt from '@babel/types';
+import { NodePath } from 'ast-types';
+import { Documentation } from '../Documentation';
+import getDocblock from '../utils/getDocblock';
+import getDoclets from '../utils/getDoclets';
+import transformTagsIntoObject from '../utils/transformTagsIntoObject';
 
 export default function propHandler(documentation: Documentation, path: NodePath) {
   let componentCommentedPath = path.parent;

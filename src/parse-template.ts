@@ -1,5 +1,5 @@
-import { SFCBlock, ASTElement, ASTNode, compile } from 'vue-template-compiler';
 import * as pug from 'pug';
+import { ASTElement, ASTNode, compile, SFCBlock } from 'vue-template-compiler';
 import { ComponentDoc } from './Documentation';
 
 export interface TemplateParserOptions {

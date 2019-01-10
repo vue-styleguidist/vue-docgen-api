@@ -1,11 +1,11 @@
-import { generate } from 'escodegen';
+import * as bt from '@babel/types';
 import { NodePath } from 'ast-types';
+import { generate } from 'escodegen';
+import { Documentation, PropDescriptor } from '../Documentation';
+import { BlockTag } from '../utils/blockTags';
 import getDocblock from '../utils/getDocblock';
 import getDoclets, { DocBlockTags } from '../utils/getDoclets';
 import transformTagsIntoObject from '../utils/transformTagsIntoObject';
-import * as bt from '@babel/types';
-import { Documentation, PropDescriptor } from 'src/Documentation';
-import { BlockTag } from 'src/utils/blockTags';
 
 type ValueLitteral = bt.StringLiteral | bt.BooleanLiteral | bt.NumericLiteral;
 

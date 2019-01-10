@@ -1,13 +1,13 @@
-import * as path from 'path';
 import * as bt from '@babel/types';
+import * as path from 'path';
 import { SFCDescriptor } from 'vue-template-compiler';
-import scfParser from './utils/sfc-parser';
-import getEvents from './utils/getEvents';
 import { ComponentDoc } from './Documentation';
 import parseScript from './parse-script';
-import handlers from './script-handlers';
 import parseTemplate from './parse-template';
+import handlers from './script-handlers';
 import templateHandlers from './template-handlers';
+import getEvents from './utils/getEvents';
+import scfParser from './utils/sfc-parser';
 
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty';
 

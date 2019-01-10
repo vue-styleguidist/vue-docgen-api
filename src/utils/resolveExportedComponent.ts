@@ -1,7 +1,7 @@
-import { visit, NodePath } from 'ast-types';
-import resolveExportDeclaration from './resolveExportDeclaration';
-import isExportedAssignment from './isExportedAssignment';
 import * as bt from '@babel/types';
+import { NodePath, visit } from 'ast-types';
+import isExportedAssignment from './isExportedAssignment';
+import resolveExportDeclaration from './resolveExportDeclaration';
 
 function ignore(): boolean {
   return false;

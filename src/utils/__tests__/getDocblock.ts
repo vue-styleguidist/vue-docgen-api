@@ -1,5 +1,5 @@
 import * as bt from '@babel/types';
-import { visit, NodePath } from 'ast-types';
+import { NodePath, visit } from 'ast-types';
 import babylon from '../../babel-parser';
 import getDocblock from '../getDocblock';
 

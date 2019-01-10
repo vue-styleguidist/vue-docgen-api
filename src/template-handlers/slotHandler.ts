@@ -1,4 +1,4 @@
-import { ASTNode, ASTElement } from 'vue-template-compiler';
+import { ASTElement, ASTNode } from 'vue-template-compiler';
 import { ComponentDoc } from '../Documentation';
 
 export default function slotHandler(templateAst: ASTElement, documentation: ComponentDoc) {

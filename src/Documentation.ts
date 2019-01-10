@@ -1,6 +1,6 @@
+import Map from 'ts-map';
 import { BlockTag } from './utils/blockTags';
 import { Param, UnnamedParam } from './utils/getDoclets';
-import Map from 'ts-map';
 
 export interface PropDescriptor {
   type?: { name: string; func?: boolean };

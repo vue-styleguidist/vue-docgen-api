@@ -1,5 +1,5 @@
-import * as bt from '@babel/types';
 import { parse, ParserOptions } from '@babel/parser';
+import * as bt from '@babel/types';
 
 const babelParserOptions: ParserOptions = {
   sourceType: 'module',

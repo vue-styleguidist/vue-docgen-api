@@ -3,11 +3,11 @@ import babylon from '../../babel-parser';
 jest.mock('../resolveRequired');
 jest.mock('../resolvePathFrom');
 jest.mock('../../main');
-import resolveExportedComponent from '../resolveExportedComponent';
-import getRequiredMixinDocumentations from '../getRequiredMixinDocumentations';
-import resolveRequired from '../resolveRequired';
-import resolvePathFrom from '../resolvePathFrom';
 import { parse } from '../../main';
+import getRequiredMixinDocumentations from '../getRequiredMixinDocumentations';
+import resolveExportedComponent from '../resolveExportedComponent';
+import resolvePathFrom from '../resolvePathFrom';
+import resolveRequired from '../resolveRequired';
 
 describe('getRequiredMixinDocumentations', () => {
   let resolveRequiredMock: jest.Mock;

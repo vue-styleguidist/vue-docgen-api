@@ -1,5 +1,5 @@
-import { visit, NodePath } from 'ast-types';
 import * as bt from '@babel/types';
+import { NodePath, visit } from 'ast-types';
 
 function ignore() {
   return false;

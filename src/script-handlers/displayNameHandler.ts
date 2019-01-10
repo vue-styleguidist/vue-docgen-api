@@ -1,6 +1,6 @@
-import { NodePath } from 'ast-types';
-import { Documentation } from 'src/Documentation';
 import * as bt from '@babel/types';
+import { NodePath } from 'ast-types';
+import { Documentation } from '../Documentation';
 
 export default function propHandler(documentation: Documentation, path: NodePath) {
   const namePath = path

@@ -1,7 +1,7 @@
-import propHandler from '../methodHandler';
 import babylon from '../../babel-parser';
-import resolveExportedComponent from '../../utils/resolveExportedComponent';
 import { Documentation, MethodDescriptor } from '../../Documentation';
+import resolveExportedComponent from '../../utils/resolveExportedComponent';
+import propHandler from '../methodHandler';
 
 jest.mock('../../Documentation');
 

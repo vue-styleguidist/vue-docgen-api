@@ -1,5 +1,5 @@
-import { NodePath } from 'ast-types';
 import * as bt from '@babel/types';
+import { NodePath } from 'ast-types';
 
 export default function resolveExportDeclaration(path: NodePath) {
   const definitions: NodePath[] = [];

@@ -1,9 +1,9 @@
-import { MemberExpression, isIdentifier } from '@babel/types';
+import { isIdentifier, MemberExpression } from '@babel/types';
+import { NodePath, visit } from 'ast-types';
 import { ASTElement, ASTExpression } from 'vue-template-compiler';
-import { visit, NodePath } from 'ast-types';
-import { TemplateParserOptions } from '../parse-template';
-import { ComponentDoc } from '../Documentation';
 import buildParser from '../babel-parser';
+import { ComponentDoc } from '../Documentation';
+import { TemplateParserOptions } from '../parse-template';
 
 const allowRE = /^(v-bind|:)/;
 export default function propTemplateHandler(

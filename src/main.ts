@@ -1,7 +1,7 @@
 import * as fs from 'fs';
-import * as utils from './utils';
-import parseSource from './parse';
 import { ComponentDoc } from './Documentation';
+import parseSource from './parse';
+import * as utils from './utils';
 
 export { default as parseSource } from './parse';
 

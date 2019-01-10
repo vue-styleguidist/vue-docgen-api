@@ -1,10 +1,10 @@
-import { NodePath } from 'ast-types';
-import getDocblock from '../utils/getDocblock';
-import getDoclets, { DocBlockTags, ParamTag, Param, ParamType } from '../utils/getDoclets';
-import transformTagsIntoObject from '../utils/transformTagsIntoObject';
-import { Documentation, MethodDescriptor } from '../Documentation';
 import * as bt from '@babel/types';
+import { NodePath } from 'ast-types';
+import { Documentation, MethodDescriptor } from '../Documentation';
 import { BlockTag } from '../utils/blockTags';
+import getDocblock from '../utils/getDocblock';
+import getDoclets, { DocBlockTags, Param, ParamTag, ParamType } from '../utils/getDoclets';
+import transformTagsIntoObject from '../utils/transformTagsIntoObject';
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   const methodsPath = path

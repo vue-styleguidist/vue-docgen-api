@@ -1,5 +1,5 @@
-import resolveExportedComponent from '../resolveExportedComponent';
 import babylon from '../../babel-parser';
+import resolveExportedComponent from '../resolveExportedComponent';
 
 describe('resolveExportedComponent', () => {
   it('should return an export default', () => {

@@ -1,7 +1,7 @@
-import displayNameHandler from '../displayNameHandler';
 import babylon from '../../babel-parser';
-import resolveExportedComponent from '../../utils/resolveExportedComponent';
 import { Documentation } from '../../Documentation';
+import resolveExportedComponent from '../../utils/resolveExportedComponent';
+import displayNameHandler from '../displayNameHandler';
 
 jest.mock('../../Documentation');
 

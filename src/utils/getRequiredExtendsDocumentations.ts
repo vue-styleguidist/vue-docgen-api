@@ -1,10 +1,10 @@
-import * as path from 'path';
 import * as bt from '@babel/types';
 import { NodePath } from 'ast-types';
-import resolveRequired from './resolveRequired';
-import resolvePathFrom from './resolvePathFrom';
-import { parse } from '../main';
+import * as path from 'path';
 import { ComponentDoc } from '../Documentation';
+import { parse } from '../main';
+import resolvePathFrom from './resolvePathFrom';
+import resolveRequired from './resolveRequired';
 
 /**
  * Retruns documentation of the component referenced in the extends property of the component

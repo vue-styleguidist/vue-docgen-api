@@ -1,7 +1,7 @@
 import * as bt from '@babel/types';
-import getDoclets, { ParamTag, DocBlockTags, ParamType, Tag } from './getDoclets';
-import { parseDocblock } from './getDocblock';
 import { BlockTag } from './blockTags';
+import { parseDocblock } from './getDocblock';
+import getDoclets, { DocBlockTags, ParamTag, ParamType, Tag } from './getDoclets';
 
 interface EventType {
   names: string[];
