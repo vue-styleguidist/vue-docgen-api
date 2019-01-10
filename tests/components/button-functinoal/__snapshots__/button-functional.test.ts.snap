@@ -8,9 +8,11 @@ Object {
   "methods": Array [],
   "props": Object {
     "size": Object {
-      "description": "",
-      "required": false,
-      "tags": Object {},
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "text": Object {
       "type": Object {
         "name": "string",
       },

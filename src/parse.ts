@@ -1,36 +1,15 @@
 import * as path from 'path';
-import scfParser from './utils/sfc-parser';
-import buildParser from './babel-parser';
 import * as bt from '@babel/types';
-import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations';
-import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations';
-import resolveExportedComponent from './utils/resolveExportedComponent';
-import getEvents from './utils/getEvents';
-import { Documentation, ComponentDoc } from './Documentation';
-import handlers from './handlers';
-import templateHandlers from './templateHandlers';
-import parseTemplate from './template-parser';
-import { NodePath } from 'ast-types';
 import { SFCDescriptor } from 'vue-template-compiler';
-import { ParserPlugin } from '@babel/parser';
+import scfParser from './utils/sfc-parser';
+import getEvents from './utils/getEvents';
+import { ComponentDoc } from './Documentation';
+import parseScript from './parse-script';
+import handlers from './script-handlers';
+import parseTemplate from './parse-template';
+import templateHandlers from './template-handlers';
 
-// tslint:disable-next-line:no-var-requires
-const deepmerge = require('deepmerge');
-
-const ERROR_MISSING_DEFINITION = 'No suitable component definition found';
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty';
-
-function executeHandlers(
-  localHandlers: Array<(doc: Documentation, componentDefinition: NodePath) => void>,
-  componentDefinitions: NodePath[],
-  mixinsDocumentations: { props?: any; data?: any },
-) {
-  return componentDefinitions.map((compDef) => {
-    const documentation = new Documentation(mixinsDocumentations);
-    localHandlers.forEach((handler) => handler(documentation, compDef));
-    return documentation.toObject();
-  });
-}
 
 /**
  * parses the source and returns the doc
@@ -41,53 +20,28 @@ function executeHandlers(
 export default function parse(source: string, filePath: string): ComponentDoc {
   const singleFileComponent = /\.vue$/i.test(path.extname(filePath));
   let parts: SFCDescriptor | null = null;
-  let vueDocArray: ComponentDoc[] = [];
-  let ast: bt.File | null = null;
-  if (singleFileComponent) {
-    parts = scfParser(source, filePath);
-  }
 
   if (source === '') {
     throw new Error(ERROR_EMPTY_DOCUMENT);
   }
 
-  const originalSource = parts ? (parts.script ? parts.script.content : undefined) : source;
-  if (originalSource) {
-    const plugins: ParserPlugin[] =
-      (parts && parts.script && parts.script.attrs && parts.script.attrs.lang === 'ts') ||
-      /\.tsx?$/i.test(path.extname(filePath))
-        ? ['typescript']
-        : ['flow'];
-
-    ast = buildParser({ plugins }).parse(originalSource);
-
-    const componentDefinitions = resolveExportedComponent(ast.program);
-
-    if (componentDefinitions.length === 0) {
-      throw new Error(ERROR_MISSING_DEFINITION);
-    }
-
-    // extends management
-    const extendsDocumentations =
-      getRequiredExtendsDocumentations(ast.program, componentDefinitions, filePath) || {};
-
-    // mixins management
-    const mixinsDocumentations = getRequiredMixinDocumentations(
-      ast.program,
-      componentDefinitions,
-      filePath,
-    );
-
-    // merge all the varnames found in the mixins
-    const mixinDocs = Object.keys(mixinsDocumentations).reduce((acc, mixinVar) => {
-      return deepmerge(acc, mixinsDocumentations[mixinVar]);
-    }, extendsDocumentations);
-
-    vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs);
+  if (singleFileComponent) {
+    parts = scfParser(source, filePath);
   }
 
-  const doc: ComponentDoc = vueDocArray.length
-    ? vueDocArray[0]
+  const scriptSource = parts ? (parts.script ? parts.script.content : undefined) : source;
+  let parsed: { doc: ComponentDoc; ast: bt.File } | null = null;
+  if (scriptSource) {
+    const lang =
+      (parts && parts.script && parts.script.attrs && parts.script.attrs.lang === 'ts') ||
+      /\.tsx?$/i.test(path.extname(filePath))
+        ? 'ts'
+        : 'js';
+    parsed = parseScript(scriptSource, handlers, { lang, filePath });
+  }
+
+  const doc: ComponentDoc = parsed
+    ? parsed.doc
     : {
         displayName: '',
         description: '',
@@ -103,7 +57,7 @@ export default function parse(source: string, filePath: string): ComponentDoc {
   }
 
   // get events from comments
-  doc.events = ast ? getEvents(ast) : {};
+  doc.events = parsed ? getEvents(parsed.ast) : {};
 
   // get slots from template
   if (parts && parts.template) {
