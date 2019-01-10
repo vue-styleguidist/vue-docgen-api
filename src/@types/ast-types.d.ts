@@ -1,24 +1,6 @@
 declare module 'ast-types' {
   import * as bt from '@babel/types'
 
-  interface AstNodeType {
-    check: (testedNode: Node | null) => boolean
-  }
-
-  export const namedTypes: {
-    CommentBlock: AstNodeType
-    Literal: AstNodeType
-    Identifier: AstNodeType
-    Property: AstNodeType
-    ExpressionStatement: AstNodeType
-    AssignmentExpression: AstNodeType
-    MemberExpression: AstNodeType
-    VariableDeclaration: AstNodeType
-    ObjectExpression: AstNodeType
-    CallExpression: AstNodeType
-    ImportDefaultSpecifier: AstNodeType
-  }
-
   export interface NodePath<T extends bt.Node = bt.Node> {
     node: T
     parent: NodePath
