@@ -19,10 +19,16 @@ export interface MethodDescriptor {
   [key: string]: any;
 }
 
+export interface SlotResult {
+  description?: string;
+  bindings?: Record<string, any>;
+}
+
 export interface ComponentDoc {
   displayName: string;
   props: { [propName: string]: PropDescriptor } | undefined;
   methods: MethodDescriptor[];
+  slots: { [name: string]: SlotResult };
   [key: string]: any;
 }
 
@@ -80,6 +86,7 @@ export class Documentation {
       ...obj,
       props,
       methods: obj.methods,
+      slots: obj.slots || {},
       displayName: obj.displayName,
     };
   }

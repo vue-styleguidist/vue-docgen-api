@@ -5,10 +5,11 @@ import * as bt from '@babel/types';
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations';
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations';
 import resolveExportedComponent from './utils/resolveExportedComponent';
-import getSlots from './utils/getSlots';
 import getEvents from './utils/getEvents';
 import { Documentation, ComponentDoc } from './Documentation';
 import handlers from './handlers';
+import templateHandlers from './templateHandlers';
+import parseTemplate from './template-parser';
 import { NodePath } from 'ast-types';
 import { SFCDescriptor } from 'vue-template-compiler';
 import { ParserPlugin } from '@babel/parser';
@@ -84,9 +85,17 @@ export default function parse(source: string, filePath: string): ComponentDoc {
 
     vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs);
   }
+
   const doc: ComponentDoc = vueDocArray.length
     ? vueDocArray[0]
-    : { displayName: '', description: '', methods: [], props: undefined, tags: {} };
+    : {
+        displayName: '',
+        description: '',
+        methods: [],
+        props: undefined,
+        slots: {},
+        tags: {},
+      };
 
   // a component should always have a display name
   if (!doc.displayName || !doc.displayName.length) {
@@ -97,7 +106,9 @@ export default function parse(source: string, filePath: string): ComponentDoc {
   doc.events = ast ? getEvents(ast) : {};
 
   // get slots from template
-  doc.slots = parts && parts.template ? getSlots(parts.template) : {};
+  if (parts && parts.template) {
+    parseTemplate(parts.template, doc, templateHandlers);
+  }
 
   return doc;
 }

@@ -19,8 +19,8 @@ describe('tests button functional', () => {
     expect(docButton.slots.default).not.toBeUndefined();
   });
 
-  xit('should extract props from template if functional', () => {
-    expect(docButton.props).toMatchObject({ size: { type: { name: 'any' } } });
+  it('should extract props from template if functional', () => {
+    expect(docButton.props).toMatchObject({ size: { type: { name: 'string' } } });
   });
 
   it('the default slot should have "Use this slot default" as description', () => {

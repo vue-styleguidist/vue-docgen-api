@@ -6,7 +6,16 @@ Object {
   "displayName": "MyButton",
   "events": Object {},
   "methods": Array [],
-  "props": undefined,
+  "props": Object {
+    "size": Object {
+      "description": "",
+      "required": false,
+      "tags": Object {},
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
   "slots": Object {
     "default": Object {
       "bindings": Object {},
