@@ -1,32 +1,30 @@
 <template>
+  <div>
+    <!-- @slot Use this slot header -->
+    <slot name="header"></slot>
+    <table class="grid">
+      <thead>
+        <tr>
+          <th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">
+            {{ key | capitalize }}
+            <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="entry in filteredData">
+          <td v-for="key in columns">{{entry[key]}}</td>
+        </tr>
+      </tbody>
+    </table>
 
-	<!-- @slot Use this slot header -->
-	<slot name="header"></slot>
-	<table class="grid">
-		<thead>
-			<tr>
-				<th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">
-					{{ key | capitalize }}
-					<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-					</span>
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for="entry in filteredData">
-				<td v-for="key in columns">
-					{{entry[key]}}
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<!-- @slot Use this slot footer -->
-	<slot name="footer"></slot>
+    <!-- @slot Use this slot footer -->
+    <slot name="footer"></slot>
+  </div>
 </template>
 
 <script>
-import { text } from "./utils";
+import { text } from './utils'
 
 /**
  * This is an example of creating a reusable grid component and using it with external data.
@@ -35,7 +33,7 @@ import { text } from "./utils";
  * @since Version 1.0.1
  */
 export default {
-  name: "grid",
+  name: 'grid',
   props: {
     /**
      * object/array defaults should be returned from a factory function
@@ -46,7 +44,7 @@ export default {
      */
     msg: {
       type: [String, Number],
-      default: text
+      default: text,
     },
     /**
      * describe data
@@ -57,14 +55,14 @@ export default {
     images: {
       type: Array,
       default: function() {
-        return [{}];
-      }
+        return [{}]
+      },
     },
     /**
      * prop function
      */
     propFunc: {
-      default: function() {}
+      default: function() {},
     },
     /**
      * get columns list
@@ -76,25 +74,25 @@ export default {
      */
     filterKey: {
       type: String,
-      default: "example"
-    }
+      default: 'example',
+    },
   },
   data() {
-    var sortOrders = {};
+    var sortOrders = {}
     this.columns.forEach(function(key) {
-      sortOrders[key] = 1;
-    });
+      sortOrders[key] = 1
+    })
     return {
-      sortKey: "",
-      sortOrders: sortOrders
-    };
+      sortKey: '',
+      sortOrders: sortOrders,
+    }
   },
   computed: {
     filteredData: function() {
-      var sortKey = this.sortKey;
-      var filterKey = this.filterKey && this.filterKey.toLowerCase();
-      var order = this.sortOrders[sortKey] || 1;
-      var data = this.data;
+      var sortKey = this.sortKey
+      var filterKey = this.filterKey && this.filterKey.toLowerCase()
+      var order = this.sortOrders[sortKey] || 1
+      var data = this.data
       if (filterKey) {
         data = data.filter(function(row) {
           return Object.keys(row).some(function(key) {
@@ -102,63 +100,63 @@ export default {
               String(row[key])
                 .toLowerCase()
                 .indexOf(filterKey) > -1
-            );
-          });
-        });
+            )
+          })
+        })
       }
       if (sortKey) {
         data = data.slice().sort(function(a, b) {
-          a = a[sortKey];
-          b = b[sortKey];
-          return (a === b ? 0 : a > b ? 1 : -1) * order;
-        });
+          a = a[sortKey]
+          b = b[sortKey]
+          return (a === b ? 0 : a > b ? 1 : -1) * order
+        })
       }
-      return data;
-    }
+      return data
+    },
   },
   filters: {
     capitalize: function(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
   },
   methods: {
     /**
-   * Sets the order
-   *
-   * @public
-   * @version 1.0.5
-   * @since Version 1.0.1
-   * @param {string} key Key to order
-   * @returns {string} Test
-   */
+     * Sets the order
+     *
+     * @public
+     * @version 1.0.5
+     * @since Version 1.0.1
+     * @param {string} key Key to order
+     * @returns {string} Test
+     */
     sortBy: function(key) {
-      this.sortKey = key;
-      this.sortOrders[key] = this.sortOrders[key] * -1;
+      this.sortKey = key
+      this.sortOrders[key] = this.sortOrders[key] * -1
 
       /**
-			 * Success event.
-			 *
-			 * @event success
-			 * @type {object}
-			 */
-      this.$emit("example", {
-        demo: "example success"
-      });
+       * Success event.
+       *
+       * @event success
+       * @type {object}
+       */
+      this.$emit('example', {
+        demo: 'example success',
+      })
     },
 
     hiddenMethod: function() {
       /**
-			 * Error event.
-			 *
-			 * @event error
-			 * @type {object}
-			 */
-      this.$emit("error", {
-        demo: "example error"
-      });
-    }
-  }
-};
+       * Error event.
+       *
+       * @event error
+       * @type {object}
+       */
+      this.$emit('error', {
+        demo: 'example error',
+      })
+    },
+  },
+}
 </script>
 
 <style scoped>

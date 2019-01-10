@@ -12,4 +12,17 @@ describe('getSlots', () => {
       default: { description: 'Use this slot default' },
     });
   });
+
+  it('should extract slots from pug', () => {
+    const content = [
+      '<button class="buttonComponent" @click.prevent="onClick">',
+      '  <!-- @slot Use this slot default -->',
+      '  <slot></slot>',
+      '</button>',
+    ].join('\n');
+    const attrs = { lang: 'pug' };
+    expect(getSlots({ type: 'template', content, attrs })).toMatchObject({
+      default: { description: 'Use this slot default' },
+    });
+  });
 });

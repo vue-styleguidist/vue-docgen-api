@@ -13,6 +13,7 @@ declare module 'vue-template-compiler' {
     modules?: ModuleOptions[]
     directives?: Record<string, DirectiveFunction>
     preserveWhitespace?: boolean
+    comments?: boolean
   }
 
   interface CompiledResult {

@@ -1,40 +1,98 @@
-import { Parser } from 'htmlparser2';
-import { SFCBlock } from 'vue-template-compiler';
+import { SFCBlock, ASTElement, ASTNode, compile } from 'vue-template-compiler';
 import getHtmlFromPug from './getHtmlFromPug';
 
-export default function getSlots(tpl: SFCBlock) {
-  const output: { [name: string]: { description?: string } } = {};
+export interface SlotResult {
+  description?: string;
+  bindings?: Record<string, any>;
+}
+
+export default function getSlots(tpl: SFCBlock): { [name: string]: SlotResult } {
+  const output: { [name: string]: SlotResult } = {};
   if (tpl && tpl.content) {
     const template =
       tpl.attrs && tpl.attrs.lang === 'pug' ? getHtmlFromPug(tpl.content) : tpl.content;
-    let lastComment = '';
-
-    const parser = new Parser({
-      oncomment: (data) => {
-        if (data.search(/\@slot/) !== -1) {
-          lastComment = data.replace('@slot', '').trim();
-        }
-      },
-      ontext: (text) => {
-        if (text.trim()) {
-          lastComment = '';
-        }
-      },
-      onopentag: (name, attrs) => {
-        if (name === 'slot') {
-          const nameSlot = attrs.name || 'default';
-          output[nameSlot] = {
-            description: lastComment,
-          };
-
-          lastComment = '';
-        }
-      },
-    });
-
-    parser.write(template);
-    parser.end();
-    return output;
+    const ast = compile(template, { comments: true }).ast;
+    if (ast) {
+      traverse(ast, output);
+      return output;
+    }
   }
   return {};
+}
+
+function traverse(templateAst: ASTElement, slots: { [name: string]: SlotResult }) {
+  if (templateAst.type === 1) {
+    if (templateAst.tag === 'slot') {
+      const bindings = extractAndFilterAttr(templateAst.attrsMap);
+      let name = 'default';
+      if (bindings.name) {
+        name = bindings.name;
+        delete bindings.name;
+      }
+      slots[name] = { bindings };
+      if (templateAst.parent) {
+        const slotSiblings: ASTNode[] = templateAst.parent.children;
+        // first find the position of the slot in the list
+        let i = slotSiblings.length - 1;
+        let currentSlotIndex = -1;
+        do {
+          if (slotSiblings[i] === templateAst) {
+            currentSlotIndex = i;
+          }
+        } while (currentSlotIndex < 0 && i--);
+
+        // Find the first leading comment node as a description of the slot
+        const slotSiblingsBeforeSlot = slotSiblings.slice(0, currentSlotIndex).reverse();
+
+        for (const potentialComment of slotSiblingsBeforeSlot) {
+          // if there is text between the slot and the comment ignore
+          if (
+            potentialComment.type !== 3 ||
+            (!potentialComment.isComment && potentialComment.text.trim())
+          ) {
+            break;
+          }
+
+          if (
+            potentialComment.isComment &&
+            !(
+              templateAst.parent.tag === 'slot' &&
+              templateAst.parent.children[0] === potentialComment
+            )
+          ) {
+            const comment = potentialComment.text.trim();
+            if (comment.search(/\@slot/) !== -1) {
+              slots[name].description = comment.replace('@slot', '').trim();
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    if (templateAst.children) {
+      for (const childNode of templateAst.children) {
+        if (isASTElement(childNode)) {
+          traverse(childNode, slots);
+        }
+      }
+    }
+  }
+}
+
+function isASTElement(node: ASTNode): node is ASTElement {
+  return !!node && (node as ASTElement).children !== undefined;
+}
+
+const dirRE = /^(v-|:|@)/;
+const allowRE = /^(v-bind|:)/;
+function extractAndFilterAttr(attrsMap: Record<string, any>): Record<string, any> {
+  const res: Record<string, any> = {};
+  const keys = Object.keys(attrsMap);
+  for (const key of keys) {
+    if (!dirRE.test(key) || allowRE.test(key)) {
+      res[key.replace(allowRE, '')] = attrsMap[key];
+    }
+  }
+  return res;
 }

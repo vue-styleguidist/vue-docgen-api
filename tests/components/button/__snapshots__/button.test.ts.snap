@@ -218,6 +218,7 @@ a factory function",
   },
   "slots": Object {
     "default": Object {
+      "bindings": Object {},
       "description": "Use this slot default",
     },
   },
