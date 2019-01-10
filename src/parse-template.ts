@@ -1,5 +1,5 @@
 import { SFCBlock, ASTElement, ASTNode, compile } from 'vue-template-compiler';
-import getHtmlFromPug from './utils/getHtmlFromPug';
+import * as pug from 'pug';
 import { ComponentDoc } from './Documentation';
 
 export interface TemplateParserOptions {
@@ -16,10 +16,13 @@ export default function parseTemplate(
   tpl: SFCBlock,
   documentation: ComponentDoc,
   handlers: Handler[],
+  filePath: string,
 ) {
   if (tpl && tpl.content) {
     const template =
-      tpl.attrs && tpl.attrs.lang === 'pug' ? getHtmlFromPug(tpl.content) : tpl.content;
+      tpl.attrs && tpl.attrs.lang === 'pug'
+        ? pug.render(tpl.content, { filename: filePath })
+        : tpl.content;
     const ast = compile(template, { comments: true }).ast;
     if (ast) {
       traverse(ast, documentation, handlers, { functional: !!tpl.attrs.functional });

@@ -61,7 +61,7 @@ export default function parse(source: string, filePath: string): ComponentDoc {
 
   // get slots from template
   if (parts && parts.template) {
-    parseTemplate(parts.template, doc, templateHandlers);
+    parseTemplate(parts.template, doc, templateHandlers, filePath);
   }
 
   return doc;
