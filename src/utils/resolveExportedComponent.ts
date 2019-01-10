@@ -11,6 +11,10 @@ function isComponentDefinition(path: NodePath): boolean {
   return (
     // export default {}
     bt.isObjectExpression(path.node) ||
+    // export const myComp = {}
+    (bt.isVariableDeclarator(path.node) &&
+      path.node.init &&
+      bt.isObjectExpression(path.node.init)) ||
     // export default Vue.extends({})
     (bt.isCallExpression(path.node) &&
       bt.isMemberExpression(path.node.callee) &&
@@ -43,11 +47,7 @@ export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
 
   function setComponent(definition: NodePath) {
     if (definition && components.indexOf(definition) === -1) {
-      if (bt.isObjectExpression(definition.node)) {
-        components.push(definition);
-      } else {
-        components.push(definition.get('arguments', 0));
-      }
+      components.push(normalizeComponentPath(definition));
     }
   }
 
@@ -115,4 +115,15 @@ export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
   });
 
   return components;
+}
+
+function normalizeComponentPath(path: NodePath): NodePath {
+  if (bt.isObjectExpression(path.node)) {
+    return path;
+  } else if (bt.isCallExpression(path.node)) {
+    return path.get('arguments', 0);
+  } else if (bt.isVariableDeclarator(path.node)) {
+    return path.get('init');
+  }
+  return path;
 }

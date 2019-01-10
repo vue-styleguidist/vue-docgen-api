@@ -10,16 +10,23 @@ export default function isExportedAssignment(path: NodePath) {
     path = path.get('expression');
   }
 
-  // check if we are looking at obj.member = value`
-  if (!bt.isAssignmentExpression(path.node) || !bt.isMemberExpression(path.node.left)) {
+  if (!bt.isAssignmentExpression(path.node)) {
     return false;
   }
-  const pathLeft = path.get('left').node;
+  const pathLeft = path.node.left;
   const isSimpleExports = bt.isIdentifier(pathLeft) && pathLeft.name === 'exports';
-  const isModuleExports =
-    bt.isMemberExpression(pathLeft) &&
-    bt.isIdentifier(pathLeft.object) &&
-    pathLeft.object.name === 'module' &&
-    pathLeft.property.name === 'exports';
+
+  // check if we are looking at obj.member = value`
+  let isModuleExports = false;
+  if (!isSimpleExports && !bt.isMemberExpression(path.node.left)) {
+    return false;
+  } else {
+    isModuleExports =
+      bt.isMemberExpression(pathLeft) &&
+      bt.isIdentifier(pathLeft.object) &&
+      pathLeft.object.name === 'module' &&
+      pathLeft.property.name === 'exports';
+  }
+
   return isSimpleExports || isModuleExports;
 }
