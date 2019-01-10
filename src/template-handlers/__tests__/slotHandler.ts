@@ -28,7 +28,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast;
     if (ast) {
-      traverse(ast, doc, [slotHandler]);
+      traverse(ast, doc, [slotHandler], { functional: false });
       expect(doc.slots.default).toMatchObject({ description: 'a default slot' });
     } else {
       fail();
@@ -47,7 +47,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast;
     if (ast) {
-      traverse(ast, doc, [slotHandler]);
+      traverse(ast, doc, [slotHandler], { functional: false });
       expect(doc.slots.oeuf).toMatchObject({ description: 'a slot named oeuf' });
     } else {
       fail();

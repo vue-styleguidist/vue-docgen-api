@@ -78,5 +78,5 @@ export default function getEvents(ast: bt.File) {
 }
 
 function isTag(tag: BlockTag): tag is Tag {
-  return typeof (tag as Tag).content === 'string';
+  return tag && typeof (tag as Tag).content === 'string';
 }

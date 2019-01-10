@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { NodePath } from 'ast-types';
 import * as bt from '@babel/types';
+import resolvePathFrom from './resolvePathFrom';
 import resolveRequired from './resolveRequired';
 import { ComponentDoc } from 'src/Documentation';
 import { parse } from '../main';
@@ -30,7 +31,7 @@ export default function getRequiredMixinDocumentations(
     const filePath = mixinVarToFilePath[varName];
     let doc = mixinFileToDoc[filePath];
     if (!doc) {
-      const fullFilePath = require.resolve(filePath, { paths: [originalDirName] });
+      const fullFilePath = resolvePathFrom(filePath, originalDirName);
       doc = parse(fullFilePath);
       mixinFileToDoc[filePath] = doc;
     }

@@ -2,11 +2,12 @@ import * as path from 'path';
 import * as bt from '@babel/types';
 import { NodePath } from 'ast-types';
 import resolveRequired from './resolveRequired';
+import resolvePathFrom from './resolvePathFrom';
 import { parse } from '../main';
-import { ComponentDoc } from 'src/Documentation';
+import { ComponentDoc } from '../Documentation';
 
 /**
- *
+ * Retruns documentation of the component referenced in the extends property of the component
  * @param {NodePath} astPath
  * @param {Array<NodePath>} componentDefinitions
  * @param {string} originalFilePath
@@ -26,9 +27,8 @@ export default function getRequiredExtendsDocumentations(
   const extendsFilePath = resolveRequired(astPath, [extendsVariableName]);
 
   const originalDirName = path.dirname(originalFilePath);
-  const fullFilePath = require.resolve(extendsFilePath[extendsVariableName], {
-    paths: [originalDirName],
-  });
+  const fullFilePath = resolvePathFrom(extendsFilePath[extendsVariableName], originalDirName);
+
   return parse(fullFilePath);
 }
 
