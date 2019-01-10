@@ -24,9 +24,10 @@ function isComponentDefinition(path: NodePath): boolean {
     // @Component
     // export default class MyComp extends VueComp
     (bt.isClassDeclaration(path.node) &&
-      (path.node.decorators || []).some(
-        (d) => bt.isIdentifier(d.expression) && d.expression.name === 'Component',
-      ))
+      (path.node.decorators || []).some((d) => {
+        const exp = bt.isCallExpression(d.expression) ? d.expression.callee : d.expression;
+        return bt.isIdentifier(exp) && exp.name === 'Component';
+      }))
   );
 }
 

@@ -32,7 +32,7 @@ describe('getRequiredExtendsDocumentations', () => {
     getRequiredExtendsDocumentations(ast.program, path, '');
   }
 
-  it('should resolve extended modules variables', () => {
+  it('should resolve extended modules variables in import default', () => {
     const src = [
       'import testComponent from "./testComponent"',
       'export default {',
@@ -43,7 +43,7 @@ describe('getRequiredExtendsDocumentations', () => {
     expect(parse).toHaveBeenCalledWith('./component/full/path');
   });
 
-  it('should resolve extended modules variables', () => {
+  it('should resolve extended modules variables in require', () => {
     const src = [
       'const testComponent = require("./testComponent");',
       'export default {',
@@ -54,11 +54,21 @@ describe('getRequiredExtendsDocumentations', () => {
     expect(parse).toHaveBeenCalledWith('./component/full/path');
   });
 
-  it('should resolve extended modules variables', () => {
+  it('should resolve extended modules variables in import', () => {
     const src = [
       'import { testComponent, other } from "./testComponent"',
       'export default {',
       '  extends:testComponent',
+      '}',
+    ].join('\n');
+    parseItExtends(src);
+    expect(parse).toHaveBeenCalledWith('./component/full/path');
+  });
+
+  it('should resolve extended modules variables in class style components', () => {
+    const src = [
+      'import { testComponent} from "./testComponent"',
+      'export default class Bart extends testComponent {',
       '}',
     ].join('\n');
     parseItExtends(src);

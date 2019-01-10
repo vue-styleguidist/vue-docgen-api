@@ -21,4 +21,11 @@ describe('resolveExportedComponent', () => {
     const ast = babylon().parse('exports = {};');
     expect(resolveExportedComponent(ast.program).length).toBe(1);
   });
+
+  it('should return exportedclass style components', () => {
+    const ast = babylon().parse(
+      ['@Component()', 'export default class Bart extends testComponent {}'].join('\n'),
+    );
+    expect(resolveExportedComponent(ast.program).length).toBe(1);
+  });
 });
