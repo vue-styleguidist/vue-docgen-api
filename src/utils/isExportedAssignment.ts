@@ -24,8 +24,10 @@ export default function isExportedAssignment(path: NodePath) {
     isModuleExports =
       bt.isMemberExpression(pathLeft) &&
       bt.isIdentifier(pathLeft.object) &&
-      pathLeft.object.name === 'module' &&
-      pathLeft.property.name === 'exports';
+      // if exports.xx =
+      (pathLeft.object.name === 'exports' ||
+        // if module.exports =
+        (pathLeft.object.name === 'module' && pathLeft.property.name === 'exports'));
   }
 
   return isSimpleExports || isModuleExports;
