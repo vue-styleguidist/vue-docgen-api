@@ -13,7 +13,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
   if (bt.isObjectExpression(path.node)) {
     const propsPath = path
       .get('properties')
-      .filter(p => bt.isProperty(p.node) && p.node.key.name === 'props')
+      .filter((p) => bt.isProperty(p.node) && p.node.key.name === 'props')
 
     // if no prop return
     if (!propsPath.length) {
@@ -38,7 +38,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
           const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
 
           // if it's the v-model describe it only as such
-          const propName = jsDocTags.some(t => t.title === 'model') ? 'v-model' : propNode.key.name
+          const propName = jsDocTags.some((t) => t.title === 'model') ? 'v-model' : propNode.key.name
 
           const propDescriptor = documentation.getPropDescriptor(propName)
           const propValuePath = prop.get('value')
@@ -81,24 +81,22 @@ export default function propHandler(documentation: Documentation, path: NodePath
           propDescriptor.type = { name: 'undefined' }
         })
     }
-  } else if (bt.isClassDeclaration(path.node)) {
-    // TODO: implement property detection in class style components
   }
 }
 
 function describeType(
   propPropertiesPath: NodePath<bt.ObjectProperty>,
-  propDescriptor: PropDescriptor
+  propDescriptor: PropDescriptor,
 ) {
   const typeArray = propPropertiesPath.filter(
-    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'type'
+    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'type',
   )
   if (typeArray.length) {
     propDescriptor.type = getTypeFromTypePath(typeArray[0].get('value'))
   } else {
     // deduce the type from default expression
     const defaultArray = propPropertiesPath.filter(
-      (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'default'
+      (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'default',
     )
     if (defaultArray.length) {
       const typeNode = defaultArray[0].node as bt.ObjectProperty
@@ -115,7 +113,7 @@ function getTypeFromTypePath(typePath: NodePath): { name: string; func?: boolean
   const typeNode = typePath.node
   const typeName = bt.isArrayExpression(typeNode)
     ? typeNode.elements
-        .map(t => (t && bt.isIdentifier(t) ? t.name.toLowerCase() : 'undefined'))
+        .map((t) => (t && bt.isIdentifier(t) ? t.name.toLowerCase() : 'undefined'))
         .join('|')
     : typeNode && bt.isIdentifier(typeNode)
     ? typeNode.name.toLowerCase()
@@ -127,10 +125,10 @@ function getTypeFromTypePath(typePath: NodePath): { name: string; func?: boolean
 
 function describeRequired(
   propPropertiesPath: NodePath<bt.ObjectProperty>,
-  propDescriptor: PropDescriptor
+  propDescriptor: PropDescriptor,
 ) {
   const requiredArray = propPropertiesPath.filter(
-    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'required'
+    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'required',
   )
   const requiredNode = requiredArray.length ? requiredArray[0].get('value').node : undefined
   if (requiredNode && bt.isLiteral(requiredNode)) {
@@ -140,7 +138,7 @@ function describeRequired(
 
 function describeDefault(propPropertiesPath: NodePath, propDescriptor: PropDescriptor) {
   const defaultArray = propPropertiesPath.filter(
-    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'default'
+    (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'default',
   )
   if (defaultArray.length) {
     const defaultNode = defaultArray[0].get('value')

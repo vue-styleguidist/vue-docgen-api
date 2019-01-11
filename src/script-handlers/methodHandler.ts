@@ -12,7 +12,7 @@ export default function methodHandler(documentation: Documentation, path: NodePa
   if (bt.isObjectExpression(path.node)) {
     const methodsPath = path
       .get('properties')
-      .filter(propertyPath => bt.isProperty(propertyPath.node))
+      .filter((propertyPath) => bt.isProperty(propertyPath.node))
       .filter((p: NodePath<bt.Property>) => p.node.key.name === 'methods')
 
     // if no method return
@@ -25,7 +25,7 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 
     methodsObject
       .get('properties')
-      .filter(propertyPath => bt.isProperty(propertyPath.node))
+      .filter((propertyPath) => bt.isProperty(propertyPath.node))
       .forEach((method: NodePath<bt.Property>) => {
         const methodDescriptor: MethodDescriptor = { name: '', description: '' }
 
@@ -37,7 +37,7 @@ export default function methodHandler(documentation: Documentation, path: NodePa
         const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
 
         // ignore the method if there is no public tag
-        if (!jsDocTags.some(t => t.title === 'public')) {
+        if (!jsDocTags.some((t) => t.title === 'public')) {
           return
         }
 
@@ -47,18 +47,16 @@ export default function methodHandler(documentation: Documentation, path: NodePa
         }
 
         // params
-        describeParams(method, methodDescriptor, jsDocTags.filter(tag => tag.title === 'param'))
+        describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'))
 
         // returns
-        describeReturns(method, methodDescriptor, jsDocTags.filter(t => t.title === 'returns'))
+        describeReturns(method, methodDescriptor, jsDocTags.filter((t) => t.title === 'returns'))
 
         // tags
         methodDescriptor.tags = transformTagsIntoObject(jsDocTags)
 
         methods.push(methodDescriptor)
       })
-  } else if (bt.isClassDeclaration(path.node)) {
-    // TODO: implement public method detection in class style components
   }
   documentation.set('methods', methods)
 }
@@ -66,7 +64,7 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 function describeParams(
   methodPath: NodePath<bt.Property>,
   methodDescriptor: MethodDescriptor,
-  jsDocParamTags: ParamTag[]
+  jsDocParamTags: ParamTag[],
 ) {
   // if there is no parameter non need to parse them
   const fExp = methodPath.node.value
@@ -78,7 +76,7 @@ function describeParams(
     fExp.params.forEach((par: bt.Identifier, i) => {
       const param: Param = { name: par.name }
 
-      const jsDocTags = jsDocParamTags.filter(tag => tag.name === param.name)
+      const jsDocTags = jsDocParamTags.filter((tag) => tag.name === param.name)
       let jsDocTag = jsDocTags.length ? jsDocTags[0] : undefined
 
       // if tag is not namely described try finding it by its order
@@ -123,7 +121,7 @@ function describeParams(
 function describeReturns(
   methodPath: NodePath<bt.Property>,
   methodDescriptor: MethodDescriptor,
-  jsDocReturnTags: ParamTag[]
+  jsDocReturnTags: ParamTag[],
 ) {
   if (jsDocReturnTags.length) {
     methodDescriptor.returns = jsDocReturnTags[0]
@@ -139,12 +137,12 @@ function describeReturns(
         if (bt.isTSTypeAnnotation(methodNode.returnType)) {
           methodDescriptor.returns = methodDescriptor.returns || {}
           methodDescriptor.returns.type = getTypeObjectFromTSType(
-            methodNode.returnType.typeAnnotation
+            methodNode.returnType.typeAnnotation,
           )
         } else if (bt.isTypeAnnotation(methodNode.returnType)) {
           methodDescriptor.returns = methodDescriptor.returns || {}
           methodDescriptor.returns.type = getTypeObjectFromFlowType(
-            methodNode.returnType.typeAnnotation
+            methodNode.returnType.typeAnnotation,
           )
         }
       }
