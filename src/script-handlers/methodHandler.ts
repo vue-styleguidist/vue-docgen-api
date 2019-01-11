@@ -38,7 +38,7 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 
         // ignore the method if there is no public tag
         if (!jsDocTags.some(t => t.title === 'public')) {
-          return;
+          return
         }
 
         // description
@@ -47,20 +47,20 @@ export default function methodHandler(documentation: Documentation, path: NodePa
         }
 
         // params
-        describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'))
+        describeParams(method, methodDescriptor, jsDocTags.filter(tag => tag.title === 'param'))
 
         // returns
-        describeReturns(method, methodDescriptor, jsDocTags.filter((t) => t.title === 'returns'))
+        describeReturns(method, methodDescriptor, jsDocTags.filter(t => t.title === 'returns'))
 
         // tags
         methodDescriptor.tags = transformTagsIntoObject(jsDocTags)
 
         methods.push(methodDescriptor)
-      });
+      })
   } else if (bt.isClassDeclaration(path.node)) {
     // TODO: implement public method detection in class style components
   }
-  documentation.set('methods', methods);
+  documentation.set('methods', methods)
 }
 
 function describeParams(
@@ -69,83 +69,83 @@ function describeParams(
   jsDocParamTags: ParamTag[]
 ) {
   // if there is no parameter non need to parse them
-  const fExp = methodPath.node.value;
+  const fExp = methodPath.node.value
   if (fExp && bt.isFunctionExpression(fExp) && !fExp.params.length) {
-    return;
+    return
   }
-  const params: Param[] = [];
+  const params: Param[] = []
   if (fExp && bt.isFunctionExpression(fExp)) {
     fExp.params.forEach((par: bt.Identifier, i) => {
-      const param: Param = { name: par.name };
+      const param: Param = { name: par.name }
 
-      const jsDocTags = jsDocParamTags.filter((tag) => tag.name === param.name);
-      let jsDocTag = jsDocTags.length ? jsDocTags[0] : undefined;
+      const jsDocTags = jsDocParamTags.filter(tag => tag.name === param.name)
+      let jsDocTag = jsDocTags.length ? jsDocTags[0] : undefined
 
       // if tag is not namely described try finding it by its order
       if (!jsDocTag) {
         if (jsDocParamTags[i] && !jsDocParamTags[i].name) {
-          jsDocTag = jsDocParamTags[i];
+          jsDocTag = jsDocParamTags[i]
         }
       }
 
       if (jsDocTag) {
         if (jsDocTag.type) {
-          param.type = jsDocTag.type;
+          param.type = jsDocTag.type
         }
         if (jsDocTag.description) {
-          param.description = jsDocTag.description;
+          param.description = jsDocTag.description
         }
       }
 
       if (!param.type && par.typeAnnotation) {
         const tsType = bt.isTSTypeAnnotation(par.typeAnnotation)
           ? par.typeAnnotation.typeAnnotation
-          : undefined;
+          : undefined
         if (tsType) {
-          param.type = getTypeObjectFromTSType(tsType);
+          param.type = getTypeObjectFromTSType(tsType)
         } else if (bt.isTypeAnnotation(par.typeAnnotation)) {
-          const flowType = par.typeAnnotation.typeAnnotation;
+          const flowType = par.typeAnnotation.typeAnnotation
           if (flowType) {
-            param.type = getTypeObjectFromFlowType(flowType);
+            param.type = getTypeObjectFromFlowType(flowType)
           }
         }
       }
 
-      params.push(param);
-    });
+      params.push(param)
+    })
   }
 
   if (params.length) {
-    methodDescriptor.params = params;
+    methodDescriptor.params = params
   }
 }
 
 function describeReturns(
   methodPath: NodePath<bt.Property>,
   methodDescriptor: MethodDescriptor,
-  jsDocReturnTags: ParamTag[],
+  jsDocReturnTags: ParamTag[]
 ) {
   if (jsDocReturnTags.length) {
-    methodDescriptor.returns = jsDocReturnTags[0];
+    methodDescriptor.returns = jsDocReturnTags[0]
   }
 
   if (!methodDescriptor.returns || !methodDescriptor.returns.type) {
-    const methodNode = methodPath.node.value;
+    const methodNode = methodPath.node.value
     if (
       methodNode &&
       (bt.isFunctionExpression(methodNode) || bt.isArrowFunctionExpression(methodNode))
     ) {
       if (methodNode.returnType) {
         if (bt.isTSTypeAnnotation(methodNode.returnType)) {
-          methodDescriptor.returns = methodDescriptor.returns || {};
+          methodDescriptor.returns = methodDescriptor.returns || {}
           methodDescriptor.returns.type = getTypeObjectFromTSType(
-            methodNode.returnType.typeAnnotation,
-          );
+            methodNode.returnType.typeAnnotation
+          )
         } else if (bt.isTypeAnnotation(methodNode.returnType)) {
-          methodDescriptor.returns = methodDescriptor.returns || {};
+          methodDescriptor.returns = methodDescriptor.returns || {}
           methodDescriptor.returns.type = getTypeObjectFromFlowType(
-            methodNode.returnType.typeAnnotation,
-          );
+            methodNode.returnType.typeAnnotation
+          )
         }
       }
     }
@@ -164,7 +164,7 @@ const TS_TYPE_NAME_MAP: { [name: string]: string } = {
   TSUndefinedKeyword: 'undefined',
   TSNullKeyword: 'null',
   TSNeverKeyword: 'never',
-};
+}
 
 function getTypeObjectFromTSType(type: bt.TSType): ParamType {
   const name =
@@ -172,9 +172,9 @@ function getTypeObjectFromTSType(type: bt.TSType): ParamType {
       ? type.typeName.name
       : TS_TYPE_NAME_MAP[type.type]
       ? TS_TYPE_NAME_MAP[type.type]
-      : type.type;
+      : type.type
 
-  return { name };
+  return { name }
 }
 
 const FLOW_TYPE_NAME_MAP: { [name: string]: string } = {
@@ -189,13 +189,13 @@ const FLOW_TYPE_NAME_MAP: { [name: string]: string } = {
   UndefinedTypeAnnotation: 'undefined',
   NullTypeAnnotation: 'null',
   NeverTypeAnnotation: 'never',
-};
+}
 
 function getTypeObjectFromFlowType(type: bt.FlowType): ParamType {
   const name = FLOW_TYPE_NAME_MAP[type.type]
     ? FLOW_TYPE_NAME_MAP[type.type]
     : bt.isGenericTypeAnnotation(type)
     ? type.id.name
-    : type.type;
-  return { name };
+    : type.type
+  return { name }
 }

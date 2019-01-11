@@ -9,7 +9,7 @@
   "types": "dist/main.d.ts",
   "scripts": {
     "lint": "tslint -p . --fix",
-    "format": "prettier --write **/*.{js,ts,md}",
+    "format": "prettier --write */**/*.ts",
     "compile": "tsc -p ./tsconfig.build.json",
     "prepublishOnly": "npm run compile",
     "test": "npm run unit && npm run e2e",

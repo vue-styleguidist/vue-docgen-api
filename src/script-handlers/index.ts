@@ -1,6 +1,6 @@
-import componentHandler from './componentHandler';
-import displayNameHandler from './displayNameHandler';
-import methodHandler from './methodHandler';
-import propHandler from './propHandler';
+import componentHandler from './componentHandler'
+import displayNameHandler from './displayNameHandler'
+import methodHandler from './methodHandler'
+import propHandler from './propHandler'
 
-export default [componentHandler, displayNameHandler, methodHandler, propHandler];
+export default [componentHandler, displayNameHandler, methodHandler, propHandler]

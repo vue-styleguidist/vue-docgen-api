@@ -1,50 +1,50 @@
-import * as pug from 'pug';
-import { ASTElement, ASTNode, compile, SFCBlock } from 'vue-template-compiler';
-import { ComponentDoc } from './Documentation';
+import * as pug from 'pug'
+import { ASTElement, ASTNode, compile, SFCBlock } from 'vue-template-compiler'
+import { ComponentDoc } from './Documentation'
 
 export interface TemplateParserOptions {
-  functional: boolean;
+  functional: boolean
 }
 
 export type Handler = (
   templateAst: ASTElement,
   documentation: ComponentDoc,
-  options: TemplateParserOptions,
-) => void;
+  options: TemplateParserOptions
+) => void
 
 export default function parseTemplate(
   tpl: SFCBlock,
   documentation: ComponentDoc,
   handlers: Handler[],
-  filePath: string,
+  filePath: string
 ) {
   if (tpl && tpl.content) {
     const template =
       tpl.attrs && tpl.attrs.lang === 'pug'
         ? pug.render(tpl.content, { filename: filePath })
-        : tpl.content;
-    const ast = compile(template, { comments: true }).ast;
+        : tpl.content
+    const ast = compile(template, { comments: true }).ast
     if (ast) {
-      traverse(ast, documentation, handlers, { functional: !!tpl.attrs.functional });
+      traverse(ast, documentation, handlers, { functional: !!tpl.attrs.functional })
     }
   }
-  return {};
+  return {}
 }
 
 export function traverse(
   templateAst: ASTElement,
   documentation: ComponentDoc,
   handlers: Handler[],
-  options: TemplateParserOptions,
+  options: TemplateParserOptions
 ) {
   if (templateAst.type === 1) {
-    handlers.forEach((handler) => {
-      handler(templateAst, documentation, options);
-    });
+    handlers.forEach(handler => {
+      handler(templateAst, documentation, options)
+    })
     if (templateAst.children) {
       for (const childNode of templateAst.children) {
         if (isASTElement(childNode)) {
-          traverse(childNode, documentation, handlers, options);
+          traverse(childNode, documentation, handlers, options)
         }
       }
     }
@@ -52,5 +52,5 @@ export function traverse(
 }
 
 function isASTElement(node: ASTNode): node is ASTElement {
-  return !!node && (node as ASTElement).children !== undefined;
+  return !!node && (node as ASTElement).children !== undefined
 }

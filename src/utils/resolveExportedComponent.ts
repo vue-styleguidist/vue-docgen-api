@@ -1,10 +1,10 @@
-import * as bt from '@babel/types';
-import { NodePath, visit } from 'ast-types';
-import isExportedAssignment from './isExportedAssignment';
-import resolveExportDeclaration from './resolveExportDeclaration';
+import * as bt from '@babel/types'
+import { NodePath, visit } from 'ast-types'
+import isExportedAssignment from './isExportedAssignment'
+import resolveExportDeclaration from './resolveExportDeclaration'
 
 function ignore(): boolean {
-  return false;
+  return false
 }
 
 function isComponentDefinition(path: NodePath): boolean {
@@ -24,11 +24,11 @@ function isComponentDefinition(path: NodePath): boolean {
     // @Component
     // export default class MyComp extends VueComp
     (bt.isClassDeclaration(path.node) &&
-      (path.node.decorators || []).some((d) => {
-        const exp = bt.isCallExpression(d.expression) ? d.expression.callee : d.expression;
-        return bt.isIdentifier(exp) && exp.name === 'Component';
+      (path.node.decorators || []).some(d => {
+        const exp = bt.isCallExpression(d.expression) ? d.expression.callee : d.expression
+        return bt.isIdentifier(exp) && exp.name === 'Component'
       }))
-  );
+  )
 }
 
 /**
@@ -43,11 +43,11 @@ function isComponentDefinition(path: NodePath): boolean {
  * export var Definition = ...;
  */
 export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
-  const components: NodePath[] = [];
+  const components: NodePath[] = []
 
   function setComponent(definition: NodePath) {
     if (definition && components.indexOf(definition) === -1) {
-      components.push(normalizeComponentPath(definition));
+      components.push(normalizeComponentPath(definition))
     }
   }
 
@@ -57,21 +57,21 @@ export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
     const definitions = resolveExportDeclaration(path).reduce(
       (acc: NodePath[], definition: NodePath) => {
         if (isComponentDefinition(definition)) {
-          acc.push(definition);
+          acc.push(definition)
         }
-        return acc;
+        return acc
       },
-      [],
-    );
+      []
+    )
 
     if (definitions.length === 0) {
-      return false;
+      return false
     }
 
     definitions.forEach((definition: NodePath) => {
-      setComponent(definition);
-    });
-    return false;
+      setComponent(definition)
+    })
+    return false
   }
 
   visit(ast, {
@@ -98,32 +98,32 @@ export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
       if (!isExportedAssignment(path)) {
-        return false;
+        return false
       }
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
-      path = path.get('right');
+      path = path.get('right')
       if (!isComponentDefinition(path)) {
         if (!isComponentDefinition(path)) {
-          return false;
+          return false
         }
       }
 
-      setComponent(path);
-      return false;
+      setComponent(path)
+      return false
     },
-  });
+  })
 
-  return components;
+  return components
 }
 
 function normalizeComponentPath(path: NodePath): NodePath {
   if (bt.isObjectExpression(path.node)) {
-    return path;
+    return path
   } else if (bt.isCallExpression(path.node)) {
-    return path.get('arguments', 0);
+    return path.get('arguments', 0)
   } else if (bt.isVariableDeclarator(path.node)) {
-    return path.get('init');
+    return path.get('init')
   }
-  return path;
+  return path
 }

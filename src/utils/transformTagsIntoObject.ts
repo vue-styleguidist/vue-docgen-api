@@ -1,5 +1,5 @@
-import blockTags, { BlockTag } from './blockTags';
-import { ParamTag, Tag } from './getDoclets';
+import blockTags, { BlockTag } from './blockTags'
+import { ParamTag, Tag } from './getDoclets'
 
 export default function transformTagsIntoObject(tags: BlockTag[]): { [key: string]: BlockTag[] } {
   return tags.reduce((acc: { [key: string]: BlockTag[] }, tag) => {
@@ -8,15 +8,15 @@ export default function transformTagsIntoObject(tags: BlockTag[]): { [key: strin
         const newTag: ParamTag = {
           description: tag.content,
           title: tag.title,
-        };
-        tag = newTag;
+        }
+        tag = newTag
       }
-      acc[tag.title] = [tag];
+      acc[tag.title] = [tag]
     }
-    return acc;
-  }, {});
+    return acc
+  }, {})
 }
 
 function isContentTag(tag: any): tag is Tag {
-  return tag.content !== undefined;
+  return tag.content !== undefined
 }

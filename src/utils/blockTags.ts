@@ -1,6 +1,6 @@
-import { ParamTag, Tag } from './getDoclets';
+import { ParamTag, Tag } from './getDoclets'
 
-export type BlockTag = ParamTag | Tag;
+export type BlockTag = ParamTag | Tag
 
 export default [
   'abstract',
@@ -55,4 +55,4 @@ export default [
   'variation',
   'version',
   'link',
-];
+]

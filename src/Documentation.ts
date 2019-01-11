@@ -1,55 +1,55 @@
-import Map from 'ts-map';
-import { BlockTag } from './utils/blockTags';
-import { Param, UnnamedParam } from './utils/getDoclets';
+import Map from 'ts-map'
+import { BlockTag } from './utils/blockTags'
+import { Param, UnnamedParam } from './utils/getDoclets'
 
 export interface PropDescriptor {
-  type?: { name: string; func?: boolean };
-  description: string;
-  required: string | boolean;
-  defaultValue?: { value: string; func?: boolean };
-  tags: { [title: string]: BlockTag[] };
+  type?: { name: string; func?: boolean }
+  description: string
+  required: string | boolean
+  defaultValue?: { value: string; func?: boolean }
+  tags: { [title: string]: BlockTag[] }
 }
 
 export interface MethodDescriptor {
-  name: string;
-  description: string;
-  returns?: UnnamedParam;
-  tags?: { [key: string]: BlockTag[] };
-  params?: Param[];
-  [key: string]: any;
+  name: string
+  description: string
+  returns?: UnnamedParam
+  tags?: { [key: string]: BlockTag[] }
+  params?: Param[]
+  [key: string]: any
 }
 
 export interface SlotResult {
-  description?: string;
-  bindings?: Record<string, any>;
+  description?: string
+  bindings?: Record<string, any>
 }
 
 export interface ComponentDoc {
-  displayName: string;
-  props: { [propName: string]: PropDescriptor } | undefined;
-  methods: MethodDescriptor[];
-  slots: { [name: string]: SlotResult };
-  [key: string]: any;
+  displayName: string
+  props: { [propName: string]: PropDescriptor } | undefined
+  methods: MethodDescriptor[]
+  slots: { [name: string]: SlotResult }
+  [key: string]: any
 }
 
 export class Documentation {
-  private propsMap: Map<string, any>;
-  private dataMap: Map<string, any>;
+  private propsMap: Map<string, any>
+  private dataMap: Map<string, any>
   constructor(initDocumentation: { props?: any; data?: any } = {}) {
-    this.propsMap = new Map(adaptToKeyValue(initDocumentation.props));
-    this.dataMap = new Map(adaptToKeyValue(initDocumentation.data));
+    this.propsMap = new Map(adaptToKeyValue(initDocumentation.props))
+    this.dataMap = new Map(adaptToKeyValue(initDocumentation.data))
   }
 
   public set(key: string, value: any) {
-    this.dataMap.set(key, value);
+    this.dataMap.set(key, value)
   }
 
   public get(key: string): any {
-    return this.dataMap.get(key);
+    return this.dataMap.get(key)
   }
 
   public getPropDescriptor(propName: string): PropDescriptor {
-    let propDescriptor: PropDescriptor = this.propsMap.get(propName) as PropDescriptor;
+    let propDescriptor: PropDescriptor = this.propsMap.get(propName) as PropDescriptor
     if (!propDescriptor) {
       this.propsMap.set(
         propName,
@@ -57,27 +57,27 @@ export class Documentation {
           description: '',
           required: '',
           tags: {},
-        }),
-      );
+        })
+      )
     }
-    return propDescriptor;
+    return propDescriptor
   }
 
   public toObject(): ComponentDoc {
-    let props: { [propName: string]: PropDescriptor } | undefined;
+    let props: { [propName: string]: PropDescriptor } | undefined
 
     if (this.propsMap.size > 0) {
-      props = {};
+      props = {}
       for (const [name, descriptor] of this.propsMap.entries()) {
-        props[name] = descriptor;
+        props[name] = descriptor
       }
     } else {
-      props = undefined;
+      props = undefined
     }
 
-    const obj: { [key: string]: any } = {};
+    const obj: { [key: string]: any } = {}
     for (const [key, value] of this.dataMap.entries()) {
-      obj[key] = value;
+      obj[key] = value
     }
 
     return {
@@ -88,7 +88,7 @@ export class Documentation {
       methods: obj.methods,
       slots: obj.slots || {},
       displayName: obj.displayName,
-    };
+    }
   }
 }
 
@@ -100,9 +100,9 @@ export class Documentation {
 function adaptToKeyValue(obj: { [key: string]: any } | undefined): Array<[string, any]> {
   const keyValuePairs: Array<[string, any]> = obj
     ? Object.keys(obj).map((k: string) => {
-        const kvp: [string, any] = [k, obj[k]];
-        return kvp;
+        const kvp: [string, any] = [k, obj[k]]
+        return kvp
       })
-    : [];
-  return keyValuePairs;
+    : []
+  return keyValuePairs
 }

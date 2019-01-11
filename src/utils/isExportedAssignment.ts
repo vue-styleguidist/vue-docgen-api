@@ -1,5 +1,5 @@
-import * as bt from '@babel/types';
-import { NodePath } from 'ast-types';
+import * as bt from '@babel/types'
+import { NodePath } from 'ast-types'
 
 /**
  * true if the left part of the expression of the NodePath is of form `exports.foo = ...;` or
@@ -7,19 +7,19 @@ import { NodePath } from 'ast-types';
  */
 export default function isExportedAssignment(path: NodePath) {
   if (bt.isExpressionStatement(path.node)) {
-    path = path.get('expression');
+    path = path.get('expression')
   }
 
   if (!bt.isAssignmentExpression(path.node)) {
-    return false;
+    return false
   }
-  const pathLeft = path.node.left;
-  const isSimpleExports = bt.isIdentifier(pathLeft) && pathLeft.name === 'exports';
+  const pathLeft = path.node.left
+  const isSimpleExports = bt.isIdentifier(pathLeft) && pathLeft.name === 'exports'
 
   // check if we are looking at obj.member = value`
-  let isModuleExports = false;
+  let isModuleExports = false
   if (!isSimpleExports && !bt.isMemberExpression(path.node.left)) {
-    return false;
+    return false
   } else {
     isModuleExports =
       bt.isMemberExpression(pathLeft) &&
@@ -27,8 +27,8 @@ export default function isExportedAssignment(path: NodePath) {
       // if exports.xx =
       (pathLeft.object.name === 'exports' ||
         // if module.exports =
-        (pathLeft.object.name === 'module' && pathLeft.property.name === 'exports'));
+        (pathLeft.object.name === 'module' && pathLeft.property.name === 'exports'))
   }
 
-  return isSimpleExports || isModuleExports;
+  return isSimpleExports || isModuleExports
 }
