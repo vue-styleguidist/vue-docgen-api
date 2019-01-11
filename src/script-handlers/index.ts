@@ -1,4 +1,6 @@
 import classDisplayNameHandler from './classDisplayNameHandler'
+import classMethodHandler from './classMethodHandler'
+import classPropHandler from './classPropHandler'
 import componentHandler from './componentHandler'
 import displayNameHandler from './displayNameHandler'
 import methodHandler from './methodHandler'
@@ -10,4 +12,6 @@ export default [
   methodHandler,
   propHandler,
   classDisplayNameHandler,
+  classMethodHandler,
+  classPropHandler,
 ]

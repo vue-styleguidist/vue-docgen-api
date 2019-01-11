@@ -7,7 +7,7 @@ import getDoclets, { DocBlockTags, Param, ParamTag, ParamType } from '../utils/g
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
-  const methods: MethodDescriptor[] = []
+  const methods: MethodDescriptor[] = documentation.get('methods') || []
 
   if (bt.isObjectExpression(path.node)) {
     const methodsPath = path
