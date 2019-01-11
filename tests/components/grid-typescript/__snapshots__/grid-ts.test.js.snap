@@ -13,11 +13,11 @@ Object {
   "events": Object {
     "error": Object {
       "comment": "/**
-                           * Error event.
-                           *
-                           * @event error
-                           * @type {object}
-                           */",
+                     * Error event.
+                     *
+                     * @event error
+                     * @type {object}
+                     */",
       "description": "Error event.",
       "properties": undefined,
       "type": Object {
@@ -28,11 +28,11 @@ Object {
     },
     "success": Object {
       "comment": "/**
-                                                               * Success event.
-                                                               *
-                                                               * @event success
-                                                               * @type {object}
-                                                               */",
+                                                         * Success event.
+                                                         *
+                                                         * @event success
+                                                         * @type {object}
+                                                         */",
       "description": "Success event.",
       "properties": undefined,
       "type": Object {
@@ -45,14 +45,14 @@ Object {
   "methods": Array [
     Object {
       "comment": "/**
-             * Sets the order
-             *
-             * @public
-             * @version 1.0.5
-             * @since Version 1.0.1
-             * @param {string} key Key to order
-             * @returns {string} Test
-             */",
+              * Sets the order
+              *
+              * @public
+              * @version 1.0.5
+              * @since Version 1.0.1
+              * @param {string} key Key to order
+              * @returns {string} Test
+              */",
       "description": "Sets the order",
       "modifiers": Array [],
       "name": "sortBy",
@@ -109,6 +109,24 @@ Object {
           Object {
             "description": "1.0.5",
             "title": "version",
+          },
+        ],
+      },
+    },
+    Object {
+      "comment": "/**
+        * @public
+        */",
+      "description": "",
+      "modifiers": Array [],
+      "name": "publicMethod",
+      "params": Array [],
+      "returns": Object {},
+      "tags": Object {
+        "access": Array [
+          Object {
+            "description": "public",
+            "title": "access",
           },
         ],
       },
