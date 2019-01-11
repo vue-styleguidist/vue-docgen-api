@@ -4,7 +4,7 @@ import { parse } from '../../../src/main';
 
 const button = path.join(__dirname, './Button.vue');
 let docButton: ComponentDoc;
-xdescribe('tests button', () => {
+describe('tests button', () => {
   beforeAll((done) => {
     docButton = parse(button);
     done();

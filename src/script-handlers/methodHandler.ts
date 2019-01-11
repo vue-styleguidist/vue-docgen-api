@@ -1,68 +1,72 @@
-import * as bt from '@babel/types';
-import { NodePath } from 'ast-types';
-import { Documentation, MethodDescriptor } from '../Documentation';
-import { BlockTag } from '../utils/blockTags';
-import getDocblock from '../utils/getDocblock';
-import getDoclets, { DocBlockTags, Param, ParamTag, ParamType } from '../utils/getDoclets';
-import transformTagsIntoObject from '../utils/transformTagsIntoObject';
+import * as bt from '@babel/types'
+import { NodePath } from 'ast-types'
+import { Documentation, MethodDescriptor } from '../Documentation'
+import { BlockTag } from '../utils/blockTags'
+import getDocblock from '../utils/getDocblock'
+import getDoclets, { DocBlockTags, Param, ParamTag, ParamType } from '../utils/getDoclets'
+import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
-  const methodsPath = path
-    .get('properties')
-    .filter((propertyPath) => bt.isProperty(propertyPath.node))
-    .filter((p: NodePath<bt.Property>) => p.node.key.name === 'methods');
+  const methods: MethodDescriptor[] = []
 
-  const methods: MethodDescriptor[] = [];
+  if (bt.isObjectExpression(path.node)) {
+    const methodsPath = path
+      .get('properties')
+      .filter(propertyPath => bt.isProperty(propertyPath.node))
+      .filter((p: NodePath<bt.Property>) => p.node.key.name === 'methods')
 
-  // if no method return
-  if (!methodsPath.length) {
-    documentation.set('methods', methods);
-    return;
+    // if no method return
+    if (!methodsPath.length) {
+      documentation.set('methods', methods)
+      return
+    }
+
+    const methodsObject = methodsPath[0].get('value')
+
+    methodsObject
+      .get('properties')
+      .filter(propertyPath => bt.isProperty(propertyPath.node))
+      .forEach((method: NodePath<bt.Property>) => {
+        const methodDescriptor: MethodDescriptor = { name: '', description: '' }
+
+        methodDescriptor.name = method.node.key.name
+
+        const docBlock = getDocblock(method)
+
+        const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] }
+        const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
+
+        // ignore the method if there is no public tag
+        if (!jsDocTags.some(t => t.title === 'public')) {
+          return;
+        }
+
+        // description
+        if (jsDoc.description) {
+          methodDescriptor.description = jsDoc.description
+        }
+
+        // params
+        describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'))
+
+        // returns
+        describeReturns(method, methodDescriptor, jsDocTags.filter((t) => t.title === 'returns'))
+
+        // tags
+        methodDescriptor.tags = transformTagsIntoObject(jsDocTags)
+
+        methods.push(methodDescriptor)
+      });
+  } else if (bt.isClassDeclaration(path.node)) {
+    // TODO: implement public method detection in class style components
   }
-
-  const methodsObject = methodsPath[0].get('value');
-
-  methodsObject
-    .get('properties')
-    .filter((propertyPath) => bt.isProperty(propertyPath.node))
-    .forEach((method: NodePath<bt.Property>) => {
-      const methodDescriptor: MethodDescriptor = { name: '', description: '' };
-
-      methodDescriptor.name = method.node.key.name;
-
-      const docBlock = getDocblock(method);
-
-      const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] };
-      const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : [];
-
-      // ignore the method if there is no public tag
-      if (!jsDocTags.some((t) => t.title === 'public')) {
-        return;
-      }
-
-      // description
-      if (jsDoc.description) {
-        methodDescriptor.description = jsDoc.description;
-      }
-
-      // params
-      describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'));
-
-      // returns
-      describeReturns(method, methodDescriptor, jsDocTags.filter((t) => t.title === 'returns'));
-
-      // tags
-      methodDescriptor.tags = transformTagsIntoObject(jsDocTags);
-
-      methods.push(methodDescriptor);
-    });
   documentation.set('methods', methods);
 }
 
 function describeParams(
   methodPath: NodePath<bt.Property>,
   methodDescriptor: MethodDescriptor,
-  jsDocParamTags: ParamTag[],
+  jsDocParamTags: ParamTag[]
 ) {
   // if there is no parameter non need to parse them
   const fExp = methodPath.node.value;
