@@ -1,7 +1,7 @@
 import babylon from '../../babel-parser'
 import { Documentation, MethodDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
-import classPropHandler from '../classPropHandler'
+import classMethodHandler from '../classMethodHandler'
 
 jest.mock('../../Documentation')
 
@@ -26,23 +26,25 @@ describe('classPropHandler', () => {
 
   function tester(src: string, matchedObj: any) {
     const def = parseTS(src)
-    classPropHandler(documentation, def[0])
+    classMethodHandler(documentation, def[0])
     expect(mockMethodDescriptor).toMatchObject(matchedObj)
   }
 
-  xdescribe('base', () => {
-    it('should accept an array of string as props', () => {
+  describe('base', () => {
+    it('should detect public methods', () => {
       const src = `
         @Component
         export default class MyComp {
+          /**
+           * @public
+           */
           myMethod(){
 
           }
         }`
       tester(src, {
-        type: { name: 'undefined' },
+        methods: [{ name: 'myMethod' }],
       })
-      expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testArray')
     })
   })
 })
