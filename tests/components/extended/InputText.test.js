@@ -1,12 +1,11 @@
-const path = require('path')
-
-const api = require('../../../src/main')
+import * as path from 'path'
+import { parse } from '../../../src/main'
 const InputText = path.join(__dirname, './InputText.vue')
 let docInputText
 
 describe('tests InputText', () => {
-  beforeAll(function(done) {
-    docInputText = api.parse(InputText)
+  beforeAll(done => {
+    docInputText = parse(InputText)
     done()
   })
 
@@ -23,11 +22,11 @@ describe('tests InputText', () => {
   })
 
   it('should has props', () => {
-    expect(docInputText['props']).not.toBeUndefined()
+    expect(docInputText.props).not.toBeUndefined()
   })
 
   it('should the component has two props', () => {
-    expect(Object.keys(docInputText['props']).length).toEqual(2)
+    expect(Object.keys(docInputText.props || {}).length).toEqual(2)
   })
 
   it('should match the snapshot', () => {

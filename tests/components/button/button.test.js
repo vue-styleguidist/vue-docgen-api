@@ -1,12 +1,12 @@
-const path = require('path')
+import * as path from 'path'
 
-const api = require('../../../src/main')
+import { parse } from '../../../src/main'
 const button = path.join(__dirname, './Button.vue')
 let docButton
 
 describe('tests button', () => {
-  beforeAll(function(done) {
-    docButton = api.parse(button)
+  beforeAll(done => {
+    docButton = parse(button)
     done()
   })
 

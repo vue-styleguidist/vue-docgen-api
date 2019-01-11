@@ -1,12 +1,12 @@
-const path = require('path')
+import * as path from 'path'
 
-const api = require('../../../src/main')
+import { parse } from '../../../src/main'
 const Base = path.join(__dirname, './Base.vue')
 let docBase
 
 describe('tests Base', () => {
-  beforeAll(function(done) {
-    docBase = api.parse(Base)
+  beforeAll(done => {
+    docBase = parse(Base)
     done()
   })
 
@@ -23,10 +23,10 @@ describe('tests Base', () => {
   })
 
   it('should has props', () => {
-    expect(typeof docBase['props'] !== 'undefined').toBe(true)
+    expect(typeof docBase.props !== 'undefined').toBe(true)
   })
 
   it('should the component has one prop', () => {
-    expect(Object.keys(docBase['props']).length).toEqual(1)
+    expect(Object.keys(docBase.props || {}).length).toEqual(1)
   })
 })

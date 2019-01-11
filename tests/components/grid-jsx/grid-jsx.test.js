@@ -1,12 +1,12 @@
-const path = require('path')
+import * as path from 'path'
+import { parse } from '../../../src/main'
 
-const api = require('../../../src/main')
 const grid = path.join(__dirname, './Grid.vue')
 let docGrid
 
 describe('tests grid jsx', () => {
-  beforeAll(function(done) {
-    docGrid = api.parse(grid)
+  beforeAll(done => {
+    docGrid = parse(grid)
     done()
   })
 
@@ -19,87 +19,97 @@ describe('tests grid jsx', () => {
   })
 
   it('should the component has tags', () => {
-    expect(typeof docGrid['tags'] !== 'undefined').toBe(true)
+    expect(typeof docGrid.tags !== 'undefined').toBe(true)
   })
 
   it('should the component has authors', () => {
-    expect(typeof docGrid['tags']['author'] !== 'undefined').toBe(true)
+    expect(typeof docGrid.tags.author !== 'undefined').toBe(true)
   })
 
   it('should the component has description', () => {
-    expect(typeof docGrid['description'] !== 'undefined').toBe(true)
+    expect(typeof docGrid.description !== 'undefined').toBe(true)
   })
 
   it('should has methods', () => {
-    expect(typeof docGrid['methods'] !== 'undefined').toBe(true)
+    expect(typeof docGrid.methods !== 'undefined').toBe(true)
   })
 
   it('should the component has one method', () => {
-    expect(Object.keys(docGrid['methods']).length).toEqual(1)
+    expect(Object.keys(docGrid.methods).length).toEqual(1)
   })
 
   it('should has props', () => {
-    expect(typeof docGrid['props'] !== 'undefined').toBe(true)
+    expect(docGrid.props).not.toBeUndefined()
   })
 
   it('should the component has version', () => {
-    expect(typeof docGrid['tags']['version'] !== 'undefined').toBe(true)
+    expect(typeof docGrid.tags.version !== 'undefined').toBe(true)
   })
+  describe('props', () => {
+    let props
 
-  it('should the component has four props', () => {
-    expect(Object.keys(docGrid['props']).length).toEqual(6)
-  })
+    beforeAll(() => {
+      props = docGrid.props ? docGrid.props : {}
+    })
+    it('should the component has four props', () => {
+      expect(Object.keys(props).length).toEqual(6)
+    })
 
-  it('grid component should have a msg prop as string|number type', () => {
-    expect(docGrid['props']['msg']['type']['name']).toEqual('string|number')
-  })
+    it('grid component should have a msg prop as string|number type', () => {
+      expect(props.msg.type).toMatchObject({ name: 'string|number' })
+    })
 
-  it('grid component should have a filterKey prop as string type', () => {
-    expect(docGrid['props']['filterKey']['type']['name']).toEqual('string')
-  })
+    it('grid component should have a filterKey prop as string type', () => {
+      expect(props.filterKey.type).toMatchObject({ name: 'string' })
+    })
 
-  it('grid component should have a propFunc prop as func type', () => {
-    expect(docGrid['props']['propFunc']['type']['name']).toEqual('func')
-  })
+    it('grid component should have a propFunc prop as func type', () => {
+      expect(props.propFunc.type).toMatchObject({ name: 'func' })
+    })
 
-  it('grid component should have a images prop as Array type', () => {
-    expect(docGrid['props']['images']['type']['name']).toEqual('array')
-  })
+    it('grid component should have a images prop as Array type', () => {
+      expect(props.images.type).toMatchObject({ name: 'array' })
+    })
 
-  it('grid component should have a data prop as Array type', () => {
-    expect(docGrid['props']['data']['type']['name']).toEqual('array')
-  })
+    it('grid component should have a data prop as Array type', () => {
+      expect(props.data.type).toMatchObject({ name: 'array' })
+    })
 
-  it('grid component should have a columns prop as Array type', () => {
-    expect(docGrid['props']['columns']['type']['name']).toEqual('array')
-  })
+    it('grid component should have a columns prop as Array type', () => {
+      expect(props.columns.type).toMatchObject({ name: 'array' })
+    })
 
-  it('should the prop msg has four tags', () => {
-    expect(Object.keys(docGrid['props']['msg']['tags']).length).toEqual(4)
+    it('should the prop msg has four tags', () => {
+      expect(Object.keys(props.msg.tags).length).toEqual(4)
+    })
   })
 
   it('should the component has two event', () => {
-    expect(Object.keys(docGrid['events']).length).toEqual(2)
+    expect(Object.keys(docGrid.events).length).toEqual(2)
   })
 
   it('should the component has event, it called success', () => {
-    expect(typeof docGrid['events']['success'] !== 'undefined').toBe(true)
+    expect(typeof docGrid.events.success !== 'undefined').toBe(true)
   })
 
   it('should the description of success event is Success event.', () => {
-    expect(docGrid['events']['success']['description']).toEqual('Success event.')
+    expect(docGrid.events.success.description).toEqual('Success event.')
   })
 
   it('should the component has event, it called error', () => {
-    expect(typeof docGrid['events']['error'] !== 'undefined').toBe(true)
+    expect(typeof docGrid.events.error !== 'undefined').toBe(true)
   })
 
   it('should the description of error event is Error event.', () => {
-    expect(docGrid['events']['error']['description']).toEqual('Error event.')
+    expect(docGrid.events.error.description).toEqual('Error event.')
   })
 
   it('should the type of error event is object.', () => {
-    expect(docGrid['events']['error']['type']['names'][0]).toEqual('object')
+    expect(docGrid.events.error.type.names[0]).toEqual('object')
+  })
+
+  it('should define the return type of the first method', () => {
+    expect(docGrid.methods[0].returns).toMatchObject({ description: 'Test' })
   })
 
   it('should match the snapshot', () => {

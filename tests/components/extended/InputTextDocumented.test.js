@@ -1,12 +1,11 @@
-const path = require('path')
-
-const api = require('../../../src/main')
+import * as path from 'path'
+import { parse } from '../../../src/main'
 const InputTextDoc = path.join(__dirname, './InputTextDocumented.vue')
 let docInputTextDoc
 
 describe('tests InputTextDoc', () => {
-  beforeAll(function(done) {
-    docInputTextDoc = api.parse(InputTextDoc)
+  beforeAll(done => {
+    docInputTextDoc = parse(InputTextDoc)
     done()
   })
 
@@ -23,15 +22,21 @@ describe('tests InputTextDoc', () => {
   })
 
   it('should has props', () => {
-    expect(typeof docInputTextDoc['props'] !== 'undefined').toBe(true)
+    expect(typeof docInputTextDoc.props !== 'undefined').toBe(true)
   })
+  describe('props', () => {
+    let props
 
-  it('should the component has two props', () => {
-    expect(Object.keys(docInputTextDoc['props']).length).toEqual(2)
-  })
+    beforeAll(() => {
+      props = docInputTextDoc.props ? docInputTextDoc.props : {}
+    })
+    it('should the component has two props', () => {
+      expect(Object.keys(props).length).toEqual(2)
+    })
 
-  it('should the component has placeholder of type string', () => {
-    expect(docInputTextDoc['props']['placeholder']['type']['name']).toEqual('string')
+    it('should the component has placeholder of type string', () => {
+      expect(props.placeholder.type).toEqual({ name: 'string' })
+    })
   })
 
   it('should match the snapshot', () => {
