@@ -6,7 +6,7 @@ import classPropHandler from '../classPropHandler'
 jest.mock('../../Documentation')
 
 function parse(src: string) {
-  const ast = babylon().parse(src)
+  const ast = babylon({ plugins: ['typescript'] }).parse(src)
   return resolveExportedComponent(ast.program)
 }
 
@@ -32,18 +32,64 @@ describe('propHandler', () => {
     expect(mockPropDescriptor).toMatchObject(matchedObj)
   }
 
-  xdescribe('base', () => {
-    it('should accept an array of string as props', () => {
+  describe('base', () => {
+    it('should detect all data that have the prop decorator', () => {
       const src = `
         @Component
-        export default class MyTest {
+        export default class MyComp {
           @Prop
-          test: string
+          test: string;
         }`
       tester(src, {
         type: { name: 'string' },
       })
       expect(documentation.getPropDescriptor).toHaveBeenCalledWith('test')
+    })
+
+    it('should get default expression from the prop decorator', () => {
+      const src = `
+        @Component
+        export default class MyTest {
+          @Prop({default: 'hello'})
+          testDefault: string;
+        }`
+      tester(src, {
+        type: { name: 'string' },
+        defaultValue: {
+          value: `"hello"`,
+        },
+      })
+      expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testDefault')
+    })
+
+    it('should get required from the prop decorator', () => {
+      const src = `
+        @Component
+        export default class MyTest {
+          @Prop({required: true})
+          testRequired: string;
+        }`
+      tester(src, {
+        type: { name: 'string' },
+        required: true,
+      })
+      expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testRequired')
+    })
+
+    it('should extract descriptions from leading comments', () => {
+      const src = `
+        @Component
+        export default class MyTest {
+          /**
+           * A described prop
+           **/
+          @Prop
+          testDescribed: boolean;
+        }`
+      tester(src, {
+        description: 'A described prop',
+      })
+      expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testDescribed')
     })
   })
 })

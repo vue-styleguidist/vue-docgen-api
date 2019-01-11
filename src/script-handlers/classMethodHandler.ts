@@ -1,7 +1,7 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import { Documentation, MethodDescriptor } from '../Documentation'
-import getMethodDescriptor from '../utils/getMethodDescriptor'
+import { getMethodDescriptor } from './methodHandler'
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   if (bt.isClassDeclaration(path.node)) {

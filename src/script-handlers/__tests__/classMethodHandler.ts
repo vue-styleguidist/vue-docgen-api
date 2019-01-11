@@ -30,9 +30,8 @@ describe('classPropHandler', () => {
     expect(mockMethodDescriptor).toMatchObject(matchedObj)
   }
 
-  describe('base', () => {
-    it('should detect public methods', () => {
-      const src = `
+  it('should detect public methods', () => {
+    const src = `
         @Component
         export default class MyComp {
           /**
@@ -42,13 +41,13 @@ describe('classPropHandler', () => {
 
           }
         }`
-      tester(src, {
-        methods: [{ name: 'myMethod' }],
-      })
+    tester(src, {
+      methods: [{ name: 'myMethod' }],
     })
+  })
 
-    it('should detect public methods params', () => {
-      const src = `
+  it('should detect public methods params', () => {
+    const src = `
         @Component
         export default class MyComp {
           /**
@@ -58,41 +57,40 @@ describe('classPropHandler', () => {
 
           }
         }`
-      tester(src, {
-        methods: [{ name: 'myMethod', params: [{ name: 'param1' }] }],
-      })
+    tester(src, {
+      methods: [{ name: 'myMethod', params: [{ name: 'param1' }] }],
     })
+  })
 
-    it('should detect public methods params types', () => {
-      const src = `
+  it('should detect public methods params types', () => {
+    const src = `
         @Component
         export default class MyComp {
           /**
            * @public
            */
-          myMethod(param1:string){
+          myMethod(param1: string){
 
           }
         }`
-      tester(src, {
-        methods: [{ name: 'myMethod', params: [{ name: 'param1', type: { name: 'string' } }] }],
-      })
+    tester(src, {
+      methods: [{ name: 'myMethod', params: [{ name: 'param1', type: { name: 'string' } }] }],
     })
+  })
 
-    it('should detect public methods params types', () => {
-      const src = `
+  it('should detect public methods params types', () => {
+    const src = `
         @Component
         export default class MyComp {
           /**
            * @public
            */
-          myMethod():number{
-
+          myMethod(): number{
+            return 1;
           }
         }`
-      tester(src, {
-        methods: [{ name: 'myMethod', return: { type: { name: 'number' } } }],
-      })
+    tester(src, {
+      methods: [{ name: 'myMethod', returns: { type: { name: 'number' } } }],
     })
   })
 })

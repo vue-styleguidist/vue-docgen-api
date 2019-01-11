@@ -123,10 +123,7 @@ function getTypeFromTypePath(typePath: NodePath): { name: string; func?: boolean
   }
 }
 
-function describeRequired(
-  propPropertiesPath: NodePath<bt.ObjectProperty>,
-  propDescriptor: PropDescriptor,
-) {
+export function describeRequired(propPropertiesPath: NodePath, propDescriptor: PropDescriptor) {
   const requiredArray = propPropertiesPath.filter(
     (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'required',
   )
@@ -136,7 +133,7 @@ function describeRequired(
   }
 }
 
-function describeDefault(propPropertiesPath: NodePath, propDescriptor: PropDescriptor) {
+export function describeDefault(propPropertiesPath: NodePath, propDescriptor: PropDescriptor) {
   const defaultArray = propPropertiesPath.filter(
     (p: NodePath<bt.ObjectProperty>) => p.node.key.name === 'default',
   )
