@@ -46,5 +46,53 @@ describe('classPropHandler', () => {
         methods: [{ name: 'myMethod' }],
       })
     })
+
+    it('should detect public methods params', () => {
+      const src = `
+        @Component
+        export default class MyComp {
+          /**
+           * @public
+           */
+          myMethod(param1){
+
+          }
+        }`
+      tester(src, {
+        methods: [{ name: 'myMethod', params: [{ name: 'param1' }] }],
+      })
+    })
+
+    it('should detect public methods params types', () => {
+      const src = `
+        @Component
+        export default class MyComp {
+          /**
+           * @public
+           */
+          myMethod(param1:string){
+
+          }
+        }`
+      tester(src, {
+        methods: [{ name: 'myMethod', params: [{ name: 'param1', type: { name: 'string' } }] }],
+      })
+    })
+
+    it('should detect public methods params types', () => {
+      const src = `
+        @Component
+        export default class MyComp {
+          /**
+           * @public
+           */
+          myMethod():number{
+
+          }
+        }`
+      tester(src, {
+        methods: [{ name: 'myMethod', return: { type: { name: 'number' } } }],
+      })
+    })
   })
 })
