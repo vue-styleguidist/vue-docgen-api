@@ -45,4 +45,26 @@ describe('methodHandler', () => {
     displayNameHandler(documentation, def[0]);
     expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123');
   });
+
+  it('should extract the name of the component from the classname', () => {
+    const src = `
+    @Component
+    export default class Decorum extends Vue{
+    }
+    `;
+    const def = parse(src);
+    displayNameHandler(documentation, def[0]);
+    expect(documentation.set).toHaveBeenCalledWith('displayName', 'Decorum');
+  });
+
+  it('should extract the name of the component from the decorators', () => {
+    const src = `
+    @Component({name: 'decorum'})
+    export default class Test extends Vue{
+    }
+    `;
+    const def = parse(src);
+    displayNameHandler(documentation, def[0]);
+    expect(documentation.set).toHaveBeenCalledWith('displayName', 'decorum');
+  });
 });
