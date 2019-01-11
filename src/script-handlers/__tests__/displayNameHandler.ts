@@ -1,21 +1,21 @@
-import babylon from '../../babel-parser';
-import { Documentation } from '../../Documentation';
-import resolveExportedComponent from '../../utils/resolveExportedComponent';
-import displayNameHandler from '../displayNameHandler';
+import babylon from '../../babel-parser'
+import { Documentation } from '../../Documentation'
+import resolveExportedComponent from '../../utils/resolveExportedComponent'
+import displayNameHandler from '../displayNameHandler'
 
-jest.mock('../../Documentation');
+jest.mock('../../Documentation')
 
 function parse(src: string) {
-  const ast = babylon().parse(src);
-  return resolveExportedComponent(ast.program);
+  const ast = babylon().parse(src)
+  return resolveExportedComponent(ast.program)
 }
 
-describe('methodHandler', () => {
-  let documentation: Documentation;
+describe('displayNameHandler', () => {
+  let documentation: Documentation
 
   beforeEach(() => {
-    documentation = new (require('../../Documentation')).Documentation();
-  });
+    documentation = new (require('../../Documentation')).Documentation()
+  })
 
   it('should return the right component name', () => {
     const src = `
@@ -25,11 +25,11 @@ describe('methodHandler', () => {
         testComp: {}
       }
     }
-    `;
-    const def = parse(src);
-    displayNameHandler(documentation, def[0]);
-    expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123');
-  });
+    `
+    const def = parse(src)
+    displayNameHandler(documentation, def[0])
+    expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123')
+  })
 
   it('should return the right component name as a constant', () => {
     const src = `
@@ -40,31 +40,9 @@ describe('methodHandler', () => {
         testComp: {}
       }
     }
-    `;
-    const def = parse(src);
-    displayNameHandler(documentation, def[0]);
-    expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123');
-  });
-
-  it('should extract the name of the component from the classname', () => {
-    const src = `
-    @Component
-    export default class Decorum extends Vue{
-    }
-    `;
-    const def = parse(src);
-    displayNameHandler(documentation, def[0]);
-    expect(documentation.set).toHaveBeenCalledWith('displayName', 'Decorum');
-  });
-
-  it('should extract the name of the component from the decorators', () => {
-    const src = `
-    @Component({name: 'decorum'})
-    export default class Test extends Vue{
-    }
-    `;
-    const def = parse(src);
-    displayNameHandler(documentation, def[0]);
-    expect(documentation.set).toHaveBeenCalledWith('displayName', 'decorum');
-  });
-});
+    `
+    const def = parse(src)
+    displayNameHandler(documentation, def[0])
+    expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123')
+  })
+})
