@@ -1,23 +1,9 @@
 import * as bt from '@babel/types'
+import { DocBlockTagEvent } from '../Documentation'
 import { getEventDescriptor } from '../script-handlers/eventHandler'
 import { BlockTag } from './blockTags'
 import { parseDocblock } from './getDocblock'
-import getDoclets, { DocBlockTags, ParamTag, ParamType, Tag } from './getDoclets'
-
-interface EventType {
-  names: string[]
-}
-
-interface EventProperty {
-  type: EventType
-  name?: string
-  description?: string | boolean
-}
-
-export interface DocBlockTagEvent extends DocBlockTags {
-  type?: EventType
-  properties: EventProperty[] | undefined
-}
+import getDoclets, { ParamTag, ParamType, Tag } from './getDoclets'
 
 export interface TypedParamTag extends ParamTag {
   type: ParamType

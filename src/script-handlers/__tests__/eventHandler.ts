@@ -1,6 +1,5 @@
 import babylon from '../../babel-parser'
-import { Documentation } from '../../Documentation'
-import { DocBlockTagEvent } from '../../utils/getEvents'
+import { DocBlockTagEvent, Documentation } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
 import eventHandler from '../eventHandler'
 

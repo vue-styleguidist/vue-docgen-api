@@ -1,10 +1,10 @@
 import * as bt from '@babel/types'
 import { NodePath, visit } from 'ast-types'
 import { BlockTag } from 'src/utils/blockTags'
-import { Documentation } from '../Documentation'
+import { DocBlockTagEvent, Documentation } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets, { DocBlockTags } from '../utils/getDoclets'
-import { DocBlockTagEvent, TypedParamTag } from '../utils/getEvents'
+import { TypedParamTag } from '../utils/getEvents'
 
 export default function eventHandler(documentation: Documentation, path: NodePath) {
   const events: { [eventName: string]: DocBlockTagEvent } = documentation.get('events') || {}

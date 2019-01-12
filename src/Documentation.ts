@@ -1,6 +1,21 @@
 import Map from 'ts-map'
 import { BlockTag } from './utils/blockTags'
-import { Param, UnnamedParam } from './utils/getDoclets'
+import { DocBlockTags, Param, UnnamedParam } from './utils/getDoclets'
+
+interface EventType {
+  names: string[]
+}
+
+interface EventProperty {
+  type: EventType
+  name?: string
+  description?: string | boolean
+}
+
+export interface DocBlockTagEvent extends DocBlockTags {
+  type?: EventType
+  properties: EventProperty[] | undefined
+}
 
 export interface PropDescriptor {
   type?: { name: string; func?: boolean }
@@ -57,7 +72,7 @@ export class Documentation {
           description: '',
           required: '',
           tags: {},
-        })
+        }),
       )
     }
     return propDescriptor
