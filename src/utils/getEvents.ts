@@ -48,7 +48,7 @@ export default function getEvents(
 
       const eventTagContent = (eventTag[0] as Tag).content
       const eventName = typeof eventTagContent === 'string' ? eventTagContent : undefined
-      if (eventName && !acc[eventName]) {
+      if (eventName) {
         acc[eventName] = getEventDescriptor(eventName, jsDoc)
       }
       return acc
