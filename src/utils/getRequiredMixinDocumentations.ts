@@ -14,7 +14,7 @@ import resolveRequired from './resolveRequired'
 export default function getRequiredMixinDocumentations(
   astPath: bt.Program,
   componentDefinitions: NodePath[],
-  originalFilePath: string
+  originalFilePath: string,
 ): { [varName: string]: ComponentDoc } {
   const originalDirName = path.dirname(originalFilePath)
   // filter only mixins
@@ -43,8 +43,8 @@ export default function getRequiredMixinDocumentations(
 
 function getMixinsVariableNames(componentDefinitions: NodePath[]) {
   const allMixins = componentDefinitions
-    .filter(comp => bt.isObjectExpression(comp.node))
-    .map(compDef => {
+    .filter((comp) => bt.isObjectExpression(comp.node))
+    .map((compDef) => {
       const mixinProp = compDef
         .get('properties')
         .filter((p: NodePath<bt.Property>) => p.node.key.name === 'mixins')
@@ -56,7 +56,7 @@ function getMixinsVariableNames(componentDefinitions: NodePath[]) {
         mixinPath.node.value && bt.isArrayExpression(mixinPath.node.value)
           ? mixinPath.node.value.elements
           : []
-      mixinPropertyValue.forEach(e => {
+      mixinPropertyValue.forEach((e) => {
         if (e && bt.isIdentifier(e)) {
           acc.push(e.name)
         }

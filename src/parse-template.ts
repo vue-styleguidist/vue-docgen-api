@@ -9,14 +9,14 @@ export interface TemplateParserOptions {
 export type Handler = (
   templateAst: ASTElement,
   documentation: ComponentDoc,
-  options: TemplateParserOptions
+  options: TemplateParserOptions,
 ) => void
 
 export default function parseTemplate(
   tpl: SFCBlock,
   documentation: ComponentDoc,
   handlers: Handler[],
-  filePath: string
+  filePath: string,
 ) {
   if (tpl && tpl.content) {
     const template =
@@ -35,10 +35,10 @@ export function traverse(
   templateAst: ASTElement,
   documentation: ComponentDoc,
   handlers: Handler[],
-  options: TemplateParserOptions
+  options: TemplateParserOptions,
 ) {
   if (templateAst.type === 1) {
-    handlers.forEach(handler => {
+    handlers.forEach((handler) => {
       handler(templateAst, documentation, options)
     })
     if (templateAst.children) {

@@ -57,7 +57,7 @@ export default function parse(source: string, filePath: string): ComponentDoc {
   }
 
   // get events from comments
-  doc.events = parsed ? getEvents(parsed.ast) : {}
+  doc.events = parsed ? getEvents(parsed.ast, doc.events) : {}
 
   // get slots from template
   if (parts && parts.template) {

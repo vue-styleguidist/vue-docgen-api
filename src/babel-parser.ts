@@ -31,7 +31,7 @@ const babelParserOptions: ParserOptions = {
 }
 
 export default function buildParse(
-  options: ParserOptions = {}
+  options: ParserOptions = {},
 ): { parse: (src: string) => bt.File } {
   options = {
     ...babelParserOptions,

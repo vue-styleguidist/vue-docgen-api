@@ -1,4 +1,5 @@
 import * as bt from '@babel/types'
+import { getEventDescriptor } from '../script-handlers/eventHandler'
 import { BlockTag } from './blockTags'
 import { parseDocblock } from './getDocblock'
 import getDoclets, { DocBlockTags, ParamTag, ParamType, Tag } from './getDoclets'
@@ -13,16 +14,19 @@ interface EventProperty {
   description?: string | boolean
 }
 
-interface DocBlockTagEvent extends DocBlockTags {
+export interface DocBlockTagEvent extends DocBlockTags {
   type?: EventType
   properties: EventProperty[] | undefined
 }
 
-interface TypedParamTag extends ParamTag {
+export interface TypedParamTag extends ParamTag {
   type: ParamType
 }
 
-export default function getEvents(ast: bt.File) {
+export default function getEvents(
+  ast: bt.File,
+  events: { [eventName: string]: DocBlockTagEvent },
+): { [eventName: string]: DocBlockTagEvent } {
   if (Array.isArray(ast.comments)) {
     const eventCommentBlocksDoclets = ast.comments.reduce((acc, comment: bt.Comment) => {
       // only observe block comments
@@ -30,53 +34,28 @@ export default function getEvents(ast: bt.File) {
         return acc
       }
 
-      const doc: DocBlockTagEvent = {
-        properties: undefined,
-        ...getDoclets(parseDocblock(comment.value)),
-      }
+      const docblock = parseDocblock(comment.value)
+
+      const jsDoc = getDoclets(docblock)
 
       // filter comments where a tag is @event
-      const nonNullTags: BlockTag[] = doc.tags ? doc.tags : []
+      const nonNullTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
       const eventTag = nonNullTags.filter((t: BlockTag) => t.title === 'event')
 
-      if (eventTag.length) {
-        const typeTags = nonNullTags.filter(tg => tg.title === 'type')
+      if (!eventTag.length) {
+        return acc
+      }
 
-        doc.type = typeTags.length
-          ? { names: typeTags.map((tg: TypedParamTag) => tg.type.name) }
-          : undefined
-
-        const propertyTags = nonNullTags.filter(tg => tg.title === 'property')
-        if (propertyTags.length) {
-          doc.properties = propertyTags.map((tg: TypedParamTag) => {
-            return { type: { names: [tg.type.name] }, name: tg.name, description: tg.description }
-          })
-        }
-
-        // remove the property an type tags from the tag array
-        const tags = nonNullTags.filter(
-          (tg: BlockTag) => tg.title !== 'type' && tg.title !== 'property' && tg.title !== 'event'
-        )
-
-        if (tags.length) {
-          doc.tags = tags
-        } else {
-          delete doc.tags
-        }
-        const t = eventTag[0]
-        if (isTag(t) && typeof t.content === 'string') {
-          acc[t.content] = doc
-        }
+      const eventTagContent = (eventTag[0] as Tag).content
+      const eventName = typeof eventTagContent === 'string' ? eventTagContent : undefined
+      if (eventName && !acc[eventName]) {
+        acc[eventName] = getEventDescriptor(eventName, jsDoc)
       }
       return acc
-    }, {})
+    }, events || {})
 
     return eventCommentBlocksDoclets
   } else {
     return {}
   }
-}
-
-function isTag(tag: BlockTag): tag is Tag {
-  return tag && typeof (tag as Tag).content === 'string'
 }

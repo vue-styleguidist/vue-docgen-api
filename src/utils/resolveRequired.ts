@@ -12,7 +12,7 @@ function ignore() {
  */
 export default function resolveRequired(
   ast: bt.Program,
-  varNameFilter?: string[]
+  varNameFilter?: string[],
 ): { [key: string]: string } {
   const varToFilePath: { [key: string]: string } = {}
 
@@ -44,7 +44,7 @@ export default function resolveRequired(
     if (!bt.isVariableDeclaration(astPath.node)) {
       return false
     }
-    astPath.node.declarations.forEach(nodeDeclaration => {
+    astPath.node.declarations.forEach((nodeDeclaration) => {
       let sourceNode: bt.Node
       let source: string = ''
       const init =

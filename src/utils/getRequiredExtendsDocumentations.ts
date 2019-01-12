@@ -15,7 +15,7 @@ import resolveRequired from './resolveRequired'
 export default function getRequiredExtendsDocumentations(
   astPath: bt.Program,
   componentDefinitions: NodePath[],
-  originalFilePath: string
+  originalFilePath: string,
 ): ComponentDoc | undefined {
   const extendsVariableName = getExtendsVariableName(componentDefinitions)
   // if there is no extends or extends is a direct require

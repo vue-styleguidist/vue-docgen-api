@@ -15,7 +15,7 @@ const ERROR_MISSING_DEFINITION = 'No suitable component definition found'
 export default function parseScript(
   source: string,
   handlers: Array<(doc: Documentation, componentDefinition: NodePath) => void>,
-  options: { lang: 'ts' | 'js'; filePath: string }
+  options: { lang: 'ts' | 'js'; filePath: string },
 ): { doc: ComponentDoc; ast: bt.File } {
   const plugins: ParserPlugin[] = options.lang === 'ts' ? ['typescript'] : ['flow']
   const ast = buildParser({ plugins }).parse(source)
@@ -36,7 +36,7 @@ export default function parseScript(
   const mixinsDocumentations = getRequiredMixinDocumentations(
     ast.program,
     componentDefinitions,
-    options.filePath
+    options.filePath,
   )
 
   // merge all the varnames found in the mixins
@@ -51,11 +51,11 @@ export default function parseScript(
 function executeHandlers(
   localHandlers: Array<(doc: Documentation, componentDefinition: NodePath) => void>,
   componentDefinitions: NodePath[],
-  mixinsDocumentations: { props?: any; data?: any }
+  mixinsDocumentations: { props?: any; data?: any },
 ) {
-  return componentDefinitions.map(compDef => {
+  return componentDefinitions.map((compDef) => {
     const documentation = new Documentation(mixinsDocumentations)
-    localHandlers.forEach(handler => handler(documentation, compDef))
+    localHandlers.forEach((handler) => handler(documentation, compDef))
     return documentation.toObject()
   })
 }

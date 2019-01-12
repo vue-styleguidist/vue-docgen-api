@@ -35,23 +35,23 @@ function getParamInfo(content: string, hasName: boolean) {
   const typeSlice = typeSliceArray && typeSliceArray.length ? typeSliceArray[1] : '*'
   const param: Param = { type: getTypeObjectFromTypeString(typeSlice) }
 
-  content = content.replace(`{${typeSlice}} `, '')
+  content = content.replace(`{${typeSlice}}`, '')
 
   if (hasName) {
-    const nameSliceArray = /^(\w+)( - )?/.exec(content)
+    const nameSliceArray = /^ *(\w+)?/.exec(content)
     if (nameSliceArray) {
       param.name = nameSliceArray[1]
     }
 
     if (param.name) {
-      content = content.replace(new RegExp(`^${param.name} `), '')
+      content = content.replace(new RegExp(`^ *${param.name}`), '')
     }
   }
 
-  content = content.replace(/^- /, '')
+  content = content.replace(/^ *-/, '')
 
   if (content.length) {
-    param.description = content
+    param.description = content.trim()
   }
 
   return param
@@ -63,7 +63,7 @@ function getTypeObjectFromTypeString(typeSlice: string): ParamType {
   } else if (/\w+\|\w+/.test(typeSlice)) {
     return {
       name: 'union',
-      elements: typeSlice.split('|').map(type => getTypeObjectFromTypeString(type)),
+      elements: typeSlice.split('|').map((type) => getTypeObjectFromTypeString(type)),
     }
   } else {
     return {

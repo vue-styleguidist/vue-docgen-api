@@ -29,12 +29,12 @@ export default function getDocblock(path: NodePath, trailing = false): string | 
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
       (comment: bt.Comment) =>
-        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value)
+        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     )
   } else if (path.node.leadingComments) {
     comments = path.node.leadingComments.filter(
       (comment: bt.Comment) =>
-        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value)
+        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     )
   }
 

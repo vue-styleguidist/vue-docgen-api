@@ -9,7 +9,7 @@ const allowRE = /^(v-bind|:)/
 export default function propTemplateHandler(
   templateAst: ASTElement,
   documentation: ComponentDoc,
-  options: TemplateParserOptions
+  options: TemplateParserOptions,
 ) {
   if (options.functional) {
     propsInAttributes(templateAst, documentation)
@@ -32,7 +32,7 @@ function propsInAttributes(templateAst: ASTElement, documentation: ComponentDoc)
 function propsInInterpolation(templateAst: ASTElement, documentation: ComponentDoc) {
   if (templateAst.children) {
     templateAst.children
-      .filter(c => c.type === 2)
+      .filter((c) => c.type === 2)
       .forEach((expr: ASTExpression) => {
         getPropsFromExpression(expr.expression, documentation)
       })
