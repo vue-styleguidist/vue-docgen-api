@@ -1,9 +1,15 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
-import { Documentation, MethodDescriptor } from '../Documentation'
-import { BlockTag } from '../utils/blockTags'
+import {
+  BlockTag,
+  DocBlockTags,
+  Documentation,
+  MethodDescriptor,
+  Param,
+  ParamTag,
+} from '../Documentation'
 import getDocblock from '../utils/getDocblock'
-import getDoclets, { DocBlockTags, Param, ParamTag } from '../utils/getDoclets'
+import getDoclets from '../utils/getDoclets'
 import getTypeFromAnnotation from '../utils/getTypeFromAnnotation'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 

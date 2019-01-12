@@ -1,5 +1,5 @@
 import babylon from '../../babel-parser'
-import { DocBlockTagEvent, Documentation } from '../../Documentation'
+import { Documentation, EventDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
 import eventHandler from '../eventHandler'
 
@@ -34,7 +34,7 @@ describe('displayNameHandler', () => {
     `
     const def = parse(src)
     eventHandler(documentation, def[0])
-    const eventComp: { [eventName: string]: DocBlockTagEvent } = {
+    const eventComp: { [eventName: string]: EventDescriptor } = {
       success: {
         description: 'Describe the event',
         properties: [
@@ -68,7 +68,7 @@ describe('displayNameHandler', () => {
     `
     const def = parse(src)
     eventHandler(documentation, def[0])
-    const eventComp: { [eventName: string]: DocBlockTagEvent } = {
+    const eventComp: { [eventName: string]: EventDescriptor } = {
       success: {
         description: '',
         properties: [

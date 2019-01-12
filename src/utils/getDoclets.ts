@@ -1,33 +1,6 @@
+import { BlockTag, DocBlockTags, Param, ParamType } from '../Documentation'
+
 const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim
-
-export interface ParamType {
-  name: string
-  elements?: ParamType[]
-}
-
-export interface UnnamedParam {
-  type?: ParamType
-  description?: string | boolean
-}
-
-export interface Param extends UnnamedParam {
-  name?: string
-}
-
-interface RootTag {
-  title: string
-}
-
-export interface Tag extends RootTag {
-  content: string | boolean
-}
-
-export interface ParamTag extends RootTag, Param {}
-
-export interface DocBlockTags {
-  description: string
-  tags?: Array<ParamTag | Tag>
-}
 
 function getParamInfo(content: string, hasName: boolean) {
   content = content || ''
@@ -81,7 +54,7 @@ const TYPED_TAG_TITLES = ['param', 'property', 'type', 'returns']
  * - `description` whatever is left once the tags are removed
  */
 export default function getDocblockTags(str: string): DocBlockTags {
-  const tags: Array<ParamTag | Tag> = []
+  const tags: BlockTag[] = []
   let match = DOCLET_PATTERN.exec(str)
 
   for (; match; match = DOCLET_PATTERN.exec(str)) {

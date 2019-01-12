@@ -1,6 +1,35 @@
 import Map from 'ts-map'
-import { BlockTag } from './utils/blockTags'
-import { DocBlockTags, Param, UnnamedParam } from './utils/getDoclets'
+
+export type BlockTag = ParamTag | Tag
+
+export interface ParamType {
+  name: string
+  elements?: ParamType[]
+}
+
+export interface UnnamedParam {
+  type?: ParamType
+  description?: string | boolean
+}
+
+export interface Param extends UnnamedParam {
+  name?: string
+}
+
+interface RootTag {
+  title: string
+}
+
+export interface Tag extends RootTag {
+  content: string | boolean
+}
+
+export interface ParamTag extends RootTag, Param {}
+
+export interface DocBlockTags {
+  description: string
+  tags?: Array<ParamTag | Tag>
+}
 
 interface EventType {
   names: string[]
@@ -12,7 +41,7 @@ interface EventProperty {
   description?: string | boolean
 }
 
-export interface DocBlockTagEvent extends DocBlockTags {
+export interface EventDescriptor extends DocBlockTags {
   type?: EventType
   properties: EventProperty[] | undefined
 }
@@ -72,7 +101,7 @@ export class Documentation {
           description: '',
           required: '',
           tags: {},
-        }),
+        })
       )
     }
     return propDescriptor

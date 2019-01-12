@@ -1,7 +1,3 @@
-import { ParamTag, Tag } from './getDoclets'
-
-export type BlockTag = ParamTag | Tag
-
 export default [
   'abstract',
   'access',

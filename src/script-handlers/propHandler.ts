@@ -1,10 +1,9 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import { generate } from 'escodegen'
-import { Documentation, PropDescriptor } from '../Documentation'
-import { BlockTag } from '../utils/blockTags'
+import { BlockTag, DocBlockTags, Documentation, PropDescriptor } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
-import getDoclets, { DocBlockTags } from '../utils/getDoclets'
+import getDoclets from '../utils/getDoclets'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 type ValueLitteral = bt.StringLiteral | bt.BooleanLiteral | bt.NumericLiteral

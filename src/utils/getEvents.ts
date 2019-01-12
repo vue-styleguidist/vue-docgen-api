@@ -1,9 +1,8 @@
 import * as bt from '@babel/types'
-import { DocBlockTagEvent } from '../Documentation'
+import { BlockTag, EventDescriptor, ParamTag, ParamType, Tag } from '../Documentation'
 import { getEventDescriptor } from '../script-handlers/eventHandler'
-import { BlockTag } from './blockTags'
 import { parseDocblock } from './getDocblock'
-import getDoclets, { ParamTag, ParamType, Tag } from './getDoclets'
+import getDoclets from './getDoclets'
 
 export interface TypedParamTag extends ParamTag {
   type: ParamType
@@ -11,8 +10,8 @@ export interface TypedParamTag extends ParamTag {
 
 export default function getEvents(
   ast: bt.File,
-  events: { [eventName: string]: DocBlockTagEvent },
-): { [eventName: string]: DocBlockTagEvent } {
+  events: { [eventName: string]: EventDescriptor }
+): { [eventName: string]: EventDescriptor } {
   if (Array.isArray(ast.comments)) {
     const eventCommentBlocksDoclets = ast.comments.reduce((acc, comment: bt.Comment) => {
       // only observe block comments
@@ -26,7 +25,7 @@ export default function getEvents(
 
       // filter comments where a tag is @event
       const nonNullTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
-      const eventTag = nonNullTags.filter((t: BlockTag) => t.title === 'event')
+      const eventTag = nonNullTags.filter(t => t.title === 'event')
 
       if (!eventTag.length) {
         return acc

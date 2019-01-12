@@ -1,5 +1,5 @@
-import blockTags, { BlockTag } from './blockTags'
-import { ParamTag, Tag } from './getDoclets'
+import { BlockTag, ParamTag, Tag } from '../Documentation'
+import blockTags from './blockTags'
 
 export default function transformTagsIntoObject(tags: BlockTag[]): { [key: string]: BlockTag[] } {
   return tags.reduce((acc: { [key: string]: BlockTag[] }, tag) => {

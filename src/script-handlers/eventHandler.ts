@@ -1,13 +1,12 @@
 import * as bt from '@babel/types'
 import { NodePath, visit } from 'ast-types'
-import { BlockTag } from 'src/utils/blockTags'
-import { DocBlockTagEvent, Documentation } from '../Documentation'
+import { BlockTag, DocBlockTags, Documentation, EventDescriptor } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
-import getDoclets, { DocBlockTags } from '../utils/getDoclets'
+import getDoclets from '../utils/getDoclets'
 import { TypedParamTag } from '../utils/getEvents'
 
 export default function eventHandler(documentation: Documentation, path: NodePath) {
-  const events: { [eventName: string]: DocBlockTagEvent } = documentation.get('events') || {}
+  const events: { [eventName: string]: EventDescriptor } = documentation.get('events') || {}
   visit(path, {
     visitCallExpression(pathExpression: NodePath<bt.CallExpression>) {
       const node = pathExpression.node
@@ -54,8 +53,8 @@ export default function eventHandler(documentation: Documentation, path: NodePat
   documentation.set('events', events)
 }
 
-export function getEventDescriptor(eventName: string, jsDoc: DocBlockTags): DocBlockTagEvent {
-  const eventDescriptor: DocBlockTagEvent = {
+export function getEventDescriptor(eventName: string, jsDoc: DocBlockTags): EventDescriptor {
+  const eventDescriptor: EventDescriptor = {
     description: jsDoc.description || '',
     properties: undefined,
   }
