@@ -28,7 +28,7 @@ describe('displayNameHandler', () => {
              * @property {number} prop1
              * @property {number} prop2
              */
-            this.$emit('success', 1, 2, 3)
+            this.$emit('success', 1, 2)
         }
       }
     }
@@ -57,7 +57,7 @@ describe('displayNameHandler', () => {
     expect(documentation.set).toHaveBeenCalledWith('events', eventComp)
   })
 
-  xit('should find events undocumented properties', () => {
+  it('should find events undocumented properties', () => {
     const src = `
     export default {
       methods: {

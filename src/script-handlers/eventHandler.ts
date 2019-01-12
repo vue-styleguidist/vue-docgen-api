@@ -33,7 +33,20 @@ export default function eventHandler(documentation: Documentation, path: NodePat
 
         // fetch the leading comments on the wrapping expression
         const docblock = getDocblock(pathExpression.parent)
-        events[eventName] = getEventDescriptor(eventName, getDoclets(docblock || ''))
+        const evtDescriptor = getEventDescriptor(eventName, getDoclets(docblock || ''))
+        if (args.length > 1 && !evtDescriptor.properties) {
+          evtDescriptor.properties = []
+        }
+        if (evtDescriptor.properties && evtDescriptor.properties.length < args.length - 1) {
+          let i = args.length - 1 - evtDescriptor.properties.length
+          while (i--) {
+            evtDescriptor.properties.push({
+              type: { names: ['undefined'] },
+              name: '<anonymous>',
+            })
+          }
+        }
+        events[eventName] = evtDescriptor
       }
       return false
     },
