@@ -11,7 +11,8 @@ export default function transformTagsIntoObject(tags: BlockTag[]): { [key: strin
         }
         tag = newTag
       }
-      acc[tag.title] = [tag]
+      const title = tag.title === 'param' ? 'params' : tag.title
+      acc[title] = [tag]
     }
     return acc
   }, {})

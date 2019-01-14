@@ -23,7 +23,7 @@ Object {
             "title": "access",
           },
         ],
-        "param": Array [
+        "params": Array [
           Object {
             "description": "Key to order",
             "name": "key",
