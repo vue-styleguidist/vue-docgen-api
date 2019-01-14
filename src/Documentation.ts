@@ -60,6 +60,7 @@ export interface MethodDescriptor {
   returns?: UnnamedParam
   tags?: { [key: string]: BlockTag[] }
   params?: Param[]
+  modifiers: string[]
   [key: string]: any
 }
 
@@ -101,7 +102,7 @@ export class Documentation {
           description: '',
           required: '',
           tags: {},
-        })
+        }),
       )
     }
     return propDescriptor
