@@ -7,6 +7,7 @@ import {
   MethodDescriptor,
   Param,
   ParamTag,
+  Tag,
 } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
@@ -54,7 +55,7 @@ export function getMethodDescriptor(method: NodePath<bt.Property>): MethodDescri
   const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
 
   // ignore the method if there is no public tag
-  if (!jsDocTags.some((t) => t.title === 'public')) {
+  if (!jsDocTags.some((t: Tag) => t.title === 'access' && t.content === 'public')) {
     return
   }
 

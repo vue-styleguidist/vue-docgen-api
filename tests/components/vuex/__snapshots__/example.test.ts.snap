@@ -17,6 +17,12 @@ Object {
         },
       },
       "tags": Object {
+        "access": Array [
+          Object {
+            "description": "public",
+            "title": "access",
+          },
+        ],
         "param": Array [
           Object {
             "description": "Key to order",
@@ -25,12 +31,6 @@ Object {
             "type": Object {
               "name": "string",
             },
-          },
-        ],
-        "public": Array [
-          Object {
-            "description": true,
-            "title": "public",
           },
         ],
         "returns": Array [

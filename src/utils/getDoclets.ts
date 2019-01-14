@@ -46,6 +46,7 @@ function getTypeObjectFromTypeString(typeSlice: string): ParamType {
 }
 
 const TYPED_TAG_TITLES = ['param', 'property', 'type', 'returns']
+const ACCESS_TAG_TITLES = ['private', 'public']
 
 /**
  * Given a string, this functions returns an object with
@@ -61,6 +62,8 @@ export default function getDocblockTags(str: string): DocBlockTags {
     const title = match[1]
     if (TYPED_TAG_TITLES.indexOf(title) > -1) {
       tags.push({ title, ...getParamInfo(match[2], title !== 'returns') })
+    } else if (ACCESS_TAG_TITLES.indexOf(title) > -1) {
+      tags.push({ title: 'access', content: title })
     } else {
       tags.push({ title, content: match[2] || true })
     }

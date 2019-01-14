@@ -50,4 +50,9 @@ describe('getDoclets', () => {
     const src = ['awesome method', ' ', '@version 1.2.3'].join('\n')
     expect(getDocLets(src).description).toEqual('awesome method')
   })
+
+  it('should extract access tag', () => {
+    const src = ['awesome method', ' ', '@public'].join('\n')
+    expect(getDocLets(src).tags).toEqual([{ content: 'public', title: 'access' }])
+  })
 })
