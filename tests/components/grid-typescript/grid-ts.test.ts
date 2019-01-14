@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { ComponentDoc, PropDescriptor } from '../../../src/Documentation'
+import { ComponentDoc, Param, PropDescriptor } from '../../../src/Documentation'
 import { parse } from '../../../src/main'
 
 const typescriptGrid = path.join(__dirname, './Grid.vue')
