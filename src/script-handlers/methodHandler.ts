@@ -45,7 +45,7 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 }
 
 export function getMethodDescriptor(method: NodePath<bt.Property>): MethodDescriptor | undefined {
-  const methodDescriptor: MethodDescriptor = { name: '', description: '' }
+  const methodDescriptor: MethodDescriptor = { name: '', description: '', modifiers: [] }
 
   methodDescriptor.name = method.node.key.name
 

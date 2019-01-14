@@ -27,6 +27,7 @@ Object {
   "methods": Array [
     Object {
       "description": "Sets the order",
+      "modifiers": Array [],
       "name": "sortBy",
       "params": Array [
         Object {
