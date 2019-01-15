@@ -124,7 +124,6 @@ Object {
     },
     "data": Object {
       "description": "describe data",
-      "required": "",
       "tags": Object {
         "version": Array [
           Object {

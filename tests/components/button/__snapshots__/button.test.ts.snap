@@ -112,7 +112,6 @@ Object {
     },
     "prop1": Object {
       "description": "",
-      "required": "",
       "tags": Object {
         "ignore": Array [
           Object {

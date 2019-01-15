@@ -9,7 +9,6 @@ Object {
   "props": Object {
     "placeholder": Object {
       "description": "",
-      "required": "",
       "tags": Object {},
       "type": Object {
         "name": "undefined",
@@ -17,7 +16,6 @@ Object {
     },
     "question": Object {
       "description": "",
-      "required": "",
       "tags": Object {},
       "type": Object {
         "name": "undefined",

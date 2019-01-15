@@ -49,7 +49,7 @@ export interface EventDescriptor extends DocBlockTags {
 export interface PropDescriptor {
   type?: { name: string; func?: boolean }
   description: string
-  required: string | boolean
+  required?: string | boolean
   defaultValue?: { value: string; func?: boolean }
   tags: { [title: string]: BlockTag[] }
 }
@@ -100,7 +100,6 @@ export class Documentation {
         propName,
         (propDescriptor = {
           description: '',
-          required: '',
           tags: {},
         }),
       )

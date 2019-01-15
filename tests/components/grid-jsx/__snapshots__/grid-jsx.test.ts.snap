@@ -89,7 +89,6 @@ Object {
   "props": Object {
     "columns": Object {
       "description": "get columns list",
-      "required": "",
       "tags": Object {},
       "type": Object {
         "name": "array",
@@ -97,7 +96,6 @@ Object {
     },
     "data": Object {
       "description": "describe data",
-      "required": "",
       "tags": Object {
         "version": Array [
           Object {
