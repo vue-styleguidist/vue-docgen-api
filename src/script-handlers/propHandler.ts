@@ -78,6 +78,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
         .forEach((e: NodePath<bt.StringLiteral>) => {
           const propDescriptor = documentation.getPropDescriptor(e.node.value)
           propDescriptor.type = { name: 'undefined' }
+          propDescriptor.required = ''
         })
     }
   }

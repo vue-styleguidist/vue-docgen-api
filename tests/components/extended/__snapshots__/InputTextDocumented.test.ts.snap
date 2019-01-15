@@ -17,6 +17,7 @@ Object {
     },
     "question": Object {
       "description": "",
+      "required": "",
       "tags": Object {},
       "type": Object {
         "name": "undefined",
