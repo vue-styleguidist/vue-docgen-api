@@ -9,7 +9,6 @@ Object {
   "props": undefined,
   "slots": Object {
     "default": Object {
-      "bindings": Object {},
       "description": "Use this slot default",
     },
   },

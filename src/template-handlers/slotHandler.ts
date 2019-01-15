@@ -10,10 +10,13 @@ export default function slotHandler(templateAst: ASTElement, documentation: Comp
       name = bindings.name
       delete bindings.name
     }
-    slots[name] = { bindings }
+
+    // TODO: update this once refactoring merged to add bindings to the slots
+    // slots[name] = { bindings }
+    slots[name] = {}
     if (templateAst.parent) {
       const slotSiblings: ASTNode[] = templateAst.parent.children
-      // first find the position of the slot in the list
+      // First find the position of the slot in the list
       let i = slotSiblings.length - 1
       let currentSlotIndex = -1
       do {
