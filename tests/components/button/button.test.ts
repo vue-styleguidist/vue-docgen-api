@@ -51,7 +51,7 @@ describe('tests button', () => {
       props = docButton.props ? docButton.props : {}
     })
     it('should give the component a size prop with default value to "normal"', () => {
-      expect(props.size.defaultValue).toMatchObject({ value: '"normal"' })
+      expect(props.size.defaultValue).toMatchObject({ value: `'normal'` })
     })
 
     it('should the component has size prop description equal The size of the button', () => {
@@ -63,14 +63,14 @@ describe('tests button', () => {
     })
 
     it('should the component has color prop default equal #333', () => {
-      expect(props.color.defaultValue).toMatchObject({ value: '"#333"' })
+      expect(props.color.defaultValue).toMatchObject({ value: `'#333'` })
     })
     it('should the component has fourteen props', () => {
       expect(Object.keys(props).length).toEqual(14)
     })
 
     it('should the component has propsAnother prop default equal "blue"', () => {
-      expect(props.propsAnother.defaultValue).toMatchObject({ value: '"blue"' })
+      expect(props.propsAnother.defaultValue).toMatchObject({ value: `'blue'` })
     })
 
     it('should span to be string|number', () => {
@@ -118,7 +118,7 @@ describe('tests button', () => {
     })
 
     it('should value default v-model to be example model', () => {
-      expect(props['v-model'].defaultValue).toMatchObject({ value: '"example model"' })
+      expect(props['v-model'].defaultValue).toMatchObject({ value: `'example model'` })
     })
 
     it('should value default v-model props description to be Model example2', () => {
@@ -132,7 +132,7 @@ describe('tests button', () => {
     it('should value default propE to be a funtion', () => {
       const dv = props.propE.defaultValue
       const functionNoSpaceNoReturn = dv ? dv.value.replace(/[ \n\r]/g, '') : ''
-      expect(functionNoSpaceNoReturn).toEqual(`()=>{return{message:"hello"};}`)
+      expect(functionNoSpaceNoReturn).toEqual(`()=>{return{message:'hello'};}`)
       expect(dv ? dv.func : false).toBeTruthy()
     })
 
