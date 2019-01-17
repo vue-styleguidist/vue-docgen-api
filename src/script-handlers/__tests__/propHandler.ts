@@ -180,7 +180,7 @@ describe('propHandler', () => {
         }
         `
       tester(src, {
-        defaultValue: { value: '["hello"]' },
+        defaultValue: { value: `['hello']` },
       })
     })
 
@@ -195,7 +195,7 @@ describe('propHandler', () => {
         }
         `
       tester(src, {
-        defaultValue: { value: '"normal"' },
+        defaultValue: { value: `'normal'` },
       })
     })
   })

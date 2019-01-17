@@ -111,7 +111,7 @@ Object {
     "filterKey": Object {
       "defaultValue": Object {
         "func": false,
-        "value": "\\"example\\"",
+        "value": "'example'",
       },
       "description": "filter key",
       "required": "",

@@ -61,28 +61,6 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
   }
 
   traverse(ast, {
-    // FIXME: needs to be removed as soos as this is fixed
-    // https://github.com/babel/babel/issues/9251
-    enter(path) {
-      if ((path.node as any).type === 'Property') {
-        path.node.type = 'ObjectProperty'
-      }
-
-      if ((path.node as any).type === 'Literal') {
-        const literalValue = (path.node as any).value
-        const type = typeof literalValue
-        const typeMap: { [key: string]: bt.Literal['type'] } = {
-          string: 'StringLiteral',
-          boolean: 'BooleanLiteral',
-          number: 'NumericLiteral',
-        }
-        if (typeMap[type]) {
-          path.node.type = typeMap[type]
-        } else if (literalValue === null || literalValue === undefined) {
-          path.node.type = 'NullLiteral'
-        }
-      }
-    },
     DeclareExportDeclaration: exportDeclaration,
     ExportNamedDeclaration: exportDeclaration,
     ExportDefaultDeclaration: exportDeclaration,

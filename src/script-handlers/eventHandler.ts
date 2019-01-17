@@ -23,7 +23,7 @@ export default function eventHandler(documentation: Documentation, path: NodePat
         const firstArg = args[0]
         let eventName: string
 
-        if (!firstArg.isLiteral()) {
+        if (!firstArg.isStringLiteral()) {
           return
         }
 

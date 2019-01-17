@@ -12,10 +12,11 @@ export default function classDisplayNameHandler(documentation: Documentation, pa
     if (arg && arg.isObjectExpression()) {
       arg
         .get('properties')
-        .filter(p => p.isObjectProperty() && p.node.key.name === 'name')
+        .filter((p) => p.isObjectProperty() && p.node.key.name === 'name')
         .forEach((p: NodePath<bt.ObjectProperty>) => {
-          if (p.get('value').isLiteral()) {
-            displayName = (p.node.value as bt.StringLiteral).value
+          const valuePath = p.get('value')
+          if (valuePath.isStringLiteral()) {
+            displayName = valuePath.node.value
           }
         })
     } else {
@@ -29,10 +30,10 @@ export default function classDisplayNameHandler(documentation: Documentation, pa
 }
 
 function getArgFromDecorator(
-  path: Array<NodePath<bt.Decorator>>
+  path: Array<NodePath<bt.Decorator>>,
 ): null | Array<NodePath<bt.Expression | bt.SpreadElement | bt.JSXNamespacedName>> {
   const expForDecorator = path
-    .filter(p => {
+    .filter((p) => {
       const exp = p.get('expression')
       const decoratorIdenifier = exp.isCallExpression() ? exp.node.callee : exp.node
       return 'Component' === (bt.isIdentifier(decoratorIdenifier) ? decoratorIdenifier.name : null)

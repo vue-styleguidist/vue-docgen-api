@@ -44,7 +44,7 @@ Object {
     "color": Object {
       "defaultValue": Object {
         "func": false,
-        "value": "\\"#333\\"",
+        "value": "'#333'",
       },
       "description": "The color for the button example",
       "required": "",
@@ -81,7 +81,7 @@ Object {
       "defaultValue": Object {
         "func": true,
         "value": "() => {
-  return \\"foo\\";
+  return 'foo';
 }",
       },
       "description": "Function default",
@@ -129,7 +129,7 @@ Object {
         "func": true,
         "value": "() => {
   return {
-    message: \\"hello\\"
+    message: 'hello'
   };
 }",
       },
@@ -144,7 +144,7 @@ a factory function",
     "propsAnother": Object {
       "defaultValue": Object {
         "func": false,
-        "value": "\\"blue\\"",
+        "value": "'blue'",
       },
       "description": "Example prop",
       "required": "",
@@ -164,7 +164,7 @@ a factory function",
     "size": Object {
       "defaultValue": Object {
         "func": false,
-        "value": "\\"normal\\"",
+        "value": "'normal'",
       },
       "description": "The size of the button",
       "required": "",
@@ -200,7 +200,7 @@ a factory function",
     "v-model": Object {
       "defaultValue": Object {
         "func": false,
-        "value": "\\"example model\\"",
+        "value": "'example model'",
       },
       "description": "Model example2",
       "required": "",

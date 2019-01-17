@@ -6,7 +6,7 @@ export default function displayNameHandler(documentation: Documentation, path: N
   if (path.isObjectExpression()) {
     const namePath = path
       .get('properties')
-      .filter(p => p.isObjectProperty() && p.node.key.name === 'name')
+      .filter((p) => p.isObjectProperty() && p.node.key.name === 'name')
 
     // if no prop return
     if (!namePath.length) {
@@ -18,14 +18,14 @@ export default function displayNameHandler(documentation: Documentation, path: N
 
     let displayName: string | null = null
     if (singleNameValuePath) {
-      if (singleNameValuePath.isLiteral()) {
-        displayName = (singleNameValuePath.node as bt.StringLiteral).value
+      if (singleNameValuePath.isStringLiteral()) {
+        displayName = singleNameValuePath.node.value
       } else if (singleNameValuePath.isIdentifier()) {
         const nameConstId = singleNameValuePath.node.name
-        // TODO: find out the real typeof this global scope (NodePath<bt.Program>)
+
         displayName = getDeclaredConstantValue(
           path.parentPath.parentPath as NodePath<bt.Program>,
-          nameConstId
+          nameConstId,
         )
       }
     }
@@ -39,13 +39,13 @@ export default function displayNameHandler(documentation: Documentation, path: N
 function getDeclaredConstantValue(path: NodePath<bt.Program>, nameConstId: string): string | null {
   const globalVariableDeclarations = path
     .get('body')
-    .filter(p => p.isVariableDeclaration()) as Array<NodePath<bt.VariableDeclaration>>
+    .filter((p) => p.isVariableDeclaration()) as Array<NodePath<bt.VariableDeclaration>>
   const declarators = globalVariableDeclarations.reduce(
     (a: bt.VariableDeclarator[], declPath) => a.concat(declPath.node.declarations),
-    []
+    [],
   )
   const nodeDeclaratorArray = declarators.filter(
-    d => bt.isIdentifier(d.id) && d.id.name === nameConstId
+    (d) => bt.isIdentifier(d.id) && d.id.name === nameConstId,
   )
   const nodeDeclarator = nodeDeclaratorArray.length ? nodeDeclaratorArray[0] : undefined
   return nodeDeclarator && nodeDeclarator.init && bt.isLiteral(nodeDeclarator.init)

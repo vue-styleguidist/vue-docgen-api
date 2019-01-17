@@ -79,7 +79,13 @@ describe('methodHandler', () => {
          */
         testMethod() {
           return {};
-        }
+        },
+        /**
+         * @public
+         */
+        testArrowFunction: () => {
+          return 'test';
+        },
       }
     }
     `
@@ -90,6 +96,9 @@ describe('methodHandler', () => {
         },
         {
           name: 'testMethod',
+        },
+        {
+          name: 'testArrowFunction',
         },
       ],
     })

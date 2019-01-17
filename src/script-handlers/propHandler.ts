@@ -71,7 +71,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
     } else if (!Array.isArray(propsValuePath) && propsValuePath.isArrayExpression()) {
       propsValuePath
         .get('elements')
-        .filter((e) => e.isLiteral())
+        .filter((e) => e.isStringLiteral())
         .forEach((e: NodePath<bt.StringLiteral>) => {
           const propDescriptor = documentation.getPropDescriptor(e.node.value)
           propDescriptor.type = { name: 'undefined' }
@@ -123,7 +123,7 @@ export function describeRequired(
   const requiredArray = propPropertiesPath.filter((p) => p.node.key.name === 'required')
   const requiredNode = requiredArray.length ? requiredArray[0].get('value').node : undefined
   propDescriptor.required =
-    requiredNode && bt.isLiteral(requiredNode) ? (requiredNode as bt.BooleanLiteral).value : ''
+    requiredNode && bt.isBooleanLiteral(requiredNode) ? requiredNode.value : ''
 }
 
 export function describeDefault(

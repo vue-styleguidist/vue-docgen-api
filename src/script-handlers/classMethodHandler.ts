@@ -9,12 +9,13 @@ export default function methodHandler(documentation: Documentation, path: NodePa
     const allMethods = path
       .get('body')
       .get('body')
-      .filter((a: NodePath) => (a.node as any).type === 'MethodDefinition') as Array<
-      NodePath<bt.Property>
-    >
+      .filter((a: NodePath) => a.isClassMethod())
 
-    allMethods.forEach((methodPath) => {
-      const doc = getMethodDescriptor(methodPath)
+    allMethods.forEach((methodPath: NodePath<bt.ClassMethod>) => {
+      const methodName = bt.isIdentifier(methodPath.node.key)
+        ? methodPath.node.key.name
+        : '<anonymous>'
+      const doc = getMethodDescriptor(methodPath, methodName)
       if (doc) {
         methods.push(doc)
       }

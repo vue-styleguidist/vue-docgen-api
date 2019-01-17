@@ -8,7 +8,6 @@ const babelParserOptions: ParserOptions = {
   plugins: [
     'jsx',
     'decorators-legacy',
-    'estree',
     'doExpressions',
     'objectRestSpread',
     'classProperties',
