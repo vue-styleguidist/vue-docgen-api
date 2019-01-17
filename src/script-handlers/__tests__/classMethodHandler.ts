@@ -15,7 +15,7 @@ describe('classPropHandler', () => {
   let mockMethodDescriptor: MethodDescriptor
 
   beforeEach(() => {
-    mockMethodDescriptor = { name: '', description: '' }
+    mockMethodDescriptor = { name: '', description: '', modifiers: [] }
     const MockDocumentation = require('../../Documentation').Documentation
     documentation = new MockDocumentation()
     const mockSetMethodDescriptor = documentation.set as jest.Mock

@@ -1,38 +1,38 @@
-import babylon from '../../babel-parser';
-import { Documentation, MethodDescriptor } from '../../Documentation';
-import resolveExportedComponent from '../../utils/resolveExportedComponent';
-import propHandler from '../methodHandler';
+import babylon from '../../babel-parser'
+import { Documentation, MethodDescriptor } from '../../Documentation'
+import resolveExportedComponent from '../../utils/resolveExportedComponent'
+import propHandler from '../methodHandler'
 
-jest.mock('../../Documentation');
+jest.mock('../../Documentation')
 
 function parse(src: string) {
-  const ast = babylon({ plugins: ['flow'] }).parse(src);
-  return resolveExportedComponent(ast.program);
+  const ast = babylon({ plugins: ['flow'] }).parse(src)
+  return resolveExportedComponent(ast.program)
 }
 
 function parseTS(src: string) {
-  const ast = babylon({ plugins: ['typescript'] }).parse(src);
-  return resolveExportedComponent(ast.program);
+  const ast = babylon({ plugins: ['typescript'] }).parse(src)
+  return resolveExportedComponent(ast.program)
 }
 
 describe('methodHandler', () => {
-  let documentation: Documentation;
-  let mockMethodDescriptor: MethodDescriptor;
+  let documentation: Documentation
+  let mockMethodDescriptor: MethodDescriptor
 
   beforeEach(() => {
-    mockMethodDescriptor = { name: '', description: '' };
-    const MockDocumentation = require('../../Documentation').Documentation;
-    documentation = new MockDocumentation();
-    const mockSetMethodDescriptor = documentation.set as jest.Mock;
+    mockMethodDescriptor = { name: '', description: '', modifiers: [] }
+    const MockDocumentation = require('../../Documentation').Documentation
+    documentation = new MockDocumentation()
+    const mockSetMethodDescriptor = documentation.set as jest.Mock
     mockSetMethodDescriptor.mockImplementation(
       (key, methods) => (mockMethodDescriptor[key] = methods),
-    );
-  });
+    )
+  })
 
   function tester(src: string, matchedObj: any) {
-    const def = parse(src);
-    propHandler(documentation, def[0]);
-    expect(mockMethodDescriptor).toMatchObject(matchedObj);
+    const def = parse(src)
+    propHandler(documentation, def[0])
+    expect(mockMethodDescriptor).toMatchObject(matchedObj)
   }
 
   it('should ignore every method not tagged as @public', () => {
@@ -50,15 +50,15 @@ describe('methodHandler', () => {
           return {};
         }
       }
-    }`;
+    }`
     tester(src, {
       methods: [
         {
           name: 'testPublic',
         },
       ],
-    });
-  });
+    })
+  })
 
   it('should return the methods of the component', () => {
     const src = `
@@ -82,7 +82,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `;
+    `
     tester(src, {
       methods: [
         {
@@ -92,8 +92,8 @@ describe('methodHandler', () => {
           name: 'testMethod',
         },
       ],
-    });
-  });
+    })
+  })
 
   it('should return their parameters', () => {
     const src = `
@@ -114,7 +114,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `;
+    `
     tester(src, {
       methods: [
         {
@@ -126,8 +126,8 @@ describe('methodHandler', () => {
           params: [{ name: 'param1' }, { name: 'param2' }],
         },
       ],
-    });
-  });
+    })
+  })
 
   it('should allow description of methods', () => {
     const src = `
@@ -143,7 +143,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `;
+    `
     tester(src, {
       methods: [
         {
@@ -151,8 +151,8 @@ describe('methodHandler', () => {
           description: 'it returns 2',
         },
       ],
-    });
-  });
+    })
+  })
 
   it('should allow description of params', () => {
     const src = `
@@ -168,7 +168,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `;
+    `
     tester(src, {
       methods: [
         {
@@ -176,8 +176,8 @@ describe('methodHandler', () => {
           params: [{ name: 'p1', description: 'multiplicateur', type: { name: 'string' } }],
         },
       ],
-    });
-  });
+    })
+  })
 
   it('should allow description of params without naming them', () => {
     const src = `
@@ -194,7 +194,7 @@ describe('methodHandler', () => {
         }
       }
     }
-    `;
+    `
     tester(src, {
       methods: [
         {
@@ -205,8 +205,8 @@ describe('methodHandler', () => {
           ],
         },
       ],
-    });
-  });
+    })
+  })
 
   describe('flow', () => {
     it('should deduce the type of params from the param type', () => {
@@ -222,10 +222,10 @@ describe('methodHandler', () => {
         '    }',
         '  }',
         '}',
-      ].join('\n');
+      ].join('\n')
 
-      const def = parse(src);
-      propHandler(documentation, def[0]);
+      const def = parse(src)
+      propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
         methods: [
           {
@@ -236,8 +236,8 @@ describe('methodHandler', () => {
             ],
           },
         ],
-      });
-    });
+      })
+    })
 
     it('should deduce the return type from method', () => {
       const src = [
@@ -252,10 +252,10 @@ describe('methodHandler', () => {
         '    }',
         '  }',
         '}',
-      ].join('\n');
+      ].join('\n')
 
-      const def = parse(src);
-      propHandler(documentation, def[0]);
+      const def = parse(src)
+      propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
         methods: [
           {
@@ -263,9 +263,9 @@ describe('methodHandler', () => {
             returns: { type: { name: 'string' } },
           },
         ],
-      });
-    });
-  });
+      })
+    })
+  })
 
   describe('typescript', () => {
     it('should deduce the type of params from the param type', () => {
@@ -280,10 +280,10 @@ describe('methodHandler', () => {
           }
         }
       }
-      `;
+      `
 
-      const def = parseTS(src);
-      propHandler(documentation, def[0]);
+      const def = parseTS(src)
+      propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
         methods: [
           {
@@ -294,8 +294,8 @@ describe('methodHandler', () => {
             ],
           },
         ],
-      });
-    });
+      })
+    })
 
     it('should deduce the return type from method decoration', () => {
       const src = `
@@ -315,10 +315,10 @@ describe('methodHandler', () => {
           }
         }
       };
-      `;
+      `
 
-      const def = parseTS(src);
-      propHandler(documentation, def[0]);
+      const def = parseTS(src)
+      propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
         methods: [
           {
@@ -330,7 +330,7 @@ describe('methodHandler', () => {
             returns: { type: { name: 'number' } },
           },
         ],
-      });
-    });
-  });
-});
+      })
+    })
+  })
+})
