@@ -7,7 +7,7 @@ jest.mock('../../Documentation')
 
 function parse(src: string) {
   const ast = babylon({ plugins: ['typescript'] }).parse(src)
-  return resolveExportedComponent(ast.program)
+  return resolveExportedComponent(ast)
 }
 
 describe('propHandler', () => {
@@ -28,7 +28,7 @@ describe('propHandler', () => {
 
   function tester(src: string, matchedObj: any) {
     const def = parse(src)
-    classPropHandler(documentation, def[0])
+    classPropHandler(documentation, def[0] as any)
     expect(mockPropDescriptor).toMatchObject(matchedObj)
   }
 

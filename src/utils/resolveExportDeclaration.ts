@@ -1,24 +1,31 @@
+import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath } from 'ast-types'
 
 export default function resolveExportDeclaration(path: NodePath) {
   const definitions: NodePath[] = []
-  const node = path.node
-  if (bt.isExportDefaultDeclaration(node)) {
-    definitions.push(path.get('declaration'))
-  } else if (bt.isExportNamedDeclaration(node)) {
-    if (node.declaration && bt.isVariableDeclaration(node.declaration)) {
-      path.get('declaration', 'declarations').each((declarator) => definitions.push(declarator))
+  if (path.isExportDefaultDeclaration()) {
+    const defaultPath = path as NodePath<bt.ExportDefaultDeclaration>
+    definitions.push(defaultPath.get('declaration'))
+  } else if (path.isExportNamedDeclaration()) {
+    const declaration = path.get('declaration')
+    if (declaration && declaration.isVariableDeclaration()) {
+      declaration
+        .get('declarations')
+        .forEach((declarator: NodePath) => definitions.push(declarator))
     } else {
-      definitions.push(path.get('declaration'))
+      definitions.push(path.get('declaration') as NodePath)
     }
-  } else if (bt.isDeclareExportDeclaration(node)) {
-    path.get('specifiers').each((specifier: NodePath) => {
-      const specifierNode = specifier.node
-      definitions.push(
-        bt.isExportSpecifier(specifierNode) ? specifier.get('local') : specifier.get('id'),
-      )
-    })
+  } else if (path.isExportDeclaration()) {
+    const declarePath = path
+    const specifiersPath = declarePath.get('specifiers')
+    const specifiersPathArray = Array.isArray(specifiersPath) ? specifiersPath : [specifiersPath]
+    specifiersPathArray.forEach(
+      (specifier: NodePath<bt.ExportSpecifier | bt.ExportNamespaceSpecifier>) => {
+        definitions.push(
+          specifier.isExportSpecifier() ? specifier.get('local') : specifier.get('exported')
+        )
+      }
+    )
   }
   return definitions
 }

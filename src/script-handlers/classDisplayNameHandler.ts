@@ -1,20 +1,21 @@
+import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath } from 'ast-types'
 import { Documentation } from '../Documentation'
 
-export default function propHandler(documentation: Documentation, path: NodePath) {
-  if (bt.isClassDeclaration(path.node)) {
-    const config = getArgFromDecorator(path.node)
+export default function classDisplayNameHandler(documentation: Documentation, path: NodePath) {
+  if (path.isClassDeclaration()) {
+    const config = getArgFromDecorator(path.get('decorators'))
 
-    const arg = config ? config[0] : undefined
+    const arg = config && Array.isArray(config) ? config[0] : null
 
     let displayName: string | undefined
-    if (arg && bt.isObjectExpression(arg)) {
-      arg.properties
-        .filter((p: bt.ObjectProperty) => p.key.name === 'name')
-        .forEach((p: bt.ObjectProperty) => {
-          if (p.value && bt.isLiteral(p.value)) {
-            displayName = (p.value as bt.StringLiteral).value
+    if (arg && arg.isObjectExpression()) {
+      arg
+        .get('properties')
+        .filter(p => p.isObjectProperty() && p.node.key.name === 'name')
+        .forEach((p: NodePath<bt.ObjectProperty>) => {
+          if (p.get('value').isLiteral()) {
+            displayName = (p.node.value as bt.StringLiteral).value
           }
         })
     } else {
@@ -28,11 +29,17 @@ export default function propHandler(documentation: Documentation, path: NodePath
 }
 
 function getArgFromDecorator(
-  node: bt.ClassDeclaration,
-): undefined | Array<bt.Expression | bt.SpreadElement | bt.JSXNamespacedName> {
-  const exp = node.decorators && node.decorators[0].expression
-  if (exp && bt.isCallExpression(exp)) {
-    return exp.arguments
+  path: Array<NodePath<bt.Decorator>>
+): null | Array<NodePath<bt.Expression | bt.SpreadElement | bt.JSXNamespacedName>> {
+  const expForDecorator = path
+    .filter(p => {
+      const exp = p.get('expression')
+      const decoratorIdenifier = exp.isCallExpression() ? exp.node.callee : exp.node
+      return 'Component' === (bt.isIdentifier(decoratorIdenifier) ? decoratorIdenifier.name : null)
+    })[0]
+    .get('expression')
+  if (expForDecorator.isCallExpression()) {
+    return expForDecorator.get('arguments')
   }
-  return undefined
+  return null
 }

@@ -1,5 +1,5 @@
+import traverse, { NodePath } from '@babel/traverse'
 import { isIdentifier, MemberExpression } from '@babel/types'
-import { NodePath, visit } from 'ast-types'
 import { ASTElement, ASTExpression } from 'vue-template-compiler'
 import buildParser from '../babel-parser'
 import { ComponentDoc } from '../Documentation'
@@ -9,7 +9,7 @@ const allowRE = /^(v-bind|:)/
 export default function propTemplateHandler(
   templateAst: ASTElement,
   documentation: ComponentDoc,
-  options: TemplateParserOptions,
+  options: TemplateParserOptions
 ) {
   if (options.functional) {
     propsInAttributes(templateAst, documentation)
@@ -32,7 +32,7 @@ function propsInAttributes(templateAst: ASTElement, documentation: ComponentDoc)
 function propsInInterpolation(templateAst: ASTElement, documentation: ComponentDoc) {
   if (templateAst.children) {
     templateAst.children
-      .filter((c) => c.type === 2)
+      .filter(c => c.type === 2)
       .forEach((expr: ASTExpression) => {
         getPropsFromExpression(expr.expression, documentation)
       })
@@ -41,8 +41,8 @@ function propsInInterpolation(templateAst: ASTElement, documentation: ComponentD
 
 function getPropsFromExpression(expression: string, documentation: ComponentDoc) {
   const ast = buildParser({ plugins: ['typescript'] }).parse(expression)
-  visit(ast.program, {
-    visitMemberExpression: (path: NodePath<MemberExpression>) => {
+  traverse(ast, {
+    MemberExpression: (path: NodePath<MemberExpression>) => {
       const obj = path.node ? path.node.object : undefined
       const propName = path.node ? path.node.property : undefined
       if (obj && propName && isIdentifier(obj) && obj.name === 'props') {
@@ -50,7 +50,6 @@ function getPropsFromExpression(expression: string, documentation: ComponentDoc)
         documentation.props = documentation.props || {}
         documentation.props[pName] = documentation.props[pName] || { type: { name: 'string' } }
       }
-      return false
     },
   })
 }

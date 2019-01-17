@@ -1,5 +1,5 @@
+import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath } from 'ast-types'
 import { BlockTag, DocBlockTags, Documentation } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
@@ -7,13 +7,19 @@ import getTypeFromAnnotation from '../utils/getTypeFromAnnotation'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 import { describeDefault, describeRequired } from './propHandler'
 
-export default function propHandler(documentation: Documentation, path: NodePath) {
-  if (bt.isClassDeclaration(path.node)) {
+export default function propHandler(
+  documentation: Documentation,
+  path: NodePath<bt.ClassDeclaration>
+) {
+  if (path.isClassDeclaration()) {
     path
-      .get('body', 'body')
-      .filter((p: NodePath) => bt.isClassProperty(p.node))
+      .get('body')
+      .get('body')
+      .filter((p: NodePath) => p.isClassProperty())
       .forEach((propPath: NodePath<bt.ClassProperty>) => {
-        const propDeco = propPath.get('decorators').filter((p: NodePath<bt.Decorator>) => {
+        const propDeco = (
+          (propPath.get('decorators') as Array<NodePath<bt.Decorator>>) || []
+        ).filter((p: NodePath<bt.Decorator>) => {
           const exp = bt.isCallExpression(p.node.expression)
             ? p.node.expression.callee
             : p.node.expression
@@ -47,12 +53,15 @@ export default function propHandler(documentation: Documentation, path: NodePath
         }
 
         const propDecoratorPath = propDeco[0].get('expression')
-        if (bt.isCallExpression(propDecoratorPath.node)) {
-          const propDecoratorArg = propDecoratorPath.get('arguments', 0)
+        if (propDecoratorPath.isCallExpression()) {
+          const propDecoratorArg = propDecoratorPath.get('arguments')[0]
 
-          if (propDecoratorArg.node && bt.isObjectExpression(propDecoratorArg.node)) {
-            describeDefault(propDecoratorArg.get('properties'), propDescriptor)
-            describeRequired(propDecoratorArg.get('properties'), propDescriptor)
+          if (propDecoratorArg && propDecoratorArg.isObjectExpression()) {
+            const propsPath = propDecoratorArg
+              .get('properties')
+              .filter(p => p.isObjectProperty()) as Array<NodePath<bt.ObjectProperty>>
+            describeDefault(propsPath, propDescriptor)
+            describeRequired(propsPath, propDescriptor)
           }
         }
       })

@@ -1,3 +1,4 @@
+import { NodePath } from '@babel/traverse'
 import babylon from '../../babel-parser'
 import { Documentation, EventDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -5,9 +6,9 @@ import eventHandler from '../eventHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string) {
+function parse(src: string): NodePath[] {
   const ast = babylon().parse(src)
-  return resolveExportedComponent(ast.program)
+  return resolveExportedComponent(ast)
 }
 
 describe('displayNameHandler', () => {

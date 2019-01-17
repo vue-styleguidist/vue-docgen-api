@@ -131,7 +131,7 @@ Object {
       "defaultValue": Object {
         "func": true,
         "value": "function () {
-    return [{}];
+  return [{}];
 }",
       },
       "description": "",
@@ -181,8 +181,7 @@ Object {
     "propFunc": Object {
       "defaultValue": Object {
         "func": true,
-        "value": "function () {
-}",
+        "value": "function () {}",
       },
       "description": "prop function",
       "required": "",

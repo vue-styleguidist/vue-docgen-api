@@ -1,5 +1,5 @@
+import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath, visit } from 'ast-types'
 import { BlockTag, DocBlockTags, Documentation, EventDescriptor } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
@@ -7,32 +7,35 @@ import { TypedParamTag } from '../utils/getEvents'
 
 export default function eventHandler(documentation: Documentation, path: NodePath) {
   const events: { [eventName: string]: EventDescriptor } = documentation.get('events') || {}
-  visit(path, {
-    visitCallExpression(pathExpression: NodePath<bt.CallExpression>) {
-      const node = pathExpression.node
+  path.traverse({
+    CallExpression(pathExpression) {
       if (
-        bt.isMemberExpression(node.callee) &&
-        bt.isThisExpression(node.callee.object) &&
-        bt.isIdentifier(node.callee.property) &&
-        node.callee.property.name === '$emit'
+        bt.isMemberExpression(pathExpression.node.callee) &&
+        bt.isThisExpression(pathExpression.node.callee.object) &&
+        bt.isIdentifier(pathExpression.node.callee.property) &&
+        pathExpression.node.callee.property.name === '$emit'
       ) {
-        const args = node.arguments
+        const args = pathExpression.get('arguments')
+        if (!args.length) {
+          return
+        }
+
         const firstArg = args[0]
         let eventName: string
 
-        if (args.length && bt.isLiteral(firstArg)) {
-          eventName = (firstArg as bt.StringLiteral).value
-        } else {
-          return false
+        if (!firstArg.isLiteral()) {
+          return
         }
+
+        eventName = (firstArg.node as bt.StringLiteral).value
 
         if (events[eventName]) {
           return
         }
 
         // fetch the leading comments on the wrapping expression
-        const docblock = getDocblock(pathExpression.parent)
-        const evtDescriptor = getEventDescriptor(eventName, getDoclets(docblock || ''))
+        const docblock = getDocblock(pathExpression.parentPath)
+        const evtDescriptor = getEventDescriptor(getDoclets(docblock || ''))
         if (args.length > 1 && !evtDescriptor.properties) {
           evtDescriptor.properties = []
         }
@@ -47,13 +50,12 @@ export default function eventHandler(documentation: Documentation, path: NodePat
         }
         events[eventName] = evtDescriptor
       }
-      return false
     },
   })
   documentation.set('events', events)
 }
 
-export function getEventDescriptor(eventName: string, jsDoc: DocBlockTags): EventDescriptor {
+export function getEventDescriptor(jsDoc: DocBlockTags): EventDescriptor {
   const eventDescriptor: EventDescriptor = {
     description: jsDoc.description || '',
     properties: undefined,

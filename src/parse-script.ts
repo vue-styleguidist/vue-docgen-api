@@ -1,6 +1,6 @@
 import { ParserPlugin } from '@babel/parser'
+import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath } from 'ast-types'
 import buildParser from './babel-parser'
 import { ComponentDoc, Documentation } from './Documentation'
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations'
@@ -22,7 +22,7 @@ export default function parseScript(
   if (!ast) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }
-  const componentDefinitions = resolveExportedComponent(ast.program)
+  const componentDefinitions = resolveExportedComponent(ast)
 
   if (componentDefinitions.length === 0) {
     throw new Error(ERROR_MISSING_DEFINITION)
@@ -30,11 +30,11 @@ export default function parseScript(
 
   // extends management
   const extendsDocumentations =
-    getRequiredExtendsDocumentations(ast.program, componentDefinitions, options.filePath) || {}
+    getRequiredExtendsDocumentations(ast, componentDefinitions, options.filePath) || {}
 
   // mixins management
   const mixinsDocumentations = getRequiredMixinDocumentations(
-    ast.program,
+    ast,
     componentDefinitions,
     options.filePath,
   )

@@ -1,7 +1,7 @@
-import * as bt from '@babel/types';
-import { NodePath, visit } from 'ast-types';
-import babylon from '../../babel-parser';
-import getDocblock from '../getDocblock';
+import traverse, { NodePath } from '@babel/traverse'
+import * as bt from '@babel/types'
+import babylon from '../../babel-parser'
+import getDocblock from '../getDocblock'
 
 describe('getDocblock', () => {
   it('should resolve imported variables', () => {
@@ -15,21 +15,21 @@ describe('getDocblock', () => {
         'var testedVariable = 8;',
         '',
       ].join('\n'),
-    );
-    const varPath = getFirstVariablePath(ast);
+    )
+    const varPath = getFirstVariablePath(ast)
 
-    const docblock = getDocblock(varPath);
-    expect(docblock).toEqual(['tested comment', 'tested description'].join('\n'));
-  });
-});
+    const docblock = getDocblock(varPath)
+    expect(docblock).toEqual(['tested comment', 'tested description'].join('\n'))
+  })
+})
 
 function getFirstVariablePath(ast: bt.File): NodePath {
-  const varPath: NodePath[] = [];
-  visit(ast.program, {
-    visitVariableDeclaration: (a: NodePath) => {
-      varPath.push(a);
-      return false;
+  const varPath: NodePath[] = []
+  traverse(ast, {
+    VariableDeclaration: (a: NodePath) => {
+      varPath.push(a)
+      return
     },
-  });
-  return varPath[0];
+  })
+  return varPath[0]
 }

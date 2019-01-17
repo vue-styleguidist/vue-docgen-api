@@ -74,6 +74,7 @@ export interface ComponentDoc {
   props: { [propName: string]: PropDescriptor } | undefined
   methods: MethodDescriptor[]
   slots: { [name: string]: SlotResult }
+  events?: { [name: string]: EventDescriptor }
   [key: string]: any
 }
 

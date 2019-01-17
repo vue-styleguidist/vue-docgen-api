@@ -7,12 +7,12 @@ jest.mock('../../Documentation')
 
 function parse(src: string) {
   const ast = babylon({ plugins: ['flow'] }).parse(src)
-  return resolveExportedComponent(ast.program)
+  return resolveExportedComponent(ast)
 }
 
 function parseTS(src: string) {
   const ast = babylon({ plugins: ['typescript'] }).parse(src)
-  return resolveExportedComponent(ast.program)
+  return resolveExportedComponent(ast)
 }
 
 describe('methodHandler', () => {

@@ -105,29 +105,24 @@ describe('tests typescript grid', () => {
   })
 
   it('should the component has two event', () => {
-    expect(Object.keys(docGrid.events).length).toEqual(2)
+    expect(Object.keys(docGrid.events || {}).length).toEqual(2)
   })
 
   it('should the component has event, it called success', () => {
-    expect(typeof docGrid.events.success).not.toBeUndefined()
+    expect(typeof (docGrid.events || {}).success).not.toBeUndefined()
   })
 
   it('should the description of success event is Success event.', () => {
-    expect(docGrid.events.success.description).toEqual('Success event.')
+    expect((docGrid.events || {}).success.description).toEqual('Success event.')
   })
 
   it('should the component has event, it called error', () => {
-    expect(typeof docGrid.events.error).not.toBeUndefined()
+    expect(typeof (docGrid.events || {}).error).not.toBeUndefined()
   })
 
   it('should the description of error event is Error event.', () => {
-    expect(docGrid.events.error.description).toEqual('Error event.')
+    expect((docGrid.events || {}).error.description).toEqual('Error event.')
   })
-
-  it('should the type of error event is object.', () => {
-    expect(docGrid.events.error.type.names[0]).toEqual('object')
-  })
-
   it('should have two slots.', () => {
     expect(Object.keys(docGrid.slots).length).toEqual(2)
   })

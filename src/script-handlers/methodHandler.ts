@@ -1,5 +1,5 @@
+import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath } from 'ast-types'
 import {
   BlockTag,
   DocBlockTags,
@@ -17,11 +17,12 @@ import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   const methods: MethodDescriptor[] = documentation.get('methods') || []
 
-  if (bt.isObjectExpression(path.node)) {
+  if (path.isObjectExpression()) {
     const methodsPath = path
       .get('properties')
-      .filter((propertyPath) => bt.isProperty(propertyPath.node))
-      .filter((p: NodePath<bt.Property>) => p.node.key.name === 'methods')
+      .filter((p) => p.isObjectProperty() && p.node.key.name === 'methods') as Array<
+      NodePath<bt.ObjectProperty>
+    >
 
     // if no method return
     if (!methodsPath.length) {
@@ -30,16 +31,17 @@ export default function methodHandler(documentation: Documentation, path: NodePa
     }
 
     const methodsObject = methodsPath[0].get('value')
-
-    methodsObject
-      .get('properties')
-      .filter((propertyPath) => bt.isProperty(propertyPath.node))
-      .forEach((methodPath: NodePath<bt.Property>) => {
-        const doc = getMethodDescriptor(methodPath)
+    if (methodsObject.isObjectExpression()) {
+      methodsObject.get('properties').forEach((p) => {
+        if (!p.isObjectProperty()) {
+          return
+        }
+        const doc = getMethodDescriptor(p)
         if (doc) {
           methods.push(doc)
         }
       })
+    }
   }
   documentation.set('methods', methods)
 }

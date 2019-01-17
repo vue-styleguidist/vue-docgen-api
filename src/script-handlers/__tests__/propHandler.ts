@@ -7,7 +7,7 @@ jest.mock('../../Documentation')
 
 function parse(src: string) {
   const ast = babylon().parse(src)
-  return resolveExportedComponent(ast.program)
+  return resolveExportedComponent(ast)
 }
 
 describe('propHandler', () => {
@@ -56,6 +56,19 @@ describe('propHandler', () => {
             test: {
               type: Array
             }
+          }
+        }
+        `
+      tester(src, {
+        type: { name: 'array' },
+      })
+    })
+
+    it('should return the right props type for lit Array', () => {
+      const src = `
+        export default {
+          props: {
+            columns: [Array]
           }
         }
         `

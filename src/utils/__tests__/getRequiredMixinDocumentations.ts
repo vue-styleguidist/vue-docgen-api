@@ -1,30 +1,30 @@
-import * as bt from '@babel/types';
-import babylon from '../../babel-parser';
-jest.mock('../resolveRequired');
-jest.mock('../resolvePathFrom');
-jest.mock('../../main');
-import { parse } from '../../main';
-import getRequiredMixinDocumentations from '../getRequiredMixinDocumentations';
-import resolveExportedComponent from '../resolveExportedComponent';
-import resolvePathFrom from '../resolvePathFrom';
-import resolveRequired from '../resolveRequired';
+import * as bt from '@babel/types'
+import babylon from '../../babel-parser'
+jest.mock('../resolveRequired')
+jest.mock('../resolvePathFrom')
+jest.mock('../../main')
+import { parse } from '../../main'
+import getRequiredMixinDocumentations from '../getRequiredMixinDocumentations'
+import resolveExportedComponent from '../resolveExportedComponent'
+import resolvePathFrom from '../resolvePathFrom'
+import resolveRequired from '../resolveRequired'
 
 describe('getRequiredMixinDocumentations', () => {
-  let resolveRequiredMock: jest.Mock;
-  let mockResolvePathFrom: jest.Mock;
-  let mockParse: jest.Mock;
+  let resolveRequiredMock: jest.Mock
+  let mockResolvePathFrom: jest.Mock
+  let mockParse: jest.Mock
   beforeEach(() => {
     resolveRequiredMock = resolveRequired as jest.Mock<
-      (ast: bt.Program, varNameFilter?: string[]) => { [key: string]: string }
-    >;
-    resolveRequiredMock.mockReturnValue({ testComponent: 'componentPath' });
+      (ast: bt.File, varNameFilter?: string[]) => { [key: string]: string }
+    >
+    resolveRequiredMock.mockReturnValue({ testComponent: 'componentPath' })
 
-    mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>;
-    mockResolvePathFrom.mockReturnValue('component/full/path');
+    mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>
+    mockResolvePathFrom.mockReturnValue('component/full/path')
 
-    mockParse = parse as jest.Mock;
-    mockParse.mockReturnValue({ component: 'documentation' });
-  });
+    mockParse = parse as jest.Mock
+    mockParse.mockReturnValue({ component: 'documentation' })
+  })
 
   it.each([
     [
@@ -46,9 +46,9 @@ describe('getRequiredMixinDocumentations', () => {
       '}',
     ].join('\n'),
   ])('should resolve extended modules variables', (src) => {
-    const ast = babylon().parse(src);
-    const path = resolveExportedComponent(ast.program);
-    getRequiredMixinDocumentations(ast.program, path, '');
-    expect(parse).toHaveBeenCalledWith('component/full/path');
-  });
-});
+    const ast = babylon().parse(src)
+    const path = resolveExportedComponent(ast)
+    getRequiredMixinDocumentations(ast, path, '')
+    expect(parse).toHaveBeenCalledWith('component/full/path')
+  })
+})

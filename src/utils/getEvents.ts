@@ -10,7 +10,7 @@ export interface TypedParamTag extends ParamTag {
 
 export default function getEvents(
   ast: bt.File,
-  events: { [eventName: string]: EventDescriptor }
+  events: { [eventName: string]: EventDescriptor },
 ): { [eventName: string]: EventDescriptor } {
   if (Array.isArray(ast.comments)) {
     const eventCommentBlocksDoclets = ast.comments.reduce((acc, comment: bt.Comment) => {
@@ -25,7 +25,7 @@ export default function getEvents(
 
       // filter comments where a tag is @event
       const nonNullTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
-      const eventTag = nonNullTags.filter(t => t.title === 'event')
+      const eventTag = nonNullTags.filter((t) => t.title === 'event')
 
       if (!eventTag.length) {
         return acc
@@ -34,7 +34,7 @@ export default function getEvents(
       const eventTagContent = (eventTag[0] as Tag).content
       const eventName = typeof eventTagContent === 'string' ? eventTagContent : undefined
       if (eventName) {
-        acc[eventName] = getEventDescriptor(eventName, jsDoc)
+        acc[eventName] = getEventDescriptor(jsDoc)
       }
       return acc
     }, events || {})

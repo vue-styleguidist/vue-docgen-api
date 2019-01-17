@@ -1,29 +1,23 @@
+import traverse, { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath, visit } from 'ast-types'
 import isExportedAssignment from './isExportedAssignment'
 import resolveExportDeclaration from './resolveExportDeclaration'
-
-function ignore(): boolean {
-  return false
-}
 
 function isComponentDefinition(path: NodePath): boolean {
   return (
     // export default {}
-    bt.isObjectExpression(path.node) ||
+    path.isObjectExpression() ||
     // export const myComp = {}
-    (bt.isVariableDeclarator(path.node) &&
-      path.node.init &&
-      bt.isObjectExpression(path.node.init)) ||
+    (path.isVariableDeclarator() && path.node.init && bt.isObjectExpression(path.node.init)) ||
     // export default Vue.extends({})
-    (bt.isCallExpression(path.node) &&
+    (path.isCallExpression() &&
       bt.isMemberExpression(path.node.callee) &&
       bt.isIdentifier(path.node.callee.object) &&
       path.node.callee.object.name === 'Vue' &&
       path.node.callee.property.name === 'extend') ||
     // @Component
     // export default class MyComp extends VueComp
-    (bt.isClassDeclaration(path.node) &&
+    (path.isClassDeclaration() &&
       (path.node.decorators || []).some((d) => {
         const exp = bt.isCallExpression(d.expression) ? d.expression.callee : d.expression
         return bt.isIdentifier(exp) && exp.name === 'Component'
@@ -42,7 +36,7 @@ function isComponentDefinition(path: NodePath): boolean {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
+export default function resolveExportedComponent(ast: bt.File): NodePath[] {
   const components: NodePath[] = []
 
   function setComponent(definition: NodePath) {
@@ -54,63 +48,62 @@ export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
   // function run for every non "assignment" export declaration
   // in extenso export default or export myvar
   function exportDeclaration(path: NodePath) {
-    const definitions = resolveExportDeclaration(path).reduce(
-      (acc: NodePath[], definition: NodePath) => {
-        if (isComponentDefinition(definition)) {
-          acc.push(definition)
-        }
-        return acc
-      },
-      [],
-    )
-
-    if (definitions.length === 0) {
-      return false
-    }
+    const definitions = resolveExportDeclaration(path).reduce((acc: NodePath[], definition) => {
+      if (isComponentDefinition(definition)) {
+        acc.push(definition)
+      }
+      return acc
+    }, [])
 
     definitions.forEach((definition: NodePath) => {
       setComponent(definition)
     })
-    return false
   }
 
-  visit(ast, {
-    visitFunctionDeclaration: ignore,
-    visitFunctionExpression: ignore,
-    visitClassDeclaration: ignore,
-    visitClassExpression: ignore,
-    visitIfStatement: ignore,
-    visitWithStatement: ignore,
-    visitSwitchStatement: ignore,
-    visitCatchCause: ignore,
-    visitWhileStatement: ignore,
-    visitDoWhileStatement: ignore,
-    visitForStatement: ignore,
-    visitForInStatement: ignore,
+  traverse(ast, {
+    // FIXME: needs to be removed as soos as this is fixed
+    // https://github.com/babel/babel/issues/9251
+    enter(path) {
+      if ((path.node as any).type === 'Property') {
+        path.node.type = 'ObjectProperty'
+      }
 
-    visitExportDeclaration: exportDeclaration,
-    visitExportNamedDeclaration: exportDeclaration,
-    visitExportDefaultDeclaration: exportDeclaration,
+      if ((path.node as any).type === 'Literal') {
+        const literalValue = (path.node as any).value
+        const type = typeof literalValue
+        const typeMap: { [key: string]: bt.Literal['type'] } = {
+          string: 'StringLiteral',
+          boolean: 'BooleanLiteral',
+          number: 'NumericLiteral',
+        }
+        if (typeMap[type]) {
+          path.node.type = typeMap[type]
+        } else if (literalValue === null || literalValue === undefined) {
+          path.node.type = 'NullLiteral'
+        }
+      }
+    },
+    DeclareExportDeclaration: exportDeclaration,
+    ExportNamedDeclaration: exportDeclaration,
+    ExportDefaultDeclaration: exportDeclaration,
 
-    visitAssignmentExpression(path) {
+    AssignmentExpression(path) {
       // function run on every assignments (with an =)
 
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
       if (!isExportedAssignment(path)) {
-        return false
-      }
-      // Resolve the value of the right hand side. It should resolve to a call
-      // expression, something like React.createClass
-      path = path.get('right')
-      if (!isComponentDefinition(path)) {
-        if (!isComponentDefinition(path)) {
-          return false
-        }
+        return
       }
 
-      setComponent(path)
-      return false
+      // Resolve the value of the right hand side. It should resolve to a call
+      // expression, something like Vue.extend({})
+      const pathRight = path.get('right')
+      if (!isComponentDefinition(pathRight)) {
+        return
+      }
+
+      setComponent(pathRight)
     },
   })
 
@@ -118,12 +111,12 @@ export default function resolveExportedComponent(ast: bt.Program): NodePath[] {
 }
 
 function normalizeComponentPath(path: NodePath): NodePath {
-  if (bt.isObjectExpression(path.node)) {
+  if (path.isObjectExpression()) {
     return path
-  } else if (bt.isCallExpression(path.node)) {
-    return path.get('arguments', 0)
-  } else if (bt.isVariableDeclarator(path.node)) {
-    return path.get('init')
+  } else if (path.isCallExpression()) {
+    return path.get('arguments')[0]
+  } else if (path.isVariableDeclarator()) {
+    return path.get('init') as NodePath
   }
   return path
 }

@@ -1,21 +1,21 @@
-import babylon from '../../babel-parser';
-import { Documentation } from '../../Documentation';
-import resolveExportedComponent from '../../utils/resolveExportedComponent';
-import componentHandler from '../componentHandler';
+import babylon from '../../babel-parser'
+import { Documentation } from '../../Documentation'
+import resolveExportedComponent from '../../utils/resolveExportedComponent'
+import componentHandler from '../componentHandler'
 
-jest.mock('../../Documentation');
+jest.mock('../../Documentation')
 
 function parse(src: string) {
-  const ast = babylon().parse(src);
-  return resolveExportedComponent(ast.program);
+  const ast = babylon().parse(src)
+  return resolveExportedComponent(ast)
 }
 
 describe('componentHandler', () => {
-  let documentation: Documentation;
+  let documentation: Documentation
 
   beforeEach(() => {
-    documentation = new (require('../../Documentation')).Documentation();
-  });
+    documentation = new (require('../../Documentation')).Documentation()
+  })
 
   it('should return the right component name', () => {
     const src = `
@@ -25,11 +25,11 @@ describe('componentHandler', () => {
     export default {
       name: 'name-123',
     }
-    `;
-    const def = parse(src);
-    componentHandler(documentation, def[0]);
-    expect(documentation.set).toHaveBeenCalledWith('description', 'An empty component');
-  });
+    `
+    const def = parse(src)
+    componentHandler(documentation, def[0])
+    expect(documentation.set).toHaveBeenCalledWith('description', 'An empty component')
+  })
 
   it('should return the right component name', () => {
     const src = `
@@ -41,12 +41,12 @@ describe('componentHandler', () => {
     export default {
       name: 'name-123',
     }
-    `;
-    const def = parse(src);
-    componentHandler(documentation, def[0]);
+    `
+    const def = parse(src)
+    componentHandler(documentation, def[0])
     expect(documentation.set).toHaveBeenCalledWith('tags', {
       author: [{ description: '[Rafael]', title: 'author' }],
       version: [{ description: '12.5.7', title: 'version' }],
-    });
-  });
-});
+    })
+  })
+})

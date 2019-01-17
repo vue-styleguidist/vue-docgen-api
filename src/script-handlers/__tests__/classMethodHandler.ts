@@ -7,7 +7,7 @@ jest.mock('../../Documentation')
 
 function parseTS(src: string) {
   const ast = babylon({ plugins: ['typescript'] }).parse(src)
-  return resolveExportedComponent(ast.program)
+  return resolveExportedComponent(ast)
 }
 
 describe('classPropHandler', () => {

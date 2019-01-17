@@ -1,5 +1,5 @@
+import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
-import { NodePath } from 'ast-types'
 import * as path from 'path'
 import { ComponentDoc } from '../Documentation'
 import { parse } from '../main'
@@ -13,7 +13,7 @@ import resolveRequired from './resolveRequired'
  * @param {string} originalFilePath
  */
 export default function getRequiredExtendsDocumentations(
-  astPath: bt.Program,
+  astPath: bt.File,
   componentDefinitions: NodePath[],
   originalFilePath: string,
 ): ComponentDoc | undefined {
@@ -42,11 +42,11 @@ function getExtendsVariableName(componentDefinitions: NodePath[]) {
       compDef.node.superClass &&
       bt.isIdentifier(compDef.node.superClass)
     ) {
-      acc.push(compDef.get('superClass'))
+      acc.push(compDef.get('superClass') as NodePath<bt.Identifier>)
     } else {
-      const extendsProp = compDef
-        .get('properties')
-        .filter((p: NodePath<bt.Property>) => p.node.key.name === 'extends')
+      const extendsProp = (compDef.get('properties') as Array<NodePath<bt.Property>>).filter(
+        (p: NodePath<bt.Property>) => p.node.key.name === 'extends',
+      )
       if (extendsProp.length) {
         acc.push(extendsProp[0])
       }
