@@ -1,11 +1,13 @@
 import { ParserPlugin } from '@babel/parser'
-import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import buildParser from './babel-parser'
 import { ComponentDoc, Documentation } from './Documentation'
 import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations'
 import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations'
 import resolveExportedComponent from './utils/resolveExportedComponent'
+
+const recast = require('recast')
 
 // tslint:disable-next-line:no-var-requires
 const deepmerge = require('deepmerge')
@@ -18,7 +20,7 @@ export default function parseScript(
   options: { lang: 'ts' | 'js'; filePath: string },
 ): { doc: ComponentDoc; ast: bt.File } {
   const plugins: ParserPlugin[] = options.lang === 'ts' ? ['typescript'] : ['flow']
-  const ast = buildParser({ plugins }).parse(source)
+  const ast = recast.parse(source, { parser: buildParser({ plugins }) })
   if (!ast) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }

@@ -1,36 +1,37 @@
-import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import { BlockTag, DocBlockTags, Documentation, EventDescriptor } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
 import { TypedParamTag } from '../utils/getEvents'
 
+const recast = require('recast')
+
 export default function eventHandler(documentation: Documentation, path: NodePath) {
   const events: { [eventName: string]: EventDescriptor } = documentation.get('events') || {}
-  path.traverse({
-    CallExpression(pathExpression) {
+  recast.visit(path.node, {
+    visitCallExpression(pathExpression: NodePath) {
       if (
         bt.isMemberExpression(pathExpression.node.callee) &&
         bt.isThisExpression(pathExpression.node.callee.object) &&
         bt.isIdentifier(pathExpression.node.callee.property) &&
         pathExpression.node.callee.property.name === '$emit'
       ) {
-        const args = pathExpression.get('arguments')
+        const args = pathExpression.get('arguments').value
         if (!args.length) {
-          return
+          return false
         }
 
         const firstArg = args[0]
-        let eventName: string
-
-        if (!firstArg.isStringLiteral()) {
-          return
+        if (!bt.isStringLiteral(firstArg)) {
+          return false
         }
 
-        eventName = (firstArg.node as bt.StringLiteral).value
+        const eventName = firstArg.value
 
+        // if this event is documented somewhere else leave it alone
         if (events[eventName]) {
-          return
+          return false
         }
 
         // fetch the leading comments on the wrapping expression
@@ -49,7 +50,9 @@ export default function eventHandler(documentation: Documentation, path: NodePat
           }
         }
         events[eventName] = evtDescriptor
+        return false
       }
+      return false
     },
   })
   documentation.set('events', events)

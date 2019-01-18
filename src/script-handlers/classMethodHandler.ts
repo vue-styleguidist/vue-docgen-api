@@ -1,15 +1,15 @@
-import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import { Documentation, MethodDescriptor } from '../Documentation'
 import { getMethodDescriptor } from './methodHandler'
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
-  if (path.isClassDeclaration()) {
+  if (bt.isClassDeclaration(path.node)) {
     const methods: MethodDescriptor[] = documentation.get('methods') || []
     const allMethods = path
       .get('body')
       .get('body')
-      .filter((a: NodePath) => a.isClassMethod())
+      .filter((a: NodePath) => bt.isClassMethod(a.node))
 
     allMethods.forEach((methodPath: NodePath<bt.ClassMethod>) => {
       const methodName = bt.isIdentifier(methodPath.node.key)

@@ -1,23 +1,27 @@
-import traverse, { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import isExportedAssignment from './isExportedAssignment'
 import resolveExportDeclaration from './resolveExportDeclaration'
+
+const recast = require('recast')
 
 function isComponentDefinition(path: NodePath): boolean {
   return (
     // export default {}
-    path.isObjectExpression() ||
+    bt.isObjectExpression(path.node) ||
     // export const myComp = {}
-    (path.isVariableDeclarator() && path.node.init && bt.isObjectExpression(path.node.init)) ||
+    (bt.isVariableDeclarator(path.node) &&
+      path.node.init &&
+      bt.isObjectExpression(path.node.init)) ||
     // export default Vue.extends({})
-    (path.isCallExpression() &&
+    (bt.isCallExpression(path.node) &&
       bt.isMemberExpression(path.node.callee) &&
       bt.isIdentifier(path.node.callee.object) &&
       path.node.callee.object.name === 'Vue' &&
       path.node.callee.property.name === 'extend') ||
     // @Component
     // export default class MyComp extends VueComp
-    (path.isClassDeclaration() &&
+    (bt.isClassDeclaration(path.node) &&
       (path.node.decorators || []).some((d) => {
         const exp = bt.isCallExpression(d.expression) ? d.expression.callee : d.expression
         return bt.isIdentifier(exp) && exp.name === 'Component'
@@ -58,30 +62,32 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
     definitions.forEach((definition: NodePath) => {
       setComponent(definition)
     })
+    return false
   }
 
-  traverse(ast, {
-    DeclareExportDeclaration: exportDeclaration,
-    ExportNamedDeclaration: exportDeclaration,
-    ExportDefaultDeclaration: exportDeclaration,
+  recast.visit(ast, {
+    visitDeclareExportDeclaration: exportDeclaration,
+    visitExportNamedDeclaration: exportDeclaration,
+    visitExportDefaultDeclaration: exportDeclaration,
 
-    AssignmentExpression(path) {
+    visitAssignmentExpression(path: NodePath) {
       // function run on every assignments (with an =)
 
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
       if (!isExportedAssignment(path)) {
-        return
+        return false
       }
 
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like Vue.extend({})
       const pathRight = path.get('right')
       if (!isComponentDefinition(pathRight)) {
-        return
+        return false
       }
 
       setComponent(pathRight)
+      return false
     },
   })
 
@@ -89,12 +95,12 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
 }
 
 function normalizeComponentPath(path: NodePath): NodePath {
-  if (path.isObjectExpression()) {
+  if (bt.isObjectExpression(path.node)) {
     return path
-  } else if (path.isCallExpression()) {
-    return path.get('arguments')[0]
-  } else if (path.isVariableDeclarator()) {
-    return path.get('init') as NodePath
+  } else if (bt.isCallExpression(path.node)) {
+    return path.get('arguments', 0)
+  } else if (bt.isVariableDeclarator(path.node)) {
+    return path.get('init')
   }
   return path
 }

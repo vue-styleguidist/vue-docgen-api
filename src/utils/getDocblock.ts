@@ -1,4 +1,4 @@
-import { NodePath } from '@babel/traverse'
+import { NodePath } from 'recast'
 import * as bt from '@babel/types'
 
 /**

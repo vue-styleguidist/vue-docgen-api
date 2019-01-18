@@ -1,5 +1,5 @@
-import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import {
   BlockTag,
   DocBlockTags,
@@ -17,12 +17,12 @@ import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   const methods: MethodDescriptor[] = documentation.get('methods') || []
 
-  if (path.isObjectExpression()) {
+  if (bt.isObjectExpression(path.node)) {
     const methodsPath = path
       .get('properties')
-      .filter((p) => p.isObjectProperty() && p.node.key.name === 'methods') as Array<
-      NodePath<bt.ObjectProperty>
-    >
+      .filter(
+        (p: NodePath) => bt.isObjectProperty(p.node) && p.node.key.name === 'methods',
+      ) as Array<NodePath<bt.ObjectProperty>>
 
     // if no method return
     if (!methodsPath.length) {
@@ -31,18 +31,18 @@ export default function methodHandler(documentation: Documentation, path: NodePa
     }
 
     const methodsObject = methodsPath[0].get('value')
-    if (methodsObject.isObjectExpression()) {
-      methodsObject.get('properties').forEach((p: NodePath) => {
+    if (bt.isObjectExpression(methodsObject.node)) {
+      methodsObject.get('properties').each((p: NodePath) => {
         let methodName = '<anonymous>'
-        if (p.isObjectProperty()) {
+        if (bt.isObjectProperty(p.node)) {
           const val = p.get('value')
           methodName = p.node.key.name
           if (!Array.isArray(val)) {
             p = val
           }
         }
-        if (p.isFunction()) {
-          methodName = p.isObjectMethod() ? p.node.key.name : methodName
+        if (bt.isFunction(p.node)) {
+          methodName = bt.isObjectMethod(p.node) ? p.node.key.name : methodName
           const doc = getMethodDescriptor(p, methodName)
           if (doc) {
             methods.push(doc)
@@ -61,7 +61,7 @@ export function getMethodDescriptor(
   const methodDescriptor: MethodDescriptor = { name: methodName, description: '', modifiers: [] }
 
   const docBlock = getDocblock(
-    method.isObjectMethod() || method.isClassMethod() ? method : method.parentPath,
+    bt.isObjectMethod(method.node) || bt.isClassMethod(method.node) ? method : method.parentPath,
   )
 
   const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] }

@@ -1,5 +1,5 @@
-import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import { BlockTag, DocBlockTags, Documentation } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
@@ -9,13 +9,13 @@ import { describeDefault, describeRequired } from './propHandler'
 
 export default function propHandler(
   documentation: Documentation,
-  path: NodePath<bt.ClassDeclaration>
+  path: NodePath<bt.ClassDeclaration>,
 ) {
-  if (path.isClassDeclaration()) {
+  if (bt.isClassDeclaration(path.node)) {
     path
       .get('body')
       .get('body')
-      .filter((p: NodePath) => p.isClassProperty())
+      .filter((p: NodePath) => bt.isClassProperty(p.node))
       .forEach((propPath: NodePath<bt.ClassProperty>) => {
         const propDeco = (
           (propPath.get('decorators') as Array<NodePath<bt.Decorator>>) || []
@@ -53,13 +53,15 @@ export default function propHandler(
         }
 
         const propDecoratorPath = propDeco[0].get('expression')
-        if (propDecoratorPath.isCallExpression()) {
-          const propDecoratorArg = propDecoratorPath.get('arguments')[0]
+        if (bt.isCallExpression(propDecoratorPath.node)) {
+          const propDecoratorArg = propDecoratorPath.get('arguments', 0)
 
-          if (propDecoratorArg && propDecoratorArg.isObjectExpression()) {
+          if (propDecoratorArg && bt.isObjectExpression(propDecoratorArg.node)) {
             const propsPath = propDecoratorArg
               .get('properties')
-              .filter(p => p.isObjectProperty()) as Array<NodePath<bt.ObjectProperty>>
+              .filter((p: NodePath) => bt.isObjectProperty(p.node)) as Array<
+              NodePath<bt.ObjectProperty>
+            >
             describeDefault(propsPath, propDescriptor)
             describeRequired(propsPath, propDescriptor)
           }

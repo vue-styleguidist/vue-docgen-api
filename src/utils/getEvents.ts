@@ -1,8 +1,11 @@
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import { BlockTag, EventDescriptor, ParamTag, ParamType, Tag } from '../Documentation'
 import { getEventDescriptor } from '../script-handlers/eventHandler'
 import { parseDocblock } from './getDocblock'
 import getDoclets from './getDoclets'
+
+const recast = require('recast')
 
 export interface TypedParamTag extends ParamTag {
   type: ParamType
@@ -12,11 +15,13 @@ export default function getEvents(
   ast: bt.File,
   events: { [eventName: string]: EventDescriptor },
 ): { [eventName: string]: EventDescriptor } {
-  if (Array.isArray(ast.comments)) {
-    const eventCommentBlocksDoclets = ast.comments.reduce((acc, comment: bt.Comment) => {
+  const eventCommentBlocksDoclets: { [eventName: string]: EventDescriptor } = events
+  recast.visit(ast, {
+    visitComment(path: NodePath) {
+      const comment = path.node.leadingComments && path.node.leadingComments[0]
       // only observe block comments
-      if (comment.type !== 'CommentBlock') {
-        return acc
+      if (!comment || comment.type !== 'CommentBlock') {
+        return false
       }
 
       const docblock = parseDocblock(comment.value)
@@ -28,19 +33,17 @@ export default function getEvents(
       const eventTag = nonNullTags.filter((t) => t.title === 'event')
 
       if (!eventTag.length) {
-        return acc
+        return false
       }
 
       const eventTagContent = (eventTag[0] as Tag).content
       const eventName = typeof eventTagContent === 'string' ? eventTagContent : undefined
       if (eventName) {
-        acc[eventName] = getEventDescriptor(jsDoc)
+        eventCommentBlocksDoclets[eventName] = getEventDescriptor(jsDoc)
       }
-      return acc
-    }, events || {})
+      return false
+    },
+  })
 
-    return eventCommentBlocksDoclets
-  } else {
-    return {}
-  }
+  return eventCommentBlocksDoclets
 }

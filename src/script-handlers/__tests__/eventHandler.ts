@@ -1,4 +1,4 @@
-import { NodePath } from '@babel/traverse'
+import { NodePath } from 'recast'
 import babylon from '../../babel-parser'
 import { Documentation, EventDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'

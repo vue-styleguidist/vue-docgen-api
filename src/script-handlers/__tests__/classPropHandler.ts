@@ -56,7 +56,7 @@ describe('propHandler', () => {
       tester(src, {
         type: { name: 'string' },
         defaultValue: {
-          value: `'hello'`,
+          value: `"hello"`,
         },
       })
       expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testDefault')

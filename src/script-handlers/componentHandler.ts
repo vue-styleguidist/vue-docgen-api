@@ -1,4 +1,5 @@
-import { NodePath } from '@babel/traverse'
+import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import { Documentation } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
@@ -7,11 +8,11 @@ import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 export default function propHandler(documentation: Documentation, path: NodePath) {
   let componentCommentedPath = path.parentPath
   // in case of Vue.extend() structure
-  if (componentCommentedPath.isCallExpression()) {
+  if (bt.isCallExpression(componentCommentedPath.node)) {
     componentCommentedPath = componentCommentedPath.parentPath
-  } else if (componentCommentedPath.isDeclaration()) {
+  } else if (bt.isDeclaration(componentCommentedPath.node)) {
     const classDeclaration = componentCommentedPath.get('declaration')
-    if (!Array.isArray(classDeclaration) && classDeclaration.isClassDeclaration()) {
+    if (bt.isClassDeclaration(classDeclaration.node)) {
       componentCommentedPath = classDeclaration
     }
   }

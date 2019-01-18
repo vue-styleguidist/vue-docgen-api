@@ -1,7 +1,9 @@
-import traverse, { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import babylon from '../../babel-parser'
 import getDocblock from '../getDocblock'
+
+const recast = require('recast')
 
 describe('getDocblock', () => {
   it('should resolve imported variables', () => {
@@ -25,10 +27,10 @@ describe('getDocblock', () => {
 
 function getFirstVariablePath(ast: bt.File): NodePath {
   const varPath: NodePath[] = []
-  traverse(ast, {
-    VariableDeclaration: (a: NodePath) => {
+  recast.visit(ast, {
+    visitVariableDeclaration: (a: NodePath) => {
       varPath.push(a)
-      return
+      return false
     },
   })
   return varPath[0]

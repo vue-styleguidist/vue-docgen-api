@@ -1,6 +1,6 @@
-import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
 import * as path from 'path'
+import { NodePath } from 'recast'
 import { ComponentDoc } from 'src/Documentation'
 import { parse } from '../main'
 import resolvePathFrom from './resolvePathFrom'
@@ -43,7 +43,7 @@ export default function getRequiredMixinDocumentations(
 
 function getMixinsVariableNames(componentDefinitions: NodePath[]) {
   const allMixins = componentDefinitions
-    .filter((comp) => bt.isObjectExpression(comp.node))
+    .filter((comp) => comp && bt.isObjectExpression(comp.node))
     .map((compDef: NodePath<bt.ObjectExpression>) => {
       const mixinProp = (compDef.get('properties') as Array<NodePath<bt.Property>>).filter(
         (p: NodePath<bt.Property>) => p.node.key.name === 'mixins',

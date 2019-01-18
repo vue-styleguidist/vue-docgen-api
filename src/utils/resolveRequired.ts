@@ -1,5 +1,7 @@
-import traverse, { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
+
+const recast = require('recast')
 
 /**
  *
@@ -12,35 +14,31 @@ export default function resolveRequired(
 ): { [key: string]: string } {
   const varToFilePath: { [key: string]: string } = {}
 
-  traverse(ast, {
-    ImportDeclaration(astPath: NodePath) {
+  recast.visit(ast, {
+    visitImportDeclaration(astPath: NodePath) {
       const specifiers = astPath.get('specifiers')
 
       // if `import 'module'` without variable name it cannot be a mixin
-      if (!Array.isArray(specifiers) && !specifiers.node) {
-        return
-      }
-      if (Array.isArray(specifiers)) {
-        specifiers.forEach((sp: NodePath) => {
-          const nodeSpecifier = sp.node
-          if (bt.isImportDefaultSpecifier(nodeSpecifier) || bt.isImportSpecifier(nodeSpecifier)) {
-            const varNameDefault = nodeSpecifier.local.name
-            if (!varNameFilter || varNameFilter.indexOf(varNameDefault) > -1) {
-              const nodeSource = (astPath.get('source') as NodePath<bt.Literal>).node
-              if (bt.isLiteral(nodeSource)) {
-                varToFilePath[varNameDefault] = (nodeSource as bt.StringLiteral).value
-              }
+
+      specifiers.each((sp: NodePath) => {
+        const nodeSpecifier = sp.node
+        if (bt.isImportDefaultSpecifier(nodeSpecifier) || bt.isImportSpecifier(nodeSpecifier)) {
+          const varNameDefault = nodeSpecifier.local.name
+          if (!varNameFilter || varNameFilter.indexOf(varNameDefault) > -1) {
+            const nodeSource = (astPath.get('source') as NodePath<bt.Literal>).node
+            if (bt.isLiteral(nodeSource)) {
+              varToFilePath[varNameDefault] = (nodeSource as bt.StringLiteral).value
             }
           }
-        })
-        return
-      }
+        }
+      })
+      return false
     },
 
-    VariableDeclaration(astPath: NodePath) {
+    visitVariableDeclaration(astPath: NodePath) {
       // only look at variable declarations
-      if (!astPath.isVariableDeclaration(astPath.node)) {
-        return
+      if (!bt.isVariableDeclaration(astPath.node)) {
+        return false
       }
       astPath.node.declarations.forEach((nodeDeclaration) => {
         let sourceNode: bt.Node
@@ -77,7 +75,7 @@ export default function resolveRequired(
           return
         }
       })
-      return
+      return false
     },
   })
 

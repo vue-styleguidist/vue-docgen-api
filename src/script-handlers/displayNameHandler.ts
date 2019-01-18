@@ -1,12 +1,12 @@
-import { NodePath } from '@babel/traverse'
 import * as bt from '@babel/types'
+import { NodePath } from 'recast'
 import { Documentation } from '../Documentation'
 
 export default function displayNameHandler(documentation: Documentation, path: NodePath) {
-  if (path.isObjectExpression()) {
+  if (bt.isObjectExpression(path.node)) {
     const namePath = path
       .get('properties')
-      .filter((p) => p.isObjectProperty() && p.node.key.name === 'name')
+      .filter((p: NodePath) => bt.isObjectProperty(p.node) && p.node.key.name === 'name')
 
     // if no prop return
     if (!namePath.length) {
@@ -18,9 +18,9 @@ export default function displayNameHandler(documentation: Documentation, path: N
 
     let displayName: string | null = null
     if (singleNameValuePath) {
-      if (singleNameValuePath.isStringLiteral()) {
+      if (bt.isStringLiteral(singleNameValuePath.node)) {
         displayName = singleNameValuePath.node.value
-      } else if (singleNameValuePath.isIdentifier()) {
+      } else if (bt.isIdentifier(singleNameValuePath.node)) {
         const nameConstId = singleNameValuePath.node.name
 
         displayName = getDeclaredConstantValue(
@@ -37,18 +37,19 @@ export default function displayNameHandler(documentation: Documentation, path: N
 }
 
 function getDeclaredConstantValue(path: NodePath<bt.Program>, nameConstId: string): string | null {
-  const globalVariableDeclarations = path
-    .get('body')
-    .filter((p) => p.isVariableDeclaration()) as Array<NodePath<bt.VariableDeclaration>>
+  const body = path.get('body').node.body
+  const globalVariableDeclarations = body.filter((node: bt.Node) =>
+    bt.isVariableDeclaration(node),
+  ) as bt.VariableDeclaration[]
   const declarators = globalVariableDeclarations.reduce(
-    (a: bt.VariableDeclarator[], declPath) => a.concat(declPath.node.declarations),
+    (a: bt.VariableDeclarator[], declPath) => a.concat(declPath.declarations),
     [],
   )
   const nodeDeclaratorArray = declarators.filter(
     (d) => bt.isIdentifier(d.id) && d.id.name === nameConstId,
   )
   const nodeDeclarator = nodeDeclaratorArray.length ? nodeDeclaratorArray[0] : undefined
-  return nodeDeclarator && nodeDeclarator.init && bt.isLiteral(nodeDeclarator.init)
-    ? (nodeDeclarator.init as bt.StringLiteral).value
+  return nodeDeclarator && nodeDeclarator.init && bt.isStringLiteral(nodeDeclarator.init)
+    ? nodeDeclarator.init.value
     : null
 }
