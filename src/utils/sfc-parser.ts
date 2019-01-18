@@ -14,7 +14,7 @@ export default function scfParser(source: string, filename: string): SFCDescript
   if (output) {
     return output
   }
-  output = parseComponent(source, { pad: true })
+  output = parseComponent(source)
   cache.set(cacheKey, output)
   return output
 }

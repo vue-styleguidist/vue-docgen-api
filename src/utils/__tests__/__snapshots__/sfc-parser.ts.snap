@@ -8,8 +8,6 @@ Object {
       "lang": "ts",
     },
     "content": "
-
-
 export default {}
 ",
     "end": 93,
@@ -22,12 +20,7 @@ export default {}
       "attrs": Object {
         "lang": "scss",
       },
-      "content": "
-
-
-
-
-.test{display:block;}",
+      "content": ".test{display:block;}",
       "end": 147,
       "lang": "scss",
       "start": 126,
