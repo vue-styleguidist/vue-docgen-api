@@ -188,6 +188,35 @@ describe('methodHandler', () => {
     })
   })
 
+  it('should allow description of params even if they are implicit', () => {
+    const src = `
+    export default {
+      name: 'name-123',
+      methods: {
+        /**
+         * @public
+         * @param {string} - unnamed param
+         * @param {number} - another unnamed param
+         */
+        describedParams(){
+          return arguments;
+        }
+      }
+    }
+    `
+    tester(src, {
+      methods: [
+        {
+          name: 'describedParams',
+          params: [
+            { description: 'unnamed param', type: { name: 'string' } },
+            { description: 'another unnamed param', type: { name: 'number' } },
+          ],
+        },
+      ],
+    })
+  })
+
   it('should allow description of params without naming them', () => {
     const src = `
     export default {
