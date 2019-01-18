@@ -10,6 +10,16 @@ Object {
       "description": "Sets the order",
       "modifiers": Array [],
       "name": "onSubmit",
+      "params": Array [
+        Object {
+          "description": "Key to order",
+          "name": "key",
+          "title": "param",
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
       "returns": Object {
         "description": "Test",
         "title": "returns",

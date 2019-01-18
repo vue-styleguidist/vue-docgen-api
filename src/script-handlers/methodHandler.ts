@@ -94,11 +94,12 @@ function describeParams(
   methodDescriptor: MethodDescriptor,
   jsDocParamTags: ParamTag[],
 ) {
-  // if there is no parameter non need to parse them
+  // if there is no parameter no need to parse them
   const fExp = methodPath.node
-  if (!fExp.params.length) {
+  if (!fExp.params.length && !jsDocParamTags.length) {
     return
   }
+
   const params: Param[] = []
   fExp.params.forEach((par: bt.Identifier, i) => {
     const param: Param = { name: par.name }
@@ -131,6 +132,13 @@ function describeParams(
 
     params.push(param)
   })
+
+  // in case the arguments are abstracted (using the arguments keyword)
+  if (!params.length) {
+    jsDocParamTags.forEach((doc) => {
+      params.push(doc)
+    })
+  }
 
   if (params.length) {
     methodDescriptor.params = params
