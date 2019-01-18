@@ -13,7 +13,7 @@
     "compile": "tsc -p ./tsconfig.build.json",
     "prepublishOnly": "npm run compile",
     "test": "npm run unit && npm run e2e",
-    "unit": "jest --config ./jest.unit.config.js ",
+    "unit": "jest --config ./jest.unit.config.js --collectCoverage",
     "e2e": "jest --config ./jest.e2e.config.js "
   },
   "files": [
