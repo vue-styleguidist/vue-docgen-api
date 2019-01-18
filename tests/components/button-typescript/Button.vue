@@ -22,6 +22,14 @@ export default class MyComponent extends Vue {
 
   @Prop([String, Boolean])
   propC: string | boolean
+
+  /**
+   * method testing
+   * @public
+   */
+  onClick(a: string) {
+    this.$emit('success', a)
+  }
 }
 </script>
 
