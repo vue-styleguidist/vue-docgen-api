@@ -9,7 +9,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
   let componentCommentedPath = path.parentPath
   // in case of Vue.extend() structure
   if (bt.isCallExpression(componentCommentedPath.node)) {
-    componentCommentedPath = componentCommentedPath.parentPath
+    componentCommentedPath = componentCommentedPath.parentPath.parentPath
   } else if (bt.isDeclaration(componentCommentedPath.node)) {
     const classDeclaration = componentCommentedPath.get('declaration')
     if (bt.isClassDeclaration(classDeclaration.node)) {
