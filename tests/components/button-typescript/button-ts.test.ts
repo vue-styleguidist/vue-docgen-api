@@ -31,4 +31,8 @@ describe('tests button', () => {
       expect(props.propB.type).toMatchObject({ name: 'string' })
     })
   })
+
+  it('should match the snapshot', () => {
+    expect(docButton).toMatchSnapshot()
+  })
 })

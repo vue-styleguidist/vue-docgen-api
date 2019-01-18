@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tests button should match the snapshot 1`] = `
+Object {
+  "description": "",
+  "displayName": "MyComponent",
+  "events": Object {},
+  "methods": Array [
+    Object {
+      "description": "method testing",
+      "modifiers": Array [],
+      "name": "onClick",
+      "params": Array [
+        Object {
+          "name": "a",
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
+      "tags": Object {
+        "access": Array [
+          Object {
+            "description": "public",
+            "title": "access",
+          },
+        ],
+      },
+    },
+  ],
+  "props": Object {
+    "propA": Object {
+      "description": "",
+      "tags": Object {},
+      "type": Object {
+        "name": "number",
+      },
+    },
+    "propB": Object {
+      "defaultValue": Object {
+        "func": false,
+        "value": "'default value'",
+      },
+      "description": "",
+      "required": "",
+      "tags": Object {},
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "propC": Object {
+      "description": "",
+      "tags": Object {},
+      "type": Object {
+        "name": "TSUnionType",
+      },
+    },
+  },
+  "slots": Object {
+    "default": Object {
+      "description": "Use this slot default",
+    },
+  },
+  "tags": Object {},
+}
+`;
