@@ -2,7 +2,7 @@
 
 exports[`tests button should match the snapshot 1`] = `
 Object {
-  "description": "",
+  "description": "This is an example of creating a reusable button component and using it with external data.",
   "displayName": "MyComponent",
   "events": Object {},
   "methods": Array [
@@ -61,6 +61,19 @@ Object {
       "description": "Use this slot default",
     },
   },
-  "tags": Object {},
+  "tags": Object {
+    "author": Array [
+      Object {
+        "description": "[Rafael](https://github.com/rafaesc92)",
+        "title": "author",
+      },
+    ],
+    "version": Array [
+      Object {
+        "description": "1.0.5",
+        "title": "version",
+      },
+    ],
+  },
 }
 `;
