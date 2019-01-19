@@ -78,10 +78,10 @@ export function getMethodDescriptor(
   }
 
   // params
-  describeParams(method, methodDescriptor, jsDocTags.filter((tag) => tag.title === 'param'))
+  describeParams(method, methodDescriptor, jsDocTags.filter(tag => tag.title === 'param'))
 
   // returns
-  describeReturns(method, methodDescriptor, jsDocTags.filter((t) => t.title === 'returns'))
+  describeReturns(method, methodDescriptor, jsDocTags.filter(t => t.title === 'returns'))
 
   // tags
   methodDescriptor.tags = transformTagsIntoObject(jsDocTags)
@@ -104,7 +104,7 @@ function describeParams(
   fExp.params.forEach((par: bt.Identifier, i) => {
     const param: Param = { name: par.name }
 
-    const jsDocTags = jsDocParamTags.filter((tag) => tag.name === param.name)
+    const jsDocTags = jsDocParamTags.filter(tag => tag.name === param.name)
     let jsDocTag = jsDocTags.length ? jsDocTags[0] : undefined
 
     // if tag is not namely described try finding it by its order
@@ -135,7 +135,7 @@ function describeParams(
 
   // in case the arguments are abstracted (using the arguments keyword)
   if (!params.length) {
-    jsDocParamTags.forEach((doc) => {
+    jsDocParamTags.forEach(doc => {
       params.push(doc)
     })
   }

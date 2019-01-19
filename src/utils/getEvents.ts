@@ -31,7 +31,7 @@ export default function getEvents(
 
       // filter comments where a tag is @event
       const nonNullTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
-      const eventTag = nonNullTags.filter((t) => t.title === 'event')
+      const eventTag = nonNullTags.filter(t => t.title === 'event')
 
       if (!eventTag.length) {
         return false

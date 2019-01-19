@@ -5,7 +5,7 @@ const grid = path.join(__dirname, './Grid.vue')
 let docGrid: ComponentDoc
 
 describe('tests grid', () => {
-  beforeEach((done) => {
+  beforeEach(done => {
     docGrid = parse(grid)
     done()
   })

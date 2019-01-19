@@ -35,7 +35,7 @@ function propsInAttributes(templateAst: ASTElement, documentation: ComponentDoc)
 function propsInInterpolation(templateAst: ASTElement, documentation: ComponentDoc) {
   if (templateAst.children) {
     templateAst.children
-      .filter((c) => c.type === 2)
+      .filter(c => c.type === 2)
       .forEach((expr: ASTExpression) => {
         getPropsFromExpression(expr.expression, documentation)
       })

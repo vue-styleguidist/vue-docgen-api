@@ -1,10 +1,10 @@
-import { compile } from 'vue-template-compiler';
-import { ComponentDoc } from '../../Documentation';
-import { traverse } from '../../parse-template';
-import slotHandler from '../slotHandler';
+import { compile } from 'vue-template-compiler'
+import { ComponentDoc } from '../../Documentation'
+import { traverse } from '../../parse-template'
+import slotHandler from '../slotHandler'
 
 describe('slotHandler', () => {
-  let doc: ComponentDoc;
+  let doc: ComponentDoc
   beforeEach(() => {
     doc = {
       displayName: '',
@@ -13,8 +13,8 @@ describe('slotHandler', () => {
       props: undefined,
       slots: {},
       tags: {},
-    };
-  });
+    }
+  })
 
   it('should pick comments before slots', () => {
     const ast = compile(
@@ -26,14 +26,14 @@ describe('slotHandler', () => {
         '</div>',
       ].join('\n'),
       { comments: true },
-    ).ast;
+    ).ast
     if (ast) {
-      traverse(ast, doc, [slotHandler], { functional: false });
-      expect(doc.slots.default).toMatchObject({ description: 'a default slot' });
+      traverse(ast, doc, [slotHandler], { functional: false })
+      expect(doc.slots.default).toMatchObject({ description: 'a default slot' })
     } else {
-      fail();
+      fail()
     }
-  });
+  })
 
   it('should pick up the name of a slot', () => {
     const ast = compile(
@@ -45,12 +45,12 @@ describe('slotHandler', () => {
         '</div>',
       ].join('\n'),
       { comments: true },
-    ).ast;
+    ).ast
     if (ast) {
-      traverse(ast, doc, [slotHandler], { functional: false });
-      expect(doc.slots.oeuf).toMatchObject({ description: 'a slot named oeuf' });
+      traverse(ast, doc, [slotHandler], { functional: false })
+      expect(doc.slots.oeuf).toMatchObject({ description: 'a slot named oeuf' })
     } else {
-      fail();
+      fail()
     }
-  });
-});
+  })
+})

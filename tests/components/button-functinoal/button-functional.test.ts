@@ -6,7 +6,7 @@ const button = path.join(__dirname, './MyButton.vue')
 let docButton: ComponentDoc
 
 describe('tests button functional', () => {
-  beforeEach((done) => {
+  beforeEach(done => {
     docButton = parse(button)
     done()
   })

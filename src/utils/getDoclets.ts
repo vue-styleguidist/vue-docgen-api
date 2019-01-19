@@ -36,7 +36,7 @@ function getTypeObjectFromTypeString(typeSlice: string): ParamType {
   } else if (/\w+\|\w+/.test(typeSlice)) {
     return {
       name: 'union',
-      elements: typeSlice.split('|').map((type) => getTypeObjectFromTypeString(type)),
+      elements: typeSlice.split('|').map(type => getTypeObjectFromTypeString(type)),
     }
   } else {
     return {

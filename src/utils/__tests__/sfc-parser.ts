@@ -1,8 +1,8 @@
-import { SFCDescriptor } from 'vue-template-compiler';
-import scfParser from '../sfc-parser';
+import { SFCDescriptor } from 'vue-template-compiler'
+import scfParser from '../sfc-parser'
 
 describe('sfc-parser', () => {
-  let compiledSfc: SFCDescriptor;
+  let compiledSfc: SFCDescriptor
   beforeEach(() => {
     compiledSfc = scfParser(
       `
@@ -13,10 +13,10 @@ describe('sfc-parser', () => {
     <style lang="scss">.test{display:block;}</style>
     `,
       'test',
-    );
-  });
+    )
+  })
 
   it('should parse sfc templates', () => {
-    expect(compiledSfc).toMatchSnapshot();
-  });
-});
+    expect(compiledSfc).toMatchSnapshot()
+  })
+})

@@ -45,7 +45,7 @@ describe('getRequiredMixinDocumentations', () => {
       '  mixins:[testComponent,other]',
       '}',
     ].join('\n'),
-  ])('should resolve extended modules variables', (src) => {
+  ])('should resolve extended modules variables', src => {
     const ast = babylon().parse(src)
     const path = resolveExportedComponent(ast)
     getRequiredMixinDocumentations(ast, path, '')

@@ -5,7 +5,7 @@ import { parse } from '../../../src/main'
 const typescriptGrid = path.join(__dirname, './Grid.vue')
 let docGrid: ComponentDoc
 describe('tests typescript grid', () => {
-  beforeAll((done) => {
+  beforeAll(done => {
     docGrid = parse(typescriptGrid)
     done()
   })
@@ -87,7 +87,7 @@ describe('tests typescript grid', () => {
   })
 
   it('should extract the type of the argument from typescript', () => {
-    const publicMethod = docGrid.methods.filter((m) => m.name === 'publicMethod')[0]
+    const publicMethod = docGrid.methods.filter(m => m.name === 'publicMethod')[0]
     const safePublicMethodParams: Param[] =
       publicMethod && publicMethod.params ? publicMethod.params : []
 

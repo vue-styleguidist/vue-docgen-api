@@ -56,9 +56,9 @@ function executeHandlers(
   componentDefinitions: NodePath[],
   mixinsDocumentations: { props?: any; data?: any },
 ) {
-  return componentDefinitions.map((compDef) => {
+  return componentDefinitions.map(compDef => {
     const documentation = new Documentation(mixinsDocumentations)
-    localHandlers.forEach((handler) => handler(documentation, compDef))
+    localHandlers.forEach(handler => handler(documentation, compDef))
     return documentation.toObject()
   })
 }

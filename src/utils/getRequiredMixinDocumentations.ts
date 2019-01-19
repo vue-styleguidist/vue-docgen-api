@@ -43,7 +43,7 @@ export default function getRequiredMixinDocumentations(
 
 function getMixinsVariableNames(componentDefinitions: NodePath[]) {
   const allMixins = componentDefinitions
-    .filter((comp) => comp && bt.isObjectExpression(comp.node))
+    .filter(comp => comp && bt.isObjectExpression(comp.node))
     .map((compDef: NodePath<bt.ObjectExpression>) => {
       const mixinProp = compDef
         .get('properties')

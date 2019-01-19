@@ -46,7 +46,7 @@ function getDeclaredConstantValue(path: NodePath<bt.Program>, nameConstId: strin
     [],
   )
   const nodeDeclaratorArray = declarators.filter(
-    (d) => bt.isIdentifier(d.id) && d.id.name === nameConstId,
+    d => bt.isIdentifier(d.id) && d.id.name === nameConstId,
   )
   const nodeDeclarator = nodeDeclaratorArray.length ? nodeDeclaratorArray[0] : undefined
   return nodeDeclarator && nodeDeclarator.init && bt.isStringLiteral(nodeDeclarator.init)

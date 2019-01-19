@@ -6,7 +6,7 @@ const button = path.join(__dirname, './Button.vue')
 let docButton: ComponentDoc
 
 describe('tests button', () => {
-  beforeAll((done) => {
+  beforeAll(done => {
     docButton = parse(button)
     done()
   })
@@ -77,15 +77,15 @@ describe('tests button', () => {
       expect(props.span.type).toEqual({ name: 'string|number' })
     })
 
-    it('should span has as description \'Number of columns (1-12) the column should span.\'', () => {
+    it("should span has as description 'Number of columns (1-12) the column should span.'", () => {
       expect(props.span.description).toEqual('Number of columns (1-12) the column should span.')
     })
 
-    it('should span has as description \'Sm breakpoint and above\'', () => {
+    it("should span has as description 'Sm breakpoint and above'", () => {
       expect(props.spanSm.description).toEqual('Sm breakpoint and above')
     })
 
-    it('should spanMd has as description \'Md breakpoint and above\'', () => {
+    it("should spanMd has as description 'Md breakpoint and above'", () => {
       expect(props.spanMd.description).toEqual('Md breakpoint and above')
     })
 

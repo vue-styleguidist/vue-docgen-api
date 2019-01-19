@@ -67,12 +67,12 @@ export function getEventDescriptor(jsDoc: DocBlockTags): EventDescriptor {
 
   const nonNullTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
 
-  const typeTags = nonNullTags.filter((tg) => tg.title === 'type')
+  const typeTags = nonNullTags.filter(tg => tg.title === 'type')
   eventDescriptor.type = typeTags.length
     ? { names: typeTags.map((t: TypedParamTag) => t.type.name) }
     : undefined
 
-  const propertyTags = nonNullTags.filter((tg) => tg.title === 'property')
+  const propertyTags = nonNullTags.filter(tg => tg.title === 'property')
   if (propertyTags.length) {
     eventDescriptor.properties = propertyTags.map((tg: TypedParamTag) => {
       return { type: { names: [tg.type.name] }, name: tg.name, description: tg.description }

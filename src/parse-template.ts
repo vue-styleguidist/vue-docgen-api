@@ -38,7 +38,7 @@ export function traverse(
   options: TemplateParserOptions,
 ) {
   if (templateAst.type === 1) {
-    handlers.forEach((handler) => {
+    handlers.forEach(handler => {
       handler(templateAst, documentation, options)
     })
     if (templateAst.children) {
