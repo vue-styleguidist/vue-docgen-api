@@ -1,9 +1,10 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import babylon from '../../babel-parser'
 import getDocblock from '../getDocblock'
 
-const recast = require('recast')
+// tslint:disable-next-line:no-var-requires
+import recast = require('recast')
 
 describe('getDocblock', () => {
   it('should resolve imported variables', () => {
@@ -16,7 +17,7 @@ describe('getDocblock', () => {
         ' */',
         'var testedVariable = 8;',
         '',
-      ].join('\n'),
+      ].join('\n')
     )
     const varPath = getFirstVariablePath(ast)
 
@@ -27,7 +28,7 @@ describe('getDocblock', () => {
 
 function getFirstVariablePath(ast: bt.File): NodePath {
   const varPath: NodePath[] = []
-  recast.visit(ast, {
+  recast.visit(ast.program, {
     visitVariableDeclaration: (a: NodePath) => {
       varPath.push(a)
       return false

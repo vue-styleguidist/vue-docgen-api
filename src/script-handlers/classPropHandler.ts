@@ -1,5 +1,5 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import { BlockTag, DocBlockTags, Documentation } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
@@ -17,9 +17,7 @@ export default function propHandler(
       .get('body')
       .filter((p: NodePath) => bt.isClassProperty(p.node))
       .forEach((propPath: NodePath<bt.ClassProperty>) => {
-        const propDeco = (
-          (propPath.get('decorators') as Array<NodePath<bt.Decorator>>) || []
-        ).filter((p: NodePath<bt.Decorator>) => {
+        const propDeco = (propPath.get('decorators') || []).filter((p: NodePath<bt.Decorator>) => {
           const exp = bt.isCallExpression(p.node.expression)
             ? p.node.expression.callee
             : p.node.expression

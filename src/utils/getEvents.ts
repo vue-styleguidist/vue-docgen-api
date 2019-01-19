@@ -1,11 +1,12 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import { BlockTag, EventDescriptor, ParamTag, ParamType, Tag } from '../Documentation'
 import { getEventDescriptor } from '../script-handlers/eventHandler'
 import { parseDocblock } from './getDocblock'
 import getDoclets from './getDoclets'
 
-const recast = require('recast')
+// tslint:disable-next-line:no-var-requires
+import recast = require('recast')
 
 export interface TypedParamTag extends ParamTag {
   type: ParamType
@@ -16,7 +17,7 @@ export default function getEvents(
   events: { [eventName: string]: EventDescriptor },
 ): { [eventName: string]: EventDescriptor } {
   const eventCommentBlocksDoclets: { [eventName: string]: EventDescriptor } = events
-  recast.visit(ast, {
+  recast.visit(ast.program, {
     visitComment(path: NodePath) {
       const comment = path.node.leadingComments && path.node.leadingComments[0]
       // only observe block comments

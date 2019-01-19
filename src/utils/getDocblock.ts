@@ -1,5 +1,5 @@
-import { NodePath } from 'recast'
 import * as bt from '@babel/types'
+import { NodePath } from 'ast-types'
 
 /**
  * Helper functions to work with docblock comments.

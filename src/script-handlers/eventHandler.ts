@@ -1,23 +1,24 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import { BlockTag, DocBlockTags, Documentation, EventDescriptor } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
 import { TypedParamTag } from '../utils/getEvents'
 
-const recast = require('recast')
+// tslint:disable-next-line:no-var-requires
+import recast = require('recast')
 
 export default function eventHandler(documentation: Documentation, path: NodePath) {
   const events: { [eventName: string]: EventDescriptor } = documentation.get('events') || {}
-  recast.visit(path.node, {
-    visitCallExpression(pathExpression: NodePath) {
+  recast.visit(path, {
+    visitCallExpression(pathExpression: NodePath<bt.CallExpression>) {
       if (
         bt.isMemberExpression(pathExpression.node.callee) &&
         bt.isThisExpression(pathExpression.node.callee.object) &&
         bt.isIdentifier(pathExpression.node.callee.property) &&
         pathExpression.node.callee.property.name === '$emit'
       ) {
-        const args = pathExpression.get('arguments').value
+        const args = pathExpression.node.arguments
         if (!args.length) {
           return false
         }

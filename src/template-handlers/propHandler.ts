@@ -1,11 +1,12 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import { ASTElement, ASTExpression } from 'vue-template-compiler'
 import buildParser from '../babel-parser'
 import { ComponentDoc } from '../Documentation'
 import { TemplateParserOptions } from '../parse-template'
 
-const recast = require('recast')
+// tslint:disable-next-line:no-var-requires
+import recast = require('recast')
 
 const allowRE = /^(v-bind|:)/
 export default function propTemplateHandler(
@@ -43,8 +44,8 @@ function propsInInterpolation(templateAst: ASTElement, documentation: ComponentD
 
 function getPropsFromExpression(expression: string, documentation: ComponentDoc) {
   const ast = buildParser({ plugins: ['typescript'] }).parse(expression)
-  recast.visit(ast, {
-    visitMemberExpression: (path: NodePath) => {
+  recast.visit(ast.program, {
+    visitMemberExpression: (path: NodePath<bt.MemberExpression>) => {
       const obj = path.node ? path.node.object : undefined
       const propName = path.node ? path.node.property : undefined
       if (

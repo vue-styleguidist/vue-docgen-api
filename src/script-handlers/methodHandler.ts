@@ -1,5 +1,5 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import {
   BlockTag,
   DocBlockTags,
@@ -43,7 +43,7 @@ export default function methodHandler(documentation: Documentation, path: NodePa
         }
         if (bt.isFunction(p.node)) {
           methodName = bt.isObjectMethod(p.node) ? p.node.key.name : methodName
-          const doc = getMethodDescriptor(p, methodName)
+          const doc = getMethodDescriptor(p as NodePath<bt.Function>, methodName)
           if (doc) {
             methods.push(doc)
           }

@@ -1,4 +1,4 @@
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import babylon from '../../babel-parser'
 import { Documentation, EventDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'

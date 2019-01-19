@@ -1,9 +1,10 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import isExportedAssignment from './isExportedAssignment'
 import resolveExportDeclaration from './resolveExportDeclaration'
 
-const recast = require('recast')
+// tslint:disable-next-line:no-var-requires
+import recast = require('recast')
 
 function isComponentDefinition(path: NodePath): boolean {
   return (
@@ -65,7 +66,7 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
     return false
   }
 
-  recast.visit(ast, {
+  recast.visit(ast.program, {
     visitDeclareExportDeclaration: exportDeclaration,
     visitExportNamedDeclaration: exportDeclaration,
     visitExportDefaultDeclaration: exportDeclaration,

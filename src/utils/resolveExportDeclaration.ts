@@ -1,5 +1,5 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 
 export default function resolveExportDeclaration(path: NodePath): NodePath[] {
   const definitions: NodePath[] = []

@@ -1,6 +1,6 @@
 import * as bt from '@babel/types'
+import { NodePath } from 'ast-types'
 import * as path from 'path'
-import { NodePath } from 'recast'
 import { ComponentDoc } from '../Documentation'
 import { parse } from '../main'
 import resolvePathFrom from './resolvePathFrom'
@@ -45,9 +45,9 @@ function getExtendsVariableName(componentDefinitions: NodePath[]) {
     ) {
       acc.push(compDef.get('superClass') as NodePath<bt.Identifier>)
     } else if (compDef) {
-      const extendsProp = (compDef.get('properties') as Array<NodePath<bt.Property>>).filter(
-        (p: NodePath<bt.Property>) => p.node.key.name === 'extends',
-      )
+      const extendsProp = compDef
+        .get('properties')
+        .filter((p: NodePath<bt.Property>) => p.node.key.name === 'extends')
       if (extendsProp.length) {
         acc.push(extendsProp[0])
       }

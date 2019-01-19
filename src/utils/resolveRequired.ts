@@ -1,7 +1,8 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 
-const recast = require('recast')
+// tslint:disable-next-line:no-var-requires
+import recast = require('recast')
 
 /**
  *
@@ -14,7 +15,7 @@ export default function resolveRequired(
 ): { [key: string]: string } {
   const varToFilePath: { [key: string]: string } = {}
 
-  recast.visit(ast, {
+  recast.visit(ast.program, {
     visitImportDeclaration(astPath: NodePath) {
       const specifiers = astPath.get('specifiers')
 

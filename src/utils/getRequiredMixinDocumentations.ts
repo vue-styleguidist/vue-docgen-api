@@ -1,6 +1,6 @@
 import * as bt from '@babel/types'
+import { NodePath } from 'ast-types'
 import * as path from 'path'
-import { NodePath } from 'recast'
 import { ComponentDoc } from 'src/Documentation'
 import { parse } from '../main'
 import resolvePathFrom from './resolvePathFrom'
@@ -45,9 +45,9 @@ function getMixinsVariableNames(componentDefinitions: NodePath[]) {
   const allMixins = componentDefinitions
     .filter((comp) => comp && bt.isObjectExpression(comp.node))
     .map((compDef: NodePath<bt.ObjectExpression>) => {
-      const mixinProp = (compDef.get('properties') as Array<NodePath<bt.Property>>).filter(
-        (p: NodePath<bt.Property>) => p.node.key.name === 'mixins',
-      )
+      const mixinProp = compDef
+        .get('properties')
+        .filter((p: NodePath<bt.Property>) => p.node.key.name === 'mixins')
       return mixinProp.length ? mixinProp[0] : undefined
     })
   return allMixins.reduce((acc: string[], mixinPath: NodePath<bt.Property>) => {

@@ -1,10 +1,10 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import { Documentation } from '../Documentation'
 
 export default function classDisplayNameHandler(documentation: Documentation, path: NodePath) {
   if (bt.isClassDeclaration(path.node)) {
-    const config = getArgFromDecorator(path.get('decorators'))
+    const config = getArgFromDecorator(path.get('decorators') as NodePath<bt.Decorator>)
 
     let displayName: string | undefined
     if (config && bt.isObjectExpression(config.node)) {
@@ -35,10 +35,12 @@ function getArgFromDecorator(
       const exp = p.get('expression')
       const decoratorIdenifier = bt.isCallExpression(exp.node) ? exp.node.callee : exp.node
       return 'Component' === (bt.isIdentifier(decoratorIdenifier) ? decoratorIdenifier.name : null)
-    }, 0)[0]
+    })[0]
     .get('expression')
   if (bt.isCallExpression(expForDecorator.node)) {
-    return expForDecorator.get('arguments', 0)
+    return expForDecorator.get('arguments', 0) as NodePath<
+      bt.Expression | bt.SpreadElement | bt.JSXNamespacedName
+    >
   }
   return null
 }

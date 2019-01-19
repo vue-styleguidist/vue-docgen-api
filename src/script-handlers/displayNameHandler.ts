@@ -1,5 +1,5 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'recast'
+import { NodePath } from 'ast-types'
 import { Documentation } from '../Documentation'
 
 export default function displayNameHandler(documentation: Documentation, path: NodePath) {
@@ -37,7 +37,7 @@ export default function displayNameHandler(documentation: Documentation, path: N
 }
 
 function getDeclaredConstantValue(path: NodePath<bt.Program>, nameConstId: string): string | null {
-  const body = path.get('body').node.body
+  const body = (path.get('body').node as any).body
   const globalVariableDeclarations = body.filter((node: bt.Node) =>
     bt.isVariableDeclaration(node),
   ) as bt.VariableDeclaration[]
