@@ -17,7 +17,7 @@ describe('getDocblock', () => {
         ' */',
         'var testedVariable = 8;',
         '',
-      ].join('\n')
+      ].join('\n'),
     )
     const varPath = getFirstVariablePath(ast)
 
