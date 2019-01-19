@@ -25,7 +25,7 @@ export default function displayNameHandler(documentation: Documentation, path: N
 
         displayName = getDeclaredConstantValue(
           path.parentPath.parentPath as NodePath<bt.Program>,
-          nameConstId,
+          nameConstId
         )
       }
     }
@@ -37,16 +37,16 @@ export default function displayNameHandler(documentation: Documentation, path: N
 }
 
 function getDeclaredConstantValue(path: NodePath<bt.Program>, nameConstId: string): string | null {
-  const body = (path.get('body').node as any).body
+  const body = path.node.body
   const globalVariableDeclarations = body.filter((node: bt.Node) =>
-    bt.isVariableDeclaration(node),
+    bt.isVariableDeclaration(node)
   ) as bt.VariableDeclaration[]
   const declarators = globalVariableDeclarations.reduce(
     (a: bt.VariableDeclarator[], declPath) => a.concat(declPath.declarations),
-    [],
+    []
   )
   const nodeDeclaratorArray = declarators.filter(
-    (d) => bt.isIdentifier(d.id) && d.id.name === nameConstId,
+    d => bt.isIdentifier(d.id) && d.id.name === nameConstId
   )
   const nodeDeclarator = nodeDeclaratorArray.length ? nodeDeclaratorArray[0] : undefined
   return nodeDeclarator && nodeDeclarator.init && bt.isStringLiteral(nodeDeclarator.init)
