@@ -64,7 +64,7 @@ export interface MethodDescriptor {
   [key: string]: any
 }
 
-export interface SlotResult {
+export interface SlotDescriptor {
   description?: string
   bindings?: Record<string, any>
 }
@@ -73,17 +73,23 @@ export interface ComponentDoc {
   displayName: string
   props: { [propName: string]: PropDescriptor } | undefined
   methods: MethodDescriptor[]
-  slots: { [name: string]: SlotResult }
+  slots: { [name: string]: SlotDescriptor }
   events?: { [name: string]: EventDescriptor }
   [key: string]: any
 }
 
 export class Documentation {
-  private propsMap: Map<string, any>
+  private propsMap: Map<string, PropDescriptor>
+  private methodsMap: Map<string, MethodDescriptor>
+  private slotsMap: Map<string, SlotDescriptor>
+  private eventsMap: Map<string, any>
   private dataMap: Map<string, any>
-  constructor(initDocumentation: { props?: any; data?: any } = {}) {
-    this.propsMap = new Map(adaptToKeyValue(initDocumentation.props))
-    this.dataMap = new Map(adaptToKeyValue(initDocumentation.data))
+  constructor() {
+    this.propsMap = new Map()
+    this.methodsMap = new Map()
+    this.slotsMap = new Map()
+    this.eventsMap = new Map()
+    this.dataMap = new Map()
   }
 
   public set(key: string, value: any) {
@@ -94,31 +100,86 @@ export class Documentation {
     return this.dataMap.get(key)
   }
 
-  public getPropDescriptor(propName: string): PropDescriptor {
-    let propDescriptor: PropDescriptor = this.propsMap.get(propName) as PropDescriptor
-    if (!propDescriptor) {
-      this.propsMap.set(
-        propName,
-        (propDescriptor = {
-          description: '',
-          tags: {},
-        }),
-      )
+  private getDescriptor<T>(name: string, map: Map<string, T>, init: () => T): T {
+    let descriptor = map.get(name)
+    if (!descriptor) {
+      map.set(name, (descriptor = init()))
     }
-    return propDescriptor
+    return descriptor
+  }
+
+  private getObjectFromDescriptor<T>(map: Map<string, T>): { [name: string]: T } | undefined {
+    if (map.size > 0) {
+      const obj: { [name: string]: T } = {}
+      map.forEach((descriptor, name) => {
+        if (name && descriptor) {
+          obj[name] = descriptor
+        }
+      })
+      return obj
+    } else {
+      return undefined
+    }
+  }
+
+  public getPropDescriptor(propName: string): PropDescriptor {
+    return this.getDescriptor(propName, this.propsMap, () => ({
+      description: '',
+      tags: {},
+    }))
+  }
+
+  private getPropsObject(): { [propName: string]: PropDescriptor } | undefined {
+    return this.getObjectFromDescriptor(this.propsMap)
+  }
+
+  public getMethodDescriptor(methodName: string): MethodDescriptor {
+    return this.getDescriptor(methodName, this.methodsMap, () => ({
+      name: methodName,
+      modifiers: [],
+      description: '',
+      tags: {},
+    }))
+  }
+
+  private getMethodsObject(): MethodDescriptor[] {
+    const methods: MethodDescriptor[] = []
+    this.methodsMap.forEach((descriptor, name) => {
+      if (name && methods && descriptor) {
+        methods.push(descriptor)
+      }
+    })
+    return methods
+  }
+
+  public getEventsDescriptor(eventName: string): EventDescriptor {
+    return this.getDescriptor(eventName, this.eventsMap, () => ({
+      properties: [],
+      description: '',
+      tags: [],
+    }))
+  }
+
+  private getEventsObject(): { [eventName: string]: EventDescriptor } | undefined {
+    return this.getObjectFromDescriptor(this.eventsMap)
+  }
+
+  public getSlotDescriptor(slotName: string): SlotDescriptor {
+    return this.getDescriptor(slotName, this.slotsMap, () => ({
+      description: '',
+      tags: {},
+    }))
+  }
+
+  private getSlotsObject(): { [slotName: string]: SlotDescriptor } {
+    return this.getObjectFromDescriptor(this.slotsMap) || {}
   }
 
   public toObject(): ComponentDoc {
-    let props: { [propName: string]: PropDescriptor } | undefined
-
-    if (this.propsMap.size > 0) {
-      props = {}
-      for (const [name, descriptor] of this.propsMap.entries()) {
-        props[name] = descriptor
-      }
-    } else {
-      props = undefined
-    }
+    const props = this.getPropsObject()
+    const methods = this.getMethodsObject()
+    const events = this.getEventsObject()
+    const slots = this.getSlotsObject()
 
     const obj: { [key: string]: any } = {}
     for (const [key, value] of this.dataMap.entries()) {
@@ -126,28 +187,19 @@ export class Documentation {
     }
 
     return {
+      // initialize non null params
       description: '',
       tags: {},
+
+      // set all the component params (override init values)
       ...obj,
-      props,
-      methods: obj.methods,
-      slots: obj.slots || {},
+
+      // set all the static properties
       displayName: obj.displayName,
+      props,
+      events,
+      methods,
+      slots,
     }
   }
-}
-
-/**
- * Transforms an object into an array of tuples [key, value]
- * @param {Object} obj
- * @returns {Array<[key, value]>} the retransfromed array and [] if obj is null
- */
-function adaptToKeyValue(obj: { [key: string]: any } | undefined): Array<[string, any]> {
-  const keyValuePairs: Array<[string, any]> = obj
-    ? Object.keys(obj).map((k: string) => {
-        const kvp: [string, any] = [k, obj[k]]
-        return kvp
-      })
-    : []
-  return keyValuePairs
 }
