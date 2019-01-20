@@ -15,8 +15,6 @@ import getTypeFromAnnotation from '../utils/getTypeFromAnnotation'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
-  const methods: MethodDescriptor[] = documentation.get('methods') || []
-
   if (bt.isObjectExpression(path.node)) {
     const methodsPath = path
       .get('properties')
@@ -26,7 +24,6 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 
     // if no method return
     if (!methodsPath.length) {
-      documentation.set('methods', methods)
       return
     }
 
@@ -43,23 +40,18 @@ export default function methodHandler(documentation: Documentation, path: NodePa
         }
         if (bt.isFunction(p.node)) {
           methodName = bt.isObjectMethod(p.node) ? p.node.key.name : methodName
-          const doc = getMethodDescriptor(p as NodePath<bt.Function>, methodName)
-          if (doc) {
-            methods.push(doc)
-          }
+          const doc = documentation.getMethodDescriptor(methodName)
+          setMethodDescriptor(doc, p as NodePath<bt.Function>)
         }
       })
     }
   }
-  documentation.set('methods', methods)
 }
 
-export function getMethodDescriptor(
+export function setMethodDescriptor(
+  methodDescriptor: MethodDescriptor,
   method: NodePath<bt.Function>,
-  methodName: string,
-): MethodDescriptor | undefined {
-  const methodDescriptor: MethodDescriptor = { name: methodName, description: '', modifiers: [] }
-
+) {
   const docBlock = getDocblock(
     bt.isObjectMethod(method.node) || bt.isClassMethod(method.node) ? method : method.parentPath,
   )

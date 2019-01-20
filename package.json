@@ -12,8 +12,8 @@
     "format": "prettier --write */**/*.ts",
     "compile": "tsc -p ./tsconfig.build.json",
     "prepublishOnly": "npm run compile",
-    "test": "npm run unit && npm run e2e",
-    "unit": "jest --config ./jest.unit.config.js --collectCoverage",
+    "test": "npm run unit --collectCoverage && npm run e2e",
+    "unit": "jest --config ./jest.unit.config.js ",
     "e2e": "jest --config ./jest.e2e.config.js "
   },
   "files": [

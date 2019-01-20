@@ -1,7 +1,7 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import { Documentation, MethodDescriptor } from '../Documentation'
-import { getMethodDescriptor } from './methodHandler'
+import { setMethodDescriptor } from './methodHandler'
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
   if (bt.isClassDeclaration(path.node)) {
@@ -15,10 +15,8 @@ export default function methodHandler(documentation: Documentation, path: NodePa
       const methodName = bt.isIdentifier(methodPath.node.key)
         ? methodPath.node.key.name
         : '<anonymous>'
-      const doc = getMethodDescriptor(methodPath, methodName)
-      if (doc) {
-        methods.push(doc)
-      }
+      const doc = documentation.getMethodDescriptor(methodName)
+      setMethodDescriptor(doc, methodPath)
     })
     documentation.set('methods', methods)
   }

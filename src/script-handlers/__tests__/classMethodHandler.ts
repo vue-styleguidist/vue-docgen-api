@@ -18,10 +18,11 @@ describe('classPropHandler', () => {
     mockMethodDescriptor = { name: '', description: '', modifiers: [] }
     const MockDocumentation = require('../../Documentation').Documentation
     documentation = new MockDocumentation()
-    const mockSetMethodDescriptor = documentation.set as jest.Mock
-    mockSetMethodDescriptor.mockImplementation(
-      (key, methods) => (mockMethodDescriptor[key] = methods),
-    )
+    const mockGetMethodDescriptor = documentation.getMethodDescriptor as jest.Mock
+    mockGetMethodDescriptor.mockImplementation((name: string) => {
+      mockMethodDescriptor.name = name
+      return mockMethodDescriptor
+    })
   })
 
   function tester(src: string, matchedObj: any) {
@@ -41,9 +42,7 @@ describe('classPropHandler', () => {
 
           }
         }`
-    tester(src, {
-      methods: [{ name: 'myMethod' }],
-    })
+    tester(src, { name: 'myMethod' })
   })
 
   it('should detect public methods params', () => {
@@ -57,9 +56,7 @@ describe('classPropHandler', () => {
 
           }
         }`
-    tester(src, {
-      methods: [{ name: 'myMethod', params: [{ name: 'param1' }] }],
-    })
+    tester(src, { name: 'myMethod', params: [{ name: 'param1' }] })
   })
 
   it('should detect public methods params types', () => {
@@ -73,9 +70,7 @@ describe('classPropHandler', () => {
 
           }
         }`
-    tester(src, {
-      methods: [{ name: 'myMethod', params: [{ name: 'param1', type: { name: 'string' } }] }],
-    })
+    tester(src, { name: 'myMethod', params: [{ name: 'param1', type: { name: 'string' } }] })
   })
 
   it('should detect public methods params types', () => {
@@ -89,8 +84,6 @@ describe('classPropHandler', () => {
             return 1;
           }
         }`
-    tester(src, {
-      methods: [{ name: 'myMethod', returns: { type: { name: 'number' } } }],
-    })
+    tester(src, { name: 'myMethod', returns: { type: { name: 'number' } } })
   })
 })

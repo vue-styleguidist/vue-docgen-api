@@ -23,10 +23,11 @@ describe('methodHandler', () => {
     mockMethodDescriptor = { name: '', description: '', modifiers: [] }
     const MockDocumentation = require('../../Documentation').Documentation
     documentation = new MockDocumentation()
-    const mockSetMethodDescriptor = documentation.set as jest.Mock
-    mockSetMethodDescriptor.mockImplementation(
-      (key, methods) => (mockMethodDescriptor[key] = methods),
-    )
+    const mockGetMethodDescriptor = documentation.getMethodDescriptor as jest.Mock
+    mockGetMethodDescriptor.mockImplementation((name: string) => {
+      mockMethodDescriptor.name = name
+      return mockMethodDescriptor
+    })
   })
 
   function tester(src: string, matchedObj: any) {
@@ -52,69 +53,69 @@ describe('methodHandler', () => {
       }
     }`
     tester(src, {
-      methods: [
-        {
-          name: 'testPublic',
-        },
-      ],
+      name: 'testPublic',
     })
   })
-
-  it('should return the methods of the component', () => {
-    const src = `
+  describe('formats', () => {
+    it('should return the method if it is an anonymous function', () => {
+      const src = `
     export default {
-      name: 'name-123',
-      components: {
-        testComp: {}
-      },
       methods: {
         /**
          * @public
          */
         testFunction: function(){
           return 1;
-        },
-        /**
-         * @public
-         */
-        testMethod() {
-          return {};
-        },
-        /**
-         * @public
-         */
-        testArrowFunction: () => {
-          return 'test';
-        },
+        }
       }
     }
     `
-    tester(src, {
-      methods: [
-        {
-          name: 'testFunction',
-        },
-        {
-          name: 'testMethod',
-        },
-        {
-          name: 'testArrowFunction',
-        },
-      ],
+      tester(src, {
+        name: 'testFunction',
+      })
+    })
+
+    it('should return the method if it is an object method', () => {
+      const src = `
+        export default {
+          methods: {
+            /**
+             * @public
+             */
+            testMethod(){
+              return 1;
+            }
+          }
+        }
+        `
+      tester(src, {
+        name: 'testMethod',
+      })
+    })
+
+    it('should return the method if it is an arrow function', () => {
+      const src = `
+      export default {
+        methods: {
+          /**
+           * @public
+           */
+          testArrowFunction: () => {
+            return 'test';
+          },
+        }
+      }
+      `
+      tester(src, {
+        name: 'testArrowFunction',
+      })
     })
   })
 
   it('should return their parameters', () => {
     const src = `
     export default {
-      name: 'name-123',
       methods: {
-        /**
-         * @public
-         */
-        testWithParam(param){
-          return 2 * param;
-        },
         /**
          * @public
          */
@@ -125,16 +126,8 @@ describe('methodHandler', () => {
     }
     `
     tester(src, {
-      methods: [
-        {
-          name: 'testWithParam',
-          params: [{ name: 'param' }],
-        },
-        {
-          name: 'testWithMultipleParams',
-          params: [{ name: 'param1' }, { name: 'param2' }],
-        },
-      ],
+      name: 'testWithMultipleParams',
+      params: [{ name: 'param1' }, { name: 'param2' }],
     })
   })
 
@@ -154,12 +147,8 @@ describe('methodHandler', () => {
     }
     `
     tester(src, {
-      methods: [
-        {
-          name: 'describedFunc',
-          description: 'it returns 2',
-        },
-      ],
+      name: 'describedFunc',
+      description: 'it returns 2',
     })
   })
 
@@ -179,12 +168,8 @@ describe('methodHandler', () => {
     }
     `
     tester(src, {
-      methods: [
-        {
-          name: 'describedParams',
-          params: [{ name: 'p1', description: 'multiplicateur', type: { name: 'string' } }],
-        },
-      ],
+      name: 'describedParams',
+      params: [{ name: 'p1', description: 'multiplicateur', type: { name: 'string' } }],
     })
   })
 
@@ -205,14 +190,10 @@ describe('methodHandler', () => {
     }
     `
     tester(src, {
-      methods: [
-        {
-          name: 'describedParams',
-          params: [
-            { description: 'unnamed param', type: { name: 'string' } },
-            { description: 'another unnamed param', type: { name: 'number' } },
-          ],
-        },
+      name: 'describedParams',
+      params: [
+        { description: 'unnamed param', type: { name: 'string' } },
+        { description: 'another unnamed param', type: { name: 'number' } },
       ],
     })
   })
@@ -234,14 +215,10 @@ describe('methodHandler', () => {
     }
     `
     tester(src, {
-      methods: [
-        {
-          name: 'describedParams',
-          params: [
-            { name: 'p', description: 'unnamed param', type: { name: 'string' } },
-            { name: 'p2', description: 'another unnamed param', type: { name: 'number' } },
-          ],
-        },
+      name: 'describedParams',
+      params: [
+        { name: 'p', description: 'unnamed param', type: { name: 'string' } },
+        { name: 'p2', description: 'another unnamed param', type: { name: 'number' } },
       ],
     })
   })
@@ -265,14 +242,10 @@ describe('methodHandler', () => {
       const def = parse(src)
       propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
-        methods: [
-          {
-            name: 'publicMethod',
-            params: [
-              { name: 'param', type: { name: 'string' } },
-              { name: 'paramObscure', type: { name: 'ObscureInterface' } },
-            ],
-          },
+        name: 'publicMethod',
+        params: [
+          { name: 'param', type: { name: 'string' } },
+          { name: 'paramObscure', type: { name: 'ObscureInterface' } },
         ],
       })
     })
@@ -295,12 +268,8 @@ describe('methodHandler', () => {
       const def = parse(src)
       propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
-        methods: [
-          {
-            name: 'publicMethod',
-            returns: { type: { name: 'string' } },
-          },
-        ],
+        name: 'publicMethod',
+        returns: { type: { name: 'string' } },
       })
     })
   })
@@ -323,14 +292,10 @@ describe('methodHandler', () => {
       const def = parseTS(src)
       propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
-        methods: [
-          {
-            name: 'publicMethod',
-            params: [
-              { name: 'param', type: { name: 'string' } },
-              { name: 'paramObscure', type: { name: 'ObscureInterface' } },
-            ],
-          },
+        name: 'publicMethod',
+        params: [
+          { name: 'param', type: { name: 'string' } },
+          { name: 'paramObscure', type: { name: 'ObscureInterface' } },
         ],
       })
     })
@@ -339,12 +304,6 @@ describe('methodHandler', () => {
       const src = `
       export default {
         methods: {
-          /**
-           * @public
-           */
-          oneMethod(): string {
-            return "one";
-          },
           /**
            * @public
            */
@@ -358,16 +317,8 @@ describe('methodHandler', () => {
       const def = parseTS(src)
       propHandler(documentation, def[0])
       expect(mockMethodDescriptor).toMatchObject({
-        methods: [
-          {
-            name: 'oneMethod',
-            returns: { type: { name: 'string' } },
-          },
-          {
-            name: 'twoMethod',
-            returns: { type: { name: 'number' } },
-          },
-        ],
+        name: 'twoMethod',
+        returns: { type: { name: 'number' } },
       })
     })
   })

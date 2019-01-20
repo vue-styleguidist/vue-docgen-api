@@ -54,7 +54,7 @@ export default function parseScript(
 function executeHandlers(
   localHandlers: Array<(doc: Documentation, componentDefinition: NodePath) => void>,
   componentDefinitions: NodePath[],
-  mixinsDocumentations: { props?: any; data?: any },
+  mixinsDocumentations: ComponentDoc,
 ) {
   return componentDefinitions.map(compDef => {
     const documentation = new Documentation(mixinsDocumentations)
