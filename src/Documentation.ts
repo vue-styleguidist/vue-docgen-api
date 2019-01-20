@@ -126,7 +126,7 @@ export class Documentation {
     }))
   }
 
-  public getEventsDescriptor(eventName: string): EventDescriptor {
+  public getEventDescriptor(eventName: string): EventDescriptor {
     return this.getDescriptor(eventName, this.eventsMap, () => ({
       properties: [],
       description: '',

@@ -9,7 +9,6 @@ import { TypedParamTag } from '../utils/getEvents'
 import recast = require('recast')
 
 export default function eventHandler(documentation: Documentation, path: NodePath) {
-  const events: { [eventName: string]: EventDescriptor } = documentation.get('events') || {}
   recast.visit(path, {
     visitCallExpression(pathExpression: NodePath<bt.CallExpression>) {
       if (
@@ -31,13 +30,11 @@ export default function eventHandler(documentation: Documentation, path: NodePat
         const eventName = firstArg.value
 
         // if this event is documented somewhere else leave it alone
-        if (events[eventName]) {
-          return false
-        }
+        const evtDescriptor = documentation.getEventDescriptor(eventName)
 
         // fetch the leading comments on the wrapping expression
         const docblock = getDocblock(pathExpression.parentPath)
-        const evtDescriptor = getEventDescriptor(getDoclets(docblock || ''))
+        setEventDescriptor(evtDescriptor, getDoclets(docblock || ''))
         if (args.length > 1 && !evtDescriptor.properties) {
           evtDescriptor.properties = []
         }
@@ -50,20 +47,18 @@ export default function eventHandler(documentation: Documentation, path: NodePat
             })
           }
         }
-        events[eventName] = evtDescriptor
         return false
       }
       return false
     },
   })
-  documentation.set('events', events)
 }
 
-export function getEventDescriptor(jsDoc: DocBlockTags): EventDescriptor {
-  const eventDescriptor: EventDescriptor = {
-    description: jsDoc.description || '',
-    properties: undefined,
-  }
+export function setEventDescriptor(
+  eventDescriptor: EventDescriptor,
+  jsDoc: DocBlockTags,
+): EventDescriptor {
+  eventDescriptor.description = jsDoc.description || ''
 
   const nonNullTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
 

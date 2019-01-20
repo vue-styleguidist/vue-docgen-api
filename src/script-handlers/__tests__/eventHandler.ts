@@ -13,9 +13,13 @@ function parse(src: string): NodePath[] {
 
 describe('displayNameHandler', () => {
   let documentation: Documentation
+  let mockEventDescriptor: EventDescriptor
 
   beforeEach(() => {
+    mockEventDescriptor = { description: '', properties: [] }
     documentation = new (require('../../Documentation')).Documentation()
+    const mockGetEventDescriptor = documentation.getEventDescriptor as jest.Mock
+    mockGetEventDescriptor.mockReturnValue(mockEventDescriptor)
   })
 
   it('should find events emmitted', () => {
@@ -35,26 +39,25 @@ describe('displayNameHandler', () => {
     `
     const def = parse(src)
     eventHandler(documentation, def[0])
-    const eventComp: { [eventName: string]: EventDescriptor } = {
-      success: {
-        description: 'Describe the event',
-        properties: [
-          {
-            name: 'prop1',
-            type: {
-              names: ['number'],
-            },
+    const eventComp: EventDescriptor = {
+      description: 'Describe the event',
+      properties: [
+        {
+          name: 'prop1',
+          type: {
+            names: ['number'],
           },
-          {
-            name: 'prop2',
-            type: {
-              names: ['number'],
-            },
+        },
+        {
+          name: 'prop2',
+          type: {
+            names: ['number'],
           },
-        ],
-      },
+        },
+      ],
     }
-    expect(documentation.set).toHaveBeenCalledWith('events', eventComp)
+    expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
+    expect(mockEventDescriptor).toMatchObject(eventComp)
   })
 
   it('should find events undocumented properties', () => {
@@ -69,25 +72,24 @@ describe('displayNameHandler', () => {
     `
     const def = parse(src)
     eventHandler(documentation, def[0])
-    const eventComp: { [eventName: string]: EventDescriptor } = {
-      success: {
-        description: '',
-        properties: [
-          {
-            name: '<anonymous>',
-            type: {
-              names: ['undefined'],
-            },
+    const eventComp: EventDescriptor = {
+      description: '',
+      properties: [
+        {
+          name: '<anonymous>',
+          type: {
+            names: ['undefined'],
           },
-          {
-            name: '<anonymous>',
-            type: {
-              names: ['undefined'],
-            },
+        },
+        {
+          name: '<anonymous>',
+          type: {
+            names: ['undefined'],
           },
-        ],
-      },
+        },
+      ],
     }
-    expect(documentation.set).toHaveBeenCalledWith('events', eventComp)
+    expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
+    expect(mockEventDescriptor).toMatchObject(eventComp)
   })
 })
