@@ -25,7 +25,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
 
   const jsDoc = getDoclets(docBlock)
 
-  documentation.set('description', jsDoc.description || '')
+  documentation.set('description', jsDoc.description)
 
   documentation.set('tags', transformTagsIntoObject(jsDoc.tags || []))
 }
