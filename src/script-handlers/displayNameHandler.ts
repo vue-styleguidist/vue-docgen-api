@@ -2,9 +2,9 @@ import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import { Documentation } from '../Documentation'
 
-export default function displayNameHandler(documentation: Documentation, path: NodePath) {
-  if (bt.isObjectExpression(path.node)) {
-    const namePath = path
+export default function displayNameHandler(documentation: Documentation, compDef: NodePath) {
+  if (bt.isObjectExpression(compDef.node)) {
+    const namePath = compDef
       .get('properties')
       .filter((p: NodePath) => bt.isObjectProperty(p.node) && p.node.key.name === 'name')
 
@@ -24,20 +24,17 @@ export default function displayNameHandler(documentation: Documentation, path: N
         const nameConstId = singleNameValuePath.node.name
 
         displayName = getDeclaredConstantValue(
-          path.parentPath.parentPath as NodePath<bt.Program>,
+          compDef.parentPath.parentPath as NodePath<bt.Program>,
           nameConstId,
         )
       }
     }
-
-    if (displayName) {
-      documentation.set('displayName', displayName)
-    }
+    documentation.set('displayName', displayName)
   }
 }
 
-function getDeclaredConstantValue(path: NodePath<bt.Program>, nameConstId: string): string | null {
-  const body = path.node.body
+function getDeclaredConstantValue(prog: NodePath<bt.Program>, nameConstId: string): string | null {
+  const body = prog.node.body
   const globalVariableDeclarations = body.filter((node: bt.Node) =>
     bt.isVariableDeclaration(node),
   ) as bt.VariableDeclaration[]

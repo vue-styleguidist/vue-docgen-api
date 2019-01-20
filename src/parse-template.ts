@@ -1,20 +1,20 @@
 import * as pug from 'pug'
 import { ASTElement, ASTNode, compile, SFCBlock } from 'vue-template-compiler'
-import { ComponentDoc } from './Documentation'
+import { Documentation } from './Documentation'
 
 export interface TemplateParserOptions {
   functional: boolean
 }
 
 export type Handler = (
+  documentation: Documentation,
   templateAst: ASTElement,
-  documentation: ComponentDoc,
   options: TemplateParserOptions,
 ) => void
 
 export default function parseTemplate(
   tpl: SFCBlock,
-  documentation: ComponentDoc,
+  documentation: Documentation,
   handlers: Handler[],
   filePath: string,
 ) {
@@ -28,18 +28,17 @@ export default function parseTemplate(
       traverse(ast, documentation, handlers, { functional: !!tpl.attrs.functional })
     }
   }
-  return {}
 }
 
 export function traverse(
   templateAst: ASTElement,
-  documentation: ComponentDoc,
+  documentation: Documentation,
   handlers: Handler[],
   options: TemplateParserOptions,
 ) {
   if (templateAst.type === 1) {
     handlers.forEach(handler => {
-      handler(templateAst, documentation, options)
+      handler(documentation, templateAst, options)
     })
     if (templateAst.children) {
       for (const childNode of templateAst.children) {

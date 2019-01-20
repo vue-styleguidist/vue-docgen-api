@@ -8,11 +8,15 @@ Object {
   "methods": Array [],
   "props": Object {
     "size": Object {
+      "description": "",
+      "tags": Object {},
       "type": Object {
         "name": "string",
       },
     },
     "text": Object {
+      "description": "",
+      "tags": Object {},
       "type": Object {
         "name": "string",
       },

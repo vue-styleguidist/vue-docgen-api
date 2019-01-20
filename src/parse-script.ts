@@ -2,24 +2,22 @@ import { ParserPlugin } from '@babel/parser'
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import buildParser from './babel-parser'
-import { ComponentDoc, Documentation } from './Documentation'
-import getRequiredExtendsDocumentations from './utils/getRequiredExtendsDocumentations'
-import getRequiredMixinDocumentations from './utils/getRequiredMixinDocumentations'
+import { Documentation } from './Documentation'
 import resolveExportedComponent from './utils/resolveExportedComponent'
 
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
-// tslint:disable-next-line:no-var-requires
-const deepmerge = require('deepmerge')
-
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found'
 
 export default function parseScript(
   source: string,
-  handlers: Array<(doc: Documentation, componentDefinition: NodePath, ast: bt.File) => void>,
+  documentation: Documentation,
+  handlers: Array<
+    (doc: Documentation, componentDefinition: NodePath, ast: bt.File, filePath: string) => void
+  >,
   options: { lang: 'ts' | 'js'; filePath: string },
-): { doc: ComponentDoc; ast: bt.File } {
+) {
   const plugins: ParserPlugin[] = options.lang === 'ts' ? ['typescript'] : ['flow']
   const ast = recast.parse(source, { parser: buildParser({ plugins }) })
   if (!ast) {
@@ -31,35 +29,19 @@ export default function parseScript(
     throw new Error(ERROR_MISSING_DEFINITION)
   }
 
-  // extends management
-  const extendsDocumentations =
-    getRequiredExtendsDocumentations(ast, componentDefinitions, options.filePath) || {}
-
-  // mixins management
-  const mixinsDocumentations = getRequiredMixinDocumentations(
-    ast,
-    componentDefinitions,
-    options.filePath,
-  )
-
-  // merge all the varnames found in the mixins
-  const mixinDocs = Object.keys(mixinsDocumentations).reduce((acc, mixinVar) => {
-    return deepmerge(acc, mixinsDocumentations[mixinVar])
-  }, extendsDocumentations)
-
-  const vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs, ast)
-  return { doc: vueDocArray[0], ast }
+  executeHandlers(handlers, componentDefinitions, documentation, ast, options.filePath)
 }
 
 function executeHandlers(
-  localHandlers: Array<(doc: Documentation, componentDefinition: NodePath, ast: bt.File) => void>,
+  localHandlers: Array<
+    (doc: Documentation, componentDefinition: NodePath, ast: bt.File, filePath: string) => void
+  >,
   componentDefinitions: NodePath[],
-  mixinsDocumentations: ComponentDoc,
+  documentation: Documentation,
   ast: bt.File,
+  filePath: string,
 ) {
-  return componentDefinitions.map(compDef => {
-    const documentation = new Documentation(mixinsDocumentations)
-    localHandlers.forEach(handler => handler(documentation, compDef, ast))
-    return documentation.toObject()
+  return componentDefinitions.forEach(compDef => {
+    localHandlers.forEach(handler => handler(documentation, compDef, ast, filePath))
   })
 }

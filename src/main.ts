@@ -1,17 +1,19 @@
-import * as fs from 'fs'
-import { ComponentDoc } from './Documentation'
-import parseSource from './parse'
+import { ComponentDoc, Documentation } from './Documentation'
+import { parseFile, parseSource as parseSourceLocal } from './parse'
 import * as utils from './utils'
-
-export { default as parseSource } from './parse'
 
 export { utils }
 
 export { ComponentDoc }
 
 export function parse(filePath: string): ComponentDoc {
-  const source = fs.readFileSync(filePath, {
-    encoding: 'utf-8',
-  })
-  return parseSource(source, filePath)
+  const doc = new Documentation()
+  parseFile(filePath, doc)
+  return doc.toObject()
+}
+
+export function parseSource(source: string, filePath: string): ComponentDoc {
+  const doc = new Documentation()
+  parseSourceLocal(source, filePath, doc)
+  return doc.toObject()
 }

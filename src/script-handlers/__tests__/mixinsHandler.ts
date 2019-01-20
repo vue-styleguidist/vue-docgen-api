@@ -1,18 +1,20 @@
 import * as bt from '@babel/types'
-import babylon from '../../babel-parser'
-jest.mock('../resolveRequired')
-jest.mock('../resolvePathFrom')
-jest.mock('../../main')
-import { parse } from '../../main'
-import getRequiredMixinDocumentations from '../getRequiredMixinDocumentations'
-import resolveExportedComponent from '../resolveExportedComponent'
-import resolvePathFrom from '../resolvePathFrom'
-import resolveRequired from '../resolveRequired'
+import babelParser from '../../babel-parser'
+jest.mock('../../utils/resolveRequired')
+jest.mock('../../utils/resolvePathFrom')
+jest.mock('../../parse')
+import { Documentation } from '../../Documentation'
+import { parseFile } from '../../parse'
+import resolveExportedComponent from '../../utils/resolveExportedComponent'
+import resolvePathFrom from '../../utils/resolvePathFrom'
+import resolveRequired from '../../utils/resolveRequired'
+import mixinsHandler from '../mixinsHandler'
 
-describe('getRequiredMixinDocumentations', () => {
+describe('mixinsHandler', () => {
   let resolveRequiredMock: jest.Mock
   let mockResolvePathFrom: jest.Mock
   let mockParse: jest.Mock
+  const doc = new Documentation()
   beforeEach(() => {
     resolveRequiredMock = resolveRequired as jest.Mock<
       (ast: bt.File, varNameFilter?: string[]) => { [key: string]: string }
@@ -22,7 +24,7 @@ describe('getRequiredMixinDocumentations', () => {
     mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>
     mockResolvePathFrom.mockReturnValue('component/full/path')
 
-    mockParse = parse as jest.Mock
+    mockParse = parseFile as jest.Mock
     mockParse.mockReturnValue({ component: 'documentation' })
   })
 
@@ -46,9 +48,9 @@ describe('getRequiredMixinDocumentations', () => {
       '}',
     ].join('\n'),
   ])('should resolve extended modules variables', src => {
-    const ast = babylon().parse(src)
+    const ast = babelParser().parse(src)
     const path = resolveExportedComponent(ast)
-    getRequiredMixinDocumentations(ast, path, '')
-    expect(parse).toHaveBeenCalledWith('component/full/path')
+    mixinsHandler(doc, path[0], ast, '')
+    expect(parseFile).toHaveBeenCalledWith('component/full/path', doc)
   })
 })

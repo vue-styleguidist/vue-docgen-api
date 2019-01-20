@@ -1,9 +1,8 @@
 import { ASTElement, ASTNode } from 'vue-template-compiler'
-import { ComponentDoc } from '../Documentation'
+import { Documentation } from '../Documentation'
 
-export default function slotHandler(templateAst: ASTElement, documentation: ComponentDoc) {
+export default function slotHandler(documentation: Documentation, templateAst: ASTElement) {
   if (templateAst.tag === 'slot') {
-    const slots = documentation.slots || {}
     const bindings = extractAndFilterAttr(templateAst.attrsMap)
     let name = 'default'
     if (bindings.name) {
@@ -11,9 +10,9 @@ export default function slotHandler(templateAst: ASTElement, documentation: Comp
       delete bindings.name
     }
 
+    const slotDescriptor = documentation.getSlotDescriptor(name)
     // TODO: update this once refactoring merged to add bindings to the slots
-    // slots[name] = { bindings }
-    slots[name] = {}
+    // slotDescriptor = { bindings }
     if (templateAst.parent) {
       const slotSiblings: ASTNode[] = templateAst.parent.children
       // First find the position of the slot in the list
@@ -45,13 +44,12 @@ export default function slotHandler(templateAst: ASTElement, documentation: Comp
         ) {
           const comment = potentialComment.text.trim()
           if (comment.search(/\@slot/) !== -1) {
-            slots[name].description = comment.replace('@slot', '').trim()
+            slotDescriptor.description = comment.replace('@slot', '').trim()
           }
           break
         }
       }
     }
-    documentation.slots = slots
   }
 }
 

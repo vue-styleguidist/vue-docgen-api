@@ -1,19 +1,12 @@
 import { compile } from 'vue-template-compiler'
-import { ComponentDoc } from '../../Documentation'
+import { Documentation } from '../../Documentation'
 import { traverse } from '../../parse-template'
 import propHandler from '../propHandler'
 
 describe('slotHandler', () => {
-  let doc: ComponentDoc
+  let doc: Documentation
   beforeEach(() => {
-    doc = {
-      displayName: '',
-      description: '',
-      methods: [],
-      props: undefined,
-      slots: {},
-      tags: {},
-    }
+    doc = new Documentation()
   })
 
   it('should match props in attributes expressions', () => {
@@ -28,7 +21,7 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [propHandler], { functional: true })
-      expect(doc.props).toMatchObject({ size: { type: { name: 'string' } } })
+      expect(doc.toObject().props).toMatchObject({ size: { type: { name: 'string' } } })
     } else {
       fail()
     }
@@ -48,7 +41,7 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [propHandler], { functional: true })
-      expect(doc.props).toMatchObject({ name: { type: { name: 'string' } } })
+      expect(doc.toObject().props).toMatchObject({ name: { type: { name: 'string' } } })
     } else {
       fail()
     }
@@ -66,7 +59,7 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [propHandler], { functional: true })
-      expect(doc.props).toBeUndefined()
+      expect(doc.toObject().props).toBeUndefined()
     } else {
       fail()
     }

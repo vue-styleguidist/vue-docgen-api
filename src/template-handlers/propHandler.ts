@@ -2,7 +2,7 @@ import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import { ASTElement, ASTExpression } from 'vue-template-compiler'
 import buildParser from '../babel-parser'
-import { ComponentDoc } from '../Documentation'
+import { Documentation } from '../Documentation'
 import { TemplateParserOptions } from '../parse-template'
 
 // tslint:disable-next-line:no-var-requires
@@ -10,8 +10,8 @@ import recast = require('recast')
 
 const allowRE = /^(v-bind|:)/
 export default function propTemplateHandler(
+  documentation: Documentation,
   templateAst: ASTElement,
-  documentation: ComponentDoc,
   options: TemplateParserOptions,
 ) {
   if (options.functional) {
@@ -20,7 +20,7 @@ export default function propTemplateHandler(
   }
 }
 
-function propsInAttributes(templateAst: ASTElement, documentation: ComponentDoc) {
+function propsInAttributes(templateAst: ASTElement, documentation: Documentation) {
   const bindings = templateAst.attrsMap
   const keys = Object.keys(bindings)
   for (const key of keys) {
@@ -32,7 +32,7 @@ function propsInAttributes(templateAst: ASTElement, documentation: ComponentDoc)
   }
 }
 
-function propsInInterpolation(templateAst: ASTElement, documentation: ComponentDoc) {
+function propsInInterpolation(templateAst: ASTElement, documentation: Documentation) {
   if (templateAst.children) {
     templateAst.children
       .filter(c => c.type === 2)
@@ -42,7 +42,7 @@ function propsInInterpolation(templateAst: ASTElement, documentation: ComponentD
   }
 }
 
-function getPropsFromExpression(expression: string, documentation: ComponentDoc) {
+function getPropsFromExpression(expression: string, documentation: Documentation) {
   const ast = buildParser({ plugins: ['typescript'] }).parse(expression)
   recast.visit(ast.program, {
     visitMemberExpression: (path: NodePath<bt.MemberExpression>) => {
@@ -56,8 +56,8 @@ function getPropsFromExpression(expression: string, documentation: ComponentDoc)
         bt.isIdentifier(propName)
       ) {
         const pName = propName.name
-        documentation.props = documentation.props || {}
-        documentation.props[pName] = documentation.props[pName] || { type: { name: 'string' } }
+        const p = documentation.getPropDescriptor(pName)
+        p.type = { name: 'string' }
       }
       return false
     },

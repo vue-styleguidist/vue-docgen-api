@@ -1,19 +1,12 @@
 import { compile } from 'vue-template-compiler'
-import { ComponentDoc } from '../../Documentation'
+import { Documentation } from '../../Documentation'
 import { traverse } from '../../parse-template'
 import slotHandler from '../slotHandler'
 
 describe('slotHandler', () => {
-  let doc: ComponentDoc
+  let doc: Documentation
   beforeEach(() => {
-    doc = {
-      displayName: '',
-      description: '',
-      methods: [],
-      props: undefined,
-      slots: {},
-      tags: {},
-    }
+    doc = new Documentation()
   })
 
   it('should pick comments before slots', () => {
@@ -29,7 +22,7 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [slotHandler], { functional: false })
-      expect(doc.slots.default).toMatchObject({ description: 'a default slot' })
+      expect(doc.toObject().slots.default).toMatchObject({ description: 'a default slot' })
     } else {
       fail()
     }
@@ -48,7 +41,7 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [slotHandler], { functional: false })
-      expect(doc.slots.oeuf).toMatchObject({ description: 'a slot named oeuf' })
+      expect(doc.toObject().slots.oeuf).toMatchObject({ description: 'a slot named oeuf' })
     } else {
       fail()
     }

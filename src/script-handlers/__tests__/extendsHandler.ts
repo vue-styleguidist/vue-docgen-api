@@ -1,18 +1,20 @@
 import * as bt from '@babel/types'
 import babylon from '../../babel-parser'
-jest.mock('../resolveRequired')
-jest.mock('../resolvePathFrom')
-jest.mock('../../main')
-import { parse } from '../../main'
-import getRequiredExtendsDocumentations from '../getRequiredExtendsDocumentations'
-import resolveExportedComponent from '../resolveExportedComponent'
-import resolvePathFrom from '../resolvePathFrom'
-import resolveRequired from '../resolveRequired'
+jest.mock('../../utils/resolveRequired')
+jest.mock('../../utils/resolvePathFrom')
+jest.mock('../../parse')
+import { Documentation } from '../../Documentation'
+import { parseFile } from '../../parse'
+import resolveExportedComponent from '../../utils/resolveExportedComponent'
+import resolvePathFrom from '../../utils/resolvePathFrom'
+import resolveRequired from '../../utils/resolveRequired'
+import extendsHandler from '../extendsHandler'
 
-describe('getRequiredExtendsDocumentations', () => {
+describe('extendsHandler', () => {
   let resolveRequiredMock: jest.Mock
   let mockResolvePathFrom: jest.Mock
   let mockParse: jest.Mock
+  const doc = new Documentation()
   beforeEach(() => {
     resolveRequiredMock = resolveRequired as jest.Mock<
       (ast: bt.File, varNameFilter?: string[]) => { [key: string]: string }
@@ -22,14 +24,14 @@ describe('getRequiredExtendsDocumentations', () => {
     mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>
     mockResolvePathFrom.mockReturnValue('./component/full/path')
 
-    mockParse = parse as jest.Mock
+    mockParse = parseFile as jest.Mock
     mockParse.mockReturnValue({ component: 'documentation' })
   })
 
   function parseItExtends(src: string) {
     const ast = babylon().parse(src)
     const path = resolveExportedComponent(ast)
-    getRequiredExtendsDocumentations(ast, path, '')
+    extendsHandler(doc, path[0], ast, '')
   }
 
   it('should resolve extended modules variables in import default', () => {
@@ -40,7 +42,7 @@ describe('getRequiredExtendsDocumentations', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parse).toHaveBeenCalledWith('./component/full/path')
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
   })
 
   it('should resolve extended modules variables in require', () => {
@@ -51,7 +53,7 @@ describe('getRequiredExtendsDocumentations', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parse).toHaveBeenCalledWith('./component/full/path')
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
   })
 
   it('should resolve extended modules variables in import', () => {
@@ -62,7 +64,7 @@ describe('getRequiredExtendsDocumentations', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parse).toHaveBeenCalledWith('./component/full/path')
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
   })
 
   it('should resolve extended modules variables in class style components', () => {
@@ -72,6 +74,6 @@ describe('getRequiredExtendsDocumentations', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parse).toHaveBeenCalledWith('./component/full/path')
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
   })
 })

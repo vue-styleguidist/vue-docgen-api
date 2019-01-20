@@ -144,7 +144,6 @@ export class Documentation {
   public getSlotDescriptor(slotName: string): SlotDescriptor {
     return this.getDescriptor(slotName, this.slotsMap, () => ({
       description: '',
-      tags: {},
     }))
   }
 
