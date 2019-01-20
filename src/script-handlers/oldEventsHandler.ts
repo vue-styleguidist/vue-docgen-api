@@ -8,7 +8,11 @@ import getDoclets from '../utils/getDoclets'
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
-export default function getEvents(documentation: Documentation, path: NodePath, ast: bt.File) {
+export default function oldEventsHanlder(
+  documentation: Documentation,
+  path: NodePath,
+  ast: bt.File,
+) {
   recast.visit(ast.program, {
     visitComment(commentPath: NodePath) {
       const comment = commentPath.node.leadingComments && commentPath.node.leadingComments[0]
