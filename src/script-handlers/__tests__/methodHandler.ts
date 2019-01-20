@@ -154,17 +154,17 @@ describe('methodHandler', () => {
       methods: {
         /**
          * @public
-         * @param {string} p1 - multiplicateur
+         * @param {string} p2 - multiplier
          */
-        describedParams(p1){
-          return p1 * 2;
+        describedParams(p1, p2){
+          return p2 * 2;
         }
       }
     }
     `
     tester(src, {
       name: 'describedParams',
-      params: [{ name: 'p1', description: 'multiplicateur', type: { name: 'string' } }],
+      params: [{ name: 'p1' }, { name: 'p2', description: 'multiplier', type: { name: 'string' } }],
     })
   })
 
