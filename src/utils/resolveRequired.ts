@@ -19,8 +19,7 @@ export default function resolveRequired(
     visitImportDeclaration(astPath: NodePath) {
       const specifiers = astPath.get('specifiers')
 
-      // if `import 'module'` without variable name it cannot be a mixin
-
+      // if `import 'module'` without variable name cannot be a mixin
       specifiers.each((sp: NodePath) => {
         const nodeSpecifier = sp.node
         if (bt.isImportDefaultSpecifier(nodeSpecifier) || bt.isImportSpecifier(nodeSpecifier)) {

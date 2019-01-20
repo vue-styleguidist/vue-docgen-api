@@ -23,6 +23,10 @@ export default function parseScript(
   if (!ast) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }
+
+  // FIXME: should be a Map<nameOfExport,NodePath>
+  // then the documentation can become a map itself and we can look at component/mixins
+  // with multiple items inside
   const componentDefinitions = resolveExportedComponent(ast)
 
   if (componentDefinitions.length === 0) {
