@@ -11,8 +11,8 @@ export default function slotHandler(documentation: Documentation, templateAst: A
     }
 
     const slotDescriptor = documentation.getSlotDescriptor(name)
-    // TODO: update this once refactoring merged to add bindings to the slots
-    // slotDescriptor = { bindings }
+
+    slotDescriptor.bindings = bindings
     if (templateAst.parent) {
       const slotSiblings: ASTNode[] = templateAst.parent.children
       // First find the position of the slot in the list

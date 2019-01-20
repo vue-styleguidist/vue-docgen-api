@@ -239,9 +239,11 @@ Object {
   },
   "slots": Object {
     "footer": Object {
+      "bindings": Object {},
       "description": "Use this slot footer",
     },
     "header": Object {
+      "bindings": Object {},
       "description": "Use this slot header",
     },
   },
