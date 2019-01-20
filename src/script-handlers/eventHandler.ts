@@ -59,7 +59,7 @@ export default function eventHandler(documentation: Documentation, path: NodePat
         }
         return false
       }
-      return false
+      this.traverse(pathExpression)
     },
   })
 }

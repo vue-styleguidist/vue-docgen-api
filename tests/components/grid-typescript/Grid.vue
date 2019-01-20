@@ -153,7 +153,7 @@ export default Vue.extend({
        * @event success
        * @type {object}
        */
-      this.$emit('example', {
+      this.$emit('success', {
         demo: 'example success',
       })
     },

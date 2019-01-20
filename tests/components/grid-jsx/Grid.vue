@@ -130,7 +130,7 @@ export default {
        * @event success
        * @type {object}
        */
-      this.$emit('example', {
+      this.$emit('success', {
         demo: 'example success',
       })
     },

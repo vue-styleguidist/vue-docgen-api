@@ -4,7 +4,22 @@ exports[`tests button should match the snapshot 1`] = `
 Object {
   "description": "This is an example of creating a reusable button component and using it with external data.",
   "displayName": "MyComponent",
-  "events": Object {},
+  "events": Object {
+    "success": Object {
+      "description": "",
+      "properties": Array [
+        Object {
+          "name": "<anonymous>",
+          "type": Object {
+            "names": Array [
+              "undefined",
+            ],
+          },
+        },
+      ],
+      "type": undefined,
+    },
+  },
   "methods": Array [
     Object {
       "description": "method testing",

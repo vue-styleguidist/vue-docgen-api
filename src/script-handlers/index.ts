@@ -3,11 +3,11 @@ import classMethodHandler from './classMethodHandler'
 import classPropHandler from './classPropHandler'
 import componentHandler from './componentHandler'
 import displayNameHandler from './displayNameHandler'
+import eventHandler from './eventHandler'
 import extendsHandler from './extendsHandler'
-// import eventHandler from './eventHandler'
 import methodHandler from './methodHandler'
 import mixinsHandler from './mixinsHandler'
-import oldEventsHandler from './oldEventsHandler'
+// import oldEventsHandler from './oldEventsHandler'
 import propHandler from './propHandler'
 // TODO: add render function slots management here
 
@@ -20,11 +20,10 @@ export default [
   displayNameHandler,
   methodHandler,
   propHandler,
-  // TODO: uncomment this if @rafaesc is ok with it and fix tests
-  // eventHandler,
+  eventHandler,
   classDisplayNameHandler,
   classMethodHandler,
   classPropHandler,
   // at the end extract events from comments
-  oldEventsHandler,
+  // oldEventsHandler,
 ]
