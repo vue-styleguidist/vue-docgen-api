@@ -40,8 +40,25 @@ export default function methodHandler(documentation: Documentation, path: NodePa
         }
         if (bt.isFunction(p.node)) {
           methodName = bt.isObjectMethod(p.node) ? p.node.key.name : methodName
-          const doc = documentation.getMethodDescriptor(methodName)
-          setMethodDescriptor(doc, p as NodePath<bt.Function>)
+
+          const docBlock = getDocblock(bt.isObjectMethod(p.node) ? p : p.parentPath)
+
+          const jsDoc: DocBlockTags = docBlock
+            ? getDoclets(docBlock)
+            : { description: '', tags: [] }
+          const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
+
+          // ignore the method if there is no public tag
+          if (!jsDocTags.some((t: Tag) => t.title === 'access' && t.content === 'public')) {
+            return
+          }
+
+          const methodDescriptor = documentation.getMethodDescriptor(methodName)
+
+          if (jsDoc.description) {
+            methodDescriptor.description = jsDoc.description
+          }
+          setMethodDescriptor(methodDescriptor, p as NodePath<bt.Function>, jsDocTags)
         }
       })
     }
@@ -51,24 +68,8 @@ export default function methodHandler(documentation: Documentation, path: NodePa
 export function setMethodDescriptor(
   methodDescriptor: MethodDescriptor,
   method: NodePath<bt.Function>,
+  jsDocTags: BlockTag[],
 ) {
-  const docBlock = getDocblock(
-    bt.isObjectMethod(method.node) || bt.isClassMethod(method.node) ? method : method.parentPath,
-  )
-
-  const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] }
-  const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
-
-  // ignore the method if there is no public tag
-  if (!jsDocTags.some((t: Tag) => t.title === 'access' && t.content === 'public')) {
-    return
-  }
-
-  // description
-  if (jsDoc.description) {
-    methodDescriptor.description = jsDoc.description
-  }
-
   // params
   describeParams(method, methodDescriptor, jsDocTags.filter(tag => tag.title === 'param'))
 

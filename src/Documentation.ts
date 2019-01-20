@@ -75,6 +75,7 @@ export interface ComponentDoc {
   methods: MethodDescriptor[]
   slots: { [name: string]: SlotDescriptor }
   events?: { [name: string]: EventDescriptor }
+  tags: { [key: string]: BlockTag[] }
   [key: string]: any
 }
 
@@ -97,6 +98,12 @@ export class Documentation {
     this.eventsMap = new Map(
       initDocumentation ? adaptToKeyValue(initDocumentation.events) : undefined,
     )
+    if (initDocumentation) {
+      delete initDocumentation.props
+      delete initDocumentation.methods
+      delete initDocumentation.slots
+      delete initDocumentation.events
+    }
     this.dataMap = new Map(
       adaptToKeyValue(initDocumentation ? adaptToKeyValue(initDocumentation) : undefined),
     )
@@ -128,7 +135,7 @@ export class Documentation {
 
   public getEventDescriptor(eventName: string): EventDescriptor {
     return this.getDescriptor(eventName, this.eventsMap, () => ({
-      properties: [],
+      properties: undefined,
       description: '',
       tags: [],
     }))
@@ -144,7 +151,7 @@ export class Documentation {
   public toObject(): ComponentDoc {
     const props = this.getPropsObject()
     const methods = this.getMethodsObject()
-    const events = this.getEventsObject()
+    const events = this.getEventsObject() || {}
     const slots = this.getSlotsObject()
 
     const obj: { [key: string]: any } = {}
@@ -156,11 +163,8 @@ export class Documentation {
 
     return {
       // initialize non null params
-      description: '',
-      tags: {},
-
-      // set all the component params (override init values)
-      ...obj,
+      description: obj.description || '',
+      tags: obj.tags || {},
 
       // set all the static properties
       displayName: obj.displayName,

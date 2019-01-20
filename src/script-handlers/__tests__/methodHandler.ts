@@ -43,19 +43,14 @@ describe('methodHandler', () => {
       methods:{
         testIgnore(){
           return 1;
-        },
-        /**
-         * @public
-         */
-        testPublic() {
-          return {};
         }
       }
     }`
     tester(src, {
-      name: 'testPublic',
+      name: '',
     })
   })
+
   describe('formats', () => {
     it('should return the method if it is an anonymous function', () => {
       const src = `

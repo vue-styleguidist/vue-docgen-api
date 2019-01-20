@@ -17,7 +17,7 @@ const ERROR_MISSING_DEFINITION = 'No suitable component definition found'
 
 export default function parseScript(
   source: string,
-  handlers: Array<(doc: Documentation, componentDefinition: NodePath) => void>,
+  handlers: Array<(doc: Documentation, componentDefinition: NodePath, ast: bt.File) => void>,
   options: { lang: 'ts' | 'js'; filePath: string },
 ): { doc: ComponentDoc; ast: bt.File } {
   const plugins: ParserPlugin[] = options.lang === 'ts' ? ['typescript'] : ['flow']
@@ -47,18 +47,19 @@ export default function parseScript(
     return deepmerge(acc, mixinsDocumentations[mixinVar])
   }, extendsDocumentations)
 
-  const vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs)
+  const vueDocArray = executeHandlers(handlers, componentDefinitions, mixinDocs, ast)
   return { doc: vueDocArray[0], ast }
 }
 
 function executeHandlers(
-  localHandlers: Array<(doc: Documentation, componentDefinition: NodePath) => void>,
+  localHandlers: Array<(doc: Documentation, componentDefinition: NodePath, ast: bt.File) => void>,
   componentDefinitions: NodePath[],
   mixinsDocumentations: ComponentDoc,
+  ast: bt.File,
 ) {
   return componentDefinitions.map(compDef => {
     const documentation = new Documentation(mixinsDocumentations)
-    localHandlers.forEach(handler => handler(documentation, compDef))
+    localHandlers.forEach(handler => handler(documentation, compDef, ast))
     return documentation.toObject()
   })
 }

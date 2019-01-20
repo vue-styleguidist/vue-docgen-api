@@ -1,6 +1,8 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
-import { Documentation, MethodDescriptor } from '../Documentation'
+import { BlockTag, DocBlockTags, Documentation, MethodDescriptor, Tag } from '../Documentation'
+import getDocblock from '../utils/getDocblock'
+import getDoclets from '../utils/getDoclets'
 import { setMethodDescriptor } from './methodHandler'
 
 export default function methodHandler(documentation: Documentation, path: NodePath) {
@@ -15,8 +17,23 @@ export default function methodHandler(documentation: Documentation, path: NodePa
       const methodName = bt.isIdentifier(methodPath.node.key)
         ? methodPath.node.key.name
         : '<anonymous>'
-      const doc = documentation.getMethodDescriptor(methodName)
-      setMethodDescriptor(doc, methodPath)
+
+      const docBlock = getDocblock(
+        bt.isClassMethod(methodPath.node) ? methodPath : methodPath.parentPath,
+      )
+
+      const jsDoc: DocBlockTags = docBlock ? getDoclets(docBlock) : { description: '', tags: [] }
+      const jsDocTags: BlockTag[] = jsDoc.tags ? jsDoc.tags : []
+
+      // ignore the method if there is no public tag
+      if (!jsDocTags.some((t: Tag) => t.title === 'access' && t.content === 'public')) {
+        return
+      }
+      const methodDescriptor = documentation.getMethodDescriptor(methodName)
+      if (jsDoc.description) {
+        methodDescriptor.description = jsDoc.description
+      }
+      setMethodDescriptor(methodDescriptor, methodPath, jsDocTags)
     })
     documentation.set('methods', methods)
   }

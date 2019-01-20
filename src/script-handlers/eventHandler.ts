@@ -1,9 +1,19 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
-import { BlockTag, DocBlockTags, Documentation, EventDescriptor } from '../Documentation'
+import {
+  BlockTag,
+  DocBlockTags,
+  Documentation,
+  EventDescriptor,
+  ParamTag,
+  ParamType,
+} from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
-import { TypedParamTag } from '../utils/getEvents'
+
+export interface TypedParamTag extends ParamTag {
+  type: ParamType
+}
 
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')

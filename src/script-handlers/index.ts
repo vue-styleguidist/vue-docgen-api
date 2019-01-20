@@ -5,7 +5,9 @@ import componentHandler from './componentHandler'
 import displayNameHandler from './displayNameHandler'
 // import eventHandler from './eventHandler'
 import methodHandler from './methodHandler'
+import oldEventsHandler from './oldEventsHandler'
 import propHandler from './propHandler'
+
 // TODO: add render function slots management here
 
 export default [
@@ -18,4 +20,6 @@ export default [
   classDisplayNameHandler,
   classMethodHandler,
   classPropHandler,
+  // at the end extract events from comments
+  oldEventsHandler,
 ]

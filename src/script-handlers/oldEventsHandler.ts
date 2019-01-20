@@ -1,25 +1,17 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
-import { BlockTag, EventDescriptor, ParamTag, ParamType, Tag } from '../Documentation'
-import { getEventDescriptor } from '../script-handlers/eventHandler'
-import { parseDocblock } from './getDocblock'
-import getDoclets from './getDoclets'
+import { BlockTag, Documentation, Tag } from '../Documentation'
+import { setEventDescriptor } from '../script-handlers/eventHandler'
+import { parseDocblock } from '../utils/getDocblock'
+import getDoclets from '../utils/getDoclets'
 
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
-export interface TypedParamTag extends ParamTag {
-  type: ParamType
-}
-
-export default function getEvents(
-  ast: bt.File,
-  events: { [eventName: string]: EventDescriptor },
-): { [eventName: string]: EventDescriptor } {
-  const eventCommentBlocksDoclets: { [eventName: string]: EventDescriptor } = events
+export default function getEvents(documentation: Documentation, path: NodePath, ast: bt.File) {
   recast.visit(ast.program, {
-    visitComment(path: NodePath) {
-      const comment = path.node.leadingComments && path.node.leadingComments[0]
+    visitComment(commentPath: NodePath) {
+      const comment = commentPath.node.leadingComments && commentPath.node.leadingComments[0]
       // only observe block comments
       if (!comment || comment.type !== 'CommentBlock') {
         return false
@@ -39,12 +31,12 @@ export default function getEvents(
 
       const eventTagContent = (eventTag[0] as Tag).content
       const eventName = typeof eventTagContent === 'string' ? eventTagContent : undefined
+
       if (eventName) {
-        eventCommentBlocksDoclets[eventName] = getEventDescriptor(jsDoc)
+        const descriptor = documentation.getEventDescriptor(eventName)
+        setEventDescriptor(descriptor, jsDoc)
       }
       return false
     },
   })
-
-  return eventCommentBlocksDoclets
 }

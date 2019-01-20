@@ -6,7 +6,6 @@ import parseScript from './parse-script'
 import parseTemplate from './parse-template'
 import handlers from './script-handlers'
 import templateHandlers from './template-handlers'
-import getEvents from './utils/getEvents'
 import scfParser from './utils/sfc-parser'
 
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty'
@@ -49,15 +48,13 @@ export default function parse(source: string, filePath: string): ComponentDoc {
         props: undefined,
         slots: {},
         tags: {},
+        events: {},
       }
 
   // a component should always have a display name
   if (!doc.displayName || !doc.displayName.length) {
     doc.displayName = path.basename(filePath).replace(/\.\w+$/, '')
   }
-
-  // get events from comments
-  doc.events = parsed ? getEvents(parsed.ast, doc.events || {}) : {}
 
   // get slots from template
   if (parts && parts.template) {
