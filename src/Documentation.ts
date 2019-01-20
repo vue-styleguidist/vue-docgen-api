@@ -85,28 +85,13 @@ export class Documentation {
   private slotsMap: Map<string, SlotDescriptor>
   private eventsMap: Map<string, any>
   private dataMap: Map<string, any>
-  constructor(initDocumentation?: ComponentDoc) {
-    this.propsMap = new Map(
-      initDocumentation ? adaptToKeyValue(initDocumentation.props) : undefined,
-    )
-    this.methodsMap = new Map(
-      initDocumentation ? adaptToKeyValue(initDocumentation.methods) : undefined,
-    )
-    this.slotsMap = new Map(
-      initDocumentation ? adaptToKeyValue(initDocumentation.slots) : undefined,
-    )
-    this.eventsMap = new Map(
-      initDocumentation ? adaptToKeyValue(initDocumentation.events) : undefined,
-    )
-    if (initDocumentation) {
-      delete initDocumentation.props
-      delete initDocumentation.methods
-      delete initDocumentation.slots
-      delete initDocumentation.events
-    }
-    this.dataMap = new Map(
-      adaptToKeyValue(initDocumentation ? adaptToKeyValue(initDocumentation) : undefined),
-    )
+  constructor() {
+    this.propsMap = new Map()
+    this.methodsMap = new Map()
+    this.slotsMap = new Map()
+    this.eventsMap = new Map()
+
+    this.dataMap = new Map()
   }
 
   public set(key: string, value: any) {
@@ -217,19 +202,4 @@ export class Documentation {
   private getSlotsObject(): { [slotName: string]: SlotDescriptor } {
     return this.getObjectFromDescriptor(this.slotsMap) || {}
   }
-}
-
-/**
- * Transforms an object into an array of tuples [key, value]
- * @param {Object} obj
- * @returns {Array<[key, value]>} the retransfromed array and [] if obj is null
- */
-function adaptToKeyValue(obj: { [key: string]: any } | undefined): Array<[string, any]> {
-  const keyValuePairs: Array<[string, any]> = obj
-    ? Object.keys(obj).map((k: string) => {
-        const kvp: [string, any] = [k, obj[k]]
-        return kvp
-      })
-    : []
-  return keyValuePairs
 }
