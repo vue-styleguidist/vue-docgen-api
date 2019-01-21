@@ -4,15 +4,15 @@
 [![Build Status](https://travis-ci.org/vue-styleguidist/vue-docgen-api.svg?branch=master)](https://travis-ci.org/vue-styleguidist/vue-docgen-api)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-`vue-docgen-api` is a toolbox to help extracting information from [Vue][] components, and generate documentation from it.
+`vue-docgen-api` is a toolbox to help extracting information from [Vue](https://vuejs.org/) components, and generate documentation from it.
 
-Use [babel][] and [jsdoc-api][] to compile the code and analyze the contents of the component extracting methods and props. The output is a JavaScript object.
+Use [@babel/parser](https://babeljs.io/docs/en/babel-parser) to parse the code and analyze the contents of the component extracting methods, props events and slots. The output is a JavaScript object.
 
 ## Install
 
 Install the module directly from npm:
 
-```
+``` sh
 npm install vue-docgen-api --save-dev
 ```
 
@@ -40,7 +40,7 @@ var componentInfo = parse(filePath)
 
 ## Using JSDoc tags
 
-You can use the following [JSDoc][] tags when documenting components, props and methods.
+You can use [JSDoc][] tags when documenting components, props and methods.
 
 ## Example
 
@@ -371,93 +371,6 @@ we are getting this output:
 }
 ```
 
-## Mixins or Extends
-
-If you import a [mixin](https://vuejs.org/v2/guide/mixins.html) or [extends](https://vuejs.org/v2/api/#extends), for it to be documented you need to add in the header the mixin tag **@mixin**, for example
-
-Case Mixin:
-
-```javascript
-// src/mixins/colorMixin.js
-
-/**
- * @mixin
- */
-module.exports = {
-  props: {
-    /**
-     * The color for the button example
-     */
-    color: {
-      type: String,
-      default: '#333'
-    }
-  }
-}
-```
-
-Case Extends:
-
-```vue
-// src/extends/Base.vue
-
-<template>
-  <div>
-    <h4>{{ color }}</h4>
-    <!--the appropriate input should go here-->
-  </div>
-</template>
-<script>
-/**
- * @mixin
- */
-export default {
-  props: {
-    /**
-     * The color for the button example
-     */
-    colorExtends: {
-      type: String,
-      default: '#333'
-    }
-  }
-}
-</script>
-```
-
-```html
-<template>
-  <!-- -->
-</template>
-<script>
-  // src/components/Button/Button.vue
-
-  import colorMixin from '../../mixins/colorMixin'
-  import Base from '../../extends/Base'
-  export default {
-    name: 'buttonComponent',
-    mixins: [colorMixin],
-    extends: Base,
-    props: {
-      /**
-       * The size of the button
-       * `small, normal, large`
-       */
-      size: {
-        default: 'normal'
-      },
-      /**
-       * Add custom click actions.
-       **/
-      onCustomClick: {
-        default: () => () => null
-      }
-    }
-    /* ... */
-  }
-</script>
-```
-
 ## Events
 
 ```js
@@ -465,7 +378,7 @@ export default {
  * Success event.
  *
  * @event success
- * @type {object}
+ * @property {object} example the demo example
  */
 this.$emit('success', {
   demo: 'example'
@@ -495,8 +408,3 @@ The change log can be found on the [Releases page](https://github.com/vue-styleg
 [Rafael Escala](https://github.com/rafaesc92)
 
 MIT License.
-
-[jsdoc]: http://usejsdoc.org/
-[vue]: https://vuejs.org/
-[babel]: https://www.npmjs.com/package/babel-core
-[jsdoc-api]: https://www.npmjs.com/package/jsdoc-api
