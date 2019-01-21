@@ -1,20 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "es2015",
+    "outDir": "dist",
+    "target": "es5",
+    "module": "commonjs",
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["node"],
     "strictFunctionTypes": false,
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "types": ["jest", "node", "htmlparser2"]
   },
   "include": ["src/**/*.ts", "tests/**/*.vue", "tests/**/*.ts"],
   "exclude": ["node_modules"]

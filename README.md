@@ -25,6 +25,13 @@ var vueDocs = require('vue-docgen-api')
 var componentInfo = vueDocs.parse(filePath)
 ```
 
+or with typescript/es6
+
+```ts
+import { parse } from 'vue-docgen-api'
+var componentInfo = parse(filePath)
+```
+
 ### parse(filePath)
 
 | Parameter | Type   | Description   |
@@ -55,123 +62,123 @@ For the following component
 </template>
 
 <script>
-import { text } from './utils';
+  import { text } from './utils';
 
-/**
- * This is an example of creating a reusable grid component and using it with external data.
- * @version 1.0.5
- * @author [Rafael](https://github.com/rafaesc92)
- * @since Version 1.0.1
- */
-export default {
-  name: 'grid',
-  props: {
-
-    /**
-     * object/array defaults should be returned from a factory function
-     * @version 1.0.5
-     * @since Version 1.0.1
-     * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
-     * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
-     */
-    msg: {
-      type: [String, Number],
-      default: text
-    },
-    /**
-     * Model example
-     * @model
-     */
-    value: {
-      type: String
-    }
-    /**
-     * describe data
-     * @version 1.0.5
-     */
-    data: [Array],
-    /**
-     * get columns list
-     */
-    columns: [Array],
-    /**
-     * filter key
-     * @ignore
-     */
-    filterKey: {
-      type: String,
-      default: 'example'
-    }
-  },
-  data () {
-    var sortOrders = {}
-    this.columns.forEach(function (key) {
-      sortOrders[key] = 1
-    })
-    return {
-      sortKey: '',
-      sortOrders: sortOrders
-    }
-  },
-  computed: {
-    filteredData: function () {
-      var sortKey = this.sortKey
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var order = this.sortOrders[sortKey] || 1
-      var data = this.data
-      if (filterKey) {
-        data = data.filter(function (row) {
-          return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-          })
-        })
-      }
-      if (sortKey) {
-        data = data.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
-        })
-      }
-      return data
-    }
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
-    }
-  },
-  methods: {
-
-    /**
-     * Sets the order
-     *
-     * @public
-     * @version 1.0.5
-     * @since Version 1.0.1
-     * @param {string} key Key to order
-     * @returns {string} Test
-     */
-    sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1;
+  /**
+   * This is an example of creating a reusable grid component and using it with external data.
+   * @version 1.0.5
+   * @author [Rafael](https://github.com/rafaesc92)
+   * @since Version 1.0.1
+   */
+  export default {
+    name: 'grid',
+    props: {
 
       /**
-       * Success event.
-       *
-       * @event success
-       * @type {object}
+       * object/array defaults should be returned from a factory function
+       * @version 1.0.5
+       * @since Version 1.0.1
+       * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
+       * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names
        */
-      this.$emit('success', {
-        demo: 'example',
-      })
+      msg: {
+        type: [String, Number],
+        default: text
+      },
+      /**
+       * Model example
+       * @model
+       */
+      value: {
+        type: String
+      }
+      /**
+       * describe data
+       * @version 1.0.5
+       */
+      data: [Array],
+      /**
+       * get columns list
+       */
+      columns: [Array],
+      /**
+       * filter key
+       * @ignore
+       */
+      filterKey: {
+        type: String,
+        default: 'example'
+      }
     },
+    data () {
+      var sortOrders = {}
+      this.columns.forEach(function (key) {
+        sortOrders[key] = 1
+      })
+      return {
+        sortKey: '',
+        sortOrders: sortOrders
+      }
+    },
+    computed: {
+      filteredData: function () {
+        var sortKey = this.sortKey
+        var filterKey = this.filterKey && this.filterKey.toLowerCase()
+        var order = this.sortOrders[sortKey] || 1
+        var data = this.data
+        if (filterKey) {
+          data = data.filter(function (row) {
+            return Object.keys(row).some(function (key) {
+              return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+            })
+          })
+        }
+        if (sortKey) {
+          data = data.slice().sort(function (a, b) {
+            a = a[sortKey]
+            b = b[sortKey]
+            return (a === b ? 0 : a > b ? 1 : -1) * order
+          })
+        }
+        return data
+      }
+    },
+    filters: {
+      capitalize: function (str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+      }
+    },
+    methods: {
 
-    hiddenMethod: function(){
+      /**
+       * Sets the order
+       *
+       * @public
+       * @version 1.0.5
+       * @since Version 1.0.1
+       * @param {string} key Key to order
+       * @returns {string} Test
+       */
+      sortBy: function (key) {
+        this.sortKey = key
+        this.sortOrders[key] = this.sortOrders[key] * -1;
 
+        /**
+         * Success event.
+         *
+         * @event success
+         * @type {object}
+         */
+        this.$emit('success', {
+          demo: 'example',
+        })
+      },
+
+      hiddenMethod: function(){
+
+      }
     }
   }
-}
 </script>
 ```
 
@@ -179,13 +186,11 @@ we are getting this output:
 
 ```json
 {
-  "description":
-    "This is an example of creating a reusable grid component and using it with external data.",
+  "description": "This is an example of creating a reusable grid component and using it with external data.",
   "methods": [
     {
       "name": "sortBy",
-      "comment":
-        "/**\n   * Sets the order\n   *\n   * @public\n   * @version 1.0.5\n   * @since Version 1.0.1\n   * @param {string} key Key to order\n   * @returns {string} Test\n   */",
+      "comment": "/**\n   * Sets the order\n   *\n   * @public\n   * @version 1.0.5\n   * @since Version 1.0.1\n   * @param {string} key Key to order\n   * @returns {string} Test\n   */",
       "modifiers": [],
       "params": [
         {
@@ -261,8 +266,7 @@ we are getting this output:
         "see": [
           {
             "title": "see",
-            "description":
-              "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
+            "description": "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
           }
         ],
         "since": [
@@ -280,15 +284,12 @@ we are getting this output:
         "link": [
           {
             "title": "link",
-            "description":
-              "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
+            "description": "See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names"
           }
         ]
       },
-      "comment":
-        "/**\n     * object/array defaults should be returned from a factory function\n     * @version 1.0.5\n     * @since Version 1.0.1\n     * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     */",
-      "description":
-        "object/array defaults should be returned from a factory function"
+      "comment": "/**\n     * object/array defaults should be returned from a factory function\n     * @version 1.0.5\n     * @since Version 1.0.1\n     * @see See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     * @link See [Wikipedia](https://en.wikipedia.org/wiki/Web_colors#HTML_color_names) for a list of color names\n     */",
+      "description": "object/array defaults should be returned from a factory function"
     },
     "v-model": {
       "type": {
@@ -329,8 +330,7 @@ we are getting this output:
       "description": "filter key"
     }
   },
-  "comment":
-    "/**\n * This is an example of creating a reusable grid component and using it with external data.\n * @version 1.0.5\n * @author [Rafael](https://github.com/rafaesc92)\n * @since Version 1.0.1\n */",
+  "comment": "/**\n * This is an example of creating a reusable grid component and using it with external data.\n * @version 1.0.5\n * @author [Rafael](https://github.com/rafaesc92)\n * @since Version 1.0.1\n */",
   "tags": {
     "author": [
       {
@@ -357,8 +357,7 @@ we are getting this output:
       "type": {
         "names": ["object"]
       },
-      "comment":
-        "/**\n     * Success event.\n     *\n     * @event success\n     * @type {object}\n     */"
+      "comment": "/**\n     * Success event.\n     *\n     * @event success\n     * @type {object}\n     */"
     }
   },
   "slots": {
@@ -428,34 +427,34 @@ export default {
 
 ```html
 <template>
-<!-- -->
+  <!-- -->
 </template>
 <script>
-// src/components/Button/Button.vue
+  // src/components/Button/Button.vue
 
-import colorMixin from '../../mixins/colorMixin';
-import Base from '../../extends/Base';
-export default {
-  name: 'buttonComponent',
-  mixins: [colorMixin],
-  extends: Base,
-  props: {
-    /**
-    * The size of the button
-    * `small, normal, large`
-    */
-    size: {
-      default: 'normal'
-    },
-    /**
-    * Add custom click actions.
-    **/
-    onCustomClick: {
-      default: () => () => null,
-    },
-  },
-  /* ... */
-}
+  import colorMixin from '../../mixins/colorMixin'
+  import Base from '../../extends/Base'
+  export default {
+    name: 'buttonComponent',
+    mixins: [colorMixin],
+    extends: Base,
+    props: {
+      /**
+       * The size of the button
+       * `small, normal, large`
+       */
+      size: {
+        default: 'normal'
+      },
+      /**
+       * Add custom click actions.
+       **/
+      onCustomClick: {
+        default: () => () => null
+      }
+    }
+    /* ... */
+  }
 </script>
 ```
 
