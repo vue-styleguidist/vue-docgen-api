@@ -6,6 +6,10 @@ import resolveExportDeclaration from './resolveExportDeclaration'
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
+function ignore(): boolean {
+  return false
+}
+
 function isComponentDefinition(path: NodePath): boolean {
   return (
     // export default {}
@@ -54,8 +58,9 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
   // in extenso export default or export myvar
   function exportDeclaration(path: NodePath) {
     const definitions = resolveExportDeclaration(path).reduce((acc: NodePath[], definition) => {
-      if (isComponentDefinition(definition)) {
-        acc.push(definition)
+      const realDef = resolveIdentifier(ast, definition)
+      if (realDef && isComponentDefinition(realDef)) {
+        acc.push(realDef)
       }
       return acc
     }, [])
@@ -67,6 +72,20 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
   }
 
   recast.visit(ast.program, {
+    // to look only at the root we ignore all traversing
+    visitFunctionDeclaration: ignore,
+    visitFunctionExpression: ignore,
+    visitClassDeclaration: ignore,
+    visitClassExpression: ignore,
+    visitIfStatement: ignore,
+    visitWithStatement: ignore,
+    visitSwitchStatement: ignore,
+    visitCatchCause: ignore,
+    visitWhileStatement: ignore,
+    visitDoWhileStatement: ignore,
+    visitForStatement: ignore,
+    visitForInStatement: ignore,
+
     visitDeclareExportDeclaration: exportDeclaration,
     visitExportNamedDeclaration: exportDeclaration,
     visitExportDefaultDeclaration: exportDeclaration,
@@ -83,11 +102,12 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like Vue.extend({})
       const pathRight = path.get('right')
-      if (!isComponentDefinition(pathRight)) {
+      const realComp = resolveIdentifier(ast, pathRight)
+      if (!realComp || !isComponentDefinition(realComp)) {
         return false
       }
 
-      setComponent(pathRight)
+      setComponent(realComp)
       return false
     },
   })
@@ -104,4 +124,49 @@ function normalizeComponentPath(path: NodePath): NodePath {
     return path.get('init')
   }
   return path
+}
+
+function resolveIdentifier(ast: bt.File, path: NodePath): NodePath | null {
+  if (!bt.isIdentifier(path.node)) {
+    return path
+  }
+
+  const varName = path.node.name
+  let comp: NodePath | null = null
+
+  recast.visit(ast.program, {
+    // to look only at the root we ignore all traversing
+    visitFunctionDeclaration: ignore,
+    visitFunctionExpression: ignore,
+    visitClassExpression: ignore,
+    visitIfStatement: ignore,
+    visitWithStatement: ignore,
+    visitSwitchStatement: ignore,
+    visitCatchCause: ignore,
+    visitWhileStatement: ignore,
+    visitDoWhileStatement: ignore,
+    visitForStatement: ignore,
+    visitForInStatement: ignore,
+
+    visitVariableDeclaration(variablePath: NodePath<bt.VariableDeclaration>) {
+      const varID = variablePath.node.declarations[0].id
+      if (!varID || !bt.isIdentifier(varID) || varID.name !== varName) {
+        return false
+      }
+
+      comp = variablePath.get('declarations', 0).get('init')
+      return false
+    },
+
+    visitClassDeclaration(classPath: NodePath<bt.ClassDeclaration>) {
+      const classID = classPath.node.id
+      if (!classID || !bt.isIdentifier(classID) || classID.name !== varName) {
+        return false
+      }
+
+      comp = classPath
+      return false
+    },
+  })
+  return comp
 }
