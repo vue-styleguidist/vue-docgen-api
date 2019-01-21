@@ -102,11 +102,12 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like Vue.extend({})
       const pathRight = path.get('right')
-      if (!isComponentDefinition(pathRight)) {
+      const realComp = resolveIdentifier(ast, pathRight)
+      if (!realComp || !isComponentDefinition(realComp)) {
         return false
       }
 
-      setComponent(pathRight)
+      setComponent(realComp)
       return false
     },
   })

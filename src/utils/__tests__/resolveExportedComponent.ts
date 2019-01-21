@@ -27,15 +27,20 @@ describe('resolveExportedComponent', () => {
     expect(resolveExportedComponent(ast).length).toBe(1)
   })
 
-  it('should return indiretctly exported components', () => {
+  it('should return indirectly exported components', () => {
     const ast = babylon().parse(['const test = {}', 'export default test'].join('\n'))
     expect(resolveExportedComponent(ast).length).toBe(1)
   })
 
-  it('should return indiretctly exported class style components', () => {
+  it('should return indirectly exported class style components', () => {
     const ast = babylon().parse(
       ['@Component()', 'class testClass extends Vue{}', 'export default testClass'].join('\n'),
     )
+    expect(resolveExportedComponent(ast).length).toBe(1)
+  })
+
+  it('should return indirectly exported components es5', () => {
+    const ast = babylon().parse(['const test = {}', 'module.exports = test'].join('\n'))
     expect(resolveExportedComponent(ast).length).toBe(1)
   })
 
