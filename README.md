@@ -40,7 +40,7 @@ var componentInfo = parse(filePath)
 
 ## Using JSDoc tags
 
-You can use [JSDoc][] tags when documenting components, props and methods.
+You can use JSDoc tags when documenting components, props and methods.
 
 ## Example
 
