@@ -11,7 +11,7 @@ function parse(src: string): NodePath[] {
   return resolveExportedComponent(ast)
 }
 
-describe('displayNameHandler', () => {
+describe('eventHandler', () => {
   let documentation: Documentation
   let mockEventDescriptor: EventDescriptor
 
