@@ -23,6 +23,10 @@ describe('tests button', () => {
     beforeEach(() => {
       props = docButton.props || {}
     })
+    it('should return propNoType type as string', () => {
+      expect(props.propNoType.type).toMatchObject({ name: 'string' })
+    })
+
     it('should return propA type as number', () => {
       expect(props.propA.type).toMatchObject({ name: 'number' })
     })
