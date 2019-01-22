@@ -1,6 +1,7 @@
 import * as pug from 'pug'
 import { ASTElement, ASTNode, compile, SFCBlock } from 'vue-template-compiler'
 import { Documentation } from './Documentation'
+import cacher from './utils/cacher'
 
 export interface TemplateParserOptions {
   functional: boolean
@@ -23,7 +24,7 @@ export default function parseTemplate(
       tpl.attrs && tpl.attrs.lang === 'pug'
         ? pug.render(tpl.content, { filename: filePath })
         : tpl.content
-    const ast = compile(template, { comments: true }).ast
+    const ast = cacher(() => compile(template, { comments: true }).ast, template)
     if (ast) {
       traverse(ast, documentation, handlers, { functional: !!tpl.attrs.functional })
     }

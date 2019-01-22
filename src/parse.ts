@@ -38,7 +38,7 @@ export function parseSource(source: string, filePath: string, documentation: Doc
   }
 
   if (singleFileComponent) {
-    parts = cacher(() => parseComponent(source), source, filePath)
+    parts = cacher(() => parseComponent(source), source)
   }
 
   const scriptSource = parts ? (parts.script ? parts.script.content : undefined) : source
