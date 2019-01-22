@@ -141,7 +141,8 @@ export function describeDefault(
     let parenthesized = false
     if (
       bt.isArrowFunctionExpression(defaultPath.node) &&
-      bt.isObjectExpression(defaultPath.node.body)
+      (bt.isObjectExpression(defaultPath.node.body) || // if () => ({})
+        (bt.isBlockStatement(defaultPath.node.body) && defaultPath.node.body.body.length === 0)) // if () => {}
     ) {
       defaultPath = defaultPath.get('body')
       const extra = (defaultPath.node as any).extra
