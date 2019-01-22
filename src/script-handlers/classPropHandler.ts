@@ -15,7 +15,7 @@ export default function propHandler(
     path
       .get('body')
       .get('body')
-      .filter((p: NodePath) => bt.isClassProperty(p.node))
+      .filter((p: NodePath) => bt.isClassProperty(p.node) && !!p.node.decorators)
       .forEach((propPath: NodePath<bt.ClassProperty>) => {
         const propDeco = (propPath.get('decorators') || []).filter((p: NodePath<bt.Decorator>) => {
           const exp = bt.isCallExpression(p.node.expression)
