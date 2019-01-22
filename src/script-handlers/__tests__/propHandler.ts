@@ -198,6 +198,53 @@ describe('propHandler', () => {
         defaultValue: { value: `"normal"` },
       })
     })
+
+    it('should return the body of the function as default value', () => {
+      const src = `
+        export default {
+          props: {
+            test: {
+              default: () => {}
+            }
+          }
+        }
+        `
+      tester(src, {
+        defaultValue: { value: `{}` },
+      })
+    })
+
+    it('should return the body of the function as default value without parenthesis', () => {
+      const src = `
+        export default {
+          props: {
+            test: {
+              default: () => ({})
+            }
+          }
+        }
+        `
+      tester(src, {
+        defaultValue: { value: `{}` },
+      })
+    })
+
+    it('should return the body of the function as default value without parenthesis', () => {
+      const src = `
+        export default {
+          props: {
+            test: {
+              default() {
+                return {}
+              }
+            }
+          }
+        }
+        `
+      tester(src, {
+        defaultValue: { value: `{}` },
+      })
+    })
   })
 
   describe('description', () => {
