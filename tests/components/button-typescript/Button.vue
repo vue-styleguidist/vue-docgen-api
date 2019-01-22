@@ -15,7 +15,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
  */
 @Component
 export default class MyComponent extends Vue {
-  @Prop() propA: number
+  aHiddenData: string
+
+  @Prop({ type: String })
+  propNoType
+
+  @Prop
+  propA: number
 
   @Prop({ default: 'default value' })
   propB: string
@@ -28,6 +34,9 @@ export default class MyComponent extends Vue {
    * @public
    */
   onClick(a: string) {
+    /**
+     * Success event when we click
+     */
     this.$emit('success', a)
   }
 }

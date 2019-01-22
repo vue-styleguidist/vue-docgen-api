@@ -6,7 +6,7 @@ Object {
   "displayName": "MyComponent",
   "events": Object {
     "success": Object {
-      "description": "",
+      "description": "Success event when we click",
       "properties": Array [
         Object {
           "name": "<anonymous>",
@@ -68,6 +68,14 @@ Object {
       "tags": Object {},
       "type": Object {
         "name": "TSUnionType",
+      },
+    },
+    "propNoType": Object {
+      "description": "",
+      "required": "",
+      "tags": Object {},
+      "type": Object {
+        "name": "string",
       },
     },
   },
