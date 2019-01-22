@@ -33,6 +33,15 @@ describe('propHandler', () => {
   }
 
   describe('base', () => {
+    it('should ignore data that does not have the prop decorator', () => {
+      const src = `
+        @Component
+        export default class MyComp {
+          someData: boolean;
+        }`
+      tester(src, {})
+      expect(documentation.getPropDescriptor).not.toHaveBeenCalledWith('someData')
+    })
     it('should detect all data that have the prop decorator', () => {
       const src = `
         @Component
