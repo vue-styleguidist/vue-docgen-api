@@ -139,7 +139,10 @@ export function describeDefault(
     let defaultPath = defaultArray[0].get('value')
 
     let parenthesized = false
-    if (bt.isArrowFunctionExpression(defaultPath.node)) {
+    if (
+      bt.isArrowFunctionExpression(defaultPath.node) &&
+      bt.isObjectExpression(defaultPath.node.body)
+    ) {
       defaultPath = defaultPath.get('body')
       const extra = (defaultPath.node as any).extra
       if (extra && extra.parenthesized) {
