@@ -3,6 +3,7 @@ import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import buildParser from './babel-parser'
 import { Documentation } from './Documentation'
+import cacher from './utils/cacher'
 import resolveExportedComponent from './utils/resolveExportedComponent'
 
 // tslint:disable-next-line:no-var-requires
@@ -19,7 +20,8 @@ export default function parseScript(
   options: { lang: 'ts' | 'js'; filePath: string },
 ) {
   const plugins: ParserPlugin[] = options.lang === 'ts' ? ['typescript'] : ['flow']
-  const ast = recast.parse(source, { parser: buildParser({ plugins }) })
+
+  const ast = cacher(() => recast.parse(source, { parser: buildParser({ plugins }) }), source)
   if (!ast) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }

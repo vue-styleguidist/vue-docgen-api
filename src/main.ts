@@ -1,8 +1,5 @@
 import { ComponentDoc, Documentation } from './Documentation'
 import { parseFile, parseSource as parseSourceLocal } from './parse'
-import * as utils from './utils'
-
-export { utils }
 
 export { ComponentDoc }
 
