@@ -85,7 +85,7 @@ export default function propHandler(documentation: Documentation, path: NodePath
   }
 }
 
-function describeType(
+export function describeType(
   propPropertiesPath: Array<NodePath<bt.ObjectProperty>>,
   propDescriptor: PropDescriptor,
 ) {

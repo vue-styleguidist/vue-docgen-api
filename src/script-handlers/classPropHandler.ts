@@ -5,7 +5,7 @@ import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
 import getTypeFromAnnotation from '../utils/getTypeFromAnnotation'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
-import { describeDefault, describeRequired } from './propHandler'
+import { describeDefault, describeRequired, describeType } from './propHandler'
 
 export default function propHandler(
   documentation: Documentation,
@@ -60,6 +60,10 @@ export default function propHandler(
               .filter((p: NodePath) => bt.isObjectProperty(p.node)) as Array<
               NodePath<bt.ObjectProperty>
             >
+            // if there is no type annotation, get it from the decorators arguments
+            if (!propPath.node.typeAnnotation) {
+              describeType(propsPath, propDescriptor)
+            }
             describeDefault(propsPath, propDescriptor)
             describeRequired(propsPath, propDescriptor)
           }
