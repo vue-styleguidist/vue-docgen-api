@@ -9,7 +9,7 @@ import methodHandler from './methodHandler'
 import mixinsHandler from './mixinsHandler'
 // import oldEventsHandler from './oldEventsHandler'
 import propHandler from './propHandler'
-// TODO: add render function slots management here
+import slotHandler from './slotHandler'
 
 export default [
   // have to be first if they can be overridden
@@ -21,6 +21,7 @@ export default [
   methodHandler,
   propHandler,
   eventHandler,
+  slotHandler,
   classDisplayNameHandler,
   classMethodHandler,
   classPropHandler,
