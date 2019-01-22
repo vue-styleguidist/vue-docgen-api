@@ -45,7 +45,7 @@ Object {
   ],
   "props": Object {
     "propA": Object {
-      "description": "",
+      "description": "An example of a property typed through the annotation",
       "tags": Object {},
       "type": Object {
         "name": "number",
@@ -56,7 +56,7 @@ Object {
         "func": false,
         "value": "'default value'",
       },
-      "description": "",
+      "description": "A prop with a default value",
       "required": "",
       "tags": Object {},
       "type": Object {
@@ -64,14 +64,14 @@ Object {
       },
     },
     "propC": Object {
-      "description": "",
+      "description": "A prop with a hybrid type",
       "tags": Object {},
       "type": Object {
         "name": "TSUnionType",
       },
     },
     "propNoType": Object {
-      "description": "",
+      "description": "An example of a property typed through the decorators arguments",
       "required": "",
       "tags": Object {},
       "type": Object {
