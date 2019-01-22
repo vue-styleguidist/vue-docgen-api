@@ -53,7 +53,7 @@ export default function eventHandler(documentation: Documentation, path: NodePat
           while (i--) {
             evtDescriptor.properties.push({
               type: { names: ['undefined'] },
-              name: `<anonymous${args.length - i}>`,
+              name: `<anonymous${args.length - i - 1}>`,
             })
           }
         }

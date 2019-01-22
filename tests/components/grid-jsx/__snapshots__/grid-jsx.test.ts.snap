@@ -9,7 +9,7 @@ Object {
       "description": "Error event.",
       "properties": Array [
         Object {
-          "name": "<anonymous>",
+          "name": "<anonymous2>",
           "type": Object {
             "names": Array [
               "undefined",
@@ -27,7 +27,7 @@ Object {
       "description": "Success event.",
       "properties": Array [
         Object {
-          "name": "<anonymous>",
+          "name": "<anonymous2>",
           "type": Object {
             "names": Array [
               "undefined",

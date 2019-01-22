@@ -76,13 +76,13 @@ describe('eventHandler', () => {
       description: '',
       properties: [
         {
-          name: '<anonymous>',
+          name: '<anonymous1>',
           type: {
             names: ['undefined'],
           },
         },
         {
-          name: '<anonymous>',
+          name: '<anonymous2>',
           type: {
             names: ['undefined'],
           },
