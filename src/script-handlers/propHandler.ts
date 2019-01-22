@@ -136,13 +136,24 @@ export function describeDefault(
 ) {
   const defaultArray = propPropertiesPath.filter(p => p.node.key.name === 'default')
   if (defaultArray.length) {
-    const defaultPath = defaultArray[0].get('value')
+    let defaultPath = defaultArray[0].get('value')
 
-    const func =
-      bt.isArrowFunctionExpression(defaultPath.node) || bt.isFunctionExpression(defaultPath.node)
+    let parenthesized = false
+    if (
+      bt.isArrowFunctionExpression(defaultPath.node) &&
+      bt.isObjectExpression(defaultPath.node.body) // if () => ({})
+    ) {
+      defaultPath = defaultPath.get('body')
+      const extra = (defaultPath.node as any).extra
+      if (extra && extra.parenthesized) {
+        parenthesized = true
+      }
+    }
+
+    const rawValue = recast.print(defaultPath).code
     propDescriptor.defaultValue = {
-      func,
-      value: recast.print(defaultPath).code,
+      func: bt.isFunction(defaultPath.node),
+      value: parenthesized ? rawValue.slice(1, rawValue.length - 1) : rawValue,
     }
   }
 }
