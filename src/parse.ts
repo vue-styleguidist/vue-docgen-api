@@ -1,12 +1,12 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { SFCDescriptor } from 'vue-template-compiler'
+import { parseComponent, SFCDescriptor } from 'vue-template-compiler'
 import { Documentation } from './Documentation'
 import parseScript from './parse-script'
 import parseTemplate from './parse-template'
 import handlers from './script-handlers'
 import templateHandlers from './template-handlers'
-import scfParser from './utils/sfc-parser'
+import cacher from './utils/cacher'
 
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty'
 
@@ -38,7 +38,7 @@ export function parseSource(source: string, filePath: string, documentation: Doc
   }
 
   if (singleFileComponent) {
-    parts = scfParser(source, filePath)
+    parts = cacher(() => parseComponent(source), source)
   }
 
   const scriptSource = parts ? (parts.script ? parts.script.content : undefined) : source
