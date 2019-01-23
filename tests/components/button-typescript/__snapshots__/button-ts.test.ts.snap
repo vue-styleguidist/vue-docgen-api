@@ -9,7 +9,7 @@ Object {
       "description": "Success event when we click",
       "properties": Array [
         Object {
-          "name": "<anonymous>",
+          "name": "<anonymous1>",
           "type": Object {
             "names": Array [
               "undefined",
