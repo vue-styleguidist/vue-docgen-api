@@ -36,7 +36,11 @@ Object {
           },
         },
       ],
-      "type": undefined,
+      "type": Object {
+        "names": Array [
+          "undefined",
+        ],
+      },
     },
   },
   "methods": Array [],

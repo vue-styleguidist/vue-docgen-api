@@ -7,16 +7,7 @@ Object {
   "events": Object {
     "error": Object {
       "description": "Error event.",
-      "properties": Array [
-        Object {
-          "name": "<anonymous1>",
-          "type": Object {
-            "names": Array [
-              "undefined",
-            ],
-          },
-        },
-      ],
+      "properties": undefined,
       "type": Object {
         "names": Array [
           "object",
@@ -25,16 +16,7 @@ Object {
     },
     "success": Object {
       "description": "Success event.",
-      "properties": Array [
-        Object {
-          "name": "<anonymous1>",
-          "type": Object {
-            "names": Array [
-              "undefined",
-            ],
-          },
-        },
-      ],
+      "properties": undefined,
       "type": Object {
         "names": Array [
           "object",

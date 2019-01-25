@@ -74,15 +74,12 @@ describe('eventHandler', () => {
     eventHandler(documentation, def[0])
     const eventComp: EventDescriptor = {
       description: '',
+      type: {
+        names: ['undefined'],
+      },
       properties: [
         {
           name: '<anonymous1>',
-          type: {
-            names: ['undefined'],
-          },
-        },
-        {
-          name: '<anonymous2>',
           type: {
             names: ['undefined'],
           },

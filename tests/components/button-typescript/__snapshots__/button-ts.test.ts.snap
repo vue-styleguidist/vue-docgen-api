@@ -7,17 +7,12 @@ Object {
   "events": Object {
     "success": Object {
       "description": "Success event when we click",
-      "properties": Array [
-        Object {
-          "name": "<anonymous1>",
-          "type": Object {
-            "names": Array [
-              "undefined",
-            ],
-          },
-        },
-      ],
-      "type": undefined,
+      "properties": undefined,
+      "type": Object {
+        "names": Array [
+          "undefined",
+        ],
+      },
     },
   },
   "methods": Array [
