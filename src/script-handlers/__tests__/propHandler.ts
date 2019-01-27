@@ -1,3 +1,4 @@
+import { NodePath } from 'ast-types'
 import babylon from '../../babel-parser'
 import { Documentation, PropDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -5,9 +6,9 @@ import propHandler from '../propHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string) {
+function parse(src: string): NodePath | undefined {
   const ast = babylon().parse(src)
-  return resolveExportedComponent(ast)
+  return resolveExportedComponent(ast).get('default')
 }
 
 describe('propHandler', () => {
@@ -27,7 +28,9 @@ describe('propHandler', () => {
 
   function tester(src: string, matchedObj: any) {
     const def = parse(src)
-    propHandler(documentation, def[0])
+    if (def) {
+      propHandler(documentation, def)
+    }
     expect(mockPropDescriptor).toMatchObject(matchedObj)
   }
 
@@ -38,7 +41,9 @@ describe('propHandler', () => {
           props: ['testArray']
         }`
       const def = parse(src)
-      propHandler(documentation, def[0])
+      if (def) {
+        propHandler(documentation, def)
+      }
       expect(mockPropDescriptor.required).toEqual('')
       expect(documentation.getPropDescriptor).toHaveBeenCalledWith('testArray')
     })
@@ -114,7 +119,9 @@ describe('propHandler', () => {
         }
         `
       const def = parse(src)
-      propHandler(documentation, def[0])
+      if (def) {
+        propHandler(documentation, def)
+      }
       expect(mockPropDescriptor.required).toBeUndefined()
     })
 

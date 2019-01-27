@@ -30,8 +30,10 @@ describe('extendsHandler', () => {
 
   function parseItExtends(src: string) {
     const ast = babylon().parse(src)
-    const path = resolveExportedComponent(ast)
-    extendsHandler(doc, path[0], ast, '')
+    const path = resolveExportedComponent(ast).get('default')
+    if (path) {
+      extendsHandler(doc, path, ast, '')
+    }
   }
 
   it('should resolve extended modules variables in import default', () => {

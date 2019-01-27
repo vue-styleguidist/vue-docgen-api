@@ -23,8 +23,10 @@ describe('classDisplayNameHandler', () => {
     export default class Decorum extends Vue{
     }
     `
-    const def = parse(src)
-    classDisplayNameHandler(documentation, def[0])
+    const def = parse(src).get('default')
+    if (def) {
+      classDisplayNameHandler(documentation, def)
+    }
     expect(documentation.set).toHaveBeenCalledWith('displayName', 'Decorum')
   })
 
@@ -34,8 +36,10 @@ describe('classDisplayNameHandler', () => {
     export default class Test extends Vue{
     }
     `
-    const def = parse(src)
-    classDisplayNameHandler(documentation, def[0])
+    const def = parse(src).get('default')
+    if (def) {
+      classDisplayNameHandler(documentation, def)
+    }
     expect(documentation.set).toHaveBeenCalledWith('displayName', 'decorum')
   })
 })

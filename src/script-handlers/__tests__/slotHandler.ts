@@ -6,9 +6,9 @@ import slotHandler from '../slotHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string): NodePath[] {
+function parse(src: string): NodePath | undefined {
   const ast = babylon().parse(src)
-  return resolveExportedComponent(ast)
+  return resolveExportedComponent(ast).get('default')
 }
 
 describe('render function slotHandler', () => {
@@ -31,7 +31,9 @@ describe('render function slotHandler', () => {
     }
     `
     const def = parse(src)
-    slotHandler(documentation, def[0])
+    if (def) {
+      slotHandler(documentation, def)
+    }
     expect(documentation.getSlotDescriptor).toHaveBeenCalledWith('mySlot')
   })
 
@@ -48,7 +50,9 @@ describe('render function slotHandler', () => {
     }
     `
     const def = parse(src)
-    slotHandler(documentation, def[0])
+    if (def) {
+      slotHandler(documentation, def)
+    }
     expect(documentation.getSlotDescriptor).toHaveBeenCalledWith('myScopedSlot')
   })
 })

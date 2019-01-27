@@ -49,8 +49,10 @@ describe('mixinsHandler', () => {
     ].join('\n'),
   ])('should resolve extended modules variables', src => {
     const ast = babelParser().parse(src)
-    const path = resolveExportedComponent(ast)
-    mixinsHandler(doc, path[0], ast, '')
+    const path = resolveExportedComponent(ast).get('default')
+    if (path) {
+      mixinsHandler(doc, path, ast, '')
+    }
     expect(parseFile).toHaveBeenCalledWith('component/full/path', doc)
   })
 })

@@ -1,6 +1,7 @@
 import { ParserPlugin } from '@babel/parser'
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import Map from 'ts-map'
 import buildParser from './babel-parser'
 import { Documentation } from './Documentation'
 import cacher from './utils/cacher'
@@ -31,7 +32,7 @@ export default function parseScript(
   // with multiple items inside
   const componentDefinitions = resolveExportedComponent(ast)
 
-  if (componentDefinitions.length === 0) {
+  if (componentDefinitions.size === 0) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }
 
@@ -42,12 +43,14 @@ function executeHandlers(
   localHandlers: Array<
     (doc: Documentation, componentDefinition: NodePath, ast: bt.File, filePath: string) => void
   >,
-  componentDefinitions: NodePath[],
+  componentDefinitions: Map<string, NodePath>,
   documentation: Documentation,
   ast: bt.File,
   filePath: string,
 ) {
   return componentDefinitions.forEach(compDef => {
-    localHandlers.forEach(handler => handler(documentation, compDef, ast, filePath))
+    if (compDef) {
+      localHandlers.forEach(handler => handler(documentation, compDef, ast, filePath))
+    }
   })
 }

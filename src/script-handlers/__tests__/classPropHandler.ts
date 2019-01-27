@@ -1,3 +1,5 @@
+import { NodePath } from 'ast-types'
+import Map from 'ts-map'
 import babylon from '../../babel-parser'
 import { Documentation, PropDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -5,7 +7,7 @@ import classPropHandler from '../classPropHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string) {
+function parse(src: string): Map<string, NodePath> {
   const ast = babylon({ plugins: ['typescript'] }).parse(src)
   return resolveExportedComponent(ast)
 }
@@ -27,8 +29,8 @@ describe('propHandler', () => {
   })
 
   function tester(src: string, matchedObj: any) {
-    const def = parse(src)
-    classPropHandler(documentation, def[0] as any)
+    const def = parse(src).get('default')
+    classPropHandler(documentation, def as any)
     expect(mockPropDescriptor).toMatchObject(matchedObj)
   }
 

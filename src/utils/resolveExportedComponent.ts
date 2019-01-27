@@ -1,5 +1,6 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import Map from 'ts-map'
 import isExportedAssignment from './isExportedAssignment'
 import resolveExportDeclaration from './resolveExportDeclaration'
 
@@ -45,12 +46,12 @@ function isComponentDefinition(path: NodePath): boolean {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(ast: bt.File): NodePath[] {
-  const components: NodePath[] = []
+export default function resolveExportedComponent(ast: bt.File): Map<string, NodePath> {
+  const components = new Map<string, NodePath>()
 
-  function setComponent(definition: NodePath) {
-    if (definition && components.indexOf(definition) === -1) {
-      components.push(normalizeComponentPath(definition))
+  function setComponent(exportName: string, definition: NodePath) {
+    if (definition && !components.get(exportName)) {
+      components.set(exportName, normalizeComponentPath(definition))
     }
   }
 
@@ -66,7 +67,7 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
     }, [])
 
     definitions.forEach((definition: NodePath) => {
-      setComponent(definition)
+      setComponent('default', definition)
     })
     return false
   }
@@ -107,7 +108,7 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
         return false
       }
 
-      setComponent(realComp)
+      setComponent('default', realComp)
       return false
     },
   })

@@ -1,3 +1,4 @@
+import { NodePath } from 'ast-types'
 import babylon from '../../babel-parser'
 import { Documentation } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -5,9 +6,9 @@ import displayNameHandler from '../displayNameHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string) {
+function parse(src: string): NodePath | undefined {
   const ast = babylon().parse(src)
-  return resolveExportedComponent(ast)
+  return resolveExportedComponent(ast).get('default')
 }
 
 describe('displayNameHandler', () => {
@@ -27,7 +28,9 @@ describe('displayNameHandler', () => {
     }
     `
     const def = parse(src)
-    displayNameHandler(documentation, def[0])
+    if (def) {
+      displayNameHandler(documentation, def)
+    }
     expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123')
   })
 
@@ -42,7 +45,9 @@ describe('displayNameHandler', () => {
     }
     `
     const def = parse(src)
-    displayNameHandler(documentation, def[0])
+    if (def) {
+      displayNameHandler(documentation, def)
+    }
     expect(documentation.set).toHaveBeenCalledWith('displayName', 'name-123')
   })
 })
