@@ -33,9 +33,9 @@ export default function extendsHandler(
 
   // only look for documentation in the current project not in node_modules
   if (/^\./.test(extendsFilePath[extendsVariableName].filePath)) {
-    const fullFilePath = resolveAliases(
-      resolvePathFrom(extendsFilePath[extendsVariableName].filePath, originalDirName),
-      opt.aliases || {},
+    const fullFilePath = resolvePathFrom(
+      resolveAliases(extendsFilePath[extendsVariableName].filePath, opt.aliases || {}),
+      originalDirName,
     )
 
     parseFile(documentation, {

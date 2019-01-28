@@ -1,3 +1,4 @@
+import * as path from 'path'
 import resolveAliases from '../resolveAliases'
 
 describe('resolveAliases', () => {
@@ -6,6 +7,6 @@ describe('resolveAliases', () => {
       resolveAliases('myPath/somethingNice/mixinFile.js', {
         myPath: './replacementPath/src/mixins',
       }),
-    ).toEqual('./replacementPath/src/mixins/somethingNice/mixinFile.js')
+    ).toEqual(path.join('./replacementPath/src/mixins', 'somethingNice/mixinFile.js'))
   })
 })

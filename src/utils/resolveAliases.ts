@@ -1,3 +1,5 @@
+import * as path from 'path'
+
 export default function resolveAliases(
   filePath: string,
   aliases: { [alias: string]: string },
@@ -11,7 +13,8 @@ export default function resolveAliases(
   while (!aliasFound && i--) {
     aliasFound = filePath.substring(0, aliasKeys[i].length) === aliasKeys[i]
   }
-  return `${aliases[aliasKeys[i]].replace(/\/$/, '')}/${filePath
-    .substring(aliasKeys[i].length + 1)
-    .replace(/^\//, '')}`
+  if (!aliasFound) {
+    return filePath
+  }
+  return path.join(aliases[aliasKeys[i]], filePath.substring(aliasKeys[i].length + 1))
 }

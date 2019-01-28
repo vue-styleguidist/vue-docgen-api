@@ -8,13 +8,13 @@
 <script>
 import Vue from 'vue'
 import { ClientTable } from 'some-plugin'
-import another from '../../mixins/another'
-import anotherMixin from '../../mixins/anotherMixin'
-import model from '../../utils/model.json'
+import another from '@mixins/another'
+import anotherMixin from '@utils/anotherMixin'
+import model from '@utils/model.json'
 import genericMixin from './genericMixin'
 import colorMixin from './colorMixin'
-import review from '../../utils/review.json'
-import { multi, hidden } from '../../mixins/multiMixin'
+import review from '@utils/review.json'
+import { multi, hidden } from '@mixins/multiMixin'
 
 Vue.use(ClientTable)
 
