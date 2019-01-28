@@ -4,6 +4,7 @@ import * as path from 'path'
 import Map from 'ts-map'
 import { Documentation } from '../Documentation'
 import { parseFile, ParseOptions } from '../parse'
+import resolveAliases from '../utils/resolveAliases'
 import resolvePathFrom from '../utils/resolvePathFrom'
 import resolveRequired from '../utils/resolveRequired'
 
@@ -34,7 +35,10 @@ export default function mixinsHandler(
   const files = new Map<string, string[]>()
   for (const varName of Object.keys(mixinVarToFilePath)) {
     const { filePath, exportName } = mixinVarToFilePath[varName]
-    const fullFilePath = resolvePathFrom(filePath, originalDirName)
+    const fullFilePath = resolveAliases(
+      resolvePathFrom(filePath, originalDirName),
+      opt.aliases || {},
+    )
     const vars = files.get(fullFilePath) || []
     vars.push(exportName)
     files.set(fullFilePath, vars)
