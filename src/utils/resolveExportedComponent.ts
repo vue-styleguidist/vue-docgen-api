@@ -58,16 +58,13 @@ export default function resolveExportedComponent(ast: bt.File): Map<string, Node
   // function run for every non "assignment" export declaration
   // in extenso export default or export myvar
   function exportDeclaration(path: NodePath) {
-    const definitions = resolveExportDeclaration(path).reduce((acc: NodePath[], definition) => {
+    const definitions = resolveExportDeclaration(path)
+
+    definitions.forEach((definition: NodePath, name: string) => {
       const realDef = resolveIdentifier(ast, definition)
       if (realDef && isComponentDefinition(realDef)) {
-        acc.push(realDef)
+        setComponent(name, realDef)
       }
-      return acc
-    }, [])
-
-    definitions.forEach((definition: NodePath) => {
-      setComponent('default', definition)
     })
     return false
   }
@@ -103,12 +100,18 @@ export default function resolveExportedComponent(ast: bt.File): Map<string, Node
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like Vue.extend({})
       const pathRight = path.get('right')
+      const pathLeft = path.get('left')
       const realComp = resolveIdentifier(ast, pathRight)
       if (!realComp || !isComponentDefinition(realComp)) {
         return false
       }
 
-      setComponent('default', realComp)
+      const name =
+        bt.isMemberExpression(pathLeft.node) && bt.isIdentifier(pathLeft.node.property)
+          ? pathLeft.node.property.name
+          : 'default'
+
+      setComponent(name, realComp)
       return false
     },
   })

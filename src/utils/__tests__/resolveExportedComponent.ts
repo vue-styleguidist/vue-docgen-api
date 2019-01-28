@@ -7,9 +7,14 @@ describe('resolveExportedComponent', () => {
     expect(resolveExportedComponent(ast).size).toBe(1)
   })
 
-  it('should return an es6 export', () => {
+  it('should return an es6 export with its name', () => {
     const ast = babylon().parse('export const test = {}')
-    expect(resolveExportedComponent(ast).size).toBe(1)
+    expect(resolveExportedComponent(ast).get('test')).not.toBeUndefined()
+  })
+
+  it('should return an es6 export with its name even with 2 statements', () => {
+    const ast = babylon().parse(['const testTwoLines = {};', 'export { testTwoLines };'].join('\n'))
+    expect(resolveExportedComponent(ast).get('testTwoLines')).not.toBeUndefined()
   })
 
   it('should return an es5 export', () => {
@@ -24,7 +29,7 @@ describe('resolveExportedComponent', () => {
 
   it('should return an es5 exports.variable', () => {
     const ast = babylon().parse('exports.xxx = {};')
-    expect(resolveExportedComponent(ast).size).toBe(1)
+    expect(resolveExportedComponent(ast).get('xxx')).not.toBeUndefined()
   })
 
   it('should return indirectly exported components', () => {
@@ -36,7 +41,7 @@ describe('resolveExportedComponent', () => {
     const ast = babylon().parse(
       ['@Component()', 'class testClass extends Vue{}', 'export default testClass'].join('\n'),
     )
-    expect(resolveExportedComponent(ast).size).toBe(1)
+    expect(resolveExportedComponent(ast).get('default')).not.toBeUndefined()
   })
 
   it('should return indirectly exported components es5', () => {
