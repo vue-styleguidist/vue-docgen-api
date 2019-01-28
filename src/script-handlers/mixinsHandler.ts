@@ -1,8 +1,10 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import * as path from 'path'
+import Map from 'ts-map'
 import { Documentation } from '../Documentation'
-import { parseFile } from '../parse'
+import { parseFile, ParseOptions } from '../parse'
+import resolveAliases from '../utils/resolveAliases'
 import resolvePathFrom from '../utils/resolvePathFrom'
 import resolveRequired from '../utils/resolveRequired'
 
@@ -15,9 +17,10 @@ export default function mixinsHandler(
   documentation: Documentation,
   componentDefinition: NodePath,
   astPath: bt.File,
-  originalFilePath: string,
+  opt: ParseOptions,
 ) {
-  const originalDirName = path.dirname(originalFilePath)
+  const originalDirName = path.dirname(opt.filePath)
+
   // filter only mixins
   const mixinVariableNames = getMixinsVariableNames(componentDefinition)
 
@@ -29,12 +32,23 @@ export default function mixinsHandler(
   const mixinVarToFilePath = resolveRequired(astPath, mixinVariableNames)
 
   // get each doc for each mixin using parse
+  const files = new Map<string, string[]>()
   for (const varName of Object.keys(mixinVarToFilePath)) {
-    // TODO: consolidate variables accessing the same file
     const { filePath, exportName } = mixinVarToFilePath[varName]
-    const fullFilePath = resolvePathFrom(filePath, originalDirName)
-    parseFile(fullFilePath, documentation, [exportName])
+    const fullFilePath = resolvePathFrom(
+      resolveAliases(filePath, opt.aliases || {}),
+      originalDirName,
+    )
+    const vars = files.get(fullFilePath) || []
+    vars.push(exportName)
+    files.set(fullFilePath, vars)
   }
+
+  files.forEach((vars, fullFilePath) => {
+    if (fullFilePath && vars) {
+      parseFile(documentation, { ...opt, filePath: fullFilePath, nameFilter: vars })
+    }
+  })
 }
 
 function getMixinsVariableNames(compDef: NodePath): string[] | undefined {

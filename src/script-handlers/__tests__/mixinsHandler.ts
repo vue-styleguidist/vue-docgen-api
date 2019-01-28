@@ -24,7 +24,7 @@ describe('mixinsHandler', () => {
     })
 
     mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>
-    mockResolvePathFrom.mockReturnValue('component/full/path')
+    mockResolvePathFrom.mockReturnValue('./component/full/path')
 
     mockParse = parseFile as jest.Mock
     mockParse.mockReturnValue({ component: 'documentation' })
@@ -53,8 +53,11 @@ describe('mixinsHandler', () => {
     const ast = babelParser().parse(src)
     const path = resolveExportedComponent(ast).get('default')
     if (path) {
-      mixinsHandler(doc, path, ast, '')
+      mixinsHandler(doc, path, ast, { filePath: '' })
     }
-    expect(parseFile).toHaveBeenCalledWith('component/full/path', doc, ['default'])
+    expect(parseFile).toHaveBeenCalledWith(doc, {
+      filePath: './component/full/path',
+      nameFilter: ['default'],
+    })
   })
 })

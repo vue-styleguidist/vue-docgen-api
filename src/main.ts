@@ -3,14 +3,18 @@ import { parseFile, parseSource as parseSourceLocal } from './parse'
 
 export { ComponentDoc }
 
-export function parse(filePath: string): ComponentDoc {
+export function parse(filePath: string, aliases?: { [alias: string]: string }): ComponentDoc {
   const doc = new Documentation()
-  parseFile(filePath, doc)
+  parseFile(doc, { filePath, aliases })
   return doc.toObject()
 }
 
-export function parseSource(source: string, filePath: string): ComponentDoc {
+export function parseSource(
+  source: string,
+  filePath: string,
+  aliases?: { [alias: string]: string },
+): ComponentDoc {
   const doc = new Documentation()
-  parseSourceLocal(source, filePath, doc)
+  parseSourceLocal(doc, source, { filePath, aliases })
   return doc.toObject()
 }
