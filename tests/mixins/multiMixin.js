@@ -6,6 +6,6 @@ export const multi = {
 
 export const hidden = {
   props: {
-    shouldNotbe: Number,
+    shouldNotBe: Number,
   },
 }
