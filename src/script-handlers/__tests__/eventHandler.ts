@@ -6,9 +6,9 @@ import eventHandler from '../eventHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string): NodePath[] {
+function parse(src: string): NodePath | undefined {
   const ast = babylon().parse(src)
-  return resolveExportedComponent(ast)
+  return resolveExportedComponent(ast).get('default')
 }
 
 describe('eventHandler', () => {
@@ -38,7 +38,9 @@ describe('eventHandler', () => {
     }
     `
     const def = parse(src)
-    eventHandler(documentation, def[0])
+    if (def) {
+      eventHandler(documentation, def)
+    }
     const eventComp: EventDescriptor = {
       description: 'Describe the event',
       properties: [
@@ -71,7 +73,9 @@ describe('eventHandler', () => {
     }
     `
     const def = parse(src)
-    eventHandler(documentation, def[0])
+    if (def) {
+      eventHandler(documentation, def)
+    }
     const eventComp: EventDescriptor = {
       description: '',
       type: {

@@ -4,6 +4,11 @@ import { NodePath } from 'ast-types'
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
+interface ImportedVariableToken {
+  filePath: string
+  exportName: string
+}
+
 /**
  *
  * @param ast
@@ -12,8 +17,8 @@ import recast = require('recast')
 export default function resolveRequired(
   ast: bt.File,
   varNameFilter?: string[],
-): { [key: string]: string } {
-  const varToFilePath: { [key: string]: string } = {}
+): { [key: string]: ImportedVariableToken } {
+  const varToFilePath: { [key: string]: ImportedVariableToken } = {}
 
   recast.visit(ast.program, {
     visitImportDeclaration(astPath: NodePath) {
@@ -23,11 +28,19 @@ export default function resolveRequired(
       specifiers.each((sp: NodePath) => {
         const nodeSpecifier = sp.node
         if (bt.isImportDefaultSpecifier(nodeSpecifier) || bt.isImportSpecifier(nodeSpecifier)) {
-          const varNameDefault = nodeSpecifier.local.name
-          if (!varNameFilter || varNameFilter.indexOf(varNameDefault) > -1) {
+          const localVariableName = nodeSpecifier.local.name
+
+          const exportName = bt.isImportDefaultSpecifier(nodeSpecifier)
+            ? 'default'
+            : nodeSpecifier.imported.name
+
+          if (!varNameFilter || varNameFilter.indexOf(localVariableName) > -1) {
             const nodeSource = (astPath.get('source') as NodePath<bt.Literal>).node
-            if (bt.isLiteral(nodeSource)) {
-              varToFilePath[varNameDefault] = (nodeSource as bt.StringLiteral).value
+            if (bt.isStringLiteral(nodeSource)) {
+              varToFilePath[localVariableName] = {
+                filePath: nodeSource.value,
+                exportName,
+              }
             }
           }
         }
@@ -43,10 +56,16 @@ export default function resolveRequired(
       astPath.node.declarations.forEach(nodeDeclaration => {
         let sourceNode: bt.Node
         let source: string = ''
-        const init =
+
+        const { init, exportName } =
           nodeDeclaration.init && bt.isMemberExpression(nodeDeclaration.init)
-            ? nodeDeclaration.init.object
-            : nodeDeclaration.init
+            ? {
+                init: nodeDeclaration.init.object,
+                exportName: bt.isIdentifier(nodeDeclaration.init.property)
+                  ? nodeDeclaration.init.property.name
+                  : 'default',
+              }
+            : { init: nodeDeclaration.init, exportName: 'default' }
         if (!init) {
           return
         }
@@ -56,20 +75,21 @@ export default function resolveRequired(
             return
           }
           sourceNode = init.arguments[0]
-          if (!bt.isLiteral(sourceNode)) {
+          if (!bt.isStringLiteral(sourceNode)) {
             return
           }
-          source = (sourceNode as bt.StringLiteral).value
+          source = sourceNode.value
         } else {
           return
         }
 
         if (bt.isIdentifier(nodeDeclaration.id)) {
           const varName = nodeDeclaration.id.name
-          varToFilePath[varName] = source
+          varToFilePath[varName] = { filePath: source, exportName }
         } else if (bt.isObjectPattern(nodeDeclaration.id)) {
           nodeDeclaration.id.properties.forEach((p: bt.ObjectProperty) => {
-            varToFilePath[p.key.name] = source
+            const varName = p.key.name
+            varToFilePath[varName] = { filePath: source, exportName }
           })
         } else {
           return

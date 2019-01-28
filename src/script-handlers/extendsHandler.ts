@@ -30,10 +30,13 @@ export default function extendsHandler(
 
   const originalDirName = path.dirname(originalFilePath)
 
-  // only look for documentation in the current project
-  if (/^\./.test(extendsFilePath[extendsVariableName])) {
-    const fullFilePath = resolvePathFrom(extendsFilePath[extendsVariableName], originalDirName)
-    parseFile(fullFilePath, documentation)
+  // only look for documentation in the current project not in node_modules
+  if (/^\./.test(extendsFilePath[extendsVariableName].filePath)) {
+    const fullFilePath = resolvePathFrom(
+      extendsFilePath[extendsVariableName].filePath,
+      originalDirName,
+    )
+    parseFile(fullFilePath, documentation, [extendsFilePath[extendsVariableName].exportName])
   }
 }
 

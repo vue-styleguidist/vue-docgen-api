@@ -19,7 +19,9 @@ describe('extendsHandler', () => {
     resolveRequiredMock = resolveRequired as jest.Mock<
       (ast: bt.File, varNameFilter?: string[]) => { [key: string]: string }
     >
-    resolveRequiredMock.mockReturnValue({ testComponent: './componentPath' })
+    resolveRequiredMock.mockReturnValue({
+      testComponent: { filePath: './componentPath', exportName: 'default' },
+    })
 
     mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>
     mockResolvePathFrom.mockReturnValue('./component/full/path')
@@ -30,8 +32,10 @@ describe('extendsHandler', () => {
 
   function parseItExtends(src: string) {
     const ast = babylon().parse(src)
-    const path = resolveExportedComponent(ast)
-    extendsHandler(doc, path[0], ast, '')
+    const path = resolveExportedComponent(ast).get('default')
+    if (path) {
+      extendsHandler(doc, path, ast, '')
+    }
   }
 
   it('should resolve extended modules variables in import default', () => {
@@ -42,7 +46,7 @@ describe('extendsHandler', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
   })
 
   it('should resolve extended modules variables in require', () => {
@@ -53,27 +57,28 @@ describe('extendsHandler', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
   })
 
   it('should resolve extended modules variables in import', () => {
     const src = [
-      'import { testComponent, other } from "./testComponent"',
+      'import { test as testComponent, other } from "./testComponent"',
       'export default {',
       '  extends:testComponent',
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
   })
 
   it('should resolve extended modules variables in class style components', () => {
     const src = [
-      'import { testComponent} from "./testComponent"',
+      'import { testComponent } from "./testComponent";',
+      '@Component',
       'export default class Bart extends testComponent {',
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc)
+    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
   })
 })

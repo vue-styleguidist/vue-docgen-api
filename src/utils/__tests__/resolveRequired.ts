@@ -5,13 +5,26 @@ describe('resolveRequired', () => {
   it('should resolve imported variables', () => {
     const ast = babylon().parse('import {test, bonjour} from "test/path";')
     const varNames = resolveRequired(ast)
-    expect(varNames).toMatchObject({ test: 'test/path', bonjour: 'test/path' })
+    expect(varNames).toMatchObject({
+      test: { filePath: 'test/path', exportName: 'test' },
+      bonjour: { filePath: 'test/path', exportName: 'bonjour' },
+    })
   })
 
   it('should resolve imported default', () => {
     const ast = babylon().parse('import bonjour from "test/path";')
     const varNames = resolveRequired(ast)
-    expect(varNames).toMatchObject({ bonjour: 'test/path' })
+    expect(varNames).toMatchObject({
+      bonjour: { filePath: 'test/path', exportName: 'default' },
+    })
+  })
+
+  it('should resolve imported variable as another name', () => {
+    const ast = babylon().parse('import {bonjour as hello} from "test/path";')
+    const varNames = resolveRequired(ast)
+    expect(varNames).toMatchObject({
+      hello: { filePath: 'test/path', exportName: 'bonjour' },
+    })
   })
 
   it('should resolve required variables', () => {
@@ -23,8 +36,8 @@ describe('resolveRequired', () => {
       ].join('\n'),
     )
     expect(resolveRequired(ast)).toMatchObject({
-      hello: 'test/pathEN',
-      bonjour: 'test/pathFR',
+      hello: { filePath: 'test/pathEN', exportName: 'default' },
+      bonjour: { filePath: 'test/pathFR', exportName: 'default' },
     })
   })
 
@@ -37,13 +50,13 @@ describe('resolveRequired', () => {
       ].join('\n'),
     )
     expect(resolveRequired(ast)).toMatchObject({
-      ciao: 'test/pathOther',
-      astaruego: 'test/pathOther',
-      sayonara: 'test/pathJP',
+      ciao: { filePath: 'test/pathOther', exportName: 'default' },
+      astaruego: { filePath: 'test/pathOther', exportName: 'default' },
+      sayonara: { filePath: 'test/pathJP', exportName: 'default' },
     })
   })
 
-  it('should not require non required variables', () => {
+  it('should not return non required variables', () => {
     const ast = babylon().parse('const sayonara = "Japanese Hello";')
     expect(resolveRequired(ast).sayonara).toBeUndefined()
   })

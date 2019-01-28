@@ -1,4 +1,6 @@
 import { ParserPlugin } from '@babel/parser'
+import { NodePath } from 'ast-types'
+import Map from 'ts-map'
 import babylon from '../../babel-parser'
 import { Documentation } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -6,7 +8,7 @@ import componentHandler from '../componentHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string, plugins: ParserPlugin[] = []) {
+function parse(src: string, plugins: ParserPlugin[] = []): Map<string, NodePath> {
   const ast = babylon({ plugins }).parse(src)
   return resolveExportedComponent(ast)
 }
@@ -27,8 +29,10 @@ describe('componentHandler', () => {
       name: 'name-123',
     }
     `
-    const def = parse(src)
-    componentHandler(documentation, def[0])
+    const def = parse(src).get('default')
+    if (def) {
+      componentHandler(documentation, def)
+    }
     expect(documentation.set).toHaveBeenCalledWith('description', 'An empty component')
   })
 
@@ -43,8 +47,10 @@ describe('componentHandler', () => {
       name: 'name-123',
     }
     `
-    const def = parse(src)
-    componentHandler(documentation, def[0])
+    const def = parse(src).get('default')
+    if (def) {
+      componentHandler(documentation, def)
+    }
     expect(documentation.set).toHaveBeenCalledWith('tags', {
       author: [{ description: '[Rafael]', title: 'author' }],
       version: [{ description: '12.5.7', title: 'version' }],
@@ -62,8 +68,10 @@ describe('componentHandler', () => {
 
     }
     `
-    const def = parse(src, ['typescript'])
-    componentHandler(documentation, def[0])
+    const def = parse(src, ['typescript']).get('default')
+    if (def) {
+      componentHandler(documentation, def)
+    }
     expect(documentation.set).toHaveBeenCalledWith('tags', {
       version: [{ description: '12.5.7', title: 'version' }],
     })

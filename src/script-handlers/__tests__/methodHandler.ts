@@ -1,3 +1,4 @@
+import { NodePath } from 'ast-types'
 import babylon from '../../babel-parser'
 import { Documentation, MethodDescriptor } from '../../Documentation'
 import resolveExportedComponent from '../../utils/resolveExportedComponent'
@@ -5,14 +6,14 @@ import propHandler from '../methodHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string) {
+function parse(src: string): NodePath | undefined {
   const ast = babylon({ plugins: ['flow'] }).parse(src)
-  return resolveExportedComponent(ast)
+  return resolveExportedComponent(ast).get('default')
 }
 
-function parseTS(src: string) {
+function parseTS(src: string): NodePath | undefined {
   const ast = babylon({ plugins: ['typescript'] }).parse(src)
-  return resolveExportedComponent(ast)
+  return resolveExportedComponent(ast).get('default')
 }
 
 describe('methodHandler', () => {
@@ -32,7 +33,9 @@ describe('methodHandler', () => {
 
   function tester(src: string, matchedObj: any) {
     const def = parse(src)
-    propHandler(documentation, def[0])
+    if (def) {
+      propHandler(documentation, def)
+    }
     expect(mockMethodDescriptor).toMatchObject(matchedObj)
   }
 
@@ -235,7 +238,9 @@ describe('methodHandler', () => {
       ].join('\n')
 
       const def = parse(src)
-      propHandler(documentation, def[0])
+      if (def) {
+        propHandler(documentation, def)
+      }
       expect(mockMethodDescriptor).toMatchObject({
         name: 'publicMethod',
         params: [
@@ -261,7 +266,9 @@ describe('methodHandler', () => {
       ].join('\n')
 
       const def = parse(src)
-      propHandler(documentation, def[0])
+      if (def) {
+        propHandler(documentation, def)
+      }
       expect(mockMethodDescriptor).toMatchObject({
         name: 'publicMethod',
         returns: { type: { name: 'string' } },
@@ -284,8 +291,10 @@ describe('methodHandler', () => {
       }
       `
 
-      const def = parseTS(src)
-      propHandler(documentation, def[0])
+      const def = parse(src)
+      if (def) {
+        propHandler(documentation, def)
+      }
       expect(mockMethodDescriptor).toMatchObject({
         name: 'publicMethod',
         params: [
@@ -310,7 +319,9 @@ describe('methodHandler', () => {
       `
 
       const def = parseTS(src)
-      propHandler(documentation, def[0])
+      if (def) {
+        propHandler(documentation, def)
+      }
       expect(mockMethodDescriptor).toMatchObject({
         name: 'twoMethod',
         returns: { type: { name: 'number' } },

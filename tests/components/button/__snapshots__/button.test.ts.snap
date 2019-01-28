@@ -163,6 +163,13 @@ a factory function",
         "name": "string",
       },
     },
+    "shouldBe": Object {
+      "description": "",
+      "tags": Object {},
+      "type": Object {
+        "name": "string",
+      },
+    },
     "size": Object {
       "defaultValue": Object {
         "func": false,

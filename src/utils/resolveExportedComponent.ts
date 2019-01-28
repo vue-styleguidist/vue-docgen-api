@@ -1,5 +1,6 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import Map from 'ts-map'
 import isExportedAssignment from './isExportedAssignment'
 import resolveExportDeclaration from './resolveExportDeclaration'
 
@@ -45,28 +46,25 @@ function isComponentDefinition(path: NodePath): boolean {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(ast: bt.File): NodePath[] {
-  const components: NodePath[] = []
+export default function resolveExportedComponent(ast: bt.File): Map<string, NodePath> {
+  const components = new Map<string, NodePath>()
 
-  function setComponent(definition: NodePath) {
-    if (definition && components.indexOf(definition) === -1) {
-      components.push(normalizeComponentPath(definition))
+  function setComponent(exportName: string, definition: NodePath) {
+    if (definition && !components.get(exportName)) {
+      components.set(exportName, normalizeComponentPath(definition))
     }
   }
 
   // function run for every non "assignment" export declaration
   // in extenso export default or export myvar
   function exportDeclaration(path: NodePath) {
-    const definitions = resolveExportDeclaration(path).reduce((acc: NodePath[], definition) => {
+    const definitions = resolveExportDeclaration(path)
+
+    definitions.forEach((definition: NodePath, name: string) => {
       const realDef = resolveIdentifier(ast, definition)
       if (realDef && isComponentDefinition(realDef)) {
-        acc.push(realDef)
+        setComponent(name, realDef)
       }
-      return acc
-    }, [])
-
-    definitions.forEach((definition: NodePath) => {
-      setComponent(definition)
     })
     return false
   }
@@ -102,12 +100,20 @@ export default function resolveExportedComponent(ast: bt.File): NodePath[] {
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like Vue.extend({})
       const pathRight = path.get('right')
+      const pathLeft = path.get('left')
       const realComp = resolveIdentifier(ast, pathRight)
       if (!realComp || !isComponentDefinition(realComp)) {
         return false
       }
 
-      setComponent(realComp)
+      const name =
+        bt.isMemberExpression(pathLeft.node) &&
+        bt.isIdentifier(pathLeft.node.property) &&
+        pathLeft.node.property.name !== 'exports'
+          ? pathLeft.node.property.name
+          : 'default'
+
+      setComponent(name, realComp)
       return false
     },
   })
