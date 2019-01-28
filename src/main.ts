@@ -5,12 +5,12 @@ export { ComponentDoc }
 
 export function parse(filePath: string): ComponentDoc {
   const doc = new Documentation()
-  parseFile(filePath, doc)
+  parseFile(doc, { filePath })
   return doc.toObject()
 }
 
 export function parseSource(source: string, filePath: string): ComponentDoc {
   const doc = new Documentation()
-  parseSourceLocal(source, filePath, doc)
+  parseSourceLocal(doc, source, { filePath })
   return doc.toObject()
 }

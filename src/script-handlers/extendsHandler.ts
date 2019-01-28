@@ -2,7 +2,7 @@ import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import * as path from 'path'
 import { Documentation } from '../Documentation'
-import { parseFile } from '../parse'
+import { parseFile, ParseOptions } from '../parse'
 import resolvePathFrom from '../utils/resolvePathFrom'
 import resolveRequired from '../utils/resolveRequired'
 
@@ -16,7 +16,7 @@ export default function extendsHandler(
   documentation: Documentation,
   componentDefinition: NodePath,
   astPath: bt.File,
-  originalFilePath: string,
+  opt: ParseOptions,
 ) {
   const extendsVariableName = getExtendsVariableName(componentDefinition)
 
@@ -28,7 +28,7 @@ export default function extendsHandler(
   // get all require / import statements
   const extendsFilePath = resolveRequired(astPath, [extendsVariableName])
 
-  const originalDirName = path.dirname(originalFilePath)
+  const originalDirName = path.dirname(opt.filePath)
 
   // only look for documentation in the current project not in node_modules
   if (/^\./.test(extendsFilePath[extendsVariableName].filePath)) {
@@ -36,7 +36,11 @@ export default function extendsHandler(
       extendsFilePath[extendsVariableName].filePath,
       originalDirName,
     )
-    parseFile(fullFilePath, documentation, [extendsFilePath[extendsVariableName].exportName])
+    parseFile(documentation, {
+      ...opt,
+      filePath: fullFilePath,
+      nameFilter: [extendsFilePath[extendsVariableName].exportName],
+    })
   }
 }
 

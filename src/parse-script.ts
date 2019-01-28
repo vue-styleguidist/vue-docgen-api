@@ -9,22 +9,22 @@ import resolveExportedComponent from './utils/resolveExportedComponent'
 
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
+import { ParseOptions } from './parse'
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found'
 
-interface ParseScriptOptions {
-  lang: 'ts' | 'js'
-  filePath: string
-  nameFilter?: string[]
-}
+type Handler = (
+  doc: Documentation,
+  componentDefinition: NodePath,
+  ast: bt.File,
+  opt: ParseOptions,
+) => void
 
 export default function parseScript(
   source: string,
   documentation: Documentation,
-  handlers: Array<
-    (doc: Documentation, componentDefinition: NodePath, ast: bt.File, filePath: string) => void
-  >,
-  options: ParseScriptOptions,
+  handlers: Handler[],
+  options: ParseOptions,
 ) {
   const plugins: ParserPlugin[] = options.lang === 'ts' ? ['typescript'] : ['flow']
 
@@ -43,17 +43,15 @@ export default function parseScript(
 }
 
 function executeHandlers(
-  localHandlers: Array<
-    (doc: Documentation, componentDefinition: NodePath, ast: bt.File, filePath: string) => void
-  >,
+  localHandlers: Handler[],
   componentDefinitions: Map<string, NodePath>,
   documentation: Documentation,
   ast: bt.File,
-  opt: ParseScriptOptions,
+  opt: ParseOptions,
 ) {
   return componentDefinitions.forEach((compDef, name) => {
     if (compDef && name && (!opt.nameFilter || opt.nameFilter.indexOf(name) > -1)) {
-      localHandlers.forEach(handler => handler(documentation, compDef, ast, opt.filePath))
+      localHandlers.forEach(handler => handler(documentation, compDef, ast, opt))
     }
   })
 }

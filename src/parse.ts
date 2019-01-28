@@ -10,17 +10,11 @@ import cacher from './utils/cacher'
 
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty'
 
-/**
- * parses the source and returns the doc
- * @param {string} source code whose documentation is parsed
- * @param {string} filePath path of the current file against whom to resolve the mixins
- * @returns {object} documentation object
- */
-export function parseFile(filePath: string, documentation: Documentation, nameFilter?: string[]) {
-  const source = fs.readFileSync(filePath, {
-    encoding: 'utf-8',
-  })
-  return parseSource(source, filePath, documentation, nameFilter)
+export interface ParseOptions {
+  filePath: string
+  lang?: 'ts' | 'js'
+  nameFilter?: string[]
+  aliases?: { [alias: string]: string }
 }
 
 /**
@@ -29,13 +23,21 @@ export function parseFile(filePath: string, documentation: Documentation, nameFi
  * @param {string} filePath path of the current file against whom to resolve the mixins
  * @returns {object} documentation object
  */
-export function parseSource(
-  source: string,
-  filePath: string,
-  documentation: Documentation,
-  nameFilter?: string[],
-) {
-  const singleFileComponent = /\.vue$/i.test(path.extname(filePath))
+export function parseFile(documentation: Documentation, opt: ParseOptions) {
+  const source = fs.readFileSync(opt.filePath, {
+    encoding: 'utf-8',
+  })
+  return parseSource(documentation, source, opt)
+}
+
+/**
+ * parses the source and returns the doc
+ * @param {string} source code whose documentation is parsed
+ * @param {string} filePath path of the current file against whom to resolve the mixins
+ * @returns {object} documentation object
+ */
+export function parseSource(documentation: Documentation, source: string, opt: ParseOptions) {
+  const singleFileComponent = /\.vue$/i.test(path.extname(opt.filePath))
   let parts: SFCDescriptor | null = null
 
   if (source === '') {
@@ -48,21 +50,22 @@ export function parseSource(
 
   const scriptSource = parts ? (parts.script ? parts.script.content : undefined) : source
   if (scriptSource) {
-    const lang =
+    opt.lang =
       (parts && parts.script && parts.script.attrs && parts.script.attrs.lang === 'ts') ||
-      /\.tsx?$/i.test(path.extname(filePath))
+      /\.tsx?$/i.test(path.extname(opt.filePath))
         ? 'ts'
         : 'js'
-    parseScript(scriptSource, documentation, handlers, { lang, filePath, nameFilter })
+
+    parseScript(scriptSource, documentation, handlers, opt)
   }
 
   // get slots from template
   if (parts && parts.template) {
-    parseTemplate(parts.template, documentation, templateHandlers, filePath)
+    parseTemplate(parts.template, documentation, templateHandlers, opt.filePath)
   }
 
   if (!documentation.get('displayName')) {
     // a component should always have a display name
-    documentation.set('displayName', path.basename(filePath).replace(/\.\w+$/, ''))
+    documentation.set('displayName', path.basename(opt.filePath).replace(/\.\w+$/, ''))
   }
 }

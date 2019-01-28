@@ -34,7 +34,7 @@ describe('extendsHandler', () => {
     const ast = babylon().parse(src)
     const path = resolveExportedComponent(ast).get('default')
     if (path) {
-      extendsHandler(doc, path, ast, '')
+      extendsHandler(doc, path, ast, { filePath: '' })
     }
   }
 
@@ -46,7 +46,10 @@ describe('extendsHandler', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
+    expect(parseFile).toHaveBeenCalledWith(doc, {
+      filePath: './component/full/path',
+      nameFilter: ['default'],
+    })
   })
 
   it('should resolve extended modules variables in require', () => {
@@ -57,7 +60,10 @@ describe('extendsHandler', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
+    expect(parseFile).toHaveBeenCalledWith(doc, {
+      filePath: './component/full/path',
+      nameFilter: ['default'],
+    })
   })
 
   it('should resolve extended modules variables in import', () => {
@@ -68,7 +74,10 @@ describe('extendsHandler', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
+    expect(parseFile).toHaveBeenCalledWith(doc, {
+      filePath: './component/full/path',
+      nameFilter: ['default'],
+    })
   })
 
   it('should resolve extended modules variables in class style components', () => {
@@ -79,6 +88,9 @@ describe('extendsHandler', () => {
       '}',
     ].join('\n')
     parseItExtends(src)
-    expect(parseFile).toHaveBeenCalledWith('./component/full/path', doc, ['default'])
+    expect(parseFile).toHaveBeenCalledWith(doc, {
+      filePath: './component/full/path',
+      nameFilter: ['default'],
+    })
   })
 })
