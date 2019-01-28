@@ -19,7 +19,7 @@ describe('resolveExportedComponent', () => {
 
   it('should return an es5 export', () => {
     const ast = babylon().parse('module.exports = {};')
-    expect(resolveExportedComponent(ast).size).toBe(1)
+    expect(resolveExportedComponent(ast).get('default')).not.toBeUndefined()
   })
 
   it('should return an es5 export direct', () => {

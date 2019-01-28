@@ -30,9 +30,10 @@ export default function mixinsHandler(
 
   // get each doc for each mixin using parse
   for (const varName of Object.keys(mixinVarToFilePath)) {
-    const filePath = mixinVarToFilePath[varName]
+    // TODO: consolidate variables accessing the same file
+    const { filePath, exportName } = mixinVarToFilePath[varName]
     const fullFilePath = resolvePathFrom(filePath, originalDirName)
-    parseFile(fullFilePath, documentation)
+    parseFile(fullFilePath, documentation, [exportName])
   }
 }
 

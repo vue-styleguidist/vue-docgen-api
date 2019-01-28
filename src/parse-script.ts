@@ -12,13 +12,19 @@ import recast = require('recast')
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found'
 
+interface ParseScriptOptions {
+  lang: 'ts' | 'js'
+  filePath: string
+  nameFilter?: string[]
+}
+
 export default function parseScript(
   source: string,
   documentation: Documentation,
   handlers: Array<
     (doc: Documentation, componentDefinition: NodePath, ast: bt.File, filePath: string) => void
   >,
-  options: { lang: 'ts' | 'js'; filePath: string },
+  options: ParseScriptOptions,
 ) {
   const plugins: ParserPlugin[] = options.lang === 'ts' ? ['typescript'] : ['flow']
 
@@ -27,16 +33,13 @@ export default function parseScript(
     throw new Error(ERROR_MISSING_DEFINITION)
   }
 
-  // FIXME: should be a Map<nameOfExport,NodePath>
-  // then the documentation can become a map itself and we can look at component/mixins
-  // with multiple items inside
   const componentDefinitions = resolveExportedComponent(ast)
 
   if (componentDefinitions.size === 0) {
     throw new Error(ERROR_MISSING_DEFINITION)
   }
 
-  executeHandlers(handlers, componentDefinitions, documentation, ast, options.filePath)
+  executeHandlers(handlers, componentDefinitions, documentation, ast, options)
 }
 
 function executeHandlers(
@@ -46,11 +49,11 @@ function executeHandlers(
   componentDefinitions: Map<string, NodePath>,
   documentation: Documentation,
   ast: bt.File,
-  filePath: string,
+  opt: ParseScriptOptions,
 ) {
-  return componentDefinitions.forEach(compDef => {
-    if (compDef) {
-      localHandlers.forEach(handler => handler(documentation, compDef, ast, filePath))
+  return componentDefinitions.forEach((compDef, name) => {
+    if (compDef && name && (!opt.nameFilter || opt.nameFilter.indexOf(name) > -1)) {
+      localHandlers.forEach(handler => handler(documentation, compDef, ast, opt.filePath))
     }
   })
 }

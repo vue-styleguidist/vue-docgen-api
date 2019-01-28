@@ -107,7 +107,9 @@ export default function resolveExportedComponent(ast: bt.File): Map<string, Node
       }
 
       const name =
-        bt.isMemberExpression(pathLeft.node) && bt.isIdentifier(pathLeft.node.property)
+        bt.isMemberExpression(pathLeft.node) &&
+        bt.isIdentifier(pathLeft.node.property) &&
+        pathLeft.node.property.name !== 'exports'
           ? pathLeft.node.property.name
           : 'default'
 

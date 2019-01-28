@@ -16,11 +16,11 @@ const ERROR_EMPTY_DOCUMENT = 'The passed source is empty'
  * @param {string} filePath path of the current file against whom to resolve the mixins
  * @returns {object} documentation object
  */
-export function parseFile(filePath: string, documentation: Documentation) {
+export function parseFile(filePath: string, documentation: Documentation, nameFilter?: string[]) {
   const source = fs.readFileSync(filePath, {
     encoding: 'utf-8',
   })
-  return parseSource(source, filePath, documentation)
+  return parseSource(source, filePath, documentation, nameFilter)
 }
 
 /**
@@ -29,7 +29,12 @@ export function parseFile(filePath: string, documentation: Documentation) {
  * @param {string} filePath path of the current file against whom to resolve the mixins
  * @returns {object} documentation object
  */
-export function parseSource(source: string, filePath: string, documentation: Documentation) {
+export function parseSource(
+  source: string,
+  filePath: string,
+  documentation: Documentation,
+  nameFilter?: string[],
+) {
   const singleFileComponent = /\.vue$/i.test(path.extname(filePath))
   let parts: SFCDescriptor | null = null
 
@@ -48,7 +53,7 @@ export function parseSource(source: string, filePath: string, documentation: Doc
       /\.tsx?$/i.test(path.extname(filePath))
         ? 'ts'
         : 'js'
-    parseScript(scriptSource, documentation, handlers, { lang, filePath })
+    parseScript(scriptSource, documentation, handlers, { lang, filePath, nameFilter })
   }
 
   // get slots from template

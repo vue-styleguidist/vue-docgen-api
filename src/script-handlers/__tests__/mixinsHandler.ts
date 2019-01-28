@@ -19,7 +19,9 @@ describe('mixinsHandler', () => {
     resolveRequiredMock = resolveRequired as jest.Mock<
       (ast: bt.File, varNameFilter?: string[]) => { [key: string]: string }
     >
-    resolveRequiredMock.mockReturnValue({ testComponent: 'componentPath' })
+    resolveRequiredMock.mockReturnValue({
+      testComponent: { filePath: 'componentPath', exportName: 'default' },
+    })
 
     mockResolvePathFrom = resolvePathFrom as jest.Mock<(path: string, from: string) => string>
     mockResolvePathFrom.mockReturnValue('component/full/path')
@@ -53,6 +55,6 @@ describe('mixinsHandler', () => {
     if (path) {
       mixinsHandler(doc, path, ast, '')
     }
-    expect(parseFile).toHaveBeenCalledWith('component/full/path', doc)
+    expect(parseFile).toHaveBeenCalledWith('component/full/path', doc, ['default'])
   })
 })
