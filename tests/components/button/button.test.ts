@@ -66,7 +66,7 @@ describe('tests button', () => {
       expect(props.color.defaultValue).toMatchObject({ value: `'#333'` })
     })
     it('should the component has fourteen props', () => {
-      expect(Object.keys(props).length).toEqual(14)
+      expect(Object.keys(props).length).toEqual(15)
     })
 
     it('should the component has propsAnother prop default equal "blue"', () => {
@@ -154,6 +154,14 @@ describe('tests button', () => {
 
     it('should prop1 to be ignored', () => {
       expect(props.prop1.tags.ignore).toBeDefined()
+    })
+
+    it('should add multi mixins props', () => {
+      expect(props.shouldBe.type).toMatchObject({ name: 'string' })
+    })
+
+    it('should ignore multi mixins props that are not appended', () => {
+      expect(props.shouldNotBe).toBeUndefined()
     })
   })
 

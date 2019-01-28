@@ -1,8 +1,8 @@
 <template>
-	<button class="buttonComponent" @click.prevent="onClick">
-		<!-- @slot Use this slot default -->
-		<slot></slot>
-	</button>
+  <button class="buttonComponent" @click.prevent="onClick">
+    <!-- @slot Use this slot default -->
+    <slot></slot>
+  </button>
 </template>
 
 <script>
@@ -14,10 +14,13 @@ import model from '../../utils/model.json'
 import genericMixin from './genericMixin'
 import colorMixin from './colorMixin'
 import review from '../../utils/review.json'
+import { multi, hidden } from '../../mixins/multiMixin'
 
 Vue.use(ClientTable)
 
 const NAME = 'buttonComponent'
+
+console.log('mixin loaded but not parsed', hidden)
 
 /**
  * This is an example of creating a reusable button component and using it with external data.
@@ -26,7 +29,7 @@ const NAME = 'buttonComponent'
  */
 export default {
   name: NAME,
-  mixins: [another, genericMixin, colorMixin],
+  mixins: [another, genericMixin, colorMixin, multi],
   props: {
     /**
      * The size of the button
@@ -124,7 +127,7 @@ export default {
             demo: 'example',
           },
           10,
-          false
+          false,
         )
       }, 1000)
     },
