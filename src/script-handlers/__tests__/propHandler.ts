@@ -152,6 +152,39 @@ describe('propHandler', () => {
         type: { name: 'boolean' },
       })
     })
+
+    it('should still return props with vue-types', () => {
+      const src = [
+        'export default {',
+        '  props:{',
+        '    test: VueTypes.shape({',
+        '       line1: String,',
+        '       line2: String,',
+        '    })',
+        '  }',
+        '}',
+      ].join('\n')
+      tester(src, {
+        type: {
+          func: true,
+        },
+      })
+    })
+
+    it('should still return props with prop-types', () => {
+      const src = [
+        'export default {',
+        '  props:{',
+        "    test: PropTypes.oneOf(['News', 'Photos'])",
+        '  }',
+        '}',
+      ].join('\n')
+      tester(src, {
+        type: {
+          func: true,
+        },
+      })
+    })
   })
 
   describe('required', () => {

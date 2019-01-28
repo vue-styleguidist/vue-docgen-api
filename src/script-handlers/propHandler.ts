@@ -70,6 +70,11 @@ export default function propHandler(documentation: Documentation, path: NodePath
         } else if (bt.isIdentifier(propValuePath.node)) {
           // contents of the prop is it's type
           propDescriptor.type = getTypeFromTypePath(propValuePath)
+        } else {
+          propDescriptor.type = {
+            name: recast.print(prop.get('value')).code,
+            func: true,
+          }
         }
       })
     } else if (bt.isArrayExpression(propsValuePath.node)) {
