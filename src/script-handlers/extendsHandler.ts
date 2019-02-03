@@ -4,6 +4,7 @@ import * as path from 'path'
 import { Documentation } from '../Documentation'
 import { parseFile, ParseOptions } from '../parse'
 import resolveAliases from '../utils/resolveAliases'
+import resolveImmediatelyExportedRequire from '../utils/resolveImmediatelyExportedRequire'
 import resolvePathFrom from '../utils/resolvePathFrom'
 import resolveRequired from '../utils/resolveRequired'
 
@@ -21,6 +22,12 @@ export default function extendsHandler(
 ) {
   const extendsVariableName = getExtendsVariableName(componentDefinition)
 
+  const pathResolver = (filePath: string, originalDirNameOverride?: string): string =>
+    resolvePathFrom(
+      resolveAliases(filePath, opt.aliases || {}),
+      originalDirNameOverride || originalDirName,
+    )
+
   // if there is no extends or extends is a direct require
   if (!extendsVariableName) {
     return
@@ -31,12 +38,11 @@ export default function extendsHandler(
 
   const originalDirName = path.dirname(opt.filePath)
 
+  resolveImmediatelyExportedRequire(pathResolver, extendsFilePath)
+
   // only look for documentation in the current project not in node_modules
   if (/^\./.test(extendsFilePath[extendsVariableName].filePath)) {
-    const fullFilePath = resolvePathFrom(
-      resolveAliases(extendsFilePath[extendsVariableName].filePath, opt.aliases || {}),
-      originalDirName,
-    )
+    const fullFilePath = pathResolver(extendsFilePath[extendsVariableName].filePath)
 
     parseFile(documentation, {
       ...opt,

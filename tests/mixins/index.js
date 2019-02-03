@@ -1,1 +1,1 @@
-export { default as anotherMixin } from './modules/anotherMixin'
+export { default as anotherMixin } from './anotherMixin'

@@ -37,8 +37,9 @@ export default function resolveRequired(
           if (!varNameFilter || varNameFilter.indexOf(localVariableName) > -1) {
             const nodeSource = (astPath.get('source') as NodePath<bt.Literal>).node
             if (bt.isStringLiteral(nodeSource)) {
+              const filePath = nodeSource.value
               varToFilePath[localVariableName] = {
-                filePath: nodeSource.value,
+                filePath,
                 exportName,
               }
             }

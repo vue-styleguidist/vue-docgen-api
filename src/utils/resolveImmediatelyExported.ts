@@ -7,7 +7,7 @@ import recast = require('recast')
 
 export default function(
   ast: bt.File,
-  variableFiler: string[],
+  variableFilter: string[],
 ): { [key: string]: ImportedVariableToken } {
   const variables: { [key: string]: ImportedVariableToken } = {}
 
@@ -40,14 +40,16 @@ export default function(
         specifiers.each((s: NodePath<bt.ExportSpecifier>) => {
           const varName = s.node.exported.name
           const exportName = s.node.local.name
-          variables[varName] = { filePath, exportName }
+          if (variableFilter.indexOf(varName) > -1) {
+            variables[varName] = { filePath, exportName }
+          }
         })
       } else {
         specifiers.each((s: NodePath<bt.ExportSpecifier>) => {
           const varName = s.node.exported.name
           const middleName = s.node.local.name
           const importedVar = importedVariablePaths[middleName]
-          if (importedVar) {
+          if (importedVar && variableFilter.indexOf(varName) > -1) {
             variables[varName] = importedVar
           }
         })
@@ -56,12 +58,14 @@ export default function(
       return false
     },
     visitExportDefaultDeclaration(astPath: NodePath<bt.ExportDefaultDeclaration>) {
-      const middleNameDeclaration = astPath.node.declaration
-      if (bt.isIdentifier(middleNameDeclaration)) {
-        const middleName = middleNameDeclaration.name
-        const importedVar = importedVariablePaths[middleName]
-        if (importedVar) {
-          variables.default = importedVar
+      if (variableFilter.indexOf('default') > -1) {
+        const middleNameDeclaration = astPath.node.declaration
+        if (bt.isIdentifier(middleNameDeclaration)) {
+          const middleName = middleNameDeclaration.name
+          const importedVar = importedVariablePaths[middleName]
+          if (importedVar) {
+            variables.default = importedVar
+          }
         }
       }
       return false
