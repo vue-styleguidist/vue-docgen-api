@@ -4,7 +4,7 @@ import { NodePath } from 'ast-types'
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
-interface ImportedVariableToken {
+export interface ImportedVariableToken {
   filePath: string
   exportName: string
 }
