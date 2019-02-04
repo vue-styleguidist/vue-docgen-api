@@ -20,11 +20,11 @@ describe('tests button', () => {
       props = docButton.props ? docButton.props : {}
     })
 
-    it('should the component has color prop description equal The color for the button example', () => {
+    it('should return the "color" prop description from passthrough exported mixin', () => {
       expect(props.color.description).toEqual('Another Mixins Error')
     })
 
-    it('should the component has propsAnother prop description', () => {
+    it('should return the "propsAnother" prop description from a vue file mixin', () => {
       expect(props.propsAnother.description).toEqual('Example prop in vue file')
     })
   })

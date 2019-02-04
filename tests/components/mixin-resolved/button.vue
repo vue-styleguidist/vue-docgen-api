@@ -7,8 +7,7 @@
 </template>
 
 <script>
-import { anotherMixin } from '@mixins/index'
-import myMixin from '@mixins/another/mix'
+import { anotherMixin, myMixin } from '@mixins/index'
 
 export default {
   mixins: [anotherMixin, myMixin],
