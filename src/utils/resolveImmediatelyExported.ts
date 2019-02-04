@@ -1,17 +1,14 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
-import { ImportedVariableToken } from './resolveRequired'
+import { ImportedVariableSet } from './resolveRequired'
 
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
-export default function(
-  ast: bt.File,
-  variableFilter: string[],
-): { [key: string]: ImportedVariableToken } {
-  const variables: { [key: string]: ImportedVariableToken } = {}
+export default function(ast: bt.File, variableFilter: string[]): ImportedVariableSet {
+  const variables: ImportedVariableSet = {}
 
-  const importedVariablePaths: { [key: string]: ImportedVariableToken } = {}
+  const importedVariablePaths: ImportedVariableSet = {}
 
   // get imported variable names and filepath
   recast.visit(ast.program, {
