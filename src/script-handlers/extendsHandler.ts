@@ -3,8 +3,8 @@ import { NodePath } from 'ast-types'
 import * as path from 'path'
 import { Documentation } from '../Documentation'
 import { parseFile, ParseOptions } from '../parse'
-import resolveAliases from '../utils/resolveAliases'
-import resolvePathFrom from '../utils/resolvePathFrom'
+import resolveImmediatelyExportedRequire from '../utils/adaptExportsToIEV'
+import makePathResolver from '../utils/makePathResolver'
 import resolveRequired from '../utils/resolveRequired'
 
 /**
@@ -31,12 +31,13 @@ export default function extendsHandler(
 
   const originalDirName = path.dirname(opt.filePath)
 
+  const pathResolver = makePathResolver(originalDirName, opt.aliases)
+
+  resolveImmediatelyExportedRequire(pathResolver, extendsFilePath)
+
   // only look for documentation in the current project not in node_modules
   if (/^\./.test(extendsFilePath[extendsVariableName].filePath)) {
-    const fullFilePath = resolvePathFrom(
-      resolveAliases(extendsFilePath[extendsVariableName].filePath, opt.aliases || {}),
-      originalDirName,
-    )
+    const fullFilePath = pathResolver(extendsFilePath[extendsVariableName].filePath)
 
     parseFile(documentation, {
       ...opt,

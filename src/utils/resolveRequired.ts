@@ -4,9 +4,13 @@ import { NodePath } from 'ast-types'
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
-interface ImportedVariableToken {
+interface ImportedVariable {
   filePath: string
   exportName: string
+}
+
+export interface ImportedVariableSet {
+  [key: string]: ImportedVariable
 }
 
 /**
@@ -17,8 +21,8 @@ interface ImportedVariableToken {
 export default function resolveRequired(
   ast: bt.File,
   varNameFilter?: string[],
-): { [key: string]: ImportedVariableToken } {
-  const varToFilePath: { [key: string]: ImportedVariableToken } = {}
+): ImportedVariableSet {
+  const varToFilePath: ImportedVariableSet = {}
 
   recast.visit(ast.program, {
     visitImportDeclaration(astPath: NodePath) {
@@ -37,8 +41,9 @@ export default function resolveRequired(
           if (!varNameFilter || varNameFilter.indexOf(localVariableName) > -1) {
             const nodeSource = (astPath.get('source') as NodePath<bt.Literal>).node
             if (bt.isStringLiteral(nodeSource)) {
+              const filePath = nodeSource.value
               varToFilePath[localVariableName] = {
-                filePath: nodeSource.value,
+                filePath,
                 exportName,
               }
             }
