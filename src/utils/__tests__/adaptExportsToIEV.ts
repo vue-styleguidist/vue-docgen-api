@@ -1,8 +1,8 @@
 import adaptRequireWithIEV from '../adaptExportsToIEV'
+import resolveImmediatelyExported from '../resolveImmediatelyExported'
 import { ImportedVariableSet } from '../resolveRequired'
 
 jest.mock('../resolveImmediatelyExported')
-jest.mock('../resolveRequired')
 
 describe('adaptRequireWithIEV', () => {
   let set: ImportedVariableSet
@@ -12,8 +12,9 @@ describe('adaptRequireWithIEV', () => {
     mockResolver = jest.fn()
   })
 
-  it('should immediately exported varibles', () => {
+  it('should call the resolver', () => {
     adaptRequireWithIEV(mockResolver, set)
+
     expect(mockResolver).toHaveBeenCalledWith('my/path')
   })
 })
