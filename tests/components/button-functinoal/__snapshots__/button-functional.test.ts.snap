@@ -7,18 +7,26 @@ Object {
   "events": Object {},
   "methods": Array [],
   "props": Object {
+    "default": Object {
+      "description": "",
+      "tags": Object {},
+      "type": Object {
+        "func": true,
+        "name": "200",
+      },
+    },
     "size": Object {
       "description": "",
       "tags": Object {},
       "type": Object {
-        "name": "string",
+        "name": "number",
       },
     },
     "text": Object {
       "description": "",
       "tags": Object {},
       "type": Object {
-        "name": "string",
+        "name": "undefined",
       },
     },
   },

@@ -57,7 +57,7 @@ function getPropsFromExpression(expression: string, documentation: Documentation
       ) {
         const pName = propName.name
         const p = documentation.getPropDescriptor(pName)
-        p.type = { name: 'string' }
+        p.type = { name: 'undefined' }
       }
       return false
     },
