@@ -1,5 +1,4 @@
 import adaptRequireWithIEV from '../adaptExportsToIEV'
-import resolveImmediatelyExported from '../resolveImmediatelyExported'
 import { ImportedVariableSet } from '../resolveRequired'
 
 jest.mock('../resolveImmediatelyExported')
