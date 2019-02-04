@@ -8,8 +8,9 @@
 
 <script>
 import { anotherMixin } from '@mixins/index'
+import myMixin from '@mixins/another/mix'
 
 export default {
-  mixins: [anotherMixin],
+  mixins: [anotherMixin, myMixin],
 }
 </script>

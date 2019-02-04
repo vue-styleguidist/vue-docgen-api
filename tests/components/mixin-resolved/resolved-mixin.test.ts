@@ -23,5 +23,9 @@ describe('tests button', () => {
     it('should the component has color prop description equal The color for the button example', () => {
       expect(props.color.description).toEqual('Another Mixins Error')
     })
+
+    it('should the component has propsAnother prop description', () => {
+      expect(props.propsAnother.description).toEqual('Example prop in vue file')
+    })
   })
 })

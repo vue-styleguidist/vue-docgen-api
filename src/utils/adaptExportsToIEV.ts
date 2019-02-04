@@ -4,16 +4,14 @@ import Map from 'ts-map'
 import buildParser from '../babel-parser'
 import cacher from './cacher'
 import resolveImmediatelyExported from './resolveImmediatelyExported'
-import { ImportedVariableToken } from './resolveRequired'
+import { ImportedVariableSet } from './resolveRequired'
 
 // tslint:disable-next-line:no-var-requires
 import recast = require('recast')
 
-export default function resolveImmediatelyExportedRequire(
+export default function adaptExportsToIEV(
   pathResolver: (path: string, originalDirNameOverride?: string) => string,
-  varToFilePath: {
-    [localName: string]: ImportedVariableToken
-  },
+  varToFilePath: ImportedVariableSet,
 ) {
   // key: filepath, content: {key: localName, content: exportedName}
   const filePathToVars = new Map<string, Map<string, string>>()

@@ -4,9 +4,8 @@ import * as path from 'path'
 import Map from 'ts-map'
 import { Documentation } from '../Documentation'
 import { parseFile, ParseOptions } from '../parse'
-import resolveAliases from '../utils/resolveAliases'
-import resolveImmediatelyExportedRequire from '../utils/resolveImmediatelyExportedRequire'
-import resolvePathFrom from '../utils/resolvePathFrom'
+import resolveImmediatelyExportedRequire from '../utils/adaptExportsToIEV'
+import makePathResolver from '../utils/makePathResolver'
 import resolveRequired from '../utils/resolveRequired'
 
 /**
@@ -22,11 +21,7 @@ export default function mixinsHandler(
 ) {
   const originalDirName = path.dirname(opt.filePath)
 
-  const pathResolver = (filePath: string, originalDirNameOverride?: string): string =>
-    resolvePathFrom(
-      resolveAliases(filePath, opt.aliases || {}),
-      originalDirNameOverride || originalDirName,
-    )
+  const pathResolver = makePathResolver(originalDirName, opt.aliases)
 
   // filter only mixins
   const mixinVariableNames = getMixinsVariableNames(componentDefinition)

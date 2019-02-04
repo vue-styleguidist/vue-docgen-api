@@ -3,9 +3,8 @@ import { NodePath } from 'ast-types'
 import * as path from 'path'
 import { Documentation } from '../Documentation'
 import { parseFile, ParseOptions } from '../parse'
-import resolveAliases from '../utils/resolveAliases'
-import resolveImmediatelyExportedRequire from '../utils/resolveImmediatelyExportedRequire'
-import resolvePathFrom from '../utils/resolvePathFrom'
+import resolveImmediatelyExportedRequire from '../utils/adaptExportsToIEV'
+import makePathResolver from '../utils/makePathResolver'
 import resolveRequired from '../utils/resolveRequired'
 
 /**
@@ -22,12 +21,6 @@ export default function extendsHandler(
 ) {
   const extendsVariableName = getExtendsVariableName(componentDefinition)
 
-  const pathResolver = (filePath: string, originalDirNameOverride?: string): string =>
-    resolvePathFrom(
-      resolveAliases(filePath, opt.aliases || {}),
-      originalDirNameOverride || originalDirName,
-    )
-
   // if there is no extends or extends is a direct require
   if (!extendsVariableName) {
     return
@@ -37,6 +30,8 @@ export default function extendsHandler(
   const extendsFilePath = resolveRequired(astPath, [extendsVariableName])
 
   const originalDirName = path.dirname(opt.filePath)
+
+  const pathResolver = makePathResolver(originalDirName, opt.aliases)
 
   resolveImmediatelyExportedRequire(pathResolver, extendsFilePath)
 
