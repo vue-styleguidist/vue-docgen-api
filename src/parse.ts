@@ -48,6 +48,11 @@ export function parseSource(documentation: Documentation, source: string, opt: P
     parts = cacher(() => parseComponent(source), source)
   }
 
+  // get slots and props from template
+  if (parts && parts.template) {
+    parseTemplate(parts.template, documentation, templateHandlers, opt.filePath)
+  }
+
   const scriptSource = parts ? (parts.script ? parts.script.content : undefined) : source
   if (scriptSource) {
     opt.lang =
@@ -57,11 +62,6 @@ export function parseSource(documentation: Documentation, source: string, opt: P
         : 'js'
 
     parseScript(scriptSource, documentation, handlers, opt)
-  }
-
-  // get slots from template
-  if (parts && parts.template) {
-    parseTemplate(parts.template, documentation, templateHandlers, opt.filePath)
   }
 
   if (!documentation.get('displayName')) {

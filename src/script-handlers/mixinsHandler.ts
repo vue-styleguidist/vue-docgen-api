@@ -4,8 +4,8 @@ import * as path from 'path'
 import Map from 'ts-map'
 import { Documentation } from '../Documentation'
 import { parseFile, ParseOptions } from '../parse'
-import resolveAliases from '../utils/resolveAliases'
-import resolvePathFrom from '../utils/resolvePathFrom'
+import resolveImmediatelyExportedRequire from '../utils/adaptExportsToIEV'
+import makePathResolver from '../utils/makePathResolver'
 import resolveRequired from '../utils/resolveRequired'
 
 /**
@@ -21,6 +21,8 @@ export default function mixinsHandler(
 ) {
   const originalDirName = path.dirname(opt.filePath)
 
+  const pathResolver = makePathResolver(originalDirName, opt.aliases)
+
   // filter only mixins
   const mixinVariableNames = getMixinsVariableNames(componentDefinition)
 
@@ -31,14 +33,13 @@ export default function mixinsHandler(
   // get all require / import statements
   const mixinVarToFilePath = resolveRequired(astPath, mixinVariableNames)
 
+  resolveImmediatelyExportedRequire(pathResolver, mixinVarToFilePath)
+
   // get each doc for each mixin using parse
   const files = new Map<string, string[]>()
   for (const varName of Object.keys(mixinVarToFilePath)) {
     const { filePath, exportName } = mixinVarToFilePath[varName]
-    const fullFilePath = resolvePathFrom(
-      resolveAliases(filePath, opt.aliases || {}),
-      originalDirName,
-    )
+    const fullFilePath = pathResolver(filePath)
     const vars = files.get(fullFilePath) || []
     vars.push(exportName)
     files.set(fullFilePath, vars)

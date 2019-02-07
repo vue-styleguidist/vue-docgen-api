@@ -21,8 +21,8 @@ describe('tests button functional', () => {
 
   it('should extract props from template if functional', () => {
     expect(docButton.props).toMatchObject({
-      size: { type: { name: 'string' } },
-      text: { type: { name: 'string' } },
+      size: { type: { name: 'number' } },
+      text: { type: { name: 'undefined' } },
     })
   })
 

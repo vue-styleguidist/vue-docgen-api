@@ -21,7 +21,7 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [propHandler], { functional: true })
-      expect(doc.toObject().props).toMatchObject({ size: { type: { name: 'string' } } })
+      expect(doc.toObject().props).toMatchObject({ size: { type: { name: 'undefined' } } })
     } else {
       fail()
     }
@@ -41,18 +41,36 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [propHandler], { functional: true })
-      expect(doc.toObject().props).toMatchObject({ name: { type: { name: 'string' } } })
+      expect(doc.toObject().props).toMatchObject({ name: { type: { name: 'undefined' } } })
     } else {
       fail()
     }
   })
 
-  it('should not match props if in a litteral', () => {
+  it('should not match props if in a string litteral', () => {
     const ast = compile(
       [
         '<div>',
         '  <h1>titleof the template</h1>',
         '  <button :style="`width:props.size`"></slot>',
+        '</div>',
+      ].join('\n'),
+      { comments: true },
+    ).ast
+    if (ast) {
+      traverse(ast, doc, [propHandler], { functional: true })
+      expect(doc.toObject().props).toBeUndefined()
+    } else {
+      fail()
+    }
+  })
+
+  it('should not match props if in a non evaluated attribute', () => {
+    const ast = compile(
+      [
+        '<div>',
+        '  <h1>titleof the template</h1>',
+        '  <button style="width:props.size"></slot>',
         '</div>',
       ].join('\n'),
       { comments: true },
