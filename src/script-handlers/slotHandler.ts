@@ -13,7 +13,11 @@ export default function eventHandler(documentation: Documentation, path: NodePat
   if (bt.isObjectExpression(path.node)) {
     const renderPath = path
       .get('properties')
-      .filter((p: NodePath) => bt.isObjectProperty(p.node) && p.node.key.name === 'render')
+      .filter(
+        (p: NodePath) =>
+          (bt.isObjectProperty(p.node) || bt.isObjectMethod(p.node)) &&
+          p.node.key.name === 'render',
+      )
 
     // if no prop return
     if (!renderPath.length) {
@@ -47,6 +51,10 @@ export default function eventHandler(documentation: Documentation, path: NodePat
           return false
         }
         this.traverse(pathMember)
+      },
+      visitJSXElement(pathJSX: NodePath<bt.JSXElement>) {
+        console.log(pathJSX.node.children.length)
+        this.traverse(pathJSX)
       },
     })
   }

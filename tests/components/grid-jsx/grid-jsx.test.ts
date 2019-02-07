@@ -12,7 +12,7 @@ describe('tests grid jsx', () => {
   })
 
   it('should return an object', () => {
-    expect(typeof docGrid).toBe('object')
+    expect(typeof docGrid).toBe('null')
   })
 
   it('The component name should be grid', () => {
