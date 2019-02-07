@@ -1,6 +1,7 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
-import { Documentation, ParamTag, ParamType } from '../Documentation'
+import { Documentation, ParamTag, ParamType, Tag } from '../Documentation'
+import getDoclets from '../utils/getDoclets'
 
 export interface TypedParamTag extends ParamTag {
   type: ParamType
@@ -57,17 +58,54 @@ export default function slotHandler(documentation: Documentation, path: NodePath
       visitJSXElement(pathJSX: NodePath<bt.JSXElement>) {
         const tagName = pathJSX.node.openingElement.name
         if (bt.isJSXIdentifier(tagName) && tagName.name === 'slot') {
-          const oe = pathJSX.node.openingElement
-          const names = oe.attributes.filter(
-            (a: bt.JSXAttribute) => bt.isJSXAttribute(a) && a.name.name === 'name',
-          ) as bt.JSXAttribute[]
-
-          const nameNode = names.length ? names[0].value : null
-          const name = nameNode && bt.isStringLiteral(nameNode) ? nameNode.value : 'default'
-          documentation.getSlotDescriptor(name)
+          const doc = documentation.getSlotDescriptor(getName(pathJSX))
+          doc.description = getDescription(pathJSX)
         }
         this.traverse(pathJSX)
       },
     })
   }
+}
+
+function getName(pathJSX: NodePath<bt.JSXElement>): string {
+  const oe = pathJSX.node.openingElement
+  const names = oe.attributes.filter(
+    (a: bt.JSXAttribute) => bt.isJSXAttribute(a) && a.name.name === 'name',
+  ) as bt.JSXAttribute[]
+
+  const nameNode = names.length ? names[0].value : null
+  return nameNode && bt.isStringLiteral(nameNode) ? nameNode.value : 'default'
+}
+
+function getDescription(pathJSX: NodePath<bt.JSXElement>): string {
+  let indexInParent = -1
+  const siblings = (pathJSX.parentPath.node as bt.JSXElement).children
+  if (!siblings) {
+    return ''
+  }
+  siblings.forEach((node: bt.JSXElement, i: number) => {
+    if (node === pathJSX.node) {
+      indexInParent = i
+    }
+  })
+
+  let commentExpression: bt.JSXExpressionContainer | null = null
+  do {
+    const currentNode = siblings[indexInParent]
+    if (bt.isJSXExpressionContainer(currentNode)) {
+      commentExpression = currentNode
+    }
+  } while (!commentExpression && indexInParent--)
+  if (commentExpression && commentExpression.expression.innerComments) {
+    const cmts = commentExpression.expression.innerComments
+    const docBlock = cmts[cmts.length - 1].value.replace(/^\*/, '').trim()
+    const jsDoc = getDoclets(docBlock)
+    if (jsDoc.tags) {
+      const slotTags = jsDoc.tags.filter(t => t.title === 'slot')
+      if (slotTags.length) {
+        return (slotTags[0] as Tag).content.toString()
+      }
+    }
+  }
+  return ''
 }
