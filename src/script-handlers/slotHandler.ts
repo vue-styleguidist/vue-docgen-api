@@ -102,7 +102,16 @@ function getDescription(pathJSX: NodePath<bt.JSXElement>): string {
     const jsDoc = getDoclets(docBlock)
     if (jsDoc.tags) {
       const slotTags = jsDoc.tags.filter(t => t.title === 'slot')
-      if (slotTags.length) {
+if (!jsDoc.tags) {
+  return '';
+}
+
+const slotTags = jsDoc.tags.filter(t => t.title === 'slot')
+if (!slotTags.length) {
+  return ''
+}
+
+return (slotTags[0] as Tag).content.toString()
         return (slotTags[0] as Tag).content.toString()
       }
     }
