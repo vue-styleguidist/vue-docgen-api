@@ -191,7 +191,11 @@ Object {
       },
     },
   },
-  "slots": Object {},
+  "slots": Object {
+    "header": Object {
+      "description": "Use this slot header",
+    },
+  },
   "tags": Object {
     "author": Array [
       Object {

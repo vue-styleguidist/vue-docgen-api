@@ -12,7 +12,7 @@ describe('tests grid jsx', () => {
   })
 
   it('should return an object', () => {
-    expect(typeof docGrid).toBe('null')
+    expect(typeof docGrid).toBe('object')
   })
 
   it('The component name should be grid', () => {
@@ -107,6 +107,10 @@ describe('tests grid jsx', () => {
 
   it('should define the return type of the first method', () => {
     expect(docGrid.methods[0].returns).toMatchObject({ description: 'Test' })
+  })
+
+  it('should return slots from the render method', () => {
+    expect(docGrid.slots.header).toMatchObject({ description: 'Use this slot header' })
   })
 
   it('should match the snapshot', () => {

@@ -95,9 +95,7 @@ export default {
     const { sortKey, capitalize } = this
     return (
       <table class="grid">
-        {/** 
-           @slot Use this slot header
-         */}
+        {/** @slot Use this slot header */}
         <slot name="header" />
         <thead>
           <tr>
