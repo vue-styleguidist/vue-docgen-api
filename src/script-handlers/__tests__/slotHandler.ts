@@ -17,7 +17,7 @@ describe('render function slotHandler', () => {
 
   beforeEach(() => {
     mockSlotDescriptor = { description: '' }
-    documentation = new (require('../../Documentation')).Documentation()
+    documentation = new Documentation()
     const mockGetSlotDescriptor = documentation.getSlotDescriptor as jest.Mock
     mockGetSlotDescriptor.mockReturnValue(mockSlotDescriptor)
   })
@@ -54,5 +54,76 @@ describe('render function slotHandler', () => {
       slotHandler(documentation, def)
     }
     expect(documentation.getSlotDescriptor).toHaveBeenCalledWith('myScopedSlot')
+  })
+
+  it('should find scoped slots in render object method', () => {
+    const src = `
+    export default {
+      render(createElement) {
+        return createElement('div', [
+          this.$scopedSlots.myOtherScopedSlot({
+            text: this.message
+          })
+        ])
+      }
+    }
+    `
+    const def = parse(src)
+    if (def) {
+      slotHandler(documentation, def)
+    }
+    expect(documentation.getSlotDescriptor).toHaveBeenCalledWith('myOtherScopedSlot')
+  })
+
+  it('should find slots in jsx render', () => {
+    const src = `
+    export default {
+      render(createElement) {
+        return (<div>, 
+          <slot name="myMain"/>
+        </div>)
+      }
+    }
+    `
+    const def = parse(src)
+    if (def) {
+      slotHandler(documentation, def)
+    }
+    expect(documentation.getSlotDescriptor).toHaveBeenCalledWith('myMain')
+  })
+
+  it('should find default slots in jsx render', () => {
+    const src = `
+    export default {
+      render(createElement) {
+        return (<div>, 
+          <slot/>
+        </div>)
+      }
+    }
+    `
+    const def = parse(src)
+    if (def) {
+      slotHandler(documentation, def)
+    }
+    expect(documentation.getSlotDescriptor).toHaveBeenCalledWith('default')
+  })
+
+  it('should allow describing slots in jsx render', () => {
+    const src = `
+    export default {
+      render(createElement) {
+        return (<div>, 
+          {/** @slot Use this slot header */}
+          <slot/>
+        </div>)
+      }
+    }
+    `
+    const def = parse(src)
+    if (def) {
+      slotHandler(documentation, def)
+    }
+    expect(mockSlotDescriptor.description).toEqual('Use this slot header')
   })
 })
