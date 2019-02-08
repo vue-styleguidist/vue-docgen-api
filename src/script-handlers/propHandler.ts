@@ -6,8 +6,6 @@ import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
-// tslint:disable-next-line:no-var-requires
-
 type ValueLitteral = bt.StringLiteral | bt.BooleanLiteral | bt.NumericLiteral
 
 export default function propHandler(documentation: Documentation, path: NodePath) {

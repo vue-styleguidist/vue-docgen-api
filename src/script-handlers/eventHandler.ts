@@ -16,8 +16,6 @@ export interface TypedParamTag extends ParamTag {
   type: ParamType
 }
 
-// tslint:disable-next-line:no-var-requires
-
 export default function eventHandler(documentation: Documentation, path: NodePath) {
   recast.visit(path.node, {
     visitCallExpression(pathExpression) {

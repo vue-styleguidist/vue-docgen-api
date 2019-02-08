@@ -8,8 +8,6 @@ export interface TypedParamTag extends ParamTag {
   type: ParamType
 }
 
-// tslint:disable-next-line:no-var-requires
-
 export default function slotHandler(documentation: Documentation, path: NodePath) {
   if (bt.isObjectExpression(path.node)) {
     const renderPath = path

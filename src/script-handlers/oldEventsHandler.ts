@@ -6,8 +6,6 @@ import { setEventDescriptor } from '../script-handlers/eventHandler'
 import { parseDocblock } from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
 
-// tslint:disable-next-line:no-var-requires
-
 export default function oldEventsHanlder(
   documentation: Documentation,
   path: NodePath,

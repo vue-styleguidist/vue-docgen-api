@@ -1,12 +1,9 @@
 import * as bt from '@babel/types'
-import { NodePath } from 'ast-types'
 import recast from 'recast'
 import { ASTElement, ASTExpression } from 'vue-template-compiler'
 import buildParser from '../babel-parser'
 import { Documentation } from '../Documentation'
 import { TemplateParserOptions } from '../parse-template'
-
-// tslint:disable-next-line:no-var-requires
 
 const allowRE = /^(v-bind|:)/
 export default function propTemplateHandler(
