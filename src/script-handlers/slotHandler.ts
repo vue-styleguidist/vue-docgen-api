@@ -89,13 +89,18 @@ function getDescription(pathJSX: NodePath<bt.JSXElement>): string {
     const currentNode = siblings[i]
     if (bt.isJSXExpressionContainer(currentNode)) {
       commentExpression = currentNode
+      break
     }
   }
   if (!commentExpression || !commentExpression.expression.innerComments) {
     return ''
   }
   const cmts = commentExpression.expression.innerComments
-  const docBlock = cmts[cmts.length - 1].value.replace(/^\*/, '').trim()
+  const lastComment = cmts[cmts.length - 1]
+  if (lastComment.type !== 'CommentBlock') {
+    return ''
+  }
+  const docBlock = lastComment.value.replace(/^\*/, '').trim()
   const jsDoc = getDoclets(docBlock)
   if (!jsDoc.tags) {
     return ''
