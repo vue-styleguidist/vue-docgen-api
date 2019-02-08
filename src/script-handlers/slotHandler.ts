@@ -78,43 +78,31 @@ function getName(pathJSX: NodePath<bt.JSXElement>): string {
 }
 
 function getDescription(pathJSX: NodePath<bt.JSXElement>): string {
-  let indexInParent = -1
   const siblings = (pathJSX.parentPath.node as bt.JSXElement).children
   if (!siblings) {
     return ''
   }
-  siblings.forEach((node: bt.JSXElement, i: number) => {
-    if (node === pathJSX.node) {
-      indexInParent = i
-    }
-  })
+  const indexInParent = siblings.indexOf(pathJSX.node)
 
   let commentExpression: bt.JSXExpressionContainer | null = null
-  do {
-    const currentNode = siblings[indexInParent]
+  for (let i = indexInParent - 1; i > -1; i--) {
+    const currentNode = siblings[i]
     if (bt.isJSXExpressionContainer(currentNode)) {
       commentExpression = currentNode
     }
-  } while (!commentExpression && indexInParent--)
-  if (commentExpression && commentExpression.expression.innerComments) {
-    const cmts = commentExpression.expression.innerComments
-    const docBlock = cmts[cmts.length - 1].value.replace(/^\*/, '').trim()
-    const jsDoc = getDoclets(docBlock)
-    if (jsDoc.tags) {
-      const slotTags = jsDoc.tags.filter(t => t.title === 'slot')
-if (!jsDoc.tags) {
-  return '';
-}
-
-const slotTags = jsDoc.tags.filter(t => t.title === 'slot')
-if (!slotTags.length) {
-  return ''
-}
-
-return (slotTags[0] as Tag).content.toString()
-        return (slotTags[0] as Tag).content.toString()
-      }
-    }
+  }
+  if (!commentExpression || !commentExpression.expression.innerComments) {
+    return ''
+  }
+  const cmts = commentExpression.expression.innerComments
+  const docBlock = cmts[cmts.length - 1].value.replace(/^\*/, '').trim()
+  const jsDoc = getDoclets(docBlock)
+  if (!jsDoc.tags) {
+    return ''
+  }
+  const slotTags = jsDoc.tags.filter(t => t.title === 'slot')
+  if (slotTags.length) {
+    return (slotTags[0] as Tag).content.toString()
   }
   return ''
 }
