@@ -1,5 +1,6 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import recast from 'recast'
 import { Documentation, ParamTag, ParamType, Tag } from '../Documentation'
 import getDoclets from '../utils/getDoclets'
 
@@ -8,7 +9,6 @@ export interface TypedParamTag extends ParamTag {
 }
 
 // tslint:disable-next-line:no-var-requires
-import recast = require('recast')
 
 export default function slotHandler(documentation: Documentation, path: NodePath) {
   if (bt.isObjectExpression(path.node)) {
@@ -28,8 +28,8 @@ export default function slotHandler(documentation: Documentation, path: NodePath
     const renderValuePath = bt.isObjectProperty(renderPath[0].node)
       ? renderPath[0].get('value')
       : renderPath[0]
-    recast.visit(renderValuePath, {
-      visitCallExpression(pathCall: NodePath<bt.CallExpression>) {
+    recast.visit(renderValuePath.node, {
+      visitCallExpression(pathCall) {
         if (
           bt.isMemberExpression(pathCall.node.callee) &&
           bt.isMemberExpression(pathCall.node.callee.object) &&
@@ -42,7 +42,7 @@ export default function slotHandler(documentation: Documentation, path: NodePath
         }
         this.traverse(pathCall)
       },
-      visitMemberExpression(pathMember: NodePath<bt.MemberExpression>) {
+      visitMemberExpression(pathMember) {
         if (
           bt.isMemberExpression(pathMember.node.object) &&
           bt.isThisExpression(pathMember.node.object.object) &&
@@ -55,11 +55,19 @@ export default function slotHandler(documentation: Documentation, path: NodePath
         }
         this.traverse(pathMember)
       },
-      visitJSXElement(pathJSX: NodePath<bt.JSXElement>) {
+      visitJSXElement(pathJSX) {
         const tagName = pathJSX.node.openingElement.name
+        const nodeJSX = pathJSX.node
+        if (!bt.isJSXElement(nodeJSX)) {
+          this.traverse(pathJSX)
+          return
+        }
         if (bt.isJSXIdentifier(tagName) && tagName.name === 'slot') {
-          const doc = documentation.getSlotDescriptor(getName(pathJSX))
-          doc.description = getDescription(pathJSX)
+          const doc = documentation.getSlotDescriptor(getName(nodeJSX))
+          const parentNode = pathJSX.parentPath.node
+          if (bt.isJSXElement(parentNode)) {
+            doc.description = getDescription(nodeJSX, parentNode.children)
+          }
         }
         this.traverse(pathJSX)
       },
@@ -67,8 +75,8 @@ export default function slotHandler(documentation: Documentation, path: NodePath
   }
 }
 
-function getName(pathJSX: NodePath<bt.JSXElement>): string {
-  const oe = pathJSX.node.openingElement
+function getName(nodeJSX: bt.JSXElement): string {
+  const oe = nodeJSX.openingElement
   const names = oe.attributes.filter(
     (a: bt.JSXAttribute) => bt.isJSXAttribute(a) && a.name.name === 'name',
   ) as bt.JSXAttribute[]
@@ -77,12 +85,11 @@ function getName(pathJSX: NodePath<bt.JSXElement>): string {
   return nameNode && bt.isStringLiteral(nameNode) ? nameNode.value : 'default'
 }
 
-function getDescription(pathJSX: NodePath<bt.JSXElement>): string {
-  const siblings = (pathJSX.parentPath.node as bt.JSXElement).children
+function getDescription(nodeJSX: bt.JSXElement, siblings: bt.Node[]): string {
   if (!siblings) {
     return ''
   }
-  const indexInParent = siblings.indexOf(pathJSX.node)
+  const indexInParent = siblings.indexOf(nodeJSX)
 
   let commentExpression: bt.JSXExpressionContainer | null = null
   for (let i = indexInParent - 1; i > -1; i--) {

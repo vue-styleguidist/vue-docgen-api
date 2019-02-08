@@ -1,11 +1,9 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import recast from 'recast'
 import Map from 'ts-map'
 import isExportedAssignment from './isExportedAssignment'
 import resolveExportDeclaration from './resolveExportDeclaration'
-
-// tslint:disable-next-line:no-var-requires
-import recast = require('recast')
 
 function ignore(): boolean {
   return false
@@ -78,7 +76,6 @@ export default function resolveExportedComponent(ast: bt.File): Map<string, Node
     visitIfStatement: ignore,
     visitWithStatement: ignore,
     visitSwitchStatement: ignore,
-    visitCatchCause: ignore,
     visitWhileStatement: ignore,
     visitDoWhileStatement: ignore,
     visitForStatement: ignore,
@@ -148,13 +145,15 @@ function resolveIdentifier(ast: bt.File, path: NodePath): NodePath | null {
     visitIfStatement: ignore,
     visitWithStatement: ignore,
     visitSwitchStatement: ignore,
-    visitCatchCause: ignore,
     visitWhileStatement: ignore,
     visitDoWhileStatement: ignore,
     visitForStatement: ignore,
     visitForInStatement: ignore,
 
-    visitVariableDeclaration(variablePath: NodePath<bt.VariableDeclaration>) {
+    visitVariableDeclaration(variablePath) {
+      if (!bt.isVariableDeclaration(variablePath.node)) {
+        return false
+      }
       const varID = variablePath.node.declarations[0].id
       if (!varID || !bt.isIdentifier(varID) || varID.name !== varName) {
         return false
@@ -164,7 +163,7 @@ function resolveIdentifier(ast: bt.File, path: NodePath): NodePath | null {
       return false
     },
 
-    visitClassDeclaration(classPath: NodePath<bt.ClassDeclaration>) {
+    visitClassDeclaration(classPath) {
       const classID = classPath.node.id
       if (!classID || !bt.isIdentifier(classID) || classID.name !== varName) {
         return false

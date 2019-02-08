@@ -1,5 +1,6 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import recast from 'recast'
 import {
   BlockTag,
   DocBlockTags,
@@ -16,11 +17,10 @@ export interface TypedParamTag extends ParamTag {
 }
 
 // tslint:disable-next-line:no-var-requires
-import recast = require('recast')
 
 export default function eventHandler(documentation: Documentation, path: NodePath) {
-  recast.visit(path, {
-    visitCallExpression(pathExpression: NodePath<bt.CallExpression>) {
+  recast.visit(path.node, {
+    visitCallExpression(pathExpression) {
       if (
         bt.isMemberExpression(pathExpression.node.callee) &&
         bt.isThisExpression(pathExpression.node.callee.object) &&

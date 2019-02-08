@@ -1,12 +1,12 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import recast from 'recast'
 import { BlockTag, DocBlockTags, Documentation, PropDescriptor } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 // tslint:disable-next-line:no-var-requires
-import recast = require('recast')
 
 type ValueLitteral = bt.StringLiteral | bt.BooleanLiteral | bt.NumericLiteral
 
