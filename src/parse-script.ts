@@ -5,11 +5,9 @@ import recast from 'recast'
 import Map from 'ts-map'
 import buildParser from './babel-parser'
 import { Documentation } from './Documentation'
+import { ParseOptions } from './parse'
 import cacher from './utils/cacher'
 import resolveExportedComponent from './utils/resolveExportedComponent'
-
-// tslint:disable-next-line:no-var-requires
-import { ParseOptions } from './parse'
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found'
 
