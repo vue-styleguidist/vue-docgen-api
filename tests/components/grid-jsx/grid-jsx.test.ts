@@ -109,6 +109,10 @@ describe('tests grid jsx', () => {
     expect(docGrid.methods[0].returns).toMatchObject({ description: 'Test' })
   })
 
+  it('should return slots from the render method', () => {
+    expect(docGrid.slots.header).toMatchObject({ description: 'Use this slot header' })
+  })
+
   it('should match the snapshot', () => {
     expect(docGrid).toMatchSnapshot()
   })
