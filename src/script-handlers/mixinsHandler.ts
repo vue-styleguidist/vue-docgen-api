@@ -21,7 +21,7 @@ export default function mixinsHandler(
 ) {
   const originalDirName = path.dirname(opt.filePath)
 
-  const pathResolver = makePathResolver(originalDirName, opt.aliases)
+  const pathResolver = makePathResolver(originalDirName, opt.alias)
 
   // filter only mixins
   const mixinVariableNames = getMixinsVariableNames(componentDefinition)

@@ -8,7 +8,10 @@ let docButton: ComponentDoc
 describe('tests button', () => {
   beforeAll(done => {
     docButton = parse(button, {
-      '@mixins': path.resolve(__dirname, '../../mixins'),
+      alias: {
+        '@mixins': path.resolve(__dirname, '../../mixins'),
+      },
+      modules: [path.resolve(__dirname, '../../mixins')],
     })
     done()
   })

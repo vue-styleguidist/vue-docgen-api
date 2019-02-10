@@ -10,13 +10,16 @@ import cacher from './utils/cacher'
 
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty'
 
-export interface ParseOptions {
+export interface ParseOptions extends DocGenOptions {
   filePath: string
   /**
    * In what language is the component written
    * @default undefined - let the system decide
    */
   lang?: 'ts' | 'js'
+}
+
+export interface DocGenOptions {
   /**
    * Which exported variables should be looked at
    * @default undefined - means treat all dependencies
@@ -25,7 +28,7 @@ export interface ParseOptions {
   /**
    * What alias should be replaced in requires and imports
    */
-  aliases?: { [alias: string]: string }
+  alias?: { [alias: string]: string }
   /**
    * What directories should be searched when resolving modules
    */

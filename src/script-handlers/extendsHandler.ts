@@ -31,7 +31,7 @@ export default function extendsHandler(
 
   const originalDirName = path.dirname(opt.filePath)
 
-  const pathResolver = makePathResolver(originalDirName, opt.aliases)
+  const pathResolver = makePathResolver(originalDirName, opt.alias)
 
   resolveImmediatelyExportedRequire(pathResolver, extendsFilePath)
 
