@@ -13,7 +13,7 @@ import { ParseOptions } from './parse'
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found'
 
-type Handler = (
+export type Handler = (
   doc: Documentation,
   componentDefinition: NodePath,
   ast: bt.File,
