@@ -10,6 +10,8 @@ import cacher from './utils/cacher'
 
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty'
 
+export { ScriptHandler, TemplateHandler }
+
 export interface ParseOptions extends DocGenOptions {
   filePath: string
   /**
