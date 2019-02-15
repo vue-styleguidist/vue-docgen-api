@@ -1,8 +1,6 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
-
-// tslint:disable-next-line:no-var-requires
-import recast = require('recast')
+import recast from 'recast'
 
 interface ImportedVariable {
   filePath: string

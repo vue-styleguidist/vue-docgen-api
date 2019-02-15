@@ -35,7 +35,7 @@ function getArgFromDecorator(
       const exp = p.get('expression')
       const decoratorIdenifier = bt.isCallExpression(exp.node) ? exp.node.callee : exp.node
       return 'Component' === (bt.isIdentifier(decoratorIdenifier) ? decoratorIdenifier.name : null)
-    })[0]
+    }, null)[0]
     .get('expression')
   if (bt.isCallExpression(expForDecorator.node)) {
     return expForDecorator.get('arguments', 0) as NodePath<

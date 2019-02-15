@@ -1,13 +1,11 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import recast from 'recast'
 import Map from 'ts-map'
 import buildParser from '../babel-parser'
 import cacher from './cacher'
 import resolveImmediatelyExported from './resolveImmediatelyExported'
 import { ImportedVariableSet } from './resolveRequired'
-
-// tslint:disable-next-line:no-var-requires
-import recast = require('recast')
 
 export default function adaptExportsToIEV(
   pathResolver: (path: string, originalDirNameOverride?: string) => string,

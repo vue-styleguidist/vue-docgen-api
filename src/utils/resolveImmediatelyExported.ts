@@ -1,9 +1,7 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import recast from 'recast'
 import { ImportedVariableSet } from './resolveRequired'
-
-// tslint:disable-next-line:no-var-requires
-import recast = require('recast')
 
 export default function(ast: bt.File, variableFilter: string[]): ImportedVariableSet {
   const variables: ImportedVariableSet = {}
@@ -12,11 +10,14 @@ export default function(ast: bt.File, variableFilter: string[]): ImportedVariabl
 
   // get imported variable names and filepath
   recast.visit(ast.program, {
-    visitImportDeclaration(astPath: NodePath<bt.ImportDeclaration>) {
+    visitImportDeclaration(astPath) {
       if (!astPath.node.source) {
         return false
       }
       const filePath = astPath.node.source.value
+      if (typeof filePath !== 'string') {
+        return false
+      }
 
       const specifiers = astPath.get('specifiers')
       specifiers.each((s: NodePath<bt.ImportSpecifier | bt.ImportDefaultSpecifier>) => {
@@ -29,10 +30,13 @@ export default function(ast: bt.File, variableFilter: string[]): ImportedVariabl
   })
 
   recast.visit(ast.program, {
-    visitExportNamedDeclaration(astPath: NodePath<bt.ExportNamedDeclaration>) {
+    visitExportNamedDeclaration(astPath) {
       const specifiers = astPath.get('specifiers')
       if (astPath.node.source) {
         const filePath = astPath.node.source.value
+        if (typeof filePath !== 'string') {
+          return false
+        }
 
         specifiers.each((s: NodePath<bt.ExportSpecifier>) => {
           const varName = s.node.exported.name
@@ -54,7 +58,7 @@ export default function(ast: bt.File, variableFilter: string[]): ImportedVariabl
 
       return false
     },
-    visitExportDefaultDeclaration(astPath: NodePath<bt.ExportDefaultDeclaration>) {
+    visitExportDefaultDeclaration(astPath) {
       if (variableFilter.indexOf('default') > -1) {
         const middleNameDeclaration = astPath.node.declaration
         if (bt.isIdentifier(middleNameDeclaration)) {

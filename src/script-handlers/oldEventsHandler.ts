@@ -1,12 +1,10 @@
 import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
+import recast from 'recast'
 import { BlockTag, Documentation, Tag } from '../Documentation'
 import { setEventDescriptor } from '../script-handlers/eventHandler'
 import { parseDocblock } from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
-
-// tslint:disable-next-line:no-var-requires
-import recast = require('recast')
 
 export default function oldEventsHanlder(
   documentation: Documentation,
