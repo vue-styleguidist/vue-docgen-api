@@ -20,7 +20,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast
     if (ast) {
-      traverse(ast, doc, [propHandler], { functional: true })
+      traverse(ast, doc, [propHandler], { functional: true, rootLeadingComment: '' })
       expect(doc.toObject().props).toMatchObject({ size: { type: { name: 'undefined' } } })
     } else {
       fail()
@@ -40,7 +40,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast
     if (ast) {
-      traverse(ast, doc, [propHandler], { functional: true })
+      traverse(ast, doc, [propHandler], { functional: true, rootLeadingComment: '' })
       expect(doc.toObject().props).toMatchObject({ name: { type: { name: 'undefined' } } })
     } else {
       fail()
@@ -58,7 +58,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast
     if (ast) {
-      traverse(ast, doc, [propHandler], { functional: true })
+      traverse(ast, doc, [propHandler], { functional: true, rootLeadingComment: '' })
       expect(doc.toObject().props).toBeUndefined()
     } else {
       fail()
@@ -76,7 +76,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast
     if (ast) {
-      traverse(ast, doc, [propHandler], { functional: true })
+      traverse(ast, doc, [propHandler], { functional: true, rootLeadingComment: '' })
       expect(doc.toObject().props).toBeUndefined()
     } else {
       fail()

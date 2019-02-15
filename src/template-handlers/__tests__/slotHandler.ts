@@ -9,6 +9,28 @@ describe('slotHandler', () => {
     doc = new Documentation()
   })
 
+  it('should pick comments at the beginning of templates', () => {
+    const ast = compile(
+      [
+        '<slot name="first">',
+        '  <div>',
+        '    <h1>titleof the template</h1>',
+        '  </div>',
+        '</slot>',
+      ].join('\n'),
+      { comments: true },
+    ).ast
+    if (ast) {
+      traverse(ast, doc, [slotHandler], {
+        functional: false,
+        rootLeadingComment: '@slot first slot found',
+      })
+      expect(doc.toObject().slots.first).toMatchObject({ description: 'first slot found' })
+    } else {
+      fail()
+    }
+  })
+
   it('should pick comments before slots', () => {
     const ast = compile(
       [
@@ -21,7 +43,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast
     if (ast) {
-      traverse(ast, doc, [slotHandler], { functional: false })
+      traverse(ast, doc, [slotHandler], { functional: false, rootLeadingComment: '' })
       expect(doc.toObject().slots.default).toMatchObject({ description: 'a default slot' })
     } else {
       fail()
@@ -40,7 +62,7 @@ describe('slotHandler', () => {
       { comments: true },
     ).ast
     if (ast) {
-      traverse(ast, doc, [slotHandler], { functional: false })
+      traverse(ast, doc, [slotHandler], { functional: false, rootLeadingComment: '' })
       expect(doc.toObject().slots.oeuf).toMatchObject({ description: 'a slot named oeuf' })
     } else {
       fail()
