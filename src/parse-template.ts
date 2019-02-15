@@ -5,6 +5,7 @@ import cacher from './utils/cacher'
 
 export interface TemplateParserOptions {
   functional: boolean
+  rootLeadingComment: string
 }
 
 export type Handler = (
@@ -25,8 +26,16 @@ export default function parseTemplate(
         ? pug.render(tpl.content, { filename: filePath })
         : tpl.content
     const ast = cacher(() => compile(template, { comments: true }).ast, template)
+    const rootLeadingCommentArray = /^<!--(.+)-->/.exec(template.trim())
+    const rootLeadingComment =
+      rootLeadingCommentArray && rootLeadingCommentArray.length > 1
+        ? rootLeadingCommentArray[1].trim()
+        : ''
     if (ast) {
-      traverse(ast, documentation, handlers, { functional: !!tpl.attrs.functional })
+      traverse(ast, documentation, handlers, {
+        functional: !!tpl.attrs.functional,
+        rootLeadingComment,
+      })
     }
   }
 }
