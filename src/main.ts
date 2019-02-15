@@ -1,20 +1,33 @@
 import { ComponentDoc, Documentation } from './Documentation'
-import { parseFile, parseSource as parseSourceLocal } from './parse'
+import { DocGenOptions, parseFile, ParseOptions, parseSource as parseSourceLocal } from './parse'
+export { ScriptHandler, TemplateHandler } from './parse'
+export { ComponentDoc, DocGenOptions, ParseOptions, Documentation }
 
-export { ComponentDoc }
-
-export function parse(filePath: string, aliases?: { [alias: string]: string }): ComponentDoc {
+export function parse(
+  filePath: string,
+  opts?: DocGenOptions | { [alias: string]: string },
+): ComponentDoc {
   const doc = new Documentation()
-  parseFile(doc, { filePath, aliases })
+  const options: ParseOptions = isOptionsObject(opts)
+    ? { ...opts, filePath }
+    : { filePath, alias: opts }
+  parseFile(doc, options)
   return doc.toObject()
 }
 
 export function parseSource(
   source: string,
   filePath: string,
-  aliases?: { [alias: string]: string },
+  opts?: DocGenOptions | { [alias: string]: string },
 ): ComponentDoc {
   const doc = new Documentation()
-  parseSourceLocal(doc, source, { filePath, aliases })
+  const options: ParseOptions = isOptionsObject(opts)
+    ? { ...opts, filePath }
+    : { filePath, alias: opts }
+  parseSourceLocal(doc, source, options)
   return doc.toObject()
+}
+
+function isOptionsObject(opts: any): opts is DocGenOptions {
+  return !!opts && !!opts.alias
 }

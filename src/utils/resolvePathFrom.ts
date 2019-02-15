@@ -1,12 +1,12 @@
 const SUFFIXES = ['', '.js', '.ts', '.vue', '/index.js', '/index.ts']
 
-export default function resolvePathFrom(path: string, from: string): string {
+export default function resolvePathFrom(path: string, from: string[]): string {
   let finalPath = ''
   SUFFIXES.forEach(s => {
     if (!finalPath.length) {
       try {
         finalPath = require.resolve(`${path}${s}`, {
-          paths: [from],
+          paths: from,
         })
       } catch (e) {
         // eat the error

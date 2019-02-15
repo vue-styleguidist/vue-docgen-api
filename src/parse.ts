@@ -2,19 +2,47 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { parseComponent, SFCDescriptor } from 'vue-template-compiler'
 import { Documentation } from './Documentation'
-import parseScript from './parse-script'
-import parseTemplate from './parse-template'
-import handlers from './script-handlers'
+import parseScript, { Handler as ScriptHandler } from './parse-script'
+import parseTemplate, { Handler as TemplateHandler } from './parse-template'
+import scriptHandlers from './script-handlers'
 import templateHandlers from './template-handlers'
 import cacher from './utils/cacher'
 
 const ERROR_EMPTY_DOCUMENT = 'The passed source is empty'
 
-export interface ParseOptions {
+export { ScriptHandler, TemplateHandler }
+
+export interface ParseOptions extends DocGenOptions {
   filePath: string
+  /**
+   * In what language is the component written
+   * @default undefined - let the system decide
+   */
   lang?: 'ts' | 'js'
+}
+
+export interface DocGenOptions {
+  /**
+   * Which exported variables should be looked at
+   * @default undefined - means treat all dependencies
+   */
   nameFilter?: string[]
-  aliases?: { [alias: string]: string }
+  /**
+   * What alias should be replaced in requires and imports
+   */
+  alias?: { [alias: string]: string }
+  /**
+   * What directories should be searched when resolving modules
+   */
+  modules?: string[]
+  /**
+   * Handlers that will be added at the end of the script analysis
+   */
+  addScriptHandlers?: ScriptHandler[]
+  /**
+   * Handlers that will be added at the end of the template analysis
+   */
+  addTemplateHandlers?: TemplateHandler[]
 }
 
 /**
@@ -50,7 +78,13 @@ export function parseSource(documentation: Documentation, source: string, opt: P
 
   // get slots and props from template
   if (parts && parts.template) {
-    parseTemplate(parts.template, documentation, templateHandlers, opt.filePath)
+    const addTemplateHandlers: TemplateHandler[] = opt.addTemplateHandlers || []
+    parseTemplate(
+      parts.template,
+      documentation,
+      [...templateHandlers, ...addTemplateHandlers],
+      opt.filePath,
+    )
   }
 
   const scriptSource = parts ? (parts.script ? parts.script.content : undefined) : source
@@ -60,8 +94,8 @@ export function parseSource(documentation: Documentation, source: string, opt: P
       /\.tsx?$/i.test(path.extname(opt.filePath))
         ? 'ts'
         : 'js'
-
-    parseScript(scriptSource, documentation, handlers, opt)
+    const addScriptHandlers: ScriptHandler[] = opt.addScriptHandlers || []
+    parseScript(scriptSource, documentation, [...scriptHandlers, ...addScriptHandlers], opt)
   }
 
   if (!documentation.get('displayName')) {

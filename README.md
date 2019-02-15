@@ -29,14 +29,31 @@ var vueDocs = require('vue-docgen-api')
 var componentInfo = vueDocs.parse(filePath)
 ```
 
-or with typescript/es6
+or with typescript
 
 ```ts
 import { parse } from 'vue-docgen-api'
-var componentInfo = parse(filePath)
+var componentInfo = parse(filePath);
+var componentInfo = vueDocs.parse(filePath, {
+  alias: {"@assets": path.resolve(__dirname, "src/assets")},
+  resolve: [path.resolve(__dirname, "src")],
+  addScriptHandler: [function(  
+    documentation: Documentation,
+    componentDefinition: NodePath,
+    astPath: bt.File,
+    opt: ParseOptions){
+      // handle custom code in script
+  }],
+  addTemplateHandler: [function(
+    documentation: Documentation,
+    templateAst: ASTElement,
+    options: TemplateParserOptions){
+      // handle custom directives here
+  }]
+})
 ```
 
-### parse(filePath)
+### parse(filePath:string, options?: DocGenOptions)
 
 | Parameter | Type   | Description   |
 | --------- | ------ | ------------- |
