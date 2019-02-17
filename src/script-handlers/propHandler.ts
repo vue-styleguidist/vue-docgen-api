@@ -47,10 +47,11 @@ export default function propHandler(documentation: Documentation, path: NodePath
           propDescriptor.description = jsDoc.description
         }
 
-        if (bt.isArrayExpression(propValuePath.node)) {
-          // I am not sure this case is valid vuejs
-          propDescriptor.type = { name: 'array' }
+        if (bt.isArrayExpression(propValuePath.node) || bt.isIdentifier(propValuePath.node)) {
+          // if it's an immediately typed property, resolve its type immediately
+          propDescriptor.type = getTypeFromTypePath(propValuePath)
         } else if (bt.isObjectExpression(propValuePath.node)) {
+          // standard default + type + required
           const propPropertiesPath = propValuePath
             .get('properties')
             .filter((p: NodePath) => bt.isObjectProperty(p.node)) as Array<
@@ -65,10 +66,8 @@ export default function propHandler(documentation: Documentation, path: NodePath
 
           // default
           describeDefault(propPropertiesPath, propDescriptor)
-        } else if (bt.isIdentifier(propValuePath.node)) {
-          // contents of the prop is it's type
-          propDescriptor.type = getTypeFromTypePath(propValuePath)
         } else {
+          // in any other case, just display the code for the typing
           propDescriptor.type = {
             name: recast.print(prop.get('value')).code,
             func: true,
