@@ -44,6 +44,8 @@ export default function extendsHandler(
       filePath: fullFilePath,
       nameFilter: [extendsFilePath[extendsVariableName].exportName],
     })
+    // make sure that the parent name does not bleed on the new doc
+    documentation.set('displayName', null)
   }
 }
 

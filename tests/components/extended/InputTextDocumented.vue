@@ -11,7 +11,6 @@ import Base from './Base.vue'
  * Description InputTextDocumented
  */
 export default {
-  name: 'InputTextDocumented',
   extends: Base,
   props: {
     placeholder: {
