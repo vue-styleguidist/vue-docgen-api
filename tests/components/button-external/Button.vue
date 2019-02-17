@@ -5,4 +5,4 @@
   </button>
 </template>
 
-<script src='./button.ts'>
+<script src='./button.ts'></script>
