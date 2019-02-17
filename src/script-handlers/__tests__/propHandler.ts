@@ -138,6 +138,19 @@ describe('propHandler', () => {
       })
     })
 
+    it('should return the right props composite string|number', () => {
+      const src = `
+        export default {
+          props: {
+            test: [String, Number]
+          }
+        }
+        `
+      tester(src, {
+        type: { name: 'string|number' },
+      })
+    })
+
     it('should deduce the prop type from the default value', () => {
       const src = `
         export default {
