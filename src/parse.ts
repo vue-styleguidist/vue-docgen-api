@@ -93,7 +93,7 @@ export function parseSource(documentation: Documentation, source: string, opt: P
     opt.lang =
       (parts && parts.script && parts.script.attrs && parts.script.attrs.lang === 'ts') ||
       /\.tsx?$/i.test(path.extname(opt.filePath)) ||
-      /\.tsx?$/i.test(path.extname(extSrc))
+      /\.tsx?$/i.test(extSrc)
         ? 'ts'
         : 'js'
     const addScriptHandlers: ScriptHandler[] = opt.addScriptHandlers || []
