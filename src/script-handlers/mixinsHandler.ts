@@ -50,6 +50,7 @@ export default function mixinsHandler(
       parseFile(documentation, { ...opt, filePath: fullFilePath, nameFilter: vars })
     }
   })
+  documentation.set('displayName', null)
 }
 
 function getMixinsVariableNames(compDef: NodePath): string[] | undefined {

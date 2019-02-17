@@ -7,12 +7,7 @@ export function parse(
   filePath: string,
   opts?: DocGenOptions | { [alias: string]: string },
 ): ComponentDoc {
-  const doc = new Documentation()
-  const options: ParseOptions = isOptionsObject(opts)
-    ? { ...opts, filePath }
-    : { filePath, alias: opts }
-  parseFile(doc, options)
-  return doc.toObject()
+  return parsePrimitive((doc, options) => parseFile(doc, options), filePath, opts)
 }
 
 export function parseSource(
@@ -20,14 +15,22 @@ export function parseSource(
   filePath: string,
   opts?: DocGenOptions | { [alias: string]: string },
 ): ComponentDoc {
-  const doc = new Documentation()
-  const options: ParseOptions = isOptionsObject(opts)
-    ? { ...opts, filePath }
-    : { filePath, alias: opts }
-  parseSourceLocal(doc, source, options)
-  return doc.toObject()
+  return parsePrimitive((doc, options) => parseSourceLocal(doc, source, options), filePath, opts)
 }
 
 function isOptionsObject(opts: any): opts is DocGenOptions {
   return !!opts && !!opts.alias
+}
+
+function parsePrimitive(
+  createDoc: (doc: Documentation, opts: ParseOptions) => void,
+  filePath: string,
+  opts?: DocGenOptions | { [alias: string]: string },
+): ComponentDoc {
+  const doc = new Documentation()
+  const options: ParseOptions = isOptionsObject(opts)
+    ? { ...opts, filePath }
+    : { filePath, alias: opts }
+  createDoc(doc, options)
+  return doc.toObject()
 }
