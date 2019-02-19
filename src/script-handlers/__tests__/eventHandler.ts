@@ -93,4 +93,22 @@ describe('eventHandler', () => {
     expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
     expect(mockEventDescriptor).toMatchObject(eventComp)
   })
+
+  it('should find events names stored in variables', () => {
+    const src = `
+    const successEventName = 'success';
+    export default {
+      methods: {
+        testEmit() {
+            this.$emit(successEventName, 1, 2)
+        }
+      }
+    }
+    `
+    const def = parse(src)
+    if (def) {
+      eventHandler(documentation, def)
+    }
+    expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
+  })
 })
