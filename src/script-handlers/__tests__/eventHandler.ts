@@ -1,3 +1,4 @@
+import * as bt from '@babel/types'
 import { NodePath } from 'ast-types'
 import babylon from '../../babel-parser'
 import { Documentation, EventDescriptor } from '../../Documentation'
@@ -6,9 +7,9 @@ import eventHandler from '../eventHandler'
 
 jest.mock('../../Documentation')
 
-function parse(src: string): NodePath | undefined {
+function parse(src: string): { component: NodePath | undefined; ast: bt.File } {
   const ast = babylon().parse(src)
-  return resolveExportedComponent(ast).get('default')
+  return { component: resolveExportedComponent(ast).get('default'), ast }
 }
 
 describe('eventHandler', () => {
@@ -38,8 +39,8 @@ describe('eventHandler', () => {
     }
     `
     const def = parse(src)
-    if (def) {
-      eventHandler(documentation, def)
+    if (def.component) {
+      eventHandler(documentation, def.component, def.ast)
     }
     const eventComp: EventDescriptor = {
       description: 'Describe the event',
@@ -73,8 +74,8 @@ describe('eventHandler', () => {
     }
     `
     const def = parse(src)
-    if (def) {
-      eventHandler(documentation, def)
+    if (def.component) {
+      eventHandler(documentation, def.component, def.ast)
     }
     const eventComp: EventDescriptor = {
       description: '',
@@ -92,5 +93,23 @@ describe('eventHandler', () => {
     }
     expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
     expect(mockEventDescriptor).toMatchObject(eventComp)
+  })
+
+  it('should find events names stored in variables', () => {
+    const src = `
+    const successEventName = 'success';
+    export default {
+      methods: {
+        testEmit() {
+            this.$emit(successEventName, 1, 2)
+        }
+      }
+    }
+    `
+    const def = parse(src)
+    if (def.component) {
+      eventHandler(documentation, def.component, def.ast)
+    }
+    expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
   })
 })

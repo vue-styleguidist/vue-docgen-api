@@ -11,12 +11,17 @@ import {
 } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
+import resolveIdentifier from '../utils/resolveIdentifier'
 
 export interface TypedParamTag extends ParamTag {
   type: ParamType
 }
 
-export default function eventHandler(documentation: Documentation, path: NodePath) {
+export default function eventHandler(
+  documentation: Documentation,
+  path: NodePath,
+  astPath: bt.File,
+) {
   recast.visit(path.node, {
     visitCallExpression(pathExpression) {
       if (
@@ -30,12 +35,16 @@ export default function eventHandler(documentation: Documentation, path: NodePat
           return false
         }
 
-        const firstArg = args[0]
-        if (!bt.isStringLiteral(firstArg)) {
+        let firstArg = pathExpression.get('arguments', 0)
+        if (bt.isIdentifier(firstArg.node)) {
+          firstArg = resolveIdentifier(astPath, firstArg)
+        }
+
+        if (!bt.isStringLiteral(firstArg.node)) {
           return false
         }
 
-        const eventName = firstArg.value
+        const eventName = firstArg.node.value
 
         // if this event is documented somewhere else leave it alone
         const evtDescriptor = documentation.getEventDescriptor(eventName)
