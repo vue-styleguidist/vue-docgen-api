@@ -78,6 +78,17 @@ export function parseSource(documentation: Documentation, source: string, opt: P
 
   // get slots and props from template
   if (parts && parts.template) {
+    const extTemplSrc: string =
+      parts && parts.template && parts.template.attrs ? parts.template.attrs.src : ''
+    const extTemplSource =
+      extTemplSrc && extTemplSrc.length
+        ? fs.readFileSync(path.resolve(path.dirname(opt.filePath), extTemplSrc), {
+            encoding: 'utf-8',
+          })
+        : ''
+    if (extTemplSource.length) {
+      parts.template.content = extTemplSource
+    }
     const addTemplateHandlers: TemplateHandler[] = opt.addTemplateHandlers || []
     parseTemplate(
       parts.template,
@@ -87,15 +98,33 @@ export function parseSource(documentation: Documentation, source: string, opt: P
     )
   }
 
-  const scriptSource = parts ? (parts.script ? parts.script.content : undefined) : source
+  const extSrc: string = parts && parts.script && parts.script.attrs ? parts.script.attrs.src : ''
+  const extSource =
+    extSrc && extSrc.length
+      ? fs.readFileSync(path.resolve(path.dirname(opt.filePath), extSrc), {
+          encoding: 'utf-8',
+        })
+      : ''
+
+  const scriptSource = extSource.length
+    ? extSource
+    : parts
+    ? parts.script
+      ? parts.script.content
+      : undefined
+    : source
   if (scriptSource) {
     opt.lang =
       (parts && parts.script && parts.script.attrs && parts.script.attrs.lang === 'ts') ||
-      /\.tsx?$/i.test(path.extname(opt.filePath))
+      /\.tsx?$/i.test(path.extname(opt.filePath)) ||
+      /\.tsx?$/i.test(extSrc)
         ? 'ts'
         : 'js'
+
     const addScriptHandlers: ScriptHandler[] = opt.addScriptHandlers || []
-    parseScript(scriptSource, documentation, [...scriptHandlers, ...addScriptHandlers], opt)
+    if (scriptSource) {
+      parseScript(scriptSource, documentation, [...scriptHandlers, ...addScriptHandlers], opt)
+    }
   }
 
   if (!documentation.get('displayName')) {
