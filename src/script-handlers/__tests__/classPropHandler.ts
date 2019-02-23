@@ -44,6 +44,21 @@ describe('propHandler', () => {
       tester(src, {})
       expect(documentation.getPropDescriptor).not.toHaveBeenCalledWith('someData')
     })
+
+    it('should find prop even if it is named readonly', () => {
+      const src = `
+        @Component
+        export default class MyComp {
+          @Prop({
+            type: Boolean,
+            default: false
+          })
+          readonly!: boolean;
+        }`
+      tester(src, {})
+      expect(documentation.getPropDescriptor).toHaveBeenCalledWith('readonly')
+    })
+
     it('should detect all data that have the prop decorator', () => {
       const src = `
         @Component
