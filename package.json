@@ -34,7 +34,7 @@
   "license": "MIT",
   "homepage": "https://github.com/vue-styleguidist/vue-docgen-api#readme",
   "dependencies": {
-    "@babel/parser": "^7.2.3",
+    "@babel/parser": "^7.3.3",
     "@babel/types": "^7.0.0",
     "ast-types": "^0.12.2",
     "hash-sum": "^1.0.2",
@@ -51,10 +51,10 @@
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.18",
     "@types/pug": "^2.0.4",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "lint-staged": "^7.2.0",
     "prettier": "^1.14.2",
-    "ts-jest": "^23.10.5",
+    "ts-jest": "^24.0.0",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.17.0",
     "vue-property-decorator": "^7.2.0"
