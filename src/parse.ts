@@ -78,6 +78,17 @@ export function parseSource(documentation: Documentation, source: string, opt: P
 
   // get slots and props from template
   if (parts && parts.template) {
+    const extTemplSrc: string =
+      parts && parts.template && parts.template.attrs ? parts.template.attrs.src : ''
+    const extTemplSource =
+      extTemplSrc && extTemplSrc.length
+        ? fs.readFileSync(path.resolve(path.dirname(opt.filePath), extTemplSrc), {
+            encoding: 'utf-8',
+          })
+        : ''
+    if (extTemplSource.length) {
+      parts.template.content = extTemplSource
+    }
     const addTemplateHandlers: TemplateHandler[] = opt.addTemplateHandlers || []
     parseTemplate(
       parts.template,
