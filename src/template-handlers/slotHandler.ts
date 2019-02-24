@@ -17,6 +17,10 @@ export default function slotHandler(
 
     const slotDescriptor = documentation.getSlotDescriptor(name)
 
+    if (bindings && Object.keys(bindings).length) {
+      slotDescriptor.scoped = true
+    }
+
     slotDescriptor.bindings = bindings
     let comment = ''
     if (templateAst.parent) {
@@ -34,7 +38,7 @@ export default function slotHandler(
       const slotSiblingsBeforeSlot = slotSiblings.slice(0, currentSlotIndex).reverse()
 
       for (const potentialComment of slotSiblingsBeforeSlot) {
-        // if there is text between the slot and the comment ignore
+        // if there is text between the slot and the comment, ignore
         if (
           potentialComment.type !== 3 ||
           (!potentialComment.isComment && potentialComment.text.trim())

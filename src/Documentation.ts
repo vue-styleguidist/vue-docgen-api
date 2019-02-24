@@ -67,6 +67,7 @@ export interface MethodDescriptor {
 export interface SlotDescriptor {
   description?: string
   bindings?: Record<string, any>
+  scoped?: boolean
 }
 
 export interface ComponentDoc {

@@ -68,4 +68,25 @@ describe('slotHandler', () => {
       fail()
     }
   })
+
+  it('should detect scoped slots', () => {
+    const ast = compile(
+      [
+        '<div title="a list of item with a scope" >',
+        '  <!-- @slot a slot named oeuf -->',
+        '  <slot name="oeuf" v-for="item in items" :item="item"/>',
+        '</div>',
+      ].join('\n'),
+      { comments: true },
+    ).ast
+    if (ast) {
+      traverse(ast, doc, [slotHandler], { functional: false, rootLeadingComment: '' })
+      expect(doc.toObject().slots.oeuf).toMatchObject({
+        scoped: true,
+        description: 'a slot named oeuf',
+      })
+    } else {
+      fail()
+    }
+  })
 })
