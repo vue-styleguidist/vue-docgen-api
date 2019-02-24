@@ -8,6 +8,7 @@ import {
   EventDescriptor,
   ParamTag,
   ParamType,
+  Tag,
 } from '../Documentation'
 import getDocblock from '../utils/getDocblock'
 import getDoclets from '../utils/getDoclets'
@@ -34,24 +35,31 @@ export default function eventHandler(
         if (!args.length) {
           return false
         }
+        // fetch the leading comments on the wrapping expression
+        const docblock = getDocblock(pathExpression.parentPath)
+        const doclets = getDoclets(docblock || '')
+        let eventName: string
+        const eventTags = doclets.tags ? doclets.tags.filter(d => d.title === 'event') : []
 
-        let firstArg = pathExpression.get('arguments', 0)
-        if (bt.isIdentifier(firstArg.node)) {
-          firstArg = resolveIdentifier(astPath, firstArg)
+        // if someone wants to document it with anything else, they can force it
+        if (eventTags.length) {
+          eventName = (eventTags[0] as Tag).content as string
+        } else {
+          let firstArg = pathExpression.get('arguments', 0)
+          if (bt.isIdentifier(firstArg.node)) {
+            firstArg = resolveIdentifier(astPath, firstArg)
+          }
+
+          if (!bt.isStringLiteral(firstArg.node)) {
+            return false
+          }
+          eventName = firstArg.node.value
         }
-
-        if (!bt.isStringLiteral(firstArg.node)) {
-          return false
-        }
-
-        const eventName = firstArg.node.value
 
         // if this event is documented somewhere else leave it alone
         const evtDescriptor = documentation.getEventDescriptor(eventName)
 
-        // fetch the leading comments on the wrapping expression
-        const docblock = getDocblock(pathExpression.parentPath)
-        setEventDescriptor(evtDescriptor, getDoclets(docblock || ''))
+        setEventDescriptor(evtDescriptor, doclets)
 
         if (args.length > 1 && !evtDescriptor.type) {
           evtDescriptor.type = {

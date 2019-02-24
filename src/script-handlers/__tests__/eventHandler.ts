@@ -112,4 +112,24 @@ describe('eventHandler', () => {
     }
     expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
   })
+
+  it('should find events whose names are only spcified in the JSDoc', () => {
+    const src = `
+    export default {
+      methods: {
+        testEmit() {
+            /**
+             * @event success
+             */
+            this.$emit(A.successEventName, 1, 2)
+        }
+      }
+    }
+    `
+    const def = parse(src)
+    if (def.component) {
+      eventHandler(documentation, def.component, def.ast)
+    }
+    expect(documentation.getEventDescriptor).toHaveBeenCalledWith('success')
+  })
 })
