@@ -22,4 +22,8 @@ describe('tests wrapper with root slot', () => {
   it('should show the slot as scoped', () => {
     expect(docButton.slots.footer.scoped).toBeTruthy()
   })
+
+  it('should match the reference for the footer slot', () => {
+    expect(docButton.slots.footer).toMatchSnapshot()
+  })
 })

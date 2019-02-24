@@ -17,7 +17,7 @@ export default function slotHandler(
 
     const slotDescriptor = documentation.getSlotDescriptor(name)
 
-    if (bindings && bindings !== {}) {
+    if (bindings && Object.keys(bindings).length) {
       slotDescriptor.scoped = true
     }
 
