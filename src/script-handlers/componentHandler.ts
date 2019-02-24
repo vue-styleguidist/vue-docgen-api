@@ -6,6 +6,20 @@ import getDoclets from '../utils/getDoclets'
 import transformTagsIntoObject from '../utils/transformTagsIntoObject'
 
 export default function propHandler(documentation: Documentation, path: NodePath) {
+  // deal with functional flag
+  if (bt.isObjectExpression(path.node)) {
+    const functionalPath = path
+      .get('properties')
+      .filter((p: NodePath) => bt.isObjectProperty(p.node) && p.node.key.name === 'functional')
+
+    if (functionalPath.length) {
+      const functionalValue = functionalPath[0].get('value').node
+      if (bt.isBooleanLiteral(functionalValue)) {
+        documentation.set('functional', functionalValue.value)
+      }
+    }
+  }
+
   let componentCommentedPath = path.parentPath
   // in case of Vue.extend() structure
   if (bt.isCallExpression(componentCommentedPath.node)) {

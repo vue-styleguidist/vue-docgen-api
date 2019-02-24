@@ -76,4 +76,17 @@ describe('componentHandler', () => {
       version: [{ description: '12.5.7', title: 'version' }],
     })
   })
+
+  it('should detect functional flags', () => {
+    const src = `
+    export default {
+      functional:true
+    }
+    `
+    const def = parse(src).get('default')
+    if (def) {
+      componentHandler(documentation, def)
+    }
+    expect(documentation.set).toHaveBeenCalledWith('functional', true)
+  })
 })

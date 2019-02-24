@@ -31,9 +31,14 @@ export default function parseTemplate(
       rootLeadingCommentArray && rootLeadingCommentArray.length > 1
         ? rootLeadingCommentArray[1].trim()
         : ''
+
+    const functional = !!tpl.attrs.functional
+    if (functional) {
+      documentation.set('functional', functional)
+    }
     if (ast) {
       traverse(ast, documentation, handlers, {
-        functional: !!tpl.attrs.functional,
+        functional,
         rootLeadingComment,
       })
     }
