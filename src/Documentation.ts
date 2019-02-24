@@ -147,6 +147,7 @@ export class Documentation {
     })
 
     return {
+      ...obj,
       // initialize non null params
       description: obj.description || '',
       tags: obj.tags || {},

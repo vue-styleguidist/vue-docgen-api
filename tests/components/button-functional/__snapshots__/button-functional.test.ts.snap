@@ -5,6 +5,7 @@ Object {
   "description": "",
   "displayName": "MyButton",
   "events": Object {},
+  "functional": true,
   "methods": Array [],
   "props": Object {
     "default": Object {
