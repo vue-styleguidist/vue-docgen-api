@@ -45,14 +45,11 @@ describe('propHandler', () => {
       expect(documentation.getPropDescriptor).not.toHaveBeenCalledWith('someData')
     })
 
-    it('should find prop even if it is named readonly', () => {
+    it('should find prop even if it is a non null prop named readonly', () => {
       const src = `
-        @Component
-        export default class MyComp {
-          @Prop({
-            type: Boolean,
-            default: false
-          })
+      @Component
+      export default class MyComp {
+          @Prop
           readonly!: boolean;
         }`
       tester(src, {})
