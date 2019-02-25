@@ -198,6 +198,21 @@ describe('propHandler', () => {
         },
       })
     })
+
+    it('should still return props with delegated types', () => {
+      const src = [
+        'export default {',
+        '  props: {',
+        "    toto",
+        '  }',
+        '}',
+      ].join('\n')
+      tester(src, {
+        type: {
+          name: "undefined",
+        },
+      })
+    })
   })
 
   describe('required', () => {

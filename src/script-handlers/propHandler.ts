@@ -108,13 +108,15 @@ export function describeType(
   }
 }
 
+const VALID_VUE_TYPES = ["string", "number", "boolean", "array", "object", "date", "function", "symbol"]
+
 function getTypeFromTypePath(typePath: NodePath): { name: string; func?: boolean } {
   const typeNode = typePath.node
   const typeName = bt.isArrayExpression(typeNode)
-    ? typeNode.elements
-        .map(t => (t && bt.isIdentifier(t) ? t.name.toLowerCase() : 'undefined'))
+    ? typePath.get("elements")
+        .map((t: NodePath) => getTypeFromTypePath(t).name)
         .join('|')
-    : typeNode && bt.isIdentifier(typeNode)
+    : typeNode && bt.isIdentifier(typeNode) && VALID_VUE_TYPES.indexOf(typeNode.name.toLowerCase()) > -1
     ? typeNode.name.toLowerCase()
     : 'undefined'
   return {
