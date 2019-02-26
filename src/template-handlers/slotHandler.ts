@@ -1,6 +1,7 @@
-import { ASTElement, ASTNode } from 'vue-template-compiler'
+import { ASTElement } from 'vue-template-compiler'
 import { Documentation } from '../Documentation'
 import { TemplateParserOptions } from '../parse-template'
+import extractLeadingComment from '../utils/extractLeadingComment'
 
 export default function slotHandler(
   documentation: Documentation,
@@ -22,45 +23,12 @@ export default function slotHandler(
     }
 
     slotDescriptor.bindings = bindings
-    let comment = ''
-    if (templateAst.parent) {
-      const slotSiblings: ASTNode[] = templateAst.parent.children
-      // First find the position of the slot in the list
-      let i = slotSiblings.length - 1
-      let currentSlotIndex = -1
-      do {
-        if (slotSiblings[i] === templateAst) {
-          currentSlotIndex = i
-        }
-      } while (currentSlotIndex < 0 && i--)
 
-      // Find the first leading comment node as a description of the slot
-      const slotSiblingsBeforeSlot = slotSiblings.slice(0, currentSlotIndex).reverse()
-
-      for (const potentialComment of slotSiblingsBeforeSlot) {
-        // if there is text between the slot and the comment, ignore
-        if (
-          potentialComment.type !== 3 ||
-          (!potentialComment.isComment && potentialComment.text.trim())
-        ) {
-          break
-        }
-
-        if (
-          potentialComment.isComment &&
-          !(
-            templateAst.parent.tag === 'slot' && templateAst.parent.children[0] === potentialComment
-          )
-        ) {
-          comment = potentialComment.text.trim()
-
-          break
-        }
-      }
-    } else if (options.rootLeadingComment.length) {
-      comment = options.rootLeadingComment
-    }
-
+    const comment = extractLeadingComment(
+      templateAst.parent,
+      templateAst,
+      options.rootLeadingComment,
+    )
     if (comment.length && comment.search(/\@slot/) !== -1) {
       slotDescriptor.description = comment.replace('@slot', '').trim()
     }

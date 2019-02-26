@@ -14,14 +14,19 @@ describe('slotHandler', () => {
       [
         '<div>',
         '  <h1>titleof the template</h1>',
-        '  <button :style="`width:${props.size}`"></button>',
+        '  <!-- @prop {number} size width of the button -->',
+        '  <!-- @prop {string} value value in the form -->',
+        '  <button :style="`width:${props.size}`" :value="props.value"></button>',
         '</div>',
       ].join('\n'),
       { comments: true },
     ).ast
     if (ast) {
       traverse(ast, doc, [propHandler], { functional: true, rootLeadingComment: '' })
-      expect(doc.toObject().props).toMatchObject({ size: { type: { name: 'undefined' } } })
+      expect(doc.toObject().props).toMatchObject({
+        size: { type: { name: 'number' }, description: 'width of the button' },
+        value: { type: { name: 'string' }, description: 'value in the form' },
+      })
     } else {
       fail()
     }
@@ -33,7 +38,9 @@ describe('slotHandler', () => {
         '<div>',
         '  <h1>titleof the template</h1>',
         '  <button style="width:200px">',
-        '    test {{props.name}}',
+        '    <!-- @prop name Your Name -->',
+        '    <!-- @prop {string} adress Your Adress -->',
+        '    test {{props.name}} {{props.adress}}',
         '  </button>',
         '</div>',
       ].join('\n'),
@@ -41,7 +48,10 @@ describe('slotHandler', () => {
     ).ast
     if (ast) {
       traverse(ast, doc, [propHandler], { functional: true, rootLeadingComment: '' })
-      expect(doc.toObject().props).toMatchObject({ name: { type: { name: 'undefined' } } })
+      expect(doc.toObject().props).toMatchObject({
+        name: { type: { name: 'mixed' }, description: 'Your Name' },
+        adress: { type: { name: 'string' }, description: 'Your Adress' },
+      })
     } else {
       fail()
     }
