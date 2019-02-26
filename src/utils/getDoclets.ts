@@ -45,7 +45,7 @@ function getTypeObjectFromTypeString(typeSlice: string): ParamType {
   }
 }
 
-const TYPED_TAG_TITLES = ['param', 'property', 'type', 'returns']
+const TYPED_TAG_TITLES = ['param', 'property', 'type', 'returns', 'prop']
 const ACCESS_TAG_TITLES = ['private', 'public']
 
 /**
