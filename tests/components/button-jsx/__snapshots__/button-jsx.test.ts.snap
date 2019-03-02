@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tests button should match the snapshot 1`] = `
+Object {
+  "description": "This is an example of creating a reusable button component and using it with external data.",
+  "displayName": "buttonComponent",
+  "events": Object {
+    "success": Object {
+      "description": "Success event.",
+      "properties": Array [
+        Object {
+          "description": "example",
+          "name": "demo",
+          "type": Object {
+            "names": Array [
+              "object",
+            ],
+          },
+        },
+        Object {
+          "description": "test called",
+          "name": "called",
+          "type": Object {
+            "names": Array [
+              "number",
+            ],
+          },
+        },
+        Object {
+          "description": "Indicates whether the snowball is tightly packed.",
+          "name": "isPacked",
+          "type": Object {
+            "names": Array [
+              "boolean",
+            ],
+          },
+        },
+      ],
+      "type": Object {
+        "names": Array [
+          "undefined",
+        ],
+      },
+    },
+  },
+  "methods": Array [],
+  "props": Object {
+    "size": Object {
+      "defaultValue": Object {
+        "func": false,
+        "value": "'normal'",
+      },
+      "description": "The size of the button",
+      "required": "",
+      "tags": Object {},
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+  "slots": Object {},
+  "tags": Object {
+    "author": Array [
+      Object {
+        "description": "[Rafael](https://github.com/rafaesc92)",
+        "title": "author",
+      },
+    ],
+    "version": Array [
+      Object {
+        "description": "1.0.5",
+        "title": "version",
+      },
+    ],
+  },
+}
+`;
